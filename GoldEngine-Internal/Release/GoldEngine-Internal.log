@@ -1,0 +1,182 @@
+﻿  AssemblyInfo.cpp
+  CastToNative.cpp
+  DataPacks.cpp
+  Drawing.cpp
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(567,64): warning C4244: 'argumento': conversión de 'unsigned int' a 'float'; posible pérdida de datos
+  (compilando archivo de origen "Drawing.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(567,35): warning C4244: 'inicializando': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "Drawing.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(568,65): warning C4244: 'argumento': conversión de 'unsigned int' a 'float'; posible pérdida de datos
+  (compilando archivo de origen "Drawing.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(568,36): warning C4244: 'inicializando': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "Drawing.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CastToNative.h(1,1): warning C4005: 'WIN32_LEAN_AND_MEAN': redefinición de macro
+  (compilando archivo de origen "Drawing.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\glad.h(30,1):
+  vea la definición anterior de 'WIN32_LEAN_AND_MEAN'
+  
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  Object.cpp
+  rlImGui.cpp
+  Window.cpp
+  ScriptSandbox.cpp
+  Transform.cpp
+  .NETCoreApp,Version=v7.0.AssemblyAttributes.cpp
+  Generando código...
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(368): warning C4793: 'ImGui::BulletText': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(370): warning C4793: 'ImGui::BulletText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(372): warning C4793: 'ImGui::BulletText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(262): warning C4793: 'ImGui::Text': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(264): warning C4793: 'ImGui::Text': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(266): warning C4793: 'ImGui::Text': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(281): warning C4793: 'ImGui::TextColored': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(283): warning C4793: 'ImGui::TextColored': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(285): warning C4793: 'ImGui::TextColored': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(296): warning C4793: 'ImGui::TextDisabled': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(298): warning C4793: 'ImGui::TextDisabled': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(300): warning C4793: 'ImGui::TextDisabled': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(312): warning C4793: 'ImGui::TextWrapped': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(314): warning C4793: 'ImGui::TextWrapped': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(316): warning C4793: 'ImGui::TextWrapped': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(331): warning C4793: 'ImGui::LabelText': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(333): warning C4793: 'ImGui::LabelText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(335): warning C4793: 'ImGui::LabelText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6009): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6011): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6013): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6018): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6020): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6022): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6054): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6056): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6058): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6063): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6065): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6067): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_internal.h(450): warning C4793: '`anonymous namespace'::ImRsqrt': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_internal.h(450): warning C4793: '`anonymous namespace'::ImRsqrt': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_internal.h(450): warning C4793: '`anonymous namespace'::ImRsqrt': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(6955): warning C4793: 'ExampleAppConsole::AddLog': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(6959): warning C4793: 'ExampleAppConsole::AddLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(6962): warning C4793: 'ExampleAppConsole::AddLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7292): warning C4793: 'ExampleAppLog::AddLog': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7295): warning C4793: 'ExampleAppLog::AddLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7297): warning C4793: 'ExampleAppLog::AddLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1900): warning C4793: 'ImFormatString': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1902): warning C4793: 'ImFormatString': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1908): warning C4793: 'ImFormatString': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1934): warning C4793: 'ImFormatStringToTempBuffer': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1936): warning C4793: 'ImFormatStringToTempBuffer': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1938): warning C4793: 'ImFormatStringToTempBuffer': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1946): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1952): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1953): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1946): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1952): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1953): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2659): warning C4793: 'ImGuiTextBuffer::appendf': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2661): warning C4793: 'ImGuiTextBuffer::appendf': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2663): warning C4793: 'ImGuiTextBuffer::appendf': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2675): warning C4793: 'ImGuiTextBuffer::appendfv': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2690): warning C4793: 'ImGuiTextBuffer::appendfv': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2675): warning C4793: 'ImGuiTextBuffer::appendfv': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2690): warning C4793: 'ImGuiTextBuffer::appendfv': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(12913): warning C4793: 'ImGui::LogText': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(12919): warning C4793: 'ImGui::LogText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(12921): warning C4793: 'ImGui::LogText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(14872): warning C4793: 'ImGui::DebugLog': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(14874): warning C4793: 'ImGui::DebugLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(14876): warning C4793: 'ImGui::DebugLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(10442): warning C4793: 'ImGui::SetItemTooltip': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(10444): warning C4793: 'ImGui::SetItemTooltip': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(10447): warning C4793: 'ImGui::SetItemTooltip': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(10424): warning C4793: 'ImGui::SetTooltip': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(10426): warning C4793: 'ImGui::SetTooltip': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(10428): warning C4793: 'ImGui::SetTooltip': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+  AssemblyInfo.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
+raylib.lib(rcore.obj) : warning LNK4099: no se encontró PDB '' con 'raylib.lib(rcore.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+raylib.lib(rmodels.obj) : warning LNK4099: no se encontró PDB '' con 'raylib.lib(rmodels.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+raylib.lib(rglfw.obj) : warning LNK4099: no se encontró PDB '' con 'raylib.lib(rglfw.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+raylib.lib(rshapes.obj) : warning LNK4099: no se encontró PDB '' con 'raylib.lib(rshapes.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+raylib.lib(rtext.obj) : warning LNK4099: no se encontró PDB '' con 'raylib.lib(rtext.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+raylib.lib(rtextures.obj) : warning LNK4099: no se encontró PDB '' con 'raylib.lib(rtextures.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+raylib.lib(utils.obj) : warning LNK4099: no se encontró PDB '' con 'raylib.lib(utils.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+  GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\Release\GoldEngine-Internal.dll

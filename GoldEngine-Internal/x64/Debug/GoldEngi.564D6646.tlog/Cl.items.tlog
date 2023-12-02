@@ -1,0 +1,15 @@
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AssemblyInfo.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\AssemblyInfo.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CastToNative.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\CastToNative.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataPacks.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\DataPacks.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Drawing.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\Drawing.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\imgui.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\imgui_demo.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_draw.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\imgui_draw.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_tables.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\imgui_tables.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\imgui_widgets.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\Object.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rlImGui.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\rlImGui.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Window.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\Window.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ScriptSandbox.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\ScriptSandbox.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\Transform.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\.NETCoreApp,Version=v7.0.AssemblyAttributes.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\.NETCoreApp,Version=v7.0.AssemblyAttributes.obj
