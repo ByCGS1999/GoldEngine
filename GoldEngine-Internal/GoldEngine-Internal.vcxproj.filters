@@ -180,6 +180,12 @@
     <ClInclude Include="Texture2DPack.h">
       <Filter>Archivos de origen\Engine\ObjectManagement\Textures\2D</Filter>
     </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Archivos de origen\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -223,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="DataPacks.cpp">
       <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineEntryPoint.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
