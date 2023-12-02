@@ -4,7 +4,6 @@
     "net7.0-windows7.0": {
       "GoldEngine-Internal/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
         "compile": {
           "bin/placeholder/GoldEngine-Internal.dll": {}
         },

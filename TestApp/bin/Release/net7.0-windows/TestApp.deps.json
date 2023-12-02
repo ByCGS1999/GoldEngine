@@ -16,7 +16,7 @@
       },
       "GoldEngine-Internal/1.0.0": {
         "runtime": {
-          "GoldEngine-Internal.dll": {}
+          "GoldEngine-Internal.exe": {}
         }
       }
     }

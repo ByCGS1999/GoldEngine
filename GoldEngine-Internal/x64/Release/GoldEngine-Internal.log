@@ -1,6 +1,3 @@
 ﻿  EngineEntryPoint.cpp
-  Window.cpp
-  Generando código...
   AssemblyInfo.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
   GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(5198,5): error MSB3030: No se pudo copiar el archivo "C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\apphost.exe" porque no se encontró.

@@ -1,4 +1,0 @@
-C:\Users\Carles\source\repos\GoldEngine\x64\Debug\Ijwhost.dll
-C:\Users\Carles\source\repos\GoldEngine\x64\Debug\GoldEngine-Internal.deps.json
-C:\Users\Carles\source\repos\GoldEngine\x64\Debug\GoldEngine-Internal.runtimeconfig.json
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\GoldEngine-Internal.genruntimeconfig.cache

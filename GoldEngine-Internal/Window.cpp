@@ -55,28 +55,14 @@ void Engine::Window::Exit()
 
 }
 
-void Engine::Window::Draw()
+void Engine::Window::Loop()
 {
 	SetTargetFPS(targetFPS);
 
 	while (!WindowShouldClose())
 	{
-		BeginDrawing();
-
-		for each (System::Object ^ object in drawList)
-		{
-			System::Action^ invokable = (System::Action^)object;
-			invokable->Invoke();
-		}
-
-		EndDrawing();
-
-		rlImGuiBegin();
-		DrawFPS(0, 0);
-		ImGui::ShowDemoWindow((bool*)true);
-		rlImGuiEnd();
-
-		tickRate++;
+		Update();
+		Draw();
 	}
 
 	rlImGuiShutdown();
@@ -84,34 +70,12 @@ void Engine::Window::Draw()
 	CloseWindow();
 }
 
-void Engine::Window::Draw(System::Action<int, int>^ executionStack)
+void Engine::Window::Draw()
 {
-	SetTargetFPS(targetFPS);
 
-	while (!WindowShouldClose())
-	{
-		// -- update
-		executionStack->Invoke(tickRate, physicsTick);
+}
 
-		BeginDrawing();
+void Engine::Window::Update()
+{
 
-		for each (System::Object ^ object in drawList)
-		{
-			System::Action^ invokable = (System::Action^)object;
-			invokable->Invoke();
-		}
-
-		EndDrawing();
-
-		rlImGuiBegin();
-		DrawFPS(0, 0);
-		ImGui::ShowDemoWindow((bool*)true);
-		rlImGuiEnd();
-
-		tickRate++;
-	}
-
-	rlImGuiShutdown();
-	Exit();
-	CloseWindow();
 }

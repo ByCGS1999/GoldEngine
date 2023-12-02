@@ -102,17 +102,7 @@ namespace TestApp
                 Drawing.HL_EndRendering();
             });
 
-            Draw((int tickRate, int targetTickrate) =>
-            {
-                Drawing.HL_UpdateCamera(0, (int)CameraType.C3D, (int)CameraMode.CAMERA_ORBITAL);
-
-                sandbox.ExecuteUpdate();
-                if (tickRate >= targetTickrate)
-                {
-                    ResetPhysics();
-                    sandbox.ExecuteFixedUpdate();
-                }
-            });
+                
         }
     }
 

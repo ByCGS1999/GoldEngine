@@ -15,7 +15,17 @@ public:
 		OpenWindow(640, 480, "Raylib Window");
 		SetFPS(60);
 
-		Draw();
+		Loop();
+	}
+
+	void Draw() override
+	{
+
+	}
+
+	void Update() override
+	{
+
 	}
 };
 

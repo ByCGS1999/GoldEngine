@@ -1,5 +1,7 @@
 #pragma once
 
+using namespace System;
+using namespace System::Collections;
 
 namespace Engine
 {
@@ -16,8 +18,9 @@ namespace Engine
 		void ResetPhysics();
 		void SetFPS(int fps);
 		int GetFPS();
-		void Exit();
-		void Draw();
-		void Draw(System::Action<int, int>^ executionStack);
+		void Loop();
+		virtual void Exit();
+		virtual void Draw();
+		virtual void Update();
 	};
 }
