@@ -3,6 +3,7 @@
 #include "Includes.h"
 #include "Drawing.h"
 #include "Transform.h"
+#include "CypherLib.h"
 #include "Raylib/include/rlImGui.h"
 
 using namespace Engine::Drawing;
@@ -11,6 +12,7 @@ DataPacks dataPack;
 Model mod;
 Camera3D c3d;
 Camera3D c3d2;
+unsigned int passwd;
 
 ref class EntryPoint : Engine::Window
 {
@@ -26,6 +28,7 @@ public:
 	{
 		SetWindowFlags(4096 | 4);
 		OpenWindow(640, 480, (const char*)"GoldEngine Window");
+
 		SetFPS(60);
 		Preload();
 
@@ -61,6 +64,11 @@ public:
 
 	void Preload() override
 	{
+		if (FirstTimeBoot())
+		{
+			Boot();
+		}
+
 		mod = LoadModel("Data/Models/castle.obj");
 		Shader s = LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
 		Drawing::HL_CreateCamera(0, gcnew Engine::Internal::Components::Vector3(10, 5, 5), gcnew Engine::Internal::Components::Vector3(0,0,1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
@@ -86,5 +94,6 @@ public:
 
 int main()
 {
+	passwd = CypherLib::GetPasswordBytes(ENCRYPTION_PASSWORD);
 	gcnew EntryPoint();
 }

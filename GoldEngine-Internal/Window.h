@@ -11,6 +11,8 @@ namespace Engine
 		ArrayList drawList;
 
 	public:
+		bool FirstTimeBoot();
+		void Boot();
 		void SetWindowFlags(unsigned int flags);
 		void OpenWindow(int width, int height, System::String^ name);
 		void OpenWindow(int width, int height, const char* name);

@@ -12,6 +12,16 @@ int tickRate = 0;
 int physicsTick = 60;
 int targetFPS = 60;
 
+bool Engine::Window::FirstTimeBoot()
+{
+	return !System::IO::File::Exists("./Data/UserData/firstInit.asset");
+}
+
+void Engine::Window::Boot()
+{
+	System::IO::File::Create("./Data/UserData/firstInit.asset")->Close();
+}
+
 void Engine::Window::SetWindowFlags(unsigned int flags)
 {
 	SetConfigFlags(flags);
@@ -57,12 +67,6 @@ void Engine::Window::Exit()
 void Engine::Window::Loop()
 {
 	SetTargetFPS(targetFPS);
-
-	unsigned int passwd = CypherLib::GetPasswordBytes(ENCRYPTION_PASSWORD);
-	String^ encryptedContents = CypherLib::EncryptFileContents("Mel kai shi, sai ei chmu", passwd);
-	String^ decryptedContents = CypherLib::DecryptFileContents(encryptedContents, passwd);
-	Console::WriteLine(encryptedContents);
-	Console::WriteLine(decryptedContents);
 
 	while (!WindowShouldClose())
 	{

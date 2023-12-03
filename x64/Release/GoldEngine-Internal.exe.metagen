@@ -3,7 +3,7 @@ Assembly GoldEngine-Internal, Version=1.0.*, Culture=Invariant Language (Invaria
 	hash=SHA1, flags=PublicKey
 Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
-Assembly System.Text.Json, Version=7.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51: 
+Assembly Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed: 
 	hash=None, flags=None
 Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
@@ -96,6 +96,8 @@ Class Engine.Drawing.Drawing: AutoLayout, AnsiClass, Class, Public, BeforeFieldI
 Class Engine.Window: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
+    FirstTimeBoot(): PrivateScope, Public, HideBySig
+    Boot(): PrivateScope, Public, HideBySig
     SetWindowFlags(UInt32): PrivateScope, Public, HideBySig
     OpenWindow(Int32, Int32, SByte*): PrivateScope, Public, HideBySig
     OpenWindow(Int32, Int32, String): PrivateScope, Public, HideBySig
