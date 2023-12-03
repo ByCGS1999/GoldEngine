@@ -27,7 +27,7 @@ void Engine::Drawing::Drawing::HL_CreateMaterial(unsigned int materialId)
 {
 	Material newMaterial;
 
-	DataPacks::AddMaterial(materialId, newMaterial);
+	DataPacks::singleton().AddMaterial(materialId, newMaterial);
 }
 
 void Engine::Drawing::Drawing::HL_DrawRectangle(int posX, int posY, int width, int height, unsigned int hexCode)
@@ -42,7 +42,7 @@ void Engine::Drawing::Drawing::HL_LoadShader(unsigned int shaderId, System::Stri
 
 	Shader s = LoadShader(vsFile, fsFile);
 
-	DataPacks::AddShader(shaderId, s);
+	DataPacks::singleton().AddShader(shaderId, s);
 }
 
 void Engine::Drawing::Drawing::HL_DrawGrid(int slices, float spaces)
@@ -65,7 +65,7 @@ void Engine::Drawing::Drawing::HL_UnloadEnvironment()
 
 void Engine::Drawing::Drawing::HL_DrawSkybox(unsigned int cameraId, Engine::Internal::Components::CameraType cameraType)
 {
-	Camera3D camera3d = DataPacks::GetCamera3D(cameraId);
+	Camera3D camera3d = DataPacks::singleton().GetCamera3D(cameraId);
 	rPBR::DrawSkybox(pbrEnv, camera3d);
 }
 
@@ -88,12 +88,12 @@ void Engine::Drawing::Drawing::HL_DrawCube(Engine::Internal::Components::Vector3
 void Engine::Drawing::Drawing::HL_LoadModel(unsigned int modelId, System::String^ fileName)
 {
 	Model model = LoadModel(CastToNative(fileName));
-	DataPacks::AddModel(modelId, model);
+	DataPacks::singleton().AddModel(modelId, model);
 }
 
 void Engine::Drawing::Drawing::HL_DrawModel(unsigned int modelId, Engine::Internal::Components::Vector3^ position, float scale, unsigned int tint)
 {
-	Model m = DataPacks::GetModel(modelId);
+	Model m = DataPacks::singleton().GetModel(modelId);
 	Vector3 convertedVector;
 
 
@@ -106,54 +106,54 @@ void Engine::Drawing::Drawing::HL_DrawModel(unsigned int modelId, Engine::Intern
 
 void Engine::Drawing::Drawing::HL_SetMaterialShader(unsigned int materialId, unsigned int shaderId)
 {
-	Material material = DataPacks::GetMaterial(materialId);
-	Shader shader = DataPacks::GetShader(shaderId);
+	Material material = DataPacks::singleton().GetMaterial(materialId);
+	Shader shader = DataPacks::singleton().GetShader(shaderId);
 
 	material.shader = shader;
 }
 
-void Engine::Drawing::Drawing::HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialEuler, Engine::Internal::Components::CameraType cameraType)
+void Engine::Drawing::Drawing::HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialforward, Engine::Internal::Components::CameraType cameraType)
 {
 	Vector3 rlib_position;
-	Vector3 rlib_euler;
+	Vector3 rlib_forward;
 	Camera3D camera;
 
 	rlib_position.x = initialPosition->x;
 	rlib_position.y = initialPosition->y;
 	rlib_position.z = initialPosition->z;
-	rlib_euler.x = initialEuler->x;
-	rlib_euler.y = initialEuler->y;
-	rlib_euler.z = initialEuler->z;
+	rlib_forward.x = initialforward->x;
+	rlib_forward.y = initialforward->y;
+	rlib_forward.z = initialforward->z;
 
 	camera.position = rlib_position;
-	camera.target = rlib_euler;
+	camera.target = rlib_forward;
 
-	DataPacks::AddCamera(cameraId, camera, cameraType);
+	DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
 }
 
-void Engine::Drawing::Drawing::HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialEuler, Engine::Internal::Components::Vector3^ up, Engine::Internal::Components::CameraType cameraType)
+void Engine::Drawing::Drawing::HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ forward, Engine::Internal::Components::Vector3^ up, Engine::Internal::Components::CameraType cameraType)
 {
 	Vector3 rlib_position;
-	Vector3 rlib_euler;
+	Vector3 rlib_forward;
 	Vector3 rlib_up;
 	Camera3D camera;
 
 	rlib_position.x = initialPosition->x;
 	rlib_position.y = initialPosition->y;
 	rlib_position.z = initialPosition->z;
-	rlib_euler.x = initialEuler->x;
-	rlib_euler.y = initialEuler->y;
-	rlib_euler.z = initialEuler->z;
+	rlib_forward.x = forward->x;
+	rlib_forward.y = forward->y;
+	rlib_forward.z = forward->z;
 	rlib_up.x = up->x;
 	rlib_up.y = up->y;
 	rlib_up.z = up->z;
 
 	camera.position = rlib_position;
-	camera.target = rlib_euler;
+	camera.target = rlib_forward;
 	camera.up = rlib_up;
 	camera.projection = CAMERA_PERSPECTIVE;
 
-	DataPacks::AddCamera(cameraId, camera, cameraType);
+	DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
 }
 
 void Engine::Drawing::Drawing::HL_EndMode(int mode)
@@ -174,11 +174,11 @@ void Engine::Drawing::Drawing::HL_UpdateCamera(unsigned int cameraId, Engine::In
 	switch (camType)
 	{
 	case Engine::Internal::Components::CameraType::C2D:
-		Camera2D cam2d = DataPacks::GetCamera2D(cameraId);
+		Camera2D cam2d = DataPacks::singleton().GetCamera2D(cameraId);
 		UpdateCamera((Camera*)&cam2d, (CameraMode)mode);
 		break;
 	case Engine::Internal::Components::CameraType::C3D:
-		Camera3D cam3d = DataPacks::GetCamera3D(cameraId);
+		Camera3D cam3d = DataPacks::singleton().GetCamera3D(cameraId);
 		UpdateCamera(&cam3d, (CameraMode)mode);
 		break;
 	}
@@ -195,12 +195,12 @@ void Engine::Drawing::Drawing::HL_CreateCamera(unsigned int cameraId, Engine::In
 
 	camera.position = rlib_position;
 
-	DataPacks::AddCamera(cameraId, camera, cameraType);
+	DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
 }
 
 void Engine::Drawing::Drawing::HL_BeginShaderMode(unsigned int shaderId)
 {
-	Shader s = DataPacks::GetShader(shaderId);
+	Shader s = DataPacks::singleton().GetShader(shaderId);
 
 	BeginShaderMode(s);
 }
@@ -212,22 +212,22 @@ void Engine::Drawing::Drawing::HL_EndShaderMode()
 
 void Engine::Drawing::Drawing::HL_FreeCameras()
 {
-	DataPacks::FreeCameras();
+	DataPacks::singleton().FreeCameras();
 }
 
 void Engine::Drawing::Drawing::HL_FreeModels()
 {
-	DataPacks::FreeModels();
+	DataPacks::singleton().FreeModels();
 }
 
 void Engine::Drawing::Drawing::HL_FreeShaders()
 {
-	DataPacks::FreeShaders();
+	DataPacks::singleton().FreeShaders();
 }
 
 void Engine::Drawing::Drawing::HL_FreeAll()
 {
-	DataPacks::FreeAll();
+	DataPacks::singleton().FreeAll();
 }
 
 void Engine::Drawing::Drawing::HL_LoadTexture2D(unsigned int textureId, System::String^ fileName)
@@ -248,19 +248,19 @@ void Engine::Drawing::Drawing::HL_CreateCamera(unsigned int cameraId, Engine::In
 	rlib_position.y = position->y;
 	camera.target = rlib_position;
 
-	DataPacks::AddCamera(cameraId, camera, cameraType);
+	DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
 }
 
 void Engine::Drawing::Drawing::HL_Begin3DMode(unsigned int cameraId)
 {
-	Camera3D c = (Camera3D)DataPacks::GetCamera3D(cameraId);
+	Camera3D c = (Camera3D)DataPacks::singleton().GetCamera3D(cameraId);
 
 	BeginMode3D(c);
 }
 
 void Engine::Drawing::Drawing::HL_Begin2DMode(unsigned int cameraId)
 {
-	Camera2D c = (Camera2D)DataPacks::GetCamera2D(cameraId);
+	Camera2D c = (Camera2D)DataPacks::singleton().GetCamera2D(cameraId);
 	BeginMode2D(c);
 }
 
@@ -271,8 +271,8 @@ void Engine::Drawing::Drawing::HL_Wait(double seconds)
 
 void Engine::Drawing::Drawing::HL_SetMaterialTexture(unsigned int materialId, unsigned int textureId)
 {
-	Material m = DataPacks::GetMaterial(materialId);
-	Texture2D t = DataPacks::GetTexture2D(textureId);
+	Material m = DataPacks::singleton().GetMaterial(materialId);
+	Texture2D t = DataPacks::singleton().GetTexture2D(textureId);
 	MaterialMap mMap;
 
 	mMap.texture = t;
@@ -281,27 +281,27 @@ void Engine::Drawing::Drawing::HL_SetMaterialTexture(unsigned int materialId, un
 
 void Engine::Drawing::Drawing::HL_SetModelTexture(unsigned int modelId, unsigned int materialId)
 {
-	Material m = DataPacks::GetMaterial(materialId);
-	Model mod = DataPacks::GetModel(modelId);
+	Material m = DataPacks::singleton().GetMaterial(materialId);
+	Model mod = DataPacks::singleton().GetModel(modelId);
 
 	mod.materials = &m;
 }
 
 void Engine::Drawing::Drawing::HL_SetCameraFov(unsigned int cameraId, float fov)
 {
-	Camera3D c = DataPacks::GetCamera3D(cameraId);
+	Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
 	c.fovy = fov;
 }
 
 void Engine::Drawing::Drawing::HL_SetCameraProjection(unsigned int cameraId, int projection)
 {
-	Camera3D c = DataPacks::GetCamera3D(cameraId);
+	Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
 	c.projection = projection;
 }
 
 void Engine::Drawing::Drawing::HL_DrawTexture(unsigned int textureId, int posX, int posY, unsigned int tint)
 {
-	Texture2D t = DataPacks::GetTexture2D(textureId);
+	Texture2D t = DataPacks::singleton().GetTexture2D(textureId);
 	Texture2D nullTex;
 
 	DrawTexture(t, posX, posY, GetColor(tint));

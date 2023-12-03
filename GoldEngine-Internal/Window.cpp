@@ -18,14 +18,12 @@ void Engine::Window::SetWindowFlags(unsigned int flags)
 
 void Engine::Window::OpenWindow(int width, int height, System::String^ name)
 {
-	DataPacks::BeginDataPacks();
 	InitWindow(width, height, CastToNative(name));
 	rlImGuiSetup(true);
 }
 
 void Engine::Window::OpenWindow(int width, int height, const char* name)
 {
-	DataPacks::BeginDataPacks();
 	InitWindow(width, height, name);
 	rlImGuiSetup(true);
 }
@@ -76,6 +74,11 @@ void Engine::Window::Draw()
 }
 
 void Engine::Window::Update()
+{
+
+}
+
+void Engine::Window::Preload()
 {
 
 }

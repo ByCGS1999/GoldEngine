@@ -14,13 +14,19 @@ std::vector<CameraPack*> cameras;
 std::vector<MaterialPack*> materials;
 std::vector<Texture2DPack*> textures2d;
 
-void DataPacks::BeginDataPacks()
+DataPacks::DataPacks()
 {
 	shaders = std::vector<ShaderPack*>();
 	models = std::vector<ModelPack*>();
 	cameras = std::vector<CameraPack*>();
 	materials = std::vector<MaterialPack*>();
 	textures2d = std::vector<Texture2DPack*>();
+	singleton_reference = *this;
+}
+
+DataPacks DataPacks::singleton()
+{
+	return singleton_reference;
 }
 
 void DataPacks::FreeAll()

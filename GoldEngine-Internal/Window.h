@@ -19,8 +19,9 @@ namespace Engine
 		void SetFPS(int fps);
 		int GetFPS();
 		void Loop();
-		virtual void Exit();
-		virtual void Draw();
-		virtual void Update();
+		virtual void Preload(); // loading assets
+		virtual void Exit(); // exit
+		virtual void Draw(); // draw
+		virtual void Update(); // update 
 	};
 }
