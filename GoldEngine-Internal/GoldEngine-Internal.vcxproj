@@ -143,8 +143,12 @@
   <ItemGroup>
     <ClInclude Include="CameraPack.h" />
     <ClInclude Include="CastToNative.h" />
+    <ClInclude Include="CypherLib.h" />
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="Drawing.h" />
+    <ClInclude Include="Macros.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -189,6 +193,8 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="ScriptSandbox.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -350,6 +356,9 @@
   <ItemGroup>
     <Library Include="Raylib\lib\raylib.lib" />
     <Library Include="Raylib\lib\raylibdll.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Text.Json, Version=7.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

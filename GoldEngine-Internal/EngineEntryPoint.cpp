@@ -8,9 +8,10 @@
 using namespace Engine::Drawing;
 
 DataPacks dataPack;
-Texture2D tx2;
+Model mod;
 Camera3D c3d;
 Camera3D c3d2;
+
 ref class EntryPoint : Engine::Window
 {
 public:
@@ -18,7 +19,6 @@ public:
 	{
 		dataPack = DataPacks();
 		Start();
-
 	}
 
 
@@ -28,7 +28,6 @@ public:
 		OpenWindow(640, 480, (const char*)"GoldEngine Window");
 		SetFPS(60);
 		Preload();
-
 
 		Loop();
 	}
@@ -46,7 +45,7 @@ public:
 		
 			BeginMode3D(c3d2);
 
-				DrawCube({ 0.0f,0.0f,0.0F }, 1, 1, 1, BLACK);
+				DrawModel(mod, { 0.0f, 0.0f, 0.0f }, 1, WHITE);
 				DrawGrid(10, 1.0f);
 
 			EndMode3D();
@@ -62,15 +61,17 @@ public:
 
 	void Preload() override
 	{
-		Drawing::HL_LoadModel(0, "Data/Models/castle.obj");
-		dataPack.AddShader(0, LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs"));
+		mod = LoadModel("Data/Models/castle.obj");
+		Shader s = LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
 		Drawing::HL_CreateCamera(0, gcnew Engine::Internal::Components::Vector3(10, 5, 5), gcnew Engine::Internal::Components::Vector3(0,0,1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
 		//dataPack.AddCamera(0, c3d, Engine::Internal::Components::C3D);
-		dataPack.AddTexture2D(0,LoadTexture("Data/Models/castle_diffuse.png"));
-		Drawing::HL_CreateMaterial(0);
-		Drawing::HL_SetMaterialShader(0, 0);
-		Drawing::HL_SetMaterialTexture(0, 0);
-		Drawing::HL_SetModelTexture(0, 0);
+		Texture2D t = LoadTexture("Data/Models/castle_diffuse.png");
+		Material m;
+		MaterialMap mMap;
+		mMap.texture = t;
+		m.shader = s;
+		m.maps = &mMap;
+		mod.materials = &m;
 		c3d2 = dataPack.GetCamera3D(0);
 		c3d2.projection = CAMERA_PERSPECTIVE;
 		c3d2.fovy = 60;

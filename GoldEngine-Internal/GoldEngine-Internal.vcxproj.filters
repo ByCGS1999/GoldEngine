@@ -79,6 +79,15 @@
     <Filter Include="Archivos de origen\Engine\Object">
       <UniqueIdentifier>{f2217650-8e69-4976-9732-9887b5cf1e03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\Management">
+      <UniqueIdentifier>{bb63e44a-1dbe-4beb-ba51-7054d1f23afe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Management\Instance">
+      <UniqueIdentifier>{ce3f0087-9198-422e-b5d6-e765e465fb60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Encryption">
+      <UniqueIdentifier>{7cc418b0-5231-4f9b-a467-cf98afcde18b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -186,6 +195,18 @@
     <ClInclude Include="Window.h">
       <Filter>Archivos de origen\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Archivos de origen\Engine\Management\Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Archivos de origen\Engine\Management</Filter>
+    </ClInclude>
+    <ClInclude Include="CypherLib.h">
+      <Filter>Archivos de origen\Engine\Encryption</Filter>
+    </ClInclude>
+    <ClInclude Include="Macros.h">
+      <Filter>Archivos de origen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -232,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="EngineEntryPoint.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Archivos de origen\Engine\Management\Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Archivos de origen\Engine\Management</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

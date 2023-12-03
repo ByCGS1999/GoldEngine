@@ -4,6 +4,9 @@
     <ProjectOutput>
       <FullPath>C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe</FullPath>
     </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\GoldEngine-Internal.exe.config</FullPath>
+    </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
   <SatelliteDlls />

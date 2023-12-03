@@ -1,4 +1,5 @@
 #pragma once
+#include "Macros.h"
 #include <iostream>
 #include <cstdio>
 #include <string>

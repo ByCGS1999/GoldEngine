@@ -106,10 +106,10 @@ void Engine::Drawing::Drawing::HL_DrawModel(unsigned int modelId, Engine::Intern
 
 void Engine::Drawing::Drawing::HL_SetMaterialShader(unsigned int materialId, unsigned int shaderId)
 {
-	Material material = DataPacks::singleton().GetMaterial(materialId);
-	Shader shader = DataPacks::singleton().GetShader(shaderId);
+	Material* material = &DataPacks::singleton().GetMaterial(materialId);
+	Shader* shader = &DataPacks::singleton().GetShader(shaderId);
 
-	material.shader = shader;
+	material->shader = *shader;
 }
 
 void Engine::Drawing::Drawing::HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialforward, Engine::Internal::Components::CameraType cameraType)
@@ -281,10 +281,10 @@ void Engine::Drawing::Drawing::HL_SetMaterialTexture(unsigned int materialId, un
 
 void Engine::Drawing::Drawing::HL_SetModelTexture(unsigned int modelId, unsigned int materialId)
 {
-	Material m = DataPacks::singleton().GetMaterial(materialId);
-	Model mod = DataPacks::singleton().GetModel(modelId);
+	Material* m = &DataPacks::singleton().GetMaterial(materialId);
+	Model* mod = &DataPacks::singleton().GetModel(modelId);
 
-	mod.materials = &m;
+	mod->materials = m;
 }
 
 void Engine::Drawing::Drawing::HL_SetCameraFov(unsigned int cameraId, float fov)

@@ -1,1 +1,5 @@
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\GoldEngine-Internal.vcxproj.AssemblyReference.cache
+C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe.config
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\GoldEngine-Internal.vcxproj.SuggestedBindingRedirects.cache
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\GoldEngine-Internal.exe.config
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\GoldEngine-Internal.vcxproj.CopyComplete
