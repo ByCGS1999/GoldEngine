@@ -9,10 +9,28 @@
 #include "MaterialPack.h"
 #include "Texture2DPack.h"
 
+public class NativeDataPack
+{
+public:
+	std::vector<ShaderPack*> shaders;
+	std::vector<ModelPack*> models;
+	std::vector<CameraPack*> cameras;
+	std::vector<MaterialPack*> materials;
+	std::vector<Texture2DPack*> textures2d;
+	NativeDataPack() {
+		shaders = std::vector<ShaderPack*>();
+		models = std::vector<ModelPack*>();
+		cameras = std::vector<CameraPack*>();
+		materials = std::vector<MaterialPack*>();
+		textures2d = std::vector<Texture2DPack*>();
+	}
+};
+
 public class DataPacks
 {
 private:
 	static DataPacks singleton_reference;
+	NativeDataPack* nativePacks;
 
 public:
 	DataPacks();

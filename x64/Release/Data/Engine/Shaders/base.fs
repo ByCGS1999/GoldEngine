@@ -11,6 +11,6 @@ out vec4 finalColor;
 void main()
 {
     vec4 texelColor = texture(texture0, fragTexCoord);
-
+    
     finalColor = texelColor;
 }

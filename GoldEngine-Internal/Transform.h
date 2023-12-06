@@ -51,17 +51,8 @@ namespace Engine::Internal::Components
 	{
 	public:
 		Vector3^ position;
-	public:
 		Quaternion^ rotation;
-	public:
-		Vector3^ scale;
-
-	public:
-		Transform(Vector3 position, Quaternion rotation, Vector3 scale)
-		{
-			this->position = gcnew Vector3(position.x, position.y, position.z);
-			this->rotation = gcnew Quaternion(rotation.x, rotation.y, rotation.z, rotation.w);
-			this->scale = gcnew Vector3(scale.x, scale.y, scale.z);
-		}
+		float scale;
+		Transform(Vector3^ position, Quaternion^ rotation, float scale);
 	};
 }

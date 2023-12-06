@@ -1,0 +1,1 @@
+{"sceneId":0,"sceneName":"Level0","sceneObjects":[{"name":"Skybox","type":2,"transform":{"position":{"x":0.0,"y":0.0,"z":0.0},"rotation":{"x":0.0,"y":0.0,"z":0.0,"w":0.0},"scale":5.0}},{"name":"Model1","type":1,"transform":{"position":{"x":0.0,"y":0.0,"z":0.0},"rotation":{"x":0.0,"y":0.0,"z":0.0,"w":0.0},"scale":0.1}}]}

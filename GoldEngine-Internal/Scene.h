@@ -10,11 +10,11 @@ namespace Engine::Management
 		System::String^ sceneName;
 		System::Collections::ArrayList sceneObjects;
 		
-		
 		// Methods
 	public:
 		void LoadScene();
 		void UnloadScene();
+		void AddObjectToScene(System::Object^ object);
 
 		// VMethods
 	public:

@@ -1,5 +1,6 @@
-#include "Scene.h"
 #include "Object.h"
+#include "Transform.h"
+#include "Scene.h"
 
 using namespace Engine::Management;
 
@@ -33,8 +34,13 @@ void Scene::OnLoad()
 
 }
 
-// SCENE UNLOADING
+// METHODS
  
+void Scene::AddObjectToScene(System::Object^ object)
+{
+	sceneObjects.Add(object);
+}
+
 void Scene::LoadScene()
 {
 	OnLoad();
