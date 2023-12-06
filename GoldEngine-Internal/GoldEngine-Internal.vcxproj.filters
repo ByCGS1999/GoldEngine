@@ -88,6 +88,9 @@
     <Filter Include="Archivos de origen\Engine\Encryption">
       <UniqueIdentifier>{7cc418b0-5231-4f9b-a467-cf98afcde18b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\Engine\Shaders\rPBR">
+      <UniqueIdentifier>{218bc461-b0bd-480e-834f-3892711e9045}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -284,48 +287,6 @@
     <CopyFileToFolders Include="Data\Engine\Shaders\base.fs">
       <Filter>Data\Engine\Shaders</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\lighting.fs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\lighting.vs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\brdf.fs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\brdf.vs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\cubemap.fs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\cubemap.vs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\irradiance.fs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\pbr.fs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\pbr.vs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\postfx.fs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\postfx.vs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\prefilter.fs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\skybox.fs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\skybox.vs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Skybox\Default.hdr">
       <Filter>Data\Engine\Skybox</Filter>
     </CopyFileToFolders>
@@ -333,6 +294,54 @@
   <ItemGroup>
     <None Include="Raylib\lib\raylib.dll">
       <Filter>raylib\lib</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\brdf.fs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\brdf.vs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\cubemap.fs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\cubemap.vs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\irradiance.fs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\lighting.fs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\lighting.vs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\pbr.fs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\pbr.vs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\postfx.fs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\postfx.vs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\prefilter.fs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\skybox.fs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\rPBR\skybox.vs">
+      <Filter>Data\Engine\Shaders\rPBR</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\pointlight.fs">
+      <Filter>Data\Engine\Shaders</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\pointlight.vs">
+      <Filter>Data\Engine\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
