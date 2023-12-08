@@ -22,6 +22,7 @@ namespace Engine
 		int GetFPS();
 		void Loop();
 		virtual void Preload(); // loading assets
+		virtual void Init(); // Initialization (spawning objects, scene loading, whatever.)
 		virtual void Exit(); // exit
 		virtual void Draw(); // draw
 		virtual void Update(); // update 

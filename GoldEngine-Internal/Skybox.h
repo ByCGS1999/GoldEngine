@@ -21,11 +21,13 @@ namespace Engine::EngineObjects
 		Native::NativeSkybox* nativeSkybox;
 
 	public:
-		Skybox(String^ s, Engine::Internal::Components::Transform^ t);
+		int materialId;
+		Skybox(String^ s, Engine::Internal::Components::Transform^ t, int matId);
 		void Draw() override;
 		void Update() override {}
 		void PhysicsUpdate() override {}
 		void Start() override;
-		void SetupSkyboxImage(int index, Texture2D texture);
+		void SetupSkyboxImage(unsigned int shaderId, Texture2D texture);
+		void SwapMaterial(unsigned int materialId);
 	};
 }

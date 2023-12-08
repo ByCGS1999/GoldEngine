@@ -1,4 +1,2 @@
 ﻿  AssemblyInfo.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
-DataPacks.obj : error LNK2020: símbolo (token) sin resolver (0A000605) "private: static class DataPacks DataPacks::singleton_reference" (?singleton_reference@DataPacks@@0V1@A)
-DataPacks.obj : error LNK2001: símbolo externo "private: static class DataPacks DataPacks::singleton_reference" (?singleton_reference@DataPacks@@0V1@A) sin resolver
-C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe : fatal error LNK1120: 2 externos sin resolver
+  GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe

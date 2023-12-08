@@ -93,3 +93,8 @@ void Engine::Window::Preload()
 {
 
 }
+
+void Engine::Window::Init()
+{
+
+}

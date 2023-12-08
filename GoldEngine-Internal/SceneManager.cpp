@@ -6,25 +6,20 @@ using namespace Engine::Management;
 using namespace System;
 using namespace System::IO;
 
-bool AssetExists(System::String^ fN)
+bool Engine::Managers::SceneManager::AssetExists(System::String^ fN)
 {
 	return File::Exists("Data/" + fN + ".scn");
 }
 
 Scene^ Engine::Managers::SceneManager::LoadSceneFromFile(String^ fN)
 {
-	if (!String::IsNullOrEmpty(fN))
+	if (AssetExists(fN))
 	{
-		// find file into data files.
-		if (AssetExists(fN))
-		{
-			// decrypt scene and parse it
-		}
+		return Newtonsoft::Json::JsonConvert::DeserializeObject<Scene^>(File::ReadAllText("Data/" + fN + ".scn"));
 	}
 
-	return gcnew Scene();
+	return nullptr;
 }
-
 
 Scene^ Engine::Managers::SceneManager::CreateScene()
 {
@@ -35,7 +30,7 @@ void Engine::Managers::SceneManager::SaveSceneToFile(Engine::Management::Scene^ 
 {
 	if (AssetExists(scene->sceneName))
 	{
-		String^ serializedData = Newtonsoft::Json::JsonConvert::SerializeObject(scene);
+		String^ serializedData = Newtonsoft::Json::JsonConvert::SerializeObject(scene, Newtonsoft::Json::Formatting::Indented);
 		String^ cipheredContents = CypherLib::EncryptFileContents(serializedData, password);
 
 		//System::IO::File::WriteAllText("Data/" + scene->sceneName + ".scn", System::Convert::ToBase64String(Encoding::UTF8->GetBytes(cipheredContents)));

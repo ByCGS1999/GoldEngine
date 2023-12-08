@@ -9,6 +9,9 @@
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Raylib/include/rlImGui.h"
+#include "DataPacks.h"
+#include "DataPack.h"
+#include "WinAPI.h"
 
 // INCLUDE ENGINE CLASSES \\
 
@@ -21,34 +24,44 @@ using namespace Engine::Managers;
 
 DataPacks dataPack;
 Model mod;
-Camera3D c3d;
 Camera3D c3d2;
 unsigned int passwd;
-unsigned int ambient_color = 0xA2A2A2A2;
+unsigned int ambient_color = 0xFFFFFFFF;
+float cameraSpeed = 1.25f;
+bool controlCamera = true;
 
 ref class EntryPoint : Engine::Window
 {
+	DataPack^ packedData;
 	Scene^ scene;
 	Engine::EngineObjects::Skybox^ skybox;
 	Engine::EngineObjects::ModelRenderer^ modelRenderer;
+	Engine::Internal::Components::Vector3^ cameraPosition;
 
 public:
 	EntryPoint()
 	{
 		dataPack = DataPacks();
+		packedData = gcnew DataPack();
 		Start();
 	}
 
 
 	void Start()
 	{
+		WinAPI::FreeCons();
 		SetWindowFlags(4096 | 4);
-		OpenWindow(640, 480, (const char*)"GoldEngine Window");
+		OpenWindow(640, 480, (const char*)"GoldEngine Technical Demo");
 
 		SetFPS(60);
 		Preload();
 
 		Loop();
+	}
+
+	void PrebuildAssets()
+	{
+
 	}
 
 	void Exit() override
@@ -83,28 +96,32 @@ public:
 
 			ImGui::ShowDemoWindow((bool*)true);
 
+			ImGui::Begin("DemoVer", (bool*)true, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration);
+			{
+				ImGui::SetWindowSize(ImVec2(285, 20), 0);
+				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight()-25), 0);
+				ImGui::TextColored(ImVec4(0, 0, 0, 255), "Gold Engine Ver: dev-0.0.2-early");
+			}
+			ImGui::End();
+
 			rlImGuiEnd();
 		}
 		EndDrawing();
 	}
 
-	void Preload() override
+	void Init() override
 	{
-		if (FirstTimeBoot())
-		{
-			Boot();
-		}
-
 		scene = SceneManager::CreateScene();
 		scene->sceneName = "Level0";
 
 		skybox = gcnew Engine::EngineObjects::Skybox(
 			"Skybox",
 			gcnew Engine::Internal::Components::Transform(
-				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+				gcnew Engine::Internal::Components::Vector3(0, 2, 0),
 				gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-				5.0f
-			)
+				25.0f
+			),
+			1
 		);
 
 		modelRenderer = gcnew Engine::EngineObjects::ModelRenderer(
@@ -113,32 +130,67 @@ public:
 				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
 				gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
 				0.1f
-			)
+			),
+			0,
+			0,
+			ambient_color
 		);
 
-		Texture2D t = LoadTexture("Data/Models/castle_diffuse.png");
-		Model model = LoadModel("Data/Models/castle.obj");
-		Shader s = LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
-		Material m = { s, 0,0,0,0, {0} };
-		model.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = t;
-		SetShaderValueTexture(s, GetShaderLocation(s, "texture0"), t);
+		skybox->SetupSkyboxImage(0, LoadTexture("Data/Engine/Skybox/Daylight.png"));
 
-		modelRenderer->SetNativeRenderer(new Engine::EngineObjects::Native::NativeModelRenderer(model, m, ambient_color));
+		//modelRenderer->SetNativeRenderer(new Engine::EngineObjects::Native::NativeModelRenderer(model, m, ambient_color));
 
 		scene->AddObjectToScene(skybox);
 		scene->AddObjectToScene(modelRenderer);
 
+		cameraPosition = gcnew Engine::Internal::Components::Vector3(0, 0, 0);
+
 		SceneManager::SaveSceneToFile(scene, passwd);
-		Drawing::HL_CreateCamera(0, gcnew Engine::Internal::Components::Vector3(10, 5, 5), gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
+		//packedData->WriteToFile("Assets1", passwd);
+		Drawing::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
 		//dataPack.AddCamera(0, c3d, Engine::Internal::Components::C3D);
 		c3d2 = dataPack.GetCamera3D(0);
 		c3d2.projection = CAMERA_PERSPECTIVE;
 		c3d2.fovy = 60;
 	}
 
+	void Preload() override
+	{
+		if (FirstTimeBoot())
+		{
+			WinAPI::MBOX(GetWindowHandle(), "Nigger", "GoldEngine - Ver 0.0.2 - early", 0x00000040L | 0x00000000L);
+			Boot();
+		}
+
+		Model model;
+		MaterialMap matMap;
+
+		packedData->ReadFromFile("Assets1", passwd);
+
+		Texture2D t = dataPack.GetTexture2D(1);
+
+		matMap.texture = dataPack.GetTexture2D(1);
+
+		Material m = dataPack.GetMaterial(0);
+		m.maps = &matMap;
+
+		Shader s = dataPack.GetShader(0);
+
+		t = dataPack.GetTexture2D(0);
+		SetShaderValueTexture(s, GetShaderLocation(s, "texture0"), dataPack.GetTexture2D(0));
+
+		model = dataPack.GetModel(0);
+		m = { dataPack.GetShader(0), 0,0,0,0, {0}};
+
+		model.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = dataPack.GetTexture2D(0);
+
+		Init();
+	}
+
 	void Update() override
 	{
-		UpdateCamera(&c3d2, CAMERA_ORBITAL);
+		if(controlCamera)
+			UpdateCamera(&c3d2, CAMERA_FREE);
 
 		if (IsKeyDown(KEY_F1))
 		{
@@ -149,6 +201,35 @@ public:
 		{
 			ambient_color--;
 			modelRenderer->SetColorTint(ambient_color);
+		}
+		if (IsKeyPressed(KEY_F3))
+		{
+			controlCamera = !controlCamera;
+		}
+
+		if (IsKeyPressed(KEY_F4))
+		{
+			scene = SceneManager::CreateScene();
+			scene->sceneName = "Level0";
+		}
+
+		if (IsKeyPressed(KEY_F5))
+		{
+			Scene^ scn = SceneManager::LoadSceneFromFile("Level0");
+			if (scn != nullptr)
+			{
+				scene = scn;
+				TraceLog(LOG_INFO, CastToNative(scene->sceneName));
+			}
+			else
+			{
+				TraceLog(LOG_FATAL, "[CORE ERROR]: Failed loading scene");
+			}
+		}
+
+		if (IsKeyPressed(KEY_F6))
+		{
+			SceneManager::SaveSceneToFile(scene, passwd);
 		}
 	}
 };

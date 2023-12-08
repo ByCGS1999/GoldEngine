@@ -45,6 +45,12 @@ namespace Engine::Internal::Components
 			this->z = z;
 			this->w = w;
 		}
+
+	public:
+		Engine::Internal::Components::Vector3^ toEuler()
+		{
+			return gcnew Engine::Internal::Components::Vector3(x, y, z);
+		}
 	};
 
 	public ref class Transform

@@ -12,25 +12,25 @@
 public class NativeDataPack
 {
 public:
-	std::vector<ShaderPack*> shaders;
-	std::vector<ModelPack*> models;
-	std::vector<CameraPack*> cameras;
-	std::vector<MaterialPack*> materials;
-	std::vector<Texture2DPack*> textures2d;
+	std::vector<ShaderPack> shaders;
+	std::vector<ModelPack> models;
+	std::vector<CameraPack> cameras;
+	std::vector<MaterialPack> materials;
+	std::vector<Texture2DPack> textures2d;
 	NativeDataPack() {
-		shaders = std::vector<ShaderPack*>();
-		models = std::vector<ModelPack*>();
-		cameras = std::vector<CameraPack*>();
-		materials = std::vector<MaterialPack*>();
-		textures2d = std::vector<Texture2DPack*>();
+		shaders = std::vector<ShaderPack>();
+		models = std::vector<ModelPack>();
+		cameras = std::vector<CameraPack>();
+		materials = std::vector<MaterialPack>();
+		textures2d = std::vector<Texture2DPack>();
 	}
 };
 
 public class DataPacks
 {
 private:
-	static DataPacks singleton_reference;
 	NativeDataPack* nativePacks;
+	// singleton
 
 public:
 	DataPacks();
@@ -54,6 +54,6 @@ public:
 	void AddCamera(unsigned int cameraId, Camera3D camera, Engine::Internal::Components::CameraType type);
 	void AddMaterial(unsigned int materialId, Material material);
 	void AddTexture2D(unsigned int textureId, Texture2D texture);
-	// singleton
 	static DataPacks singleton();
+	NativeDataPack* GetNativeDataPack();
 };

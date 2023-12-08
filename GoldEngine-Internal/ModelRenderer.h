@@ -26,7 +26,11 @@ namespace Engine::EngineObjects
 		Native::NativeModelRenderer* nativeRenderer;
 
 	public:
-		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans);
+		// datapack refs
+		int modelId;
+		int materialId;
+		// methods & constructor
+		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, int model, int material, unsigned int tint);
 		void SetNativeRenderer(Native::NativeModelRenderer* renderer);
 		void Update() override;
 		void PhysicsUpdate() override;

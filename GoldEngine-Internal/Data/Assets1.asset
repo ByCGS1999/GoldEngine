@@ -1,0 +1,15 @@
+{
+  "shaders": {
+    "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs"
+  },
+  "models": {
+    "0": "Data/Models/castle.obj"
+  },
+  "materials": {
+    "0": 0
+  },
+  "textures2d": {
+    "1": "Data/Engine/Skybox/Daylight.png",
+    "0": "Data/Models/castle_diffuse.png"
+  }
+}

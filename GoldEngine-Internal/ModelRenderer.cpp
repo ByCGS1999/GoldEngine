@@ -1,15 +1,17 @@
 #include "Object.h"
 #include "Transform.h"
+#include "DataPacks.h"
 #include "ModelRenderer.h"
 
 using namespace System;
 using namespace Engine::EngineObjects;
 
-Engine::EngineObjects::ModelRenderer::ModelRenderer(String^ n, Engine::Internal::Components::Transform^ t) : Engine::Internal::Components::Object(n, t, Engine::Internal::Components::ModelRenderer)
+Engine::EngineObjects::ModelRenderer::ModelRenderer(String^ n, Engine::Internal::Components::Transform^ t, int model, int material, unsigned int tint) : Engine::Internal::Components::Object(n, t, Engine::Internal::Components::ModelRenderer)
 {
-	Material mat;
-	mat.shader = LoadShader("data/Engine/Shaders/base.vs", "data/Engine/Shaders/base.fs");
-	nativeRenderer = new Native::NativeModelRenderer(LoadModel("data/Engine/Models/Error.obj"), mat, 0xFF0000);
+	modelId = model;
+	materialId = material;
+
+	nativeRenderer = new Native::NativeModelRenderer(DataPacks::singleton().GetModel(modelId), DataPacks::singleton().GetMaterial(materialId), tint);
 }
 
 void ModelRenderer::SetNativeRenderer(Native::NativeModelRenderer* renderer)

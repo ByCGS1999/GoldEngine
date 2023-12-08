@@ -1,5 +1,6 @@
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AssemblyInfo.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\AssemblyInfo.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CastToNative.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\CastToNative.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataPack.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\DataPack.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataPacks.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\DataPacks.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Drawing.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\Drawing.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EngineEntryPoint.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\EngineEntryPoint.obj
@@ -16,4 +17,5 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Skybox.cpp;C:\Users\
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Window.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\Window.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ScriptSandbox.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\ScriptSandbox.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\Transform.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\WinAPI.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\WinAPI.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\.NETFramework,Version=4.7.2.AssemblyAttributes.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\.NETFramework,Version=4.7.2.AssemblyAttributes.obj

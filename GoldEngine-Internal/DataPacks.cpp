@@ -1,19 +1,31 @@
+#include "DataPack.h"
 #include "DataPacks.h"
+#include <vector>
+#include <algorithm>
+#include "Includes.h"
+#include "Transform.h"
+#include "ShaderPack.h"
+#include "ModelPack.h"
+#include "CameraPack.h"
+#include "MaterialPack.h"
+#include "Texture2DPack.h"
 
 /*
 	DATAPACKS
 	Used for storing game contents in memory.
 */
 
+DataPacks* singleton_Ref;
+
 DataPacks::DataPacks()
 {
 	nativePacks = new NativeDataPack();
-	singleton_reference = *this;
+	singleton_Ref = this;
 }
 
 DataPacks DataPacks::singleton()
 {
-	return singleton_reference;
+	return *singleton_Ref;
 }
 
 void DataPacks::FreeAll()
@@ -25,55 +37,29 @@ void DataPacks::FreeAll()
 	FreeCameras();
 }
 
-
 void DataPacks::FreeTextures2D()
 {
-	for each (Texture2DPack * pack in nativePacks->textures2d)
-	{
-		free(pack);
-	}
-
 	nativePacks->textures2d.clear();
 }
 
 
 void DataPacks::FreeCameras()
 {
-	for each (CameraPack * pack in nativePacks->cameras)
-	{
-		free(pack);
-	}
-
 	nativePacks->cameras.clear();
 }
 
 void DataPacks::FreeMaterials()
 {
-	for each (MaterialPack * pack in nativePacks->materials)
-	{
-		free(pack);
-	}
-
 	nativePacks->materials.clear();
 }
 
 void DataPacks::FreeModels()
 {
-	for each (ModelPack* pack in nativePacks->models)
-	{
-		free(pack);
-	}
-
 	nativePacks->models.clear();
 }
 
 void DataPacks::FreeShaders()
 {
-	for each (ShaderPack * pack in nativePacks->shaders)
-	{
-		free(pack);
-	}
-
 	nativePacks->shaders.clear();
 }
 
@@ -81,11 +67,11 @@ void DataPacks::AddShader(unsigned int shaderId, Shader shader)
 {
 	bool hasShader = false;
 
-	for each (ShaderPack * s in nativePacks->shaders)
+	for each (ShaderPack  s in nativePacks->shaders)
 	{
-		if (s->shaderId == shaderId)
+		if (s.shaderId == shaderId)
 		{
-			s->shaderReference = shader; // overwrite shader reference
+			s.shaderReference = shader; // overwrite shader reference
 			hasShader = true;
 			break;
 		}
@@ -97,7 +83,7 @@ void DataPacks::AddShader(unsigned int shaderId, Shader shader)
 
 	if (!hasShader)
 	{
-		nativePacks->shaders.push_back(new ShaderPack(shaderId, shader));
+		nativePacks->shaders.push_back(ShaderPack(shaderId, shader));
 	}
 }
 
@@ -105,11 +91,11 @@ void DataPacks::AddModel(unsigned int modelId, Model modelRef)
 {
 	bool hasModel = false;
 
-	for each (ModelPack * model in nativePacks->models)
+	for each (ModelPack  model in nativePacks->models)
 	{
-		if (model->ModelId == modelId)
+		if (model.ModelId == modelId)
 		{
-			model->ModelReference = modelRef;
+			model.ModelReference = modelRef;
 			hasModel = true;
 			break;
 		}
@@ -121,7 +107,7 @@ void DataPacks::AddModel(unsigned int modelId, Model modelRef)
 
 	if (!hasModel)
 	{
-		nativePacks->models.push_back(new ModelPack(modelId, modelRef));
+		nativePacks->models.push_back(ModelPack(modelId, modelRef));
 	}
 }
 
@@ -131,11 +117,11 @@ Model DataPacks::GetModel(unsigned int modelId)
 	Model retn;
 	bool hasModel = false;
 
-	for each (ModelPack * mP in nativePacks->models)
+	for each (ModelPack  mP in nativePacks->models)
 	{
-		if (mP->ModelId == modelId)
+		if (mP.ModelId == modelId)
 		{
-			retn = mP->ModelReference;
+			retn = mP.ModelReference;
 			hasModel = true;
 			break;
 		}
@@ -157,11 +143,11 @@ Shader DataPacks::GetShader(unsigned int shaderId)
 
 	bool hasShader = false;
 
-	for each (ShaderPack * sP in nativePacks->shaders)
+	for each (ShaderPack  sP in nativePacks->shaders)
 	{
-		if (sP->shaderId == shaderId)
+		if (sP.shaderId == shaderId)
 		{
-			shader = sP->shaderReference;
+			shader = sP.shaderReference;
 			hasShader = true;
 			break;
 		}
@@ -181,11 +167,11 @@ Material DataPacks::GetMaterial(unsigned int materialId)
 
 	bool hasMaterial = false;
 
-	for each (MaterialPack * sP in nativePacks->materials)
+	for each (MaterialPack  sP in nativePacks->materials)
 	{
-		if (sP->MaterialId == materialId)
+		if (sP.MaterialId == materialId)
 		{
-			material = sP->MaterialReference;
+			material = sP.MaterialReference;
 			hasMaterial = true;
 			break;
 		}
@@ -205,11 +191,11 @@ Texture2D DataPacks::GetTexture2D(unsigned int textureId)
 
 	bool hasTexture2D = false;
 
-	for each (Texture2DPack * sP in nativePacks->textures2d)
+	for each (Texture2DPack  sP in nativePacks->textures2d)
 	{
-		if (sP->textureId == textureId)
+		if (sP.textureId == textureId)
 		{
-			texture = sP->textureReference;
+			texture = sP.textureReference;
 			hasTexture2D = true;
 			break;
 		}
@@ -220,29 +206,29 @@ Texture2D DataPacks::GetTexture2D(unsigned int textureId)
 
 ShaderPack DataPacks::GetShaderPack(unsigned int shaderId)
 {
-	ShaderPack* shader = nullptr;
+	ShaderPack shader = ShaderPack(-1, { 0, {0} });
 
-	for each (ShaderPack * sP in nativePacks->shaders)
+	for each (ShaderPack  sP in nativePacks->shaders)
 	{
-		if (sP->shaderId == shaderId)
+		if (sP.shaderId == shaderId)
 		{
 			shader = sP;
 			break;
 		}
 	}
 
-	return *shader;
+	return shader;
 }
 
 Camera2D DataPacks::GetCamera2D(unsigned int cameraId)
 {
 	Camera2D camera;
 
-	for each (CameraPack * cP in nativePacks->cameras)
+	for each (CameraPack  cP in nativePacks->cameras)
 	{
-		if ((cP->cameraId == cameraId) && (cP->cameraType == Engine::Internal::Components::CameraType::C2D))
+		if ((cP.cameraId == cameraId) && (cP.cameraType == Engine::Internal::Components::CameraType::C2D))
 		{
-			camera = cP->camera2D;
+			camera = cP.camera2D;
 			break;
 		}
 	}
@@ -253,11 +239,11 @@ Camera3D DataPacks::GetCamera3D(unsigned int cameraId)
 {
 	Camera3D camera;
 
-	for each (CameraPack * cP in nativePacks->cameras)
+	for each (CameraPack  cP in nativePacks->cameras)
 	{
-		if ((cP->cameraId == cameraId) && (cP->cameraType == Engine::Internal::Components::CameraType::C3D))
+		if ((cP.cameraId == cameraId) && (cP.cameraType == Engine::Internal::Components::CameraType::C3D))
 		{
-			camera = cP->camera3D;
+			camera = cP.camera3D;
 			break;
 		}
 	}
@@ -269,11 +255,11 @@ void DataPacks::AddCamera(unsigned int cameraId, Camera2D camera, Engine::Intern
 {
 	bool hasCamera = false;
 
-	for each (CameraPack * cPack in nativePacks->cameras)
+	for each (CameraPack  cPack in nativePacks->cameras)
 	{
-		if (cPack->cameraId == cameraId && cPack->cameraType == type)
+		if (cPack.cameraId == cameraId && cPack.cameraType == type)
 		{
-			cPack->camera2D = camera;
+			cPack.camera2D = camera;
 			hasCamera = true;
 			break;
 		}
@@ -285,7 +271,7 @@ void DataPacks::AddCamera(unsigned int cameraId, Camera2D camera, Engine::Intern
 
 	if (!hasCamera)
 	{
-		nativePacks->cameras.push_back(new CameraPack(cameraId, type, &camera));
+		nativePacks->cameras.push_back(CameraPack(cameraId, type, &camera));
 	}
 }
 
@@ -293,11 +279,11 @@ void DataPacks::AddCamera(unsigned int cameraId, Camera3D camera, Engine::Intern
 {
 	bool hasCamera = false;
 
-	for each (CameraPack * cPack in nativePacks->cameras)
+	for each (CameraPack  cPack in nativePacks->cameras)
 	{
-		if (cPack->cameraId == cameraId && cPack->cameraType == type)
+		if (cPack.cameraId == cameraId && cPack.cameraType == type)
 		{
-			cPack->camera3D = camera;
+			cPack.camera3D = camera;
 			hasCamera = true;
 			break;
 		}
@@ -309,7 +295,7 @@ void DataPacks::AddCamera(unsigned int cameraId, Camera3D camera, Engine::Intern
 
 	if (!hasCamera)
 	{
-		nativePacks->cameras.push_back(new CameraPack(cameraId, type, &camera));
+		nativePacks->cameras.push_back(CameraPack(cameraId, type, &camera));
 	}
 }
 
@@ -317,11 +303,11 @@ void DataPacks::AddMaterial(unsigned int materialID, Material material)
 {
 	bool hasMaterial = false;
 
-	for each (MaterialPack * cPack in nativePacks->materials)
+	for each (MaterialPack  cPack in nativePacks->materials)
 	{
-		if (cPack->MaterialId == materialID)
+		if (cPack.MaterialId == materialID)
 		{
-			cPack->MaterialReference = material;
+			cPack.MaterialReference = material;
 			hasMaterial = true;
 			break;
 		}
@@ -333,7 +319,7 @@ void DataPacks::AddMaterial(unsigned int materialID, Material material)
 
 	if (!hasMaterial)
 	{
-		nativePacks->materials.push_back(new MaterialPack(materialID, material));
+		nativePacks->materials.push_back(MaterialPack(materialID, material));
 	}
 }
 
@@ -341,11 +327,11 @@ void DataPacks::AddTexture2D(unsigned int textureId, Texture2D texture)
 {
 	bool hasTexture2D = false;
 
-	for each (Texture2DPack * cPack in nativePacks->textures2d)
+	for each (Texture2DPack  cPack in nativePacks->textures2d)
 	{
-		if (cPack->textureId == textureId)
+		if (cPack.textureId == textureId)
 		{
-			cPack->textureReference = texture;
+			cPack.textureReference = texture;
 			hasTexture2D = true;
 			break;
 		}
@@ -357,6 +343,11 @@ void DataPacks::AddTexture2D(unsigned int textureId, Texture2D texture)
 
 	if (!hasTexture2D)
 	{
-		nativePacks->textures2d.push_back(new Texture2DPack(textureId, texture));
+		nativePacks->textures2d.push_back(Texture2DPack(textureId, texture));
 	}
+}
+
+NativeDataPack* DataPacks::GetNativeDataPack()
+{
+	return nativePacks;
 }

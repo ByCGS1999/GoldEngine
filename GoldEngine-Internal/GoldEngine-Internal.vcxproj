@@ -144,6 +144,7 @@
     <ClInclude Include="CameraPack.h" />
     <ClInclude Include="CastToNative.h" />
     <ClInclude Include="CypherLib.h" />
+    <ClInclude Include="DataPack.h" />
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="Drawing.h" />
     <ClInclude Include="Macros.h" />
@@ -181,10 +182,12 @@
     <ClInclude Include="ShaderPack.h" />
     <ClInclude Include="Texture2DPack.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="WinAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CastToNative.cpp" />
+    <ClCompile Include="DataPack.cpp" />
     <ClCompile Include="DataPacks.cpp" />
     <ClCompile Include="Drawing.cpp" />
     <ClCompile Include="EngineEntryPoint.cpp" />
@@ -201,6 +204,7 @@
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="ScriptSandbox.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />

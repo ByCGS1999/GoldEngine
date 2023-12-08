@@ -103,6 +103,9 @@
     <Filter Include="Data\Engine\Shaders\Textured">
       <UniqueIdentifier>{9cbabd75-5d40-4746-bb2e-0ffb651801fd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\Windows">
+      <UniqueIdentifier>{eaefb023-df10-41a1-a6b8-7316371dfeaf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -228,6 +231,12 @@
     <ClInclude Include="Skybox.h">
       <Filter>Archivos de origen\Engine\EngineObjects\Skybox</Filter>
     </ClInclude>
+    <ClInclude Include="DataPack.h">
+      <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="WinAPI.h">
+      <Filter>Archivos de origen\Engine\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -283,6 +292,12 @@
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
       <Filter>Archivos de origen\Engine\EngineObjects\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="DataPack.cpp">
+      <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="WinAPI.cpp">
+      <Filter>Archivos de origen\Engine\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
