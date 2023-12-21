@@ -106,6 +106,21 @@
     <Filter Include="Archivos de origen\Engine\Windows">
       <UniqueIdentifier>{eaefb023-df10-41a1-a6b8-7316371dfeaf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\LightManager">
+      <UniqueIdentifier>{d66d5953-30f7-41ef-a9b8-2c3af8bab6d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\PBR">
+      <UniqueIdentifier>{bf3d51b6-a8c1-4740-9bb4-9464f1fa50c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\PBR\PBRModelRenderer">
+      <UniqueIdentifier>{1caeaa6b-8ee3-40e8-94d6-b081916f8d25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Engine\Shaders\Runtime">
+      <UniqueIdentifier>{e6ff9872-9743-4381-8891-60c16bdbfe62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Engine\Shaders\Runtime\Lighting">
+      <UniqueIdentifier>{bac28715-06e8-45d9-bb39-fab1a90bd275}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -195,7 +210,7 @@
     <ClInclude Include="Raylib\include\glad.h">
       <Filter>raylib\include</Filter>
     </ClInclude>
-    <ClInclude Include="Raylib\include\rlight.h">
+    <ClInclude Include="Raylib\include\rlights.h">
       <Filter>raylib\include</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\rPBR.h">
@@ -236,6 +251,15 @@
     </ClInclude>
     <ClInclude Include="WinAPI.h">
       <Filter>Archivos de origen\Engine\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\LightManager</Filter>
+    </ClInclude>
+    <ClInclude Include="PBRModelRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\PBR\PBRModelRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -326,53 +350,11 @@
     <CopyFileToFolders Include="Data\Engine\Skybox\Default.hdr">
       <Filter>Data\Engine\Skybox</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\pointlight.vs">
-      <Filter>Data\Engine\Shaders</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\brdf.fs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\brdf.vs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\cubemap.fs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\cubemap.vs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\irradiance.fs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\lighting.fs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\lighting.vs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.fs">
       <Filter>Data\Engine\Shaders\rPBR</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.vs">
       <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\postfx.fs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\postfx.vs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\prefilter.fs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\skybox.fs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\skybox.vs">
-      <Filter>Data\Engine\Shaders\rPBR</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\pointlight.fs">
-      <Filter>Data\Engine\Shaders</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\textured\albedo.fs">
       <Filter>Data\Engine\Shaders\Textured</Filter>

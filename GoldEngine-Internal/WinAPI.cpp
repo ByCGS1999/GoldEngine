@@ -11,3 +11,18 @@ void WinAPI::FreeCons()
 {
 	FreeConsole();
 }
+
+void WinAPI::AllocCons()
+{
+	AllocConsole();
+}
+
+void WinAPI::SetWindowStatus(void* winHandle, int windowId)
+{
+	ShowWindow((HWND)winHandle, windowId);
+}
+
+void WinAPI::SetAttribute(const char* path, int ptr)
+{
+	SetFileAttributes((LPCWSTR)path, (DWORD)ptr);
+}

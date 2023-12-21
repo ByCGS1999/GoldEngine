@@ -17,6 +17,21 @@ namespace Engine::Internal::Components
 			this->y = y;
 			this->z = z;
 		}
+
+		::Vector3 toNative()
+		{
+			::Vector3 rLib_v3;
+			rLib_v3.x = this->x;
+			rLib_v3.y = this->y;
+			rLib_v3.z = this->z;
+
+			return rLib_v3;
+		}
+
+		::Color toColor()
+		{
+			return GetColor(x + y + z);
+		}
 	};
 
 	public ref class Vector2
@@ -29,6 +44,11 @@ namespace Engine::Internal::Components
 		{
 			this->x = x;
 			this->y = y;
+		}
+
+		::Vector2 toNative()
+		{
+			return { x, y };
 		}
 	};
 

@@ -161,6 +161,11 @@ Shader DataPacks::GetShader(unsigned int shaderId)
 	return shader;
 }
 
+void DataPacks::SetShader(unsigned int shaderId, Shader value)
+{
+	nativePacks->shaders[shaderId].shaderReference = value;
+}
+
 Material DataPacks::GetMaterial(unsigned int materialId)
 {
 	Material material;

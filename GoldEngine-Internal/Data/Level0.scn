@@ -1,7 +1,27 @@
 {
   "sceneId": 0,
   "sceneName": "Level0",
+  "assetPack": null,
   "sceneObjects": [
+    {
+      "name": "Workspace",
+      "type": 0,
+      "transform": {
+        "position": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+        "rotation": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "w": 0.0
+        },
+        "scale": 0.0
+      },
+      "parent": null
+    },
     {
       "materialId": 1,
       "name": "Skybox",
@@ -19,13 +39,13 @@
           "w": 0.0
         },
         "scale": 25.0
-      }
+      },
+      "parent": null
     },
     {
-      "modelId": 0,
-      "materialId": 0,
+      "color_hex": 724249599,
       "name": "Model1",
-      "type": 1,
+      "type": 5,
       "transform": {
         "position": {
           "x": 0.0,
@@ -39,6 +59,25 @@
           "w": 0.0
         },
         "scale": 0.1
+      },
+      "parent": {
+        "name": "Workspace",
+        "type": 0,
+        "transform": {
+          "position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 0.0
+          },
+          "scale": 0.0
+        },
+        "parent": null
       }
     }
   ]

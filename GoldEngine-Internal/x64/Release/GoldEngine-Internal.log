@@ -1,2 +1,1 @@
-﻿  AssemblyInfo.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
-  GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe
+﻿C:\Program Files\dotnet\sdk\8.0.100\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.TargetFrameworkInference.targets(208,5): error NETSDK1115: El SDK de .NET actual no admite .NET Framework sin usar los valores predeterminados de dicho SDK. Posiblemente se deba a la falta de coincidencia entre la propiedad CLRSupport del proyecto de C++/CLI y TargetFramework.

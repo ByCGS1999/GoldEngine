@@ -8,6 +8,7 @@ namespace Engine::Management
 	public:
 		int sceneId;
 		System::String^ sceneName;
+		System::String^ assetPack;
 		System::Collections::ArrayList sceneObjects;
 		
 		// Methods

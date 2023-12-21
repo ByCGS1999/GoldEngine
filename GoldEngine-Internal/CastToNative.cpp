@@ -8,11 +8,13 @@
 
 const char* CastToNative(System::String^ value)
 {
-	return msclr::interop::marshal_context().marshal_as<const char*>(value);
+	msclr::interop::marshal_context ctx;
+	return ctx.marshal_as<const char*>(value);
 }
 
 template <class returnal, class input>
 returnal CastToNativeType(input value)
 {
-	return msclr::interop::marshal_context().marshal_as<returnal>(value);
+	msclr::interop::marshal_context ctx;
+	return ctx.marshal_as<returnal>(value);
 }

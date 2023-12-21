@@ -2,35 +2,20 @@
 
 namespace rPBR
 {
-    /***********************************************************************************
+    /**********************************************************************************************
 *
-*   rPBR [core] - Physically Based Rendering 3D drawing functions for raylib
+*   raylib.pbr - Some useful functions to deal with pbr materials and lights
 *
-*   FEATURES:
-*       - Phyiscally based rendering for any 3D model.
-*       - Metalness/Roughness PBR workflow.
-*       - Split-Sum Approximation for specular reflection calculations.
-*       - Support for normal mapping, parallax mapping and emission mapping.
-*       - Simple and easy-to-use implementation code.
-*       - Multi-material scene supported.
-*       - Point and directional lights supported.
-*       - Internal shader values and locations points handled automatically.
+*   CONFIGURATION:
 *
-*   NOTES:
-*       Physically based rendering shaders paths are set up by default
-*       Remember to call UnloadMaterialPBR and UnloadEnvironment to deallocate required memory and unload textures
-*       Physically based rendering requires OpenGL 3.3 or ES2
-*
-*   DEPENDENCIES:
-*       stb_image (Sean Barret) for images loading (JPEG, PNG, BMP, HDR)
-*       GLAD for OpenGL extensions loading (3.3 Core profile)
+*   #define RPBR_IMPLEMENTATION
+*       Generates the implementation of the library into the included file.
+*       If not defined, the library is in header only mode and can be included in other headers
+*       or source files without problems. But only ONE file should hold the implementation.
 *
 *   LICENSE: zlib/libpng
 *
-*   rPBR is licensed under an unmodified zlib/libpng license, which is an OSI-certified,
-*   BSD-like license that allows static linking with closed source software:
-*
-*   Copyright (c) 2017-2020 Victor Fisac
+*   Copyright (c) 2023-2024 Afan OLOVCIC (@_DevDad) 2017-2020 Victor Fisac(@victorfisac),Ramon Santamaria (@raysan5)
 *
 *   This software is provided "as-is", without any express or implied warranty. In no event
 *   will the authors be held liable for any damages arising from the use of this software.
@@ -47,939 +32,460 @@ namespace rPBR
 *
 *     3. This notice may not be removed or altered from any source distribution.
 *
-***********************************************************************************/
+**********************************************************************************************/
 
-//----------------------------------------------------------------------------------
-// Includes
-//----------------------------------------------------------------------------------
-#include <math.h>                           // Required for: powf()
+using namespace rPBR;
 
-#include "raymath.h"    // Required for matrix, vectors and other math functions
+#ifndef RPBR_H
+#define RPBR_H
 #include "raylib.h"
-#include "glad.h"                  // Required for OpenGL API
+
 
 //----------------------------------------------------------------------------------
-// Defines
+// Defines and Macros
 //----------------------------------------------------------------------------------
-#define         MAX_LIGHTS                  4                                       // Max lights supported by shader
-#define         MAX_MIPMAP_LEVELS           5                                       // Max number of prefilter texture mipmaps
-
-#define         PATH_PBR_VS                 "Data/Engine/Shaders/pbr.vs"              // Path to physically based rendering vertex shader
-#define         PATH_PBR_FS                 "Data/Engine/Shaders/pbr.fs"              // Path to physically based rendering fragment shader
-#define         PATH_CUBE_VS                "Data/Engine/Shaders/cubemap.vs"          // Path to equirectangular to cubemap vertex shader
-#define         PATH_CUBE_FS                "Data/Engine/Shaders/cubemap.fs"          // Path to equirectangular to cubemap fragment shader
-#define         PATH_SKYBOX_VS              "Data/Engine/Shaders/skybox.vs"           // Path to skybox vertex shader
-#define         PATH_SKYBOX_FS              "Data/Engine/Shaders/skybox.fs"           // Path to skybox vertex shader
-#define         PATH_IRRADIANCE_FS          "Data/Engine/Shaders/irradiance.fs"       // Path to irradiance (GI) calculation fragment shader
-#define         PATH_PREFILTER_FS           "Data/Engine/Shaders/prefilter.fs"        // Path to reflection prefilter calculation fragment shader
-#define         PATH_BRDF_VS                "Data/Engine/Shaders/brdf.vs"             // Path to bidirectional reflectance distribution function vertex shader 
-#define         PATH_BRDF_FS                "Data/Engine/Shaders/brdf.fs"             // Path to bidirectional reflectance distribution function fragment shader
-
-//----------------------------------------------------------------------------------
-// Structs and enums
-//----------------------------------------------------------------------------------
-    typedef enum {
-        LIGHT_DIRECTIONAL,
-        LIGHT_POINT
-    } LightType;
+#define SHADER_LOC_MAP_MRA SHADER_LOC_MAP_METALNESS  //METALLIC, ROUGHNESS and AO
+#define SHADER_LOC_MAP_EMISSIVE  SHADER_LOC_MAP_HEIGHT     //EMISSIVE
+#define MATERIAL_MAP_MRA MATERIAL_MAP_METALNESS
+#define MATERIAL_MAP_EMISSIVE  MATERIAL_MAP_HEIGHT
+#define NULL 0
+#define COLOR_TO_ARRAY(c)
 
     typedef struct {
-        bool enabled;
-        LightType type;
+        int enabled;
+        int type;
         Vector3 position;
         Vector3 target;
-        Color color;
+        float color[4];
+        float intensity;
+
         int enabledLoc;
         int typeLoc;
-        int posLoc;
+        int positionLoc;
         int targetLoc;
         int colorLoc;
-    } Light;
+        int intensityLoc;
+    } PBRLight;
 
-    typedef struct Environment {
+    typedef enum {
+        LIGHT_DIRECTIONAL = 0,
+        LIGHT_POINT,
+        LIGHT_SPOT
+    } PBRLightType;
+
+    typedef struct {
         Shader pbrShader;
         Shader skyShader;
-
-        unsigned int cubemapId;
-        unsigned int irradianceId;
-        unsigned int prefilterId;
-        unsigned int brdfId;
-
+        unsigned int cubemap;
+        unsigned int irradiance;
+        unsigned int prefilter;
+        unsigned int brdf;
         int modelMatrixLoc;
         int pbrViewLoc;
         int skyViewLoc;
         int skyResolutionLoc;
-    } Environment;
+    } PBREnvironment;
 
-    typedef struct PropertyPBR {
-        Texture2D bitmap;
-        bool useBitmap;
-        Color color;
-        int bitmapLoc;
-        int useBitmapLoc;
-        int colorLoc;
-    } PropertyPBR;
+    typedef enum {
+        PBR_COLOR_ALBEDO = 0,
+        PBR_COLOR_EMISSIVE
+    }PBRColorType;
 
-    typedef struct MaterialPBR {
-        PropertyPBR albedo;
-        PropertyPBR normals;
-        PropertyPBR metalness;
-        PropertyPBR roughness;
-        PropertyPBR ao;
-        PropertyPBR emission;
-        PropertyPBR height;
-        Environment env;
-    } MaterialPBR;
+    typedef enum {
+        PBR_VEC2_TILING = 0,
+        PBR_VEC2_OFFSET
+    }PBRVec2Type;
 
-    typedef enum TypePBR {
-        PBR_ALBEDO,
-        PBR_NORMALS,
-        PBR_METALNESS,
-        PBR_ROUGHNESS,
-        PBR_AO,
-        PBR_EMISSION,
-        PBR_HEIGHT
-    } TypePBR;
+    typedef enum {
+        PBR_PARAM_NORMAL = 0,
+        PBR_PARAM_METALLIC,
+        PBR_PARAM_ROUGHNESS,
+        PBR_PARAM_EMISSIVE,
+        PBR_PARAM_AO
+    }PBRFloatType;
 
+    typedef enum {
+        PBR_TEXTURE_ALBEDO = 0,
+        PBR_TEXTURE_NORMAL,
+        PBR_TEXTURE_MRA,
+        PBR_TEXTURE_EMISSIVE
+    }PBRTexType;
+
+    // Textures are moved to material from params to pack better and use less textures on the end
+    // texture MRAE 4Channel R: Metallic G: Roughness B: A: Ambient Occlusion
+    // texEmissive use just one channel, so we have 3 channels still to use if we need
+    typedef struct {
+        Shader pbrShader;
+        float albedo[4];
+        float normal;
+        float metallic;
+        float roughness;
+        float ao;
+        float emissive[4];
+        float ambient[3];
+        float emissivePower;
+
+        Texture2D texAlbedo;
+        Texture2D texNormal;
+        Texture2D texMRA;//r: Metallic  g: Roughness b: AO a:Empty
+        Texture2D texEmissive; //Emissive Texture
+        // Using float4 to store tilling at 1st and 2nd position and offset at 3rd and 4th
+        float texTiling[2];
+        float texOffset[2];
+
+        int useTexAlbedo;
+        int useTexNormal;
+        int useTexMRA;
+        int useTexEmissive;
+
+        int albedoLoc;
+        int normalLoc;
+        int metallicLoc;
+        int roughnessLoc;
+        int aoLoc;
+        int emissiveColorLoc;
+        int emissivePowerLoc;
+
+        int texTilingLoc;
+        int texOffsetLoc;
+
+        int useTexAlbedoLoc;
+        int useTexNormalLoc;
+        int useTexMRAELoc;
+        int useTexEmissiveLoc;
+    } PBRMaterial;
+
+    typedef struct {
+        Model model;
+        PBRMaterial pbrMat;
+    }PBRModel;
+
+    //----------------------------------------------------------------------------------
+    // Module Functions Declaration
+    //----------------------------------------------------------------------------------
+
+    // Create a light and get shader locations
+    PBRLight PBRLightCreate(int type, Vector3 position, Vector3 target, Color color, float intensity, Shader shader);
+    // Send light properties to shader
+    void PBRLightUpdate(Shader shader, PBRLight light);
+
+    //For now until we do real skylight
+    void PBRSetAmbient(Shader shader, Color color, float intensity);
+
+    PBRModel PBRModelLoad(const char* fileName);
+    PBRModel PBRModelLoadFromMesh(Mesh mesh);
+
+    void PBRLoadTextures(PBRMaterial* pbrMat, PBRTexType pbrTexType, const char* fileName);
+    void UnloadPBRMaterial(PBRMaterial pbrMat);
+    void PBRSetColor(PBRMaterial* pbrMat, PBRColorType pbrColorType, Color color);
+    void PBRSetVec2(PBRMaterial* pbrMat, PBRVec2Type type, Vector2 value);
+    void PBRSetFloat(PBRMaterial* pbrMat, PBRFloatType pbrParamType, float value);
+
+    void PBRMaterialSetup(PBRMaterial* pbrMat, Shader pbrShader, PBREnvironment* environment);
+    void PBRSetMaterial(PBRModel* model, PBRMaterial* pbrMat, int matIndex);
+    void PBRDrawModel(PBRModel pbrModel, Vector3 position, float scale, Color tint);
+
+#endif //RPBR_H
+
+    /***********************************************************************************
+    *
+    *   RPBR IMPLEMENTATION
+    *
+    ************************************************************************************/
+
+#ifndef rPBR_IMPL
+    #define rPBR_IMPL
     //----------------------------------------------------------------------------------
     // Global Variables Definition
     //----------------------------------------------------------------------------------
-    static int lightsCount = 0;                     // Current amount of created lights
+    static int lightsCount = 0;    // Current amount of created lights
 
-    //----------------------------------------------------------------------------------
-    // Functions Declaration
-    //----------------------------------------------------------------------------------
-    MaterialPBR SetupMaterialPBR(Environment env, Color albedo, int metalness, int roughness);                                      // Set up PBR environment shader constant values
-    void SetMaterialTexturePBR(MaterialPBR* mat, TypePBR type, Texture2D texture);                                                  // Set texture to PBR material
-    void UnsetMaterialTexturePBR(MaterialPBR* mat, TypePBR type);                                                                   // Unset texture to PBR material and unload it from GPU
-    Light CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Environment env);                                           // Defines a light and get locations from environment PBR shader
-    Environment LoadEnvironment(const char* filename, int cubemapSize, int irradianceSize, int prefilterSize, int brdfSize);        // Load an environment cubemap, irradiance, prefilter and PBR scene
-
-    int GetLightsCount(void);                                                                                                       // Get the current amount of created lights
-    void UpdateLightValues(Environment env, Light light);                                                                           // Send to environment PBR shader light values
-    void UpdateEnvironmentValues(Environment env, Camera camera, Vector2 res);                                                      // Send to environment PBR shader camera view and resolution values
-
-    void DrawModelPBR(Model model, MaterialPBR mat, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale);    // Draw a model using physically based rendering
-    void DrawSkybox(Environment environment, Camera camera);                                                                        // Draw a cube skybox using environment cube map
-    void RenderCube(void);                                                                                                          // Renders a 1x1 3D cube in NDC
-    void RenderQuad(void);                                                                                                          // Renders a 1x1 XY quad in NDC
-
-    void UnloadMaterialPBR(MaterialPBR mat);                                                                                        // Unload material PBR textures
-    void UnloadEnvironment(Environment env);                                                                                        // Unload environment loaded shaders and dynamic textures
-
-    //----------------------------------------------------------------------------------
-    // Functions Definition
-    //----------------------------------------------------------------------------------
-    // Set up PBR environment shader constant values
-    MaterialPBR SetupMaterialPBR(Environment env, Color albedo, int metalness, int roughness)
+    // Create a light and get shader locations
+    PBRLight PBRLightCreate(int type, Vector3 position, Vector3 target, Color color, float intensity, Shader shader)
     {
-        MaterialPBR mat;
-
-        // Set up material properties color
-        mat.albedo.color = albedo;
-        mat.normals.color = { 128, 128, 255, 255 };
-        mat.metalness.color = { (unsigned char)metalness, 0, 0, 0 };
-        mat.roughness.color = { (unsigned char)roughness, 0, 0, 0 };
-        mat.ao.color = { 255, 255, 255, 255 };
-        mat.emission.color = { 0, 0, 0, 0 };
-        mat.height.color = { 0, 0, 0, 0 };
-
-        // Set up material properties use texture state
-        mat.albedo.useBitmap = false;
-        mat.normals.useBitmap = false;
-        mat.metalness.useBitmap = false;
-        mat.roughness.useBitmap = false;
-        mat.ao.useBitmap = false;
-        mat.emission.useBitmap = false;
-        mat.height.useBitmap = false;
-
-        // Set up material properties textures
-        mat.albedo.bitmap = { 0 };
-        mat.normals.bitmap = { 0 };
-        mat.metalness.bitmap = { 0 };
-        mat.roughness.bitmap = { 0 };
-        mat.ao.bitmap = { 0 };
-        mat.emission.bitmap = { 0 };
-        mat.height.bitmap = { 0 };
-
-        // Set up material environment
-        mat.env = env;
-
-        // Set up PBR shader material locations
-        mat.albedo.bitmapLoc = GetShaderLocation(mat.env.pbrShader, "albedo.sampler");
-        mat.normals.bitmapLoc = GetShaderLocation(mat.env.pbrShader, "normals.sampler");
-        mat.metalness.bitmapLoc = GetShaderLocation(mat.env.pbrShader, "metalness.sampler");
-        mat.roughness.bitmapLoc = GetShaderLocation(mat.env.pbrShader, "roughness.sampler");
-        mat.ao.bitmapLoc = GetShaderLocation(mat.env.pbrShader, "ao.sampler");
-        mat.emission.bitmapLoc = GetShaderLocation(mat.env.pbrShader, "emission.sampler");
-        mat.height.bitmapLoc = GetShaderLocation(mat.env.pbrShader, "height.sampler");
-
-        mat.albedo.useBitmapLoc = GetShaderLocation(mat.env.pbrShader, "albedo.useSampler");
-        mat.normals.useBitmapLoc = GetShaderLocation(mat.env.pbrShader, "normals.useSampler");
-        mat.metalness.useBitmapLoc = GetShaderLocation(mat.env.pbrShader, "metalness.useSampler");
-        mat.roughness.useBitmapLoc = GetShaderLocation(mat.env.pbrShader, "roughness.useSampler");
-        mat.ao.useBitmapLoc = GetShaderLocation(mat.env.pbrShader, "ao.useSampler");
-        mat.emission.useBitmapLoc = GetShaderLocation(mat.env.pbrShader, "emission.useSampler");
-        mat.height.useBitmapLoc = GetShaderLocation(mat.env.pbrShader, "height.useSampler");
-
-        mat.albedo.colorLoc = GetShaderLocation(mat.env.pbrShader, "albedo.color");
-        mat.normals.colorLoc = GetShaderLocation(mat.env.pbrShader, "normals.color");
-        mat.metalness.colorLoc = GetShaderLocation(mat.env.pbrShader, "metalness.color");
-        mat.roughness.colorLoc = GetShaderLocation(mat.env.pbrShader, "roughness.color");
-        mat.ao.colorLoc = GetShaderLocation(mat.env.pbrShader, "ao.color");
-        mat.emission.colorLoc = GetShaderLocation(mat.env.pbrShader, "emission.color");
-        mat.height.colorLoc = GetShaderLocation(mat.env.pbrShader, "height.color");
-
-        // Set up PBR shader material texture units
-        SetShaderValue(mat.env.pbrShader, mat.albedo.bitmapLoc, (const void*)3, 1);
-        SetShaderValue(mat.env.pbrShader, mat.normals.bitmapLoc, (const void*)4, 1);
-        SetShaderValue(mat.env.pbrShader, mat.metalness.bitmapLoc, (const void*)5, 1);
-        SetShaderValue(mat.env.pbrShader, mat.roughness.bitmapLoc, (const void*)6, 1);
-        SetShaderValue(mat.env.pbrShader, mat.ao.bitmapLoc, (const void*)7, 1);
-        SetShaderValue(mat.env.pbrShader, mat.emission.bitmapLoc, (const void*)8, 1);
-        SetShaderValue(mat.env.pbrShader, mat.height.bitmapLoc, (const void*)9, 1);
-
-        return mat;
-    }
-
-    // Set texture to PBR material
-    void SetMaterialTexturePBR(MaterialPBR* mat, TypePBR type, Texture2D texture)
-    {
-        switch (type)
-        {
-        case PBR_ALBEDO:
-        {
-            mat->albedo.bitmap = texture;
-            mat->albedo.useBitmap = true;
-        } break;
-        case PBR_NORMALS:
-        {
-            mat->normals.bitmap = texture;
-            mat->normals.useBitmap = true;
-        } break;
-        case PBR_METALNESS:
-        {
-            mat->metalness.bitmap = texture;
-            mat->metalness.useBitmap = true;
-        } break;
-        case PBR_ROUGHNESS:
-        {
-            mat->roughness.bitmap = texture;
-            mat->roughness.useBitmap = true;
-        } break;
-        case PBR_AO:
-        {
-            mat->ao.bitmap = texture;
-            mat->ao.useBitmap = true;
-        } break;
-        case PBR_EMISSION:
-        {
-            mat->emission.bitmap = texture;
-            mat->emission.useBitmap = true;
-        } break;
-        case PBR_HEIGHT:
-        {
-            mat->height.bitmap = texture;
-            mat->height.useBitmap = true;
-        } break;
-        default: break;
-        }
-    }
-
-    // Unset texture to PBR material and unload it from GPU
-    void UnsetMaterialTexturePBR(MaterialPBR* mat, TypePBR type)
-    {
-        switch (type)
-        {
-        case PBR_ALBEDO:
-        {
-            if (mat->albedo.useBitmap)
-            {
-                mat->albedo.useBitmap = false;
-                UnloadTexture(mat->albedo.bitmap);
-                mat->albedo.bitmap = { 0 };
-            }
-        } break;
-        case PBR_NORMALS:
-        {
-            if (mat->normals.useBitmap)
-            {
-                mat->normals.useBitmap = false;
-                UnloadTexture(mat->normals.bitmap);
-                mat->normals.bitmap = { 0 };
-            }
-        } break;
-        case PBR_METALNESS:
-        {
-            if (mat->metalness.useBitmap)
-            {
-                mat->metalness.useBitmap = false;
-                UnloadTexture(mat->metalness.bitmap);
-                mat->metalness.bitmap = { 0 };
-            }
-        } break;
-        case PBR_ROUGHNESS:
-        {
-            if (mat->roughness.useBitmap)
-            {
-                mat->roughness.useBitmap = false;
-                UnloadTexture(mat->roughness.bitmap);
-                mat->roughness.bitmap = { 0 };
-            }
-        } break;
-        case PBR_AO:
-        {
-            if (mat->ao.useBitmap)
-            {
-                mat->ao.useBitmap = false;
-                UnloadTexture(mat->ao.bitmap);
-                mat->ao.bitmap = { 0 };
-            }
-        } break;
-        case PBR_EMISSION:
-        {
-            if (mat->emission.useBitmap)
-            {
-                mat->emission.useBitmap = false;
-                UnloadTexture(mat->emission.bitmap);
-                mat->emission.bitmap = { 0 };
-            }
-        } break;
-        case PBR_HEIGHT:
-        {
-            if (mat->height.useBitmap)
-            {
-                mat->height.useBitmap = false;
-                UnloadTexture(mat->height.bitmap);
-                mat->height.bitmap = { 0 };
-            }
-        } break;
-        default: break;
-        }
-    }
-
-    // Defines a light and get locations from environment shader
-    Light CreateLight(int type, Vector3 pos, Vector3 targ, Color color, Environment env)
-    {
-        Light light = { 0 };
+        PBRLight light = { 0 };
 
         if (lightsCount < MAX_LIGHTS)
         {
-            light.enabled = true;
-            light.type = (LightType)type;
-            light.position = pos;
-            light.target = targ;
-            light.color = color;
+            light.enabled = 1;
+            light.type = type;
+            light.position = position;
+            light.target = target;
+            light.color[0] = (float)color.r / (float)255;
+            light.color[1] = (float)color.g / (float)255;
+            light.color[2] = (float)color.b / (float)255;
+            light.color[3] = (float)color.a / (float)255;
+            light.intensity = intensity;
+            // NOTE: Lighting shader naming must be the provided ones
+            light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", lightsCount));
+            light.typeLoc = GetShaderLocation(shader, TextFormat("lights[%i].type", lightsCount));
+            light.positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", lightsCount));
+            light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightsCount));
+            light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightsCount));
+            light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightsCount));
+            PBRLightUpdate(shader, light);
 
-            char enabledName[32] = "lights[x].enabled\0";
-            char typeName[32] = "lights[x].type\0";
-            char posName[32] = "lights[x].position\0";
-            char targetName[32] = "lights[x].target\0";
-            char colorName[32] = "lights[x].color\0";
-            enabledName[7] = '0' + lightsCount;
-            typeName[7] = '0' + lightsCount;
-            posName[7] = '0' + lightsCount;
-            targetName[7] = '0' + lightsCount;
-            colorName[7] = '0' + lightsCount;
-
-            light.enabledLoc = GetShaderLocation(env.pbrShader, enabledName);
-            light.typeLoc = GetShaderLocation(env.pbrShader, typeName);
-            light.posLoc = GetShaderLocation(env.pbrShader, posName);
-            light.targetLoc = GetShaderLocation(env.pbrShader, targetName);
-            light.colorLoc = GetShaderLocation(env.pbrShader, colorName);
-
-            UpdateLightValues(env, light);
             lightsCount++;
         }
 
         return light;
     }
 
-    // Load an environment cubemap, irradiance, prefilter and PBR scene
-    Environment LoadEnvironment(const char* filename, int cubemapSize, int irradianceSize, int prefilterSize, int brdfSize)
+    // Send light properties to shader
+    // NOTE: Light shader locations should be available
+    void PBRLightUpdate(Shader shader, PBRLight light)
     {
-        Environment env = { 0 };
-
-        // Load environment required shaders
-        env.pbrShader = LoadShader(PATH_PBR_VS, PATH_PBR_FS);
-
-        Shader cubeShader = LoadShader(PATH_CUBE_VS, PATH_CUBE_FS);
-        Shader irradianceShader = LoadShader(PATH_SKYBOX_VS, PATH_IRRADIANCE_FS);
-        Shader prefilterShader = LoadShader(PATH_SKYBOX_VS, PATH_PREFILTER_FS);
-        Shader brdfShader = LoadShader(PATH_BRDF_VS, PATH_BRDF_FS);
-
-        env.skyShader = LoadShader(PATH_SKYBOX_VS, PATH_SKYBOX_FS);
-
-        // Get cubemap shader locations
-        int cubeProjectionLoc = GetShaderLocation(cubeShader, "projection");
-        int cubeViewLoc = GetShaderLocation(cubeShader, "view");
-
-        // Get skybox shader locations
-        int skyProjectionLoc = GetShaderLocation(env.skyShader, "projection");
-        env.skyViewLoc = GetShaderLocation(env.skyShader, "view");
-        env.skyResolutionLoc = GetShaderLocation(env.skyShader, "resolution");
-
-        // Get irradiance shader locations
-        int irradianceProjectionLoc = GetShaderLocation(irradianceShader, "projection");
-        int irradianceViewLoc = GetShaderLocation(irradianceShader, "view");
-
-        // Get prefilter shader locations
-        int prefilterProjectionLoc = GetShaderLocation(prefilterShader, "projection");
-        int prefilterViewLoc = GetShaderLocation(prefilterShader, "view");
-        int prefilterRoughnessLoc = GetShaderLocation(prefilterShader, "roughness");
-
-        // Set up environment shader texture units
-        SetShaderValue(env.pbrShader, env.pbrShader.locs[SHADER_LOC_MAP_IRRADIANCE], 0, 1);
-        SetShaderValue(env.pbrShader, env.pbrShader.locs[SHADER_LOC_MAP_PREFILTER], (const void*)1, 1);
-        SetShaderValue(env.pbrShader, env.pbrShader.locs[SHADER_LOC_MAP_BRDF], (const void*)2, 1);
-
-        // Set up cubemap shader constant values
-        SetShaderValue(cubeShader, cubeShader.locs[SHADER_LOC_MAP_CUBEMAP], 0, 1);
-
-        // Set up irradiance shader constant values
-        SetShaderValue(irradianceShader, irradianceShader.locs[SHADER_LOC_MAP_IRRADIANCE], 0, 1);
-
-        // Set up prefilter shader constant values
-        SetShaderValue(prefilterShader, prefilterShader.locs[SHADER_LOC_MAP_IRRADIANCE], 0, 1);
-
-        // Set up skybox shader constant values
-        SetShaderValue(env.skyShader, env.skyShader.locs[SHADER_LOC_MAP_IRRADIANCE], 0, 1);
-
-        // Set up depth face culling and cube map seamless
-        glDepthFunc(GL_LEQUAL);
-        glDisable(GL_CULL_FACE);
-        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-        glLineWidth(2);
-
-        // Load HDR environment texture
-        Texture2D skyTex = LoadTexture(filename);
-
-        // Set up framebuffer for skybox
-        unsigned int captureFBO, captureRBO;
-        glGenFramebuffers(1, &captureFBO);
-        glGenRenderbuffers(1, &captureRBO);
-        glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-        glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, cubemapSize, cubemapSize);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, captureRBO);
-
-        // Set up cubemap to render and attach to framebuffer
-        // NOTE: faces are stored with 16 bit floating point values
-        glGenTextures(1, &env.cubemapId);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, env.cubemapId);
-        for (unsigned int i = 0; i < 6; i++) glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, cubemapSize, cubemapSize, 0, GL_RGB, GL_FLOAT, NULL);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        // Create projection (transposed) and different views for each face
-        Matrix captureProjection = MatrixPerspective(90.0f, 1.0f, 0.01, 1000.0);
-        MatrixTranspose(captureProjection);
-        Matrix captureViews[6] = {
-            MatrixLookAt({ 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, -1.0f, 0.0f }),
-            MatrixLookAt({ 0.0f, 0.0f, 0.0f }, { -1.0f, 0.0f, 0.0f }, { 0.0f, -1.0f, 0.0f }),
-            MatrixLookAt({ 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f }),
-            MatrixLookAt({ 0.0f, 0.0f, 0.0f }, { 0.0f, -1.0f, 0.0f }, { 0.0f, 0.0f, -1.0f }),
-            MatrixLookAt({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, -1.0f, 0.0f }),
-            MatrixLookAt({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, -1.0f }, { 0.0f, -1.0f, 0.0f })
-        };
-
-        // Convert HDR equirectangular environment map to cubemap equivalent
-        glUseProgram(cubeShader.id);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, skyTex.id);
-        SetShaderValueMatrix(cubeShader, cubeProjectionLoc, captureProjection);
-
-        // Note: don't forget to configure the viewport to the capture dimensions
-        glViewport(0, 0, cubemapSize, cubemapSize);
-        glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-
-        for (unsigned int i = 0; i < 6; i++)
-        {
-            SetShaderValueMatrix(cubeShader, cubeViewLoc, captureViews[i]);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, env.cubemapId, 0);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            RenderCube();
-        }
-
-        // Unbind framebuffer and textures
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        // Create an irradiance cubemap, and re-scale capture FBO to irradiance scale
-        glGenTextures(1, &env.irradianceId);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, env.irradianceId);
-        for (unsigned int i = 0; i < 6; i++) glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, irradianceSize, irradianceSize, 0, GL_RGB, GL_FLOAT, NULL);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-        glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, irradianceSize, irradianceSize);
-
-        // Solve diffuse integral by convolution to create an irradiance cubemap
-        glUseProgram(irradianceShader.id);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, env.cubemapId);
-        SetShaderValueMatrix(irradianceShader, irradianceProjectionLoc, captureProjection);
-
-        // Note: don't forget to configure the viewport to the capture dimensions
-        glViewport(0, 0, irradianceSize, irradianceSize);
-        glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-
-        for (unsigned int i = 0; i < 6; i++)
-        {
-            SetShaderValueMatrix(irradianceShader, irradianceViewLoc, captureViews[i]);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, env.irradianceId, 0);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            RenderCube();
-        }
-
-        // Unbind framebuffer and textures
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        // Create a prefiltered HDR environment map
-        glGenTextures(1, &env.prefilterId);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, env.prefilterId);
-        for (unsigned int i = 0; i < 6; i++) glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, prefilterSize, prefilterSize, 0, GL_RGB, GL_FLOAT, NULL);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        // Generate mipmaps for the prefiltered HDR texture
-        glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-
-        // Prefilter HDR and store data into mipmap levels
-        glUseProgram(prefilterShader.id);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, env.cubemapId);
-        SetShaderValueMatrix(prefilterShader, prefilterProjectionLoc, captureProjection);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-
-        for (unsigned int mip = 0; mip < MAX_MIPMAP_LEVELS; mip++)
-        {
-            // Resize framebuffer according to mip-level size.
-            unsigned int mipWidth = prefilterSize * powf(0.5f, mip);
-            unsigned int mipHeight = prefilterSize * powf(0.5f, mip);
-            glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
-            glViewport(0, 0, mipWidth, mipHeight);
-
-            float roughness = (float)mip / (float)(MAX_MIPMAP_LEVELS - 1);
-            glUniform1f(prefilterRoughnessLoc, roughness);
-
-            for (unsigned int i = 0; i < 6; ++i)
-            {
-                SetShaderValueMatrix(prefilterShader, prefilterViewLoc, captureViews[i]);
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, env.prefilterId, mip);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-                RenderCube();
-            }
-        }
-
-        // Unbind framebuffer and textures
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        // Generate BRDF convolution texture
-        glGenTextures(1, &env.brdfId);
-        glBindTexture(GL_TEXTURE_2D, env.brdfId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, brdfSize, brdfSize, 0, GL_RG, GL_FLOAT, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        // Render BRDF LUT into a quad using default FBO
-        glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
-        glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, brdfSize, brdfSize);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, env.brdfId, 0);
-
-        glViewport(0, 0, brdfSize, brdfSize);
-        glUseProgram(brdfShader.id);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        RenderQuad();
-
-        // Unbind framebuffer and textures
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        // Then before rendering, configure the viewport to the actual screen dimensions
-        Matrix defaultProjection = MatrixPerspective(60.0, (double)GetScreenWidth() / (double)GetScreenHeight(), 0.01, 1000.0);
-        MatrixTranspose(defaultProjection);
-        SetShaderValueMatrix(cubeShader, cubeProjectionLoc, defaultProjection);
-        SetShaderValueMatrix(env.skyShader, skyProjectionLoc, defaultProjection);
-        SetShaderValueMatrix(irradianceShader, irradianceProjectionLoc, defaultProjection);
-        SetShaderValueMatrix(prefilterShader, prefilterProjectionLoc, defaultProjection);
-        env.pbrViewLoc = GetShaderLocation(env.pbrShader, "viewPos");
-        env.modelMatrixLoc = GetShaderLocation(env.pbrShader, "mMatrix");
-
-        // Reset viewport dimensions to default
-        glViewport(0, 0, GetScreenWidth(), GetScreenHeight());
-
-        UnloadShader(cubeShader);
-        UnloadShader(irradianceShader);
-        UnloadShader(prefilterShader);
-        UnloadShader(brdfShader);
-
-        return env;
-    }
-
-    // Get the current amount of created lights
-    int GetLightsCount(void)
-    {
-        return lightsCount;
-    }
-
-    // Send to environment PBR shader light values
-    void UpdateLightValues(Environment env, Light light)
-    {
-        // Send to shader light enabled state and type
-        SetShaderValue(env.pbrShader, light.enabledLoc, &light.enabled, 1);
-        SetShaderValue(env.pbrShader, light.typeLoc, &light.type, 1);
-
+        SetShaderValue(shader, light.enabledLoc, &light.enabled, SHADER_UNIFORM_INT);
+        SetShaderValue(shader, light.typeLoc, &light.type, SHADER_UNIFORM_INT);
         // Send to shader light position values
         float position[3] = { light.position.x, light.position.y, light.position.z };
-        SetShaderValue(env.pbrShader, light.posLoc, position, 3);
+        SetShaderValue(shader, light.positionLoc, position, SHADER_UNIFORM_VEC3);
 
         // Send to shader light target position values
         float target[3] = { light.target.x, light.target.y, light.target.z };
-        SetShaderValue(env.pbrShader, light.targetLoc, target, 3);
-
-        // Send to shader light color values
-        float diff[4] = { (float)light.color.r / (float)255, (float)light.color.g / (float)255, (float)light.color.b / (float)255, (float)light.color.a / (float)255 };
-        SetShaderValue(env.pbrShader, light.colorLoc, diff, 4);
+        SetShaderValue(shader, light.targetLoc, target, SHADER_UNIFORM_VEC3);
+        SetShaderValue(shader, light.colorLoc, light.color, SHADER_UNIFORM_VEC4);
+        SetShaderValue(shader, light.intensityLoc, &light.intensity, SHADER_UNIFORM_FLOAT);
     }
 
-    // Send to environment PBR shader camera view and resolution values
-    void UpdateEnvironmentValues(Environment env, Camera camera, Vector2 res)
-    {
-        // Send to shader camera view position
-        float cameraPos[3] = { camera.position.x, camera.position.y, camera.position.z };
-        SetShaderValue(env.pbrShader, env.pbrViewLoc, cameraPos, 3);
-
-        // Send to shader screen resolution
-        float resolution[2] = { res.x, res.y };
-        SetShaderValue(env.skyShader, env.skyResolutionLoc, resolution, 2);
+    void PBRSetAmbient(Shader shader, Color color, float intensity) {
+        float col[3] = { color.r / 255,color.g / 255,color.b / 255 };
+        SetShaderValue(shader, GetShaderLocation(shader, "ambientColor"), col, SHADER_UNIFORM_VEC3);
+        SetShaderValue(shader, GetShaderLocation(shader, "ambient"), &intensity, SHADER_UNIFORM_FLOAT);
     }
 
-    // Draw a model using physically based rendering
-    void DrawModelPBR(Model model, MaterialPBR mat, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale)
-    {
-        // Switch to PBR shader
-        glUseProgram(mat.env.pbrShader.id);
+    void PBRMaterialSetup(PBRMaterial* pbrMat, Shader pbrShader, PBREnvironment* environment) {
+        pbrMat->pbrShader = pbrShader;
 
-        // Set up material uniforms and other constant values
-        float shaderAlbedo[3] = { (float)mat.albedo.color.r / (float)255, (float)mat.albedo.color.g / (float)255, (float)mat.albedo.color.b / (float)255 };
-        SetShaderValue(mat.env.pbrShader, mat.albedo.colorLoc, shaderAlbedo, 3);
-        float shaderNormals[3] = { (float)mat.normals.color.r / (float)255, (float)mat.normals.color.g / (float)255, (float)mat.normals.color.b / (float)255 };
-        SetShaderValue(mat.env.pbrShader, mat.normals.colorLoc, shaderNormals, 3);
-        float shaderMetalness[3] = { (float)mat.metalness.color.r / (float)255, (float)mat.metalness.color.g / (float)255, (float)mat.metalness.color.b / (float)255 };
-        SetShaderValue(mat.env.pbrShader, mat.metalness.colorLoc, shaderMetalness, 3);
-        float shaderRoughness[3] = { 1.0f - (float)mat.roughness.color.r / (float)255, 1.0f - (float)mat.roughness.color.g / (float)255, 1.0f - (float)mat.roughness.color.b / (float)255 };
-        SetShaderValue(mat.env.pbrShader, mat.roughness.colorLoc, shaderRoughness, 3);
-        float shaderAo[3] = { (float)mat.ao.color.r / (float)255, (float)mat.ao.color.g / (float)255, (float)mat.ao.color.b / (float)255 };
-        SetShaderValue(mat.env.pbrShader, mat.ao.colorLoc, shaderAo, 3);
-        float shaderEmission[3] = { (float)mat.emission.color.r / (float)255, (float)mat.emission.color.g / (float)255, (float)mat.emission.color.b / (float)255 };
-        SetShaderValue(mat.env.pbrShader, mat.emission.colorLoc, shaderEmission, 3);
-        float shaderHeight[3] = { (float)mat.height.color.r / (float)255, (float)mat.height.color.g / (float)255, (float)mat.height.color.b / (float)255 };
-        SetShaderValue(mat.env.pbrShader, mat.height.colorLoc, shaderHeight, 3);
+        pbrMat->texAlbedo = { 0 };
+        pbrMat->texNormal = { 0 };
+        pbrMat->texMRA = { 0 };
+        pbrMat->texEmissive = { 0 };
 
-        // Send sampler use state to PBR shader
-        SetShaderValue(mat.env.pbrShader, mat.albedo.useBitmapLoc, &mat.albedo.useBitmap, 1);
-        SetShaderValue(mat.env.pbrShader, mat.normals.useBitmapLoc, &mat.normals.useBitmap, 1);
-        SetShaderValue(mat.env.pbrShader, mat.metalness.useBitmapLoc, &mat.metalness.useBitmap, 1);
-        SetShaderValue(mat.env.pbrShader, mat.roughness.useBitmapLoc, &mat.roughness.useBitmap, 1);
-        SetShaderValue(mat.env.pbrShader, mat.ao.useBitmapLoc, &mat.ao.useBitmap, 1);
-        SetShaderValue(mat.env.pbrShader, mat.emission.useBitmapLoc, &mat.emission.useBitmap, 1);
-        SetShaderValue(mat.env.pbrShader, mat.height.useBitmapLoc, &mat.height.useBitmap, 1);
+        //PBRParam
+        pbrMat->albedo[0] = 1.0;
+        pbrMat->albedo[1] = 1.0;
+        pbrMat->albedo[2] = 1.0;
+        pbrMat->albedo[3] = 1.0;
+        pbrMat->metallic = 0;
+        pbrMat->roughness = 0;
+        pbrMat->ao = 1.0;
+        pbrMat->normal = 1;
+        pbrMat->emissive[0] = 0;
+        pbrMat->emissive[1] = 0;
+        pbrMat->emissive[2] = 0;
+        pbrMat->emissive[3] = 0;
 
-        // Calculate and send to shader model matrix
-        Matrix matScale = MatrixScale(scale.x, scale.y, scale.z);
-        Matrix matRotation = MatrixRotate(rotationAxis, rotationAngle * DEG2RAD);
-        Matrix matTranslation = MatrixTranslate(position.x, position.y, position.z);
-        Matrix transform = MatrixMultiply(MatrixMultiply(matScale, matRotation), matTranslation);
-        SetShaderValueMatrix(mat.env.pbrShader, mat.env.modelMatrixLoc, transform);
+        pbrMat->texTiling[0] = 1.0;
+        pbrMat->texTiling[1] = 1.0;
+        pbrMat->texOffset[0] = 0.0;
+        pbrMat->texOffset[1] = 0.0;
+        pbrMat->emissivePower = 1.0;
+        // Set up PBR shader material locations
 
-        // Enable and bind irradiance map
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, mat.env.irradianceId);
+        pbrMat->albedoLoc = GetShaderLocation(pbrMat->pbrShader, "albedoColor");
+        pbrMat->normalLoc = GetShaderLocation(pbrMat->pbrShader, "normalValue");
+        pbrMat->metallicLoc = GetShaderLocation(pbrMat->pbrShader, "metallicValue");
+        pbrMat->roughnessLoc = GetShaderLocation(pbrMat->pbrShader, "roughnessValue");
+        pbrMat->aoLoc = GetShaderLocation(pbrMat->pbrShader, "aoValue");
+        pbrMat->emissiveColorLoc = GetShaderLocation(pbrMat->pbrShader, "emissiveColor");
+        pbrMat->emissivePowerLoc = GetShaderLocation(pbrMat->pbrShader, "emissivePower");
 
-        // Enable and bind prefiltered reflection map
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, mat.env.prefilterId);
+        pbrMat->texTilingLoc = GetShaderLocation(pbrMat->pbrShader, "tiling");
+        pbrMat->texOffsetLoc = GetShaderLocation(pbrMat->pbrShader, "offset");
 
-        // Enable and bind BRDF LUT map
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, mat.env.brdfId);
+        pbrMat->useTexAlbedoLoc = GetShaderLocation(pbrMat->pbrShader, "useTexAlbedo");
+        pbrMat->useTexNormalLoc = GetShaderLocation(pbrMat->pbrShader, "useTexNormal");
+        pbrMat->useTexMRAELoc = GetShaderLocation(pbrMat->pbrShader, "useTexMRA");
+        pbrMat->useTexEmissiveLoc = GetShaderLocation(pbrMat->pbrShader, "useTexEmissive");
 
-        if (mat.albedo.useBitmap)
-        {
-            // Enable and bind albedo map
-            glActiveTexture(GL_TEXTURE3);
-            glBindTexture(GL_TEXTURE_2D, mat.albedo.bitmap.id);
-        }
+        SetShaderValue(pbrMat->pbrShader, pbrMat->albedoLoc, pbrMat->albedo, SHADER_UNIFORM_VEC4);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->emissiveColorLoc, pbrMat->emissive, SHADER_UNIFORM_VEC4);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->emissivePowerLoc, &pbrMat->emissivePower, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->metallicLoc, &pbrMat->metallic, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->roughnessLoc, &pbrMat->roughness, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->aoLoc, &pbrMat->ao, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->normalLoc, &pbrMat->normal, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->texTilingLoc, pbrMat->texTiling, SHADER_UNIFORM_VEC2);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->texOffsetLoc, pbrMat->texOffset, SHADER_UNIFORM_VEC2);
+    }
 
-        if (mat.normals.useBitmap)
-        {
-            // Enable and bind normals map
-            glActiveTexture(GL_TEXTURE4);
-            glBindTexture(GL_TEXTURE_2D, mat.normals.bitmap.id);
-        }
-
-        if (mat.metalness.useBitmap)
-        {
-            // Enable and bind metalness map
-            glActiveTexture(GL_TEXTURE5);
-            glBindTexture(GL_TEXTURE_2D, mat.metalness.bitmap.id);
-        }
-
-        if (mat.roughness.useBitmap)
-        {
-            // Enable and bind roughness map
-            glActiveTexture(GL_TEXTURE6);
-            glBindTexture(GL_TEXTURE_2D, mat.roughness.bitmap.id);
-        }
-
-        if (mat.ao.useBitmap)
-        {
-            // Enable and bind ambient occlusion map
-            glActiveTexture(GL_TEXTURE7);
-            glBindTexture(GL_TEXTURE_2D, mat.ao.bitmap.id);
-        }
-
-        if (mat.emission.useBitmap)
-        {
-            // Enable and bind emission map
-            glActiveTexture(GL_TEXTURE8);
-            glBindTexture(GL_TEXTURE_2D, mat.emission.bitmap.id);
-        }
-
-        if (mat.height.useBitmap)
-        {
-            // Enable and bind parallax height map
-            glActiveTexture(GL_TEXTURE9);
-            glBindTexture(GL_TEXTURE_2D, mat.height.bitmap.id);
-        }
-
-        // Draw model using PBR shader and textures maps
-        DrawModelEx(model, position, rotationAxis, rotationAngle, scale, WHITE);
-
-        // Disable and unbind irradiance map
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-
-        // Disable and unbind prefiltered reflection map
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-
-        // Disable and unbind BRDF LUT map
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, 0);
-
-        if (mat.albedo.useBitmap)
-        {
-            // Disable and bind albedo map
-            glActiveTexture(GL_TEXTURE3);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-
-        if (mat.normals.useBitmap)
-        {
-            // Disable and bind normals map
-            glActiveTexture(GL_TEXTURE4);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-
-        if (mat.metalness.useBitmap)
-        {
-            // Disable and bind metalness map
-            glActiveTexture(GL_TEXTURE5);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-
-        if (mat.roughness.useBitmap)
-        {
-            // Disable and bind roughness map
-            glActiveTexture(GL_TEXTURE6);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-
-        if (mat.ao.useBitmap)
-        {
-            // Disable and bind ambient occlusion map
-            glActiveTexture(GL_TEXTURE7);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-
-        if (mat.height.useBitmap)
-        {
-            // Disable and bind parallax height map
-            glActiveTexture(GL_TEXTURE8);
-            glBindTexture(GL_TEXTURE_2D, 0);
+    void PBRLoadTextures(PBRMaterial* pbrMat, PBRTexType pbrTexType, Texture2D file) {
+        if (pbrMat == NULL) return;
+        switch (pbrTexType) {
+        case PBR_TEXTURE_ALBEDO:
+            pbrMat->texAlbedo = file;
+            pbrMat->useTexAlbedo = 1;
+            break;
+        case PBR_TEXTURE_MRA:
+            pbrMat->texMRA = file;
+            pbrMat->useTexMRA = 1;
+            break;
+        case PBR_TEXTURE_NORMAL:
+            pbrMat->texNormal = file;
+            pbrMat->useTexNormal = 1;
+            break;
+        case PBR_TEXTURE_EMISSIVE:
+            pbrMat->texEmissive = file;
+            pbrMat->useTexEmissive = 1;
+            break;
         }
     }
 
-    // Draw a cube skybox using environment cube map
-    //void DrawSkybox(Shader sky, Texture2D cubemap, Camera camera)
-    void DrawSkybox(Environment env, Camera camera)
-    {
-        // Calculate view matrix for custom shaders
-        Matrix view = MatrixLookAt(camera.position, camera.target, camera.up);
-
-        // Send to shader view matrix and bind cubemap texture
-        // NOTE: Setting shader value also activates shader program but
-        // that activation could change in a future... active shader manually!
-        SetShaderValueMatrix(env.skyShader, env.skyViewLoc, view);
-
-        // Skybox shader diffuse texture: cubemapId
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, env.cubemapId);
-
-        // Render cube using skybox shader
-        RenderCube();
+    void PBRLoadTextures(PBRMaterial* pbrMat, PBRTexType pbrTexType, const char* fileName) {
+        if (pbrMat == NULL) return;
+        switch (pbrTexType) {
+        case PBR_TEXTURE_ALBEDO:
+            pbrMat->texAlbedo = LoadTexture(fileName);
+            pbrMat->useTexAlbedo = 1;
+            break;
+        case PBR_TEXTURE_MRA:
+            pbrMat->texMRA = LoadTexture(fileName);
+            pbrMat->useTexMRA = 1;
+            break;
+        case PBR_TEXTURE_NORMAL:
+            pbrMat->texNormal = LoadTexture(fileName);
+            pbrMat->useTexNormal = 1;
+            break;
+        case PBR_TEXTURE_EMISSIVE:
+            pbrMat->texEmissive = LoadTexture(fileName);
+            pbrMat->useTexEmissive = 1;
+            break;
+        }
     }
 
-    // Renders a 1x1 3D cube in NDC
-    GLuint cubeVAO = 0;
-    GLuint cubeVBO = 0;
-    void RenderCube(void)
-    {
-        // Initialize if it is not yet
-        if (cubeVAO == 0)
-        {
-            GLfloat vertices[] = {
-                -1.0f, -1.0f, -1.0f,  0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-                1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-                1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
-                1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
-                -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-                -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
-                1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-                1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-                -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                -1.0f, 1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-                -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-                -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-                1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                -1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
-                1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-                -1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-                -1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-                -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-                1.0f, 1.0f , 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-                1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-                -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f
-            };
+    void UnloadPBRMaterial(PBRMaterial pbrMat) {
+        if (pbrMat.useTexAlbedo == 1) UnloadTexture(pbrMat.texAlbedo);
+        if (pbrMat.useTexNormal == 1) UnloadTexture(pbrMat.texNormal);
+        if (pbrMat.useTexMRA == 1) UnloadTexture(pbrMat.texMRA);
+        if (pbrMat.useTexEmissive == 1) UnloadTexture(pbrMat.texEmissive);
+    }
 
-            // Set up cube VAO
-            glGenVertexArrays(1, &cubeVAO);
-            glGenBuffers(1, &cubeVBO);
+    void PBRSetColor(PBRMaterial* pbrMat, PBRColorType pbrColorType, Color color) {
+        if (pbrMat == NULL) return;
+        switch (pbrColorType) {
+        case PBR_COLOR_ALBEDO:
+            pbrMat->albedo[0] = (float)color.r / 255;
+            pbrMat->albedo[1] = (float)color.g / 255;
+            pbrMat->albedo[2] = (float)color.b / 255;
+            pbrMat->albedo[3] = (float)color.a / 255;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->albedoLoc, pbrMat->albedo, SHADER_UNIFORM_VEC4);
+            break;
+        case PBR_COLOR_EMISSIVE:
+            pbrMat->emissive[0] = (float)color.r / 255;
+            pbrMat->emissive[1] = (float)color.g / 255;
+            pbrMat->emissive[2] = (float)color.b / 255;
+            pbrMat->emissive[3] = (float)color.a / 255;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->emissiveColorLoc, pbrMat->emissive, SHADER_UNIFORM_VEC4);
+            break;
+        }
+    }
 
-            // Fill buffer
-            glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    void PBRSetFloat(PBRMaterial* pbrMat, PBRFloatType pbrParamType, float value) {
+        if (pbrMat == NULL) return;
+        switch (pbrParamType) {
+        case PBR_PARAM_METALLIC:
+            pbrMat->metallic = value;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->metallicLoc, &pbrMat->metallic, SHADER_UNIFORM_FLOAT);
+            break;
+        case PBR_PARAM_ROUGHNESS:
+            pbrMat->roughness = value;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->roughnessLoc, &pbrMat->roughness, SHADER_UNIFORM_FLOAT);
+            break;
+        case PBR_PARAM_NORMAL:
+            pbrMat->normal = value;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->normalLoc, &pbrMat->normal, SHADER_UNIFORM_FLOAT);
+            break;
+        case PBR_PARAM_AO:
+            pbrMat->ao = value;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->aoLoc, &pbrMat->ao, SHADER_UNIFORM_FLOAT);
+            break;
+        case PBR_PARAM_EMISSIVE:
+            pbrMat->emissivePower = value;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->emissivePowerLoc, &pbrMat->emissivePower, SHADER_UNIFORM_FLOAT);
+            break;
+        }
+    }
 
-            // Link vertex attributes
-            glBindVertexArray(cubeVAO);
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glBindVertexArray(0);
+
+    void PBRSetVec2(PBRMaterial* pbrMat, PBRVec2Type type, Vector2 value) {
+        switch (type) {
+        case PBR_VEC2_TILING:
+            pbrMat->texTiling[0] = value.x;
+            pbrMat->texTiling[1] = value.y;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->texTilingLoc, &pbrMat->texTiling, SHADER_UNIFORM_VEC2);
+            break;
+        case PBR_VEC2_OFFSET:
+            pbrMat->texOffset[0] = value.x;
+            pbrMat->texOffset[1] = value.y;
+            SetShaderValue(pbrMat->pbrShader, pbrMat->texOffsetLoc, &pbrMat->texOffset, SHADER_UNIFORM_VEC2);
+            break;
+        }
+    }
+
+    void PBRSetMaterial(PBRModel* model, PBRMaterial* pbrMat, int matIndex) {
+
+
+        model->pbrMat = *pbrMat;
+        model->model.materials[matIndex].shader = model->pbrMat.pbrShader;
+        pbrMat->pbrShader.locs[SHADER_LOC_MAP_MRA] = GetShaderLocation(pbrMat->pbrShader, "mraMap");
+        pbrMat->pbrShader.locs[SHADER_LOC_MAP_EMISSIVE] = GetShaderLocation(pbrMat->pbrShader, "emissiveMap");
+        pbrMat->pbrShader.locs[SHADER_LOC_MAP_NORMAL] = GetShaderLocation(pbrMat->pbrShader, "normalMap");
+
+        if (pbrMat->useTexAlbedo) {
+            model->model.materials[matIndex].maps[MATERIAL_MAP_ALBEDO].texture = pbrMat->texAlbedo;
+        }
+        if (pbrMat->useTexMRA) {
+            model->model.materials[matIndex].maps[MATERIAL_MAP_MRA].texture = pbrMat->texMRA;
+        }
+        if (pbrMat->useTexNormal) {
+            model->model.materials[matIndex].maps[MATERIAL_MAP_NORMAL].texture = pbrMat->texNormal;
+        }
+        if (pbrMat->useTexEmissive) {
+            model->model.materials[matIndex].maps[MATERIAL_MAP_EMISSIVE].texture = pbrMat->texEmissive;
         }
 
-        // Render cube
-        glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->useTexAlbedoLoc, &pbrMat->useTexAlbedo, SHADER_UNIFORM_INT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->useTexNormalLoc, &pbrMat->useTexNormal, SHADER_UNIFORM_INT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->useTexMRAELoc, &pbrMat->useTexMRA, SHADER_UNIFORM_INT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->useTexEmissiveLoc, &pbrMat->useTexEmissive, SHADER_UNIFORM_INT);
     }
 
-    // Renders a 1x1 XY quad in NDC
-    GLuint quadVAO = 0;
-    GLuint quadVBO;
-    void RenderQuad(void)
-    {
-        // Initialize if it is not yet
-        if (quadVAO == 0)
-        {
-            GLfloat quadVertices[] = {
-                // Positions        // Texture Coords
-                -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-                -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-                1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-                1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-            };
+    void PBRDrawModel(PBRModel pbrModel, Vector3 position, float scale, Color tint) {
+        PBRMaterial* pbrMat = &pbrModel.pbrMat;
+        SetShaderValue(pbrMat->pbrShader, pbrMat->albedoLoc, pbrMat->albedo, SHADER_UNIFORM_VEC4);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->emissiveColorLoc, pbrMat->emissive, SHADER_UNIFORM_VEC4);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->metallicLoc, &pbrMat->metallic, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->roughnessLoc, &pbrMat->roughness, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->aoLoc, &pbrMat->ao, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->normalLoc, &pbrMat->normal, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->texTilingLoc, pbrMat->texTiling, SHADER_UNIFORM_VEC2);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->texOffsetLoc, pbrMat->texOffset, SHADER_UNIFORM_VEC2);
 
-            // Set up plane VAO
-            glGenVertexArrays(1, &quadVAO);
-            glGenBuffers(1, &quadVBO);
-            glBindVertexArray(quadVAO);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->useTexAlbedoLoc, &pbrMat->useTexAlbedo, SHADER_UNIFORM_INT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->useTexNormalLoc, &pbrMat->useTexNormal, SHADER_UNIFORM_INT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->useTexMRAELoc, &pbrMat->useTexMRA, SHADER_UNIFORM_INT);
+        SetShaderValue(pbrMat->pbrShader, pbrMat->useTexEmissiveLoc, &pbrMat->useTexEmissive, SHADER_UNIFORM_INT);
 
-            // Fill buffer
-            glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-
-            // Link vertex attributes
-            glEnableVertexAttribArray(0);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-        }
-
-        // Render quad
-        glBindVertexArray(quadVAO);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glBindVertexArray(0);
+        DrawModel(pbrModel.model, position, scale, tint);
     }
 
-    // Unload material PBR textures
-    void UnloadMaterialPBR(MaterialPBR mat)
-    {
-        if (mat.albedo.useBitmap) UnloadTexture(mat.albedo.bitmap);
-        if (mat.normals.useBitmap) UnloadTexture(mat.normals.bitmap);
-        if (mat.metalness.useBitmap) UnloadTexture(mat.metalness.bitmap);
-        if (mat.roughness.useBitmap) UnloadTexture(mat.roughness.bitmap);
-        if (mat.ao.useBitmap) UnloadTexture(mat.ao.bitmap);
-        if (mat.emission.useBitmap) UnloadTexture(mat.emission.bitmap);
-        if (mat.height.useBitmap) UnloadTexture(mat.height.bitmap);
+    PBRModel PBRModelLoad(Model* file) {
+        PBRModel pbrModel = { 0 };
+        pbrModel.model = *file;
+        return pbrModel;
     }
 
-    // Unload environment loaded shaders and dynamic textures
-    void UnloadEnvironment(Environment env)
-    {
-        // Unload used environment shaders
-        UnloadShader(env.pbrShader);
-        UnloadShader(env.skyShader);
-
-        // Unload dynamic textures created in environment initialization
-        glDeleteTextures(1, &env.cubemapId);
-        glDeleteTextures(1, &env.irradianceId);
-        glDeleteTextures(1, &env.prefilterId);
-        glDeleteTextures(1, &env.brdfId);
+    PBRModel PBRModelLoad(const char* fileName) {
+        PBRModel pbrModel = { 0 };
+        pbrModel.model = LoadModel(fileName);
+        return pbrModel;
     }
+
+    PBRModel PBRModelLoadFromMesh(Mesh mesh) {
+        PBRModel pbrModel = { 0 };
+        pbrModel.model = LoadModelFromMesh(mesh);
+        return pbrModel;
+    }
+#endif // RPBR_IMPLEMENTATION
 }

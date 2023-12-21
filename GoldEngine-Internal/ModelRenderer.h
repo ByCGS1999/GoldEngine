@@ -32,6 +32,7 @@ namespace Engine::EngineObjects
 		// methods & constructor
 		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, int model, int material, unsigned int tint);
 		void SetNativeRenderer(Native::NativeModelRenderer* renderer);
+		Native::NativeModelRenderer* GetNativeRenderer();
 		void Update() override;
 		void PhysicsUpdate() override;
 		void Start() override;

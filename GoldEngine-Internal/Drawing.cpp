@@ -1,7 +1,4 @@
 #include "Drawing.h"
-#include "Raylib/include/rPBR.h"
-
-rPBR::Environment pbrEnv;
 
 void Engine::Drawing::Drawing::HL_BeginRendering()
 {
@@ -54,19 +51,18 @@ void Engine::Drawing::Drawing::HL_CreateEnvironment(String^ fileName, int cubema
 {
 	const char* fN = CastToNative(fileName);
 
-	pbrEnv = rPBR::LoadEnvironment(fN, cubemapSize, irradianceSize, prefilterSize, brdfSize);
+	//pbrEnv = LoadEnvironment(fN, cubemapSize, irradianceSize, prefilterSize, brdfSize);
 }
 
 void Engine::Drawing::Drawing::HL_UnloadEnvironment()
 {
-	rPBR::UnloadEnvironment(pbrEnv);
-	pbrEnv = { 0 };
+	//rPBR::UnloadEnvironment(pbrEnv);
 }
 
 void Engine::Drawing::Drawing::HL_DrawSkybox(unsigned int cameraId, Engine::Internal::Components::CameraType cameraType)
 {
 	Camera3D camera3d = DataPacks::singleton().GetCamera3D(cameraId);
-	rPBR::DrawSkybox(pbrEnv, camera3d);
+	//rPBR::DrawSkybox(pbrEnv, camera3d);
 }
 
 void Engine::Drawing::Drawing::HL_SetMaxLights(int ammount)

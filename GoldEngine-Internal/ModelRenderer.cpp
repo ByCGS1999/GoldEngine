@@ -48,3 +48,8 @@ void ModelRenderer::SetColorTint(unsigned int hexValue)
 {
 	nativeRenderer->color_hex = hexValue;
 }
+
+Native::NativeModelRenderer* ModelRenderer::GetNativeRenderer()
+{
+	return nativeRenderer;
+}

@@ -1,6 +1,7 @@
 {
   "shaders": {
-    "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs"
+    "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs",
+    "1": "Data/Engine/Shaders/rPBR/pbr.vs:^:Data/Engine/Shaders/rPBR/pbr.fs"
   },
   "models": {
     "0": "Data/Models/castle.obj"

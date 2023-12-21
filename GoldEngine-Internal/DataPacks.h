@@ -54,6 +54,7 @@ public:
 	void AddCamera(unsigned int cameraId, Camera3D camera, Engine::Internal::Components::CameraType type);
 	void AddMaterial(unsigned int materialId, Material material);
 	void AddTexture2D(unsigned int textureId, Texture2D texture);
+	void SetShader(unsigned int shaderId, Shader value);
 	static DataPacks singleton();
 	NativeDataPack* GetNativeDataPack();
 };

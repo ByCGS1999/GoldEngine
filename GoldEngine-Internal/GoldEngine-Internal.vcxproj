@@ -22,12 +22,12 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <EnableManagedPackageReferenceSupport>true</EnableManagedPackageReferenceSupport>
     <ProjectGuid>{564D6646-9C1F-4294-A506-05FF2ADF9A18}</ProjectGuid>
-    <Keyword>NetCoreCProj</Keyword>
+    <Keyword>NetFrameworkCProj</Keyword>
     <RootNamespace>GoldEngineInternal</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <TargetFramework>netframework472</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <WindowsTargetPlatformMinVersion>7.0</WindowsTargetPlatformMinVersion>
-    <TargetFrameworkVersion>4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>net472</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -48,14 +48,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CLRSupport>true</CLRSupport>
+    <CLRSupport>NetCore</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CLRSupport>true</CLRSupport>
+    <CLRSupport>NetCore</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -147,8 +147,11 @@
     <ClInclude Include="DataPack.h" />
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="Drawing.h" />
+    <ClInclude Include="FileManager.h" />
+    <ClInclude Include="LightManager.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="ModelRenderer.h" />
+    <ClInclude Include="PBRModelRenderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Skybox.h" />
@@ -171,7 +174,7 @@
     <ClInclude Include="Raylib\include\raylib.h" />
     <ClInclude Include="Raylib\include\raymath.h" />
     <ClInclude Include="Raylib\include\rlgl.h" />
-    <ClInclude Include="Raylib\include\rlight.h" />
+    <ClInclude Include="Raylib\include\rlights.h" />
     <ClInclude Include="Raylib\include\rlImGui.h" />
     <ClInclude Include="Raylib\include\rlImGuiColors.h" />
     <ClInclude Include="Raylib\include\rPBR.h" />
@@ -256,82 +259,12 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Data\Engine\Shaders\pointlight.fs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\pointlight.vs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\brdf.fs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\brdf.vs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\cubemap.fs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\cubemap.vs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\irradiance.fs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\lighting.fs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\lighting.vs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.fs">
       <FileType>Document</FileType>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.vs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\postfx.fs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\postfx.vs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\prefilter.fs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\skybox.fs">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\skybox.vs">
       <FileType>Document</FileType>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
@@ -356,6 +289,10 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\netasm\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

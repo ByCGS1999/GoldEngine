@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "DataPacks.h"
 #include "Transform.h"
 #include "Scene.h"
 
@@ -50,5 +51,6 @@ void Scene::UnloadScene()
 {
 	OnUnload();
 	sceneObjects.Clear();
+	DataPacks::singleton().FreeAll();
 	System::GC::Collect();
 }

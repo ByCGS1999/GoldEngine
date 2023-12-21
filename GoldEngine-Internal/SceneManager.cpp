@@ -43,3 +43,8 @@ void Engine::Managers::SceneManager::SaveSceneToFile(Engine::Management::Scene^ 
 		SaveSceneToFile(scene, password);
 	}
 }
+
+void Engine::Managers::SceneManager::UnloadScene(Scene^ loadedScene)
+{
+	loadedScene->UnloadScene();
+}
