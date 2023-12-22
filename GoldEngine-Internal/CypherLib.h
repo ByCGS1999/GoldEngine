@@ -3,6 +3,7 @@
 
 using namespace System;
 using namespace System::Text;
+using namespace System::Security::Cryptography;
 
 ref class CypherLib
 {
@@ -22,7 +23,7 @@ public:
 
 		return retn;
 	}
-public:
+
 	static System::String^ EncryptFileContents(System::String^ fileContents, unsigned int password)
 	{
 		String^ encryptedContents = "";
@@ -37,7 +38,6 @@ public:
 		return encryptedContents->Substring(1, encryptedContents->Length-1);
 	}
 
-public:
 	static System::String^ DecryptFileContents(System::String^ fileContents, unsigned int password)
 	{
 		System::String^ decryptedContents = "";
@@ -50,5 +50,35 @@ public:
 		}
 
 		return decryptedContents;
+	}
+
+	static String^ EncryptString(String^ message, String^ passwd)
+	{
+		RijndaelManaged^ cryptMethod = gcnew RijndaelManaged();
+		cryptMethod->BlockSize = 256;
+		cryptMethod->KeySize = 128;
+		cryptMethod->Mode = CipherMode::ECB;
+		cryptMethod->Padding = PaddingMode::ISO10126;
+		cryptMethod->Key = Encoding::UTF8->GetBytes(passwd);
+		ICryptoTransform^ cryptoBro = cryptMethod->CreateEncryptor();
+		
+		auto plainText = Encoding::UTF8->GetBytes(message);
+
+		return Convert::ToBase64String(cryptoBro->TransformFinalBlock(plainText, 0, plainText->Length));
+	}
+
+	static String^ DecryptString(String^ message, String^ passwd)
+	{
+		RijndaelManaged^ cryptMethod = gcnew RijndaelManaged();
+		cryptMethod->BlockSize = 256;
+		cryptMethod->KeySize = 128;
+		cryptMethod->Mode = CipherMode::ECB;
+		cryptMethod->Padding = PaddingMode::ISO10126;
+		cryptMethod->Key = Encoding::UTF8->GetBytes(passwd);
+		ICryptoTransform^ cryptoBro = cryptMethod->CreateDecryptor();
+
+		auto plainText = Convert::FromBase64CharArray(message->ToCharArray(), 0, message->Length);
+
+		return Encoding::UTF8->GetString(cryptoBro->TransformFinalBlock(plainText, 0, plainText->Length));
 	}
 };

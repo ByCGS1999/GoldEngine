@@ -5,15 +5,19 @@ Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934
 	hash=None, flags=None
 Assembly Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed: 
 	hash=None, flags=None
+Assembly System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
 Assembly System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
 Assembly System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
-Assembly System.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
-	hash=None, flags=None
 Assembly System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
 	hash=None, flags=None
-Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+Assembly System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
 Class Engine.Internal.Components.Vector3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -135,6 +139,8 @@ Class Engine.Drawing.Drawing: AutoLayout, AnsiClass, Class, Public, BeforeFieldI
     HL_Wait(Double): PrivateScope, Public, Static, HideBySig
     HL_UpdateCamera(UInt32, CameraType, Int32): PrivateScope, Public, Static, HideBySig
     HL_SetModelTexture(UInt32, UInt32): PrivateScope, Public, Static, HideBySig
+Struct WinAPI: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
 Class Engine.Window: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
@@ -160,13 +166,12 @@ Class Engine.Managers.SceneManager: AutoLayout, AnsiClass, Class, Public, Before
     CreateScene(): PrivateScope, Public, Static, HideBySig
     SaveSceneToFile(Scene, UInt32): PrivateScope, Public, Static, HideBySig
     UnloadScene(Scene): PrivateScope, Public, Static, HideBySig
-Struct WinAPI: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
-  :System.ValueType
 Class FileManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
-    WriteCustomFileFormat(String, Int32): PrivateScope, Public, Static, HideBySig
-    ReadCustomFileFormat(String, Int32): PrivateScope, Public, Static, HideBySig
+    WriteCustomFileFormat(String, String, Int32): PrivateScope, Public, Static, HideBySig
+    WriteToCustomFile(String, String, String[]): PrivateScope, Public, Static, HideBySig
+    ReadCustomFileFormat(String, String, Int32): PrivateScope, Public, Static, HideBySig
 Class Engine.EngineObjects.LightManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Engine.Internal.Components.Object
     Void .ctor(System.String, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

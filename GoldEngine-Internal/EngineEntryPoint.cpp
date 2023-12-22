@@ -1,4 +1,5 @@
 #include "Macros.h"
+#include "WinAPI.h"
 #include "Window.h"
 #include "Includes.h"
 #include "Drawing.h"
@@ -11,7 +12,6 @@
 #include "DataPack.h"
 #include "Raylib/include/rPBR.h"
 #include <msclr/gcroot.h>
-#include "WinAPI.h"
 #include "FileManager.h"
 
 // INCLUDE ENGINE CLASSES \\
@@ -29,7 +29,7 @@ using namespace Engine::EngineObjects::Native;
 DataPacks dataPack;
 Model mod;
 Camera3D c3d2;
-unsigned int passwd;
+unsigned int passwd = 0;
 unsigned int ambient_color = 0x2B2B2BFF;
 float cameraSpeed = 1.25f;
 bool controlCamera = true;
@@ -205,11 +205,10 @@ public:
 		//scene->AddObjectToScene(directionalLight);
 		scene->AddObjectToScene(modelRenderer);
 
-		FileManager::WriteCustomFileFormat("Data/assets1.gold", passwd);
 		//FileManager::ReadCustomFileFormat("Data/assets1.gold", passwd);
 
 		cameraPosition = gcnew Engine::Internal::Components::Vector3(0, 0, 0);
-
+		//Directory::Delete("Data/tmp/", true);
 		SceneManager::SaveSceneToFile(scene, passwd);
 		//packedData->WriteToFile("Assets1", passwd);
 		Engine::Drawing::Drawing::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
@@ -226,6 +225,16 @@ public:
 			WinAPI::MBOX(GetWindowHandle(), "Nigger", "GoldEngine - Ver 0.0.2 - early", 0x00000040L | 0x00000000L);
 			Boot();
 		}
+
+		auto files = gcnew List<String^>();
+		files->Add("Models/castle.obj");
+		files->Add("Engine/Models/Error.obj");
+		files->Add("Engine/Models/Skybox_cube.glb");
+
+		FileManager::WriteToCustomFile("Data/assets2.gold", "ThreadcallNull", files->ToArray());
+		//FileManager::WriteCustomFileFormat("Data/assets1.gold", "ThereGoesThePasswordGyat", passwd);
+
+		FileManager::ReadCustomFileFormat("Data/assets2.gold", "ThreadcallNull", passwd);
 
 		Model model;
 		MaterialMap matMap;

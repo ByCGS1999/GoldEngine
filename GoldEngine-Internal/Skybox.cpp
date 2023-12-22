@@ -10,7 +10,7 @@ Skybox::Skybox(String^ s, Engine::Internal::Components::Transform^ t, int matId)
 {
 	materialId = matId;
 
-	nativeSkybox = new Native::NativeSkybox(LoadModel("Data/Engine/Models/Skybox_cube.glb"));
+	nativeSkybox = new Native::NativeSkybox(LoadModel("Data/tmp/Engine/Models/Skybox_cube.glb"));
 }
 
 void Skybox::Start() 
