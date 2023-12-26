@@ -9,11 +9,8 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_draw.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\imgui_draw.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_tables.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\imgui_tables.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\imgui_widgets.obj
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ModelRenderer.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\ModelRenderer.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rlImGui.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\rlImGui.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\Scene.obj
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\SceneManager.obj
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Skybox.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\Skybox.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Window.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\Window.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ScriptSandbox.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\ScriptSandbox.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\Transform.obj

@@ -84,7 +84,6 @@ Struct Engine.Internal.Components.CameraType: AutoLayout, AnsiClass, Class, Publ
     Int32 value__ : Public, SpecialName, RTSpecialName
 Class Engine.Internal.Components.Object: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(System.String, Engine.Internal.Components.Transform, Engine.Internal.Components.ObjectType, Engine.Internal.Components.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(System.String, Engine.Internal.Components.Transform, Engine.Internal.Components.ObjectType): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.String name : Public
     Engine.Internal.Components.ObjectType type : Public
@@ -159,19 +158,68 @@ Class Engine.Window: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Exit(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
     Draw(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
     Update(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    DrawImGui(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+Class Cast: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Dynamic(Object): PrivateScope, Public, Static, HideBySig
+Class Engine.Management.MiddleLevel.SceneObject: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Engine.Internal.Components.ObjectType, Engine.Internal.Components.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Engine.Internal.Components.ObjectType objectType : Public
+    Engine.Internal.Components.Object reference : Public
+Class Engine.EngineObjects.Skybox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(Engine.Internal.Components.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    UInt32 material : Public
+    UInt32 texture : Public
+  Methods:
+    Init(UInt32, UInt32): PrivateScope, Public, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+    DrawGizmo(): PrivateScope, Public, Virtual, HideBySig
+    Update(): PrivateScope, Public, Virtual, HideBySig
+    PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig
+    Start(): PrivateScope, Public, Virtual, HideBySig
+    SetupSkyboxImage(): PrivateScope, Public, HideBySig
+    SwapMaterial(UInt32): PrivateScope, Public, HideBySig
+Class Engine.EngineObjects.ModelRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(Engine.Internal.Components.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    UInt32 model : Public
+    UInt32 material : Public
+    UInt32 texture : Public
+    UInt32 tint : Public
+  Methods:
+    SetNativeRenderer(NativeModelRenderer*): PrivateScope, Public, HideBySig
+    Init(UInt32, UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig
+    GetNativeRenderer(): PrivateScope, Public, HideBySig
+    Update(): PrivateScope, Public, Virtual, HideBySig
+    PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig
+    Start(): PrivateScope, Public, Virtual, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+    SetColorTint(UInt32): PrivateScope, Public, HideBySig
 Class Engine.Managers.SceneManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
-    LoadSceneFromFile(String): PrivateScope, Public, Static, HideBySig
-    CreateScene(): PrivateScope, Public, Static, HideBySig
+    AssetExists(String): PrivateScope, Public, Static, HideBySig
+    LoadSceneFromFile(String, Scene): PrivateScope, Public, Static, HideBySig
+    CreateScene(String): PrivateScope, Public, Static, HideBySig
     SaveSceneToFile(Scene, UInt32): PrivateScope, Public, Static, HideBySig
     UnloadScene(Scene): PrivateScope, Public, Static, HideBySig
 Class FileManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
-    WriteCustomFileFormat(String, String, Int32): PrivateScope, Public, Static, HideBySig
     WriteToCustomFile(String, String, String[]): PrivateScope, Public, Static, HideBySig
-    ReadCustomFileFormat(String, String, Int32): PrivateScope, Public, Static, HideBySig
+    ReadCustomFileFormat(String, String): PrivateScope, Public, Static, HideBySig
+Class SceneFormat: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String sceneName : Public
+    System.Collections.Generic.List`1[Engine.Internal.Components.Object] sceneObjects : Public
 Class Engine.EngineObjects.LightManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Engine.Internal.Components.Object
     Void .ctor(System.String, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -184,20 +232,6 @@ Class Engine.EngineObjects.LightManager: AutoLayout, AnsiClass, Class, Public, B
     DrawGizmo(): PrivateScope, Public, Virtual, HideBySig
     Draw(): PrivateScope, Public, Virtual, HideBySig
     Update(): PrivateScope, Public, Virtual, HideBySig
-Class Engine.EngineObjects.ModelRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-  :Engine.Internal.Components.Object
-    Void .ctor(System.String, Engine.Internal.Components.Transform, Int32, Int32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Int32 modelId : Public
-    Int32 materialId : Public
-  Methods:
-    SetNativeRenderer(NativeModelRenderer*): PrivateScope, Public, HideBySig
-    GetNativeRenderer(): PrivateScope, Public, HideBySig
-    Update(): PrivateScope, Public, Virtual, HideBySig
-    PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig
-    Start(): PrivateScope, Public, Virtual, HideBySig
-    Draw(): PrivateScope, Public, Virtual, HideBySig
-    SetColorTint(UInt32): PrivateScope, Public, HideBySig
 Class Engine.EngineObjects.PBRModelRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Engine.Internal.Components.Object
     Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -211,18 +245,6 @@ Class Engine.EngineObjects.PBRModelRenderer: AutoLayout, AnsiClass, Class, Publi
     SetupMaterial(UInt32): PrivateScope, Public, HideBySig
     Draw(): PrivateScope, Public, Virtual, HideBySig
     Update(): PrivateScope, Public, Virtual, HideBySig
-Class Engine.EngineObjects.Skybox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-  :Engine.Internal.Components.Object
-    Void .ctor(System.String, Engine.Internal.Components.Transform, Int32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Int32 materialId : Public
-  Methods:
-    Draw(): PrivateScope, Public, Virtual, HideBySig
-    Update(): PrivateScope, Public, Virtual, HideBySig
-    PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig
-    Start(): PrivateScope, Public, Virtual, HideBySig
-    SetupSkyboxImage(UInt32, Texture): PrivateScope, Public, HideBySig
-    SwapMaterial(UInt32): PrivateScope, Public, HideBySig
 Class Engine.Scripting.ScriptBehaviour: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:

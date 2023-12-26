@@ -26,5 +26,6 @@ namespace Engine
 		virtual void Exit(); // exit
 		virtual void Draw(); // draw
 		virtual void Update(); // update 
+		virtual void DrawImGui();
 	};
 }

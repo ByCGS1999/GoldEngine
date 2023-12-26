@@ -7,6 +7,7 @@ namespace Engine::Internal::Components
 {
 	enum ObjectType
 	{
+		Datamodel,
 		Generic,
 		ModelRenderer,
 		Skybox,
@@ -23,13 +24,7 @@ namespace Engine::Internal::Components
 		Transform^ transform;
 		Object^ parent;
 
-		Object(System::String^ n, Transform^ transform, ObjectType t)
-		{
-			this->name = n;
-			this->transform = transform;
-			this->type = t;
-			this->parent = nullptr;
-		}
+		[[JsonConstructorAttribute]]
 		Object(System::String^ n, Transform^ transform, ObjectType t, Object^ parent)
 		{
 			this->name = n;

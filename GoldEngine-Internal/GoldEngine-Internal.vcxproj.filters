@@ -121,6 +121,12 @@
     <Filter Include="Data\Engine\Shaders\Runtime\Lighting">
       <UniqueIdentifier>{bac28715-06e8-45d9-bb39-fab1a90bd275}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\Engine\Textures">
+      <UniqueIdentifier>{4906a301-d328-4c2e-b0fd-8f75ea6b5098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Management\MiddleLevel">
+      <UniqueIdentifier>{539ae321-1426-4428-90f7-5bb797a2fb37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -261,6 +267,12 @@
     <ClInclude Include="FileManager.h">
       <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
     </ClInclude>
+    <ClInclude Include="SceneObject.h">
+      <Filter>Archivos de origen\Engine\Management\MiddleLevel</Filter>
+    </ClInclude>
+    <ClInclude Include="Cast.h">
+      <Filter>Archivos de origen\Engine\Marshaller</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -308,15 +320,6 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Archivos de origen\Engine\Management\Instance</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Archivos de origen\Engine\Management</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelRenderer.cpp">
-      <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Skybox.cpp">
-      <Filter>Archivos de origen\Engine\EngineObjects\Skybox</Filter>
-    </ClCompile>
     <ClCompile Include="DataPack.cpp">
       <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
     </ClCompile>
@@ -336,9 +339,6 @@
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Data\Engine\Models\Error.obj">
-      <Filter>Data\Engine\Models</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Models\Error.mtl">
       <Filter>Data\Engine\Models</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\base.vs">
@@ -361,6 +361,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\textured\albedo.vs">
       <Filter>Data\Engine\Shaders\Textured</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\Engine\Textures\Error.png">
+      <Filter>Data\Engine\Textures</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

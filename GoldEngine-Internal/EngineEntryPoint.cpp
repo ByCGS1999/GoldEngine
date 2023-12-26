@@ -3,8 +3,10 @@
 #include "Window.h"
 #include "Includes.h"
 #include "Drawing.h"
+#include "Cast.h"
 #include "Transform.h"
 #include "CypherLib.h"
+#include "SceneObject.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Raylib/include/rlImGui.h"
@@ -16,6 +18,7 @@
 
 // INCLUDE ENGINE CLASSES \\
 
+#include "SceneFormat.h";
 #include "LightManager.h"
 #include "ModelRenderer.h"
 #include "PBRModelRenderer.h"
@@ -24,6 +27,7 @@
 using namespace Engine::Drawing;
 using namespace Engine::Management;
 using namespace Engine::Managers;
+using namespace Engine::Internal;
 using namespace Engine::EngineObjects::Native;
 
 DataPacks dataPack;
@@ -34,6 +38,11 @@ unsigned int ambient_color = 0x2B2B2BFF;
 float cameraSpeed = 1.25f;
 bool controlCamera = true;
 rPBR::PBRLight lights[1] = { 0 };
+RenderTexture viewportTexture;
+bool isOpen = true;
+bool toggleControl = true;
+bool initSettings = false;
+bool styleEditor = false;
 
 ref class EntryPoint : Engine::Window
 {
@@ -41,6 +50,26 @@ ref class EntryPoint : Engine::Window
 	Scene^ scene;
 	Engine::EngineObjects::LightManager^ lightManager;
 	Engine::Internal::Components::Vector3^ cameraPosition;
+
+	void ExecAsIdentifiedObject(Engine::Internal::Components::ObjectType type, System::Object^ object)
+	{
+		if (type == 3)
+		{
+			Engine::EngineObjects::Skybox^ skybox = Cast::Dynamic<Engine::EngineObjects::Skybox^>(object);
+			skybox->Draw();
+			skybox->DrawGizmo();
+		}
+		else if (type == 2)
+		{
+			Engine::EngineObjects::ModelRenderer^ modelRenderer = Cast::Dynamic<Engine::EngineObjects::ModelRenderer^>(object);
+			modelRenderer->Draw();
+			modelRenderer->DrawGizmo();
+		}
+		else
+		{
+
+		}
+	}
 
 public:
 	EntryPoint()
@@ -55,7 +84,7 @@ public:
 	{
 		//WinAPI::FreeCons();
 		SetWindowFlags(4096 | 4 | FLAG_MSAA_4X_HINT);
-		OpenWindow(640, 480, (const char*)"GoldEngine Technical Demo");
+		OpenWindow(1280, 720, (const char*)"GoldEngine Editor ver1.1a");
 
 		SetFPS(60);
 		Preload();
@@ -63,34 +92,183 @@ public:
 		Loop();
 	}
 
-	void PrebuildAssets()
+	void DrawImGui() override
 	{
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
 
+		if (!initSettings)
+		{
+			ImGui::LoadIniSettingsFromDisk("imgui.ini");
+			WaitTime(2.5);
+			initSettings = true;
+		}
+
+		auto viewPort = ImGui::GetMainViewport();
+		ImGui::DockSpaceOverViewport(viewPort, ImGuiDockNodeFlags_None);
+
+		if (ImGui::BeginMainMenuBar())
+		{
+			if (ImGui::BeginMenu("Scene", true))
+			{
+				if (ImGui::MenuItem("New", "", false, true))
+				{
+					ImGui::OpenPopup("New Scene");
+				}
+				if (ImGui::MenuItem("Open", "", false, true))
+				{
+
+				}
+				if (ImGui::MenuItem("Save"))
+				{
+					SceneManager::SaveSceneToFile(scene, passwd);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Exit"))
+				{
+					Exit();
+				}
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Edit", true))
+			{
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Help", true))
+			{
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Editor", true))
+			{
+				if (ImGui::MenuItem("Style Editor"))
+				{
+					styleEditor = !styleEditor;
+				}
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMainMenuBar();
+		}
+
+		if (ImGui::Begin("Hierarchy", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		{
+
+			ImGui::End();
+		}
+
+		if (ImGui::Begin("Properties", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		{
+
+			ImGui::End();
+		}
+
+		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		{
+
+			ImGui::End();
+		}
+
+		if (styleEditor)
+		{
+			ImGui::ShowStyleEditor(&ImGui::GetStyle());
+		}
+
+		if (ImGui::Begin("Game Viewport", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		{
+			ImGui::Spacing();
+			ImGui::SameLine();
+
+			controlCamera = ImGui::IsWindowFocused();
+
+			rlImGuiImageRenderTextureFit(&viewportTexture, true);
+
+			ImGui::NewLine();
+
+			if (ImGui::Begin("Toolbox", &isOpen, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoScrollbar))
+			{
+				if (ImGui::Button("Model Renderer"))
+				{
+					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
+						"ModelRenderer",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
+							1.0f
+						),
+						0,
+						0,
+						0,
+						0xFFFFFFFF
+					);
+					scene->AddObjectToScene(meshRenderer);
+					scene->GetRenderQueue()->Add(
+						gcnew Engine::Management::MiddleLevel::SceneObject(
+							meshRenderer->type, 
+							meshRenderer
+						)
+					);
+				}
+				ImGui::End();
+			}
+
+			ImGui::End();
+		}
+
+		if (ImGui::Begin("Console", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		{
+
+			ImGui::End();
+		}
+
+		// popups
+
+		if (ImGui::BeginPopupModal("#New_Scene", &isOpen))
+		{
+			ImGui::Text("Do you want to create a new scene?");
+			ImGui::Separator();
+			if (ImGui::Button("New"))
+			{
+
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel"))
+			{
+				ImGui::CloseCurrentPopup();
+
+			}
+
+			ImGui::EndPopup();
+		}
+
+		if (ImGui::BeginPopupModal("#OpenScene", &isOpen))
+		{
+
+			ImGui::EndPopup();
+		}
 	}
 
 	void Exit() override
 	{
+		UnloadRenderTexture(viewportTexture);
 		dataPack.FreeAll();
+		exit(0);
 	}
 
 	void Draw() override
 	{
 		BeginDrawing();
 		{
+			BeginTextureMode(viewportTexture);
+
 			ClearBackground(BLACK);
 
 			BeginMode3D(c3d2);
 
-			for each (Object ^ obj in scene->sceneObjects)
+			for each (Engine::Management::MiddleLevel::SceneObject^ obj in scene->GetRenderQueue())
 			{
-				// try cast
-				auto newObj = reinterpret_cast<Engine::Internal::Components::Object^>(obj);
-
-				if (newObj != nullptr)
-				{
-					newObj->DrawGizmo();
-					newObj->Draw();
-				}
+				ExecAsIdentifiedObject(obj->objectType, obj->reference);
 			}
 			//DrawModel(mod, { 0.0f, 0.0f, 0.0f }, 1, WHITE);
 			DrawGrid(10, 1.0f);
@@ -99,17 +277,19 @@ public:
 
 			DrawFPS(0, 0);
 
+			EndTextureMode();
+
 			rlImGuiBegin();
-
-			ImGui::ShowDemoWindow((bool*)true);
-
-			ImGui::Begin("DemoVer", (bool*)true, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration);
+			
+			ImGui::Begin("DemoVer", (bool*)true, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking);
 			{
 				ImGui::SetWindowSize(ImVec2(285, 20), 0);
-				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight()-25), 0);
+				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight() - 25), 0);
 				ImGui::TextColored(ImVec4(0, 0, 0, 255), "Gold Engine Ver: dev-0.0.2-early");
+				ImGui::End();
 			}
-			ImGui::End();
+
+			DrawImGui();
 
 			rlImGuiEnd();
 		}
@@ -118,104 +298,58 @@ public:
 
 	void Init() override
 	{
-		scene = SceneManager::CreateScene();
-		scene->sceneName = "Level0";
-
-		auto workspace = gcnew Engine::Internal::Components::Object(
-			"Workspace",
-			gcnew Engine::Internal::Components::Transform(
-				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-				gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-				0.0f
-			),
-			Engine::Internal::Components::Generic
-		);
-
-		auto skybox = gcnew Engine::EngineObjects::Skybox(
-			"Skybox",
-			gcnew Engine::Internal::Components::Transform(
-				gcnew Engine::Internal::Components::Vector3(0, 2, 0),
-				gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-				25.0f
-			),
-			1
-		);
-
-		auto modelRenderer = gcnew Engine::EngineObjects::PBRModelRenderer(
-			"Model1",
-			gcnew Engine::Internal::Components::Transform(
-				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-				gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-				0.1f
-			),
-			0,
-			ambient_color
-		);
-
+		SceneManager::LoadSceneFromFile("Level0", scene);
 		/*
-		lightManager = gcnew Engine::EngineObjects::LightManager(
-			"LightManager",
-			gcnew Engine::Internal::Components::Transform(
-				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-				gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-				0.1f
-			)
+		auto workSpace = gcnew Components::Object(
+			"Workspace",
+			gcnew Components::Transform(
+				gcnew Components::Vector3(0,0,0),
+				gcnew Components::Quaternion(0, 0, 0, 0),
+				1.0f
+			),
+			Components::Datamodel,
+			nullptr
+		);
+		
+		auto skyBox = gcnew Engine::EngineObjects::Skybox(
+			"Skybox",
+			gcnew Components::Transform(
+				gcnew Components::Vector3(0, 0, 0),
+				gcnew Components::Quaternion(0, 0, 0, 0),
+				5.0f
+			),
+			0
 		);
 
-		auto directionalLight = gcnew Engine::EngineObjects::LightSource(
-			"DirectionalLight1",
-			gcnew Engine::Internal::Components::Transform(
-				gcnew Engine::Internal::Components::Vector3(-2.5f, 5.0f, 0),
-				gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-				1
-			),
-			rPBR::LIGHT_DIRECTIONAL,
-			gcnew Engine::Internal::Components::Vector3(2.5f, -1, 0),
-			1.0f,
-			dataPack.GetShader(1)
-		);
+		scene->AddObjectToScene(workSpace);
+		scene->AddObjectToScene(skyBox);
 		*/
 
-		//directionalLight->lightColor = 0xFF0000FF;
-
-		skybox->SetupSkyboxImage(0, LoadTexture("Data/Engine/Skybox/Daylight.png"));
-
-		//lightManager->AddLight(directionalLight, 1);
+		/*
+		auto midLevSkybox = (Engine::Management::MiddleLevel::SceneObject^)scene->GetRenderQueue()[1];
+		auto skyBox = (Engine::EngineObjects::Skybox^)midLevSkybox->reference;
+		auto parent = (Engine::Management::MiddleLevel::SceneObject^)scene->GetRenderQueue()[0];
 		
+		skyBox->Init(skyBox->materialId, skyBox->texPath);
+		skyBox->SetupSkyboxImage(0);
+		*/
 		int numLights = 1;
 		SetShaderValue(dataPack.GetShader(1), GetShaderLocation(dataPack.GetShader(1), "numOfLights"), &numLights, SHADER_UNIFORM_INT);
-		rPBR::PBRSetAmbient(dataPack.GetShader(1), {0, 0, 0, 255}, 0.0f);
-		lights[0] = rPBR::PBRLightCreate(rPBR::LIGHT_POINT, { -5,5,0 }, { .5f,-.5f,0 }, {255,255,255, 255}, 2.5f, dataPack.GetShader(1));
-
-		modelRenderer->SetupMaterial(1);
-		modelRenderer->SetTexture(0, rPBR::PBR_TEXTURE_ALBEDO);
-		modelRenderer->SetVector(gcnew Engine::Internal::Components::Vector2(0.5, 0.5), rPBR::PBR_VEC2_TILING);
-		modelRenderer->SetColor(rPBR::PBR_COLOR_EMISSIVE, { 255,162,0,255 });
-		modelRenderer->SetMaterial(0);
-
-		modelRenderer->SetParent(workspace);
-
-		//modelRenderer->SetNativeRenderer(new Engine::EngineObjects::Native::NativeModelRenderer(model, m, ambient_color));
-
-		//modelRenderer->GetNativeRenderer()->model.get()->materials[0].shader = S;
-
-		scene->AddObjectToScene(workspace);
-		scene->AddObjectToScene(skybox);
-		//scene->AddObjectToScene(lightManager);
-		//scene->AddObjectToScene(directionalLight);
-		scene->AddObjectToScene(modelRenderer);
+		rPBR::PBRSetAmbient(dataPack.GetShader(1), { 0, 0, 0, 255 }, 0.0f);
+		lights[0] = rPBR::PBRLightCreate(rPBR::LIGHT_POINT, { -5,5,0 }, { .5f,-.5f,0 }, { 255,255,255, 255 }, 2.5f, dataPack.GetShader(1));
 
 		//FileManager::ReadCustomFileFormat("Data/assets1.gold", passwd);
-
+		 
 		cameraPosition = gcnew Engine::Internal::Components::Vector3(0, 0, 0);
-		//Directory::Delete("Data/tmp/", true);
-		SceneManager::SaveSceneToFile(scene, passwd);
+		Directory::Delete("Data/tmp/", true);
+		//SceneManager::SaveSceneToFile(scene, passwd);
 		//packedData->WriteToFile("Assets1", passwd);
 		Engine::Drawing::Drawing::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
-		//dataPack.AddCamera(0, c3d, Engine::Internal::Components::C3D);
+
 		c3d2 = dataPack.GetCamera3D(0);
 		c3d2.projection = CAMERA_PERSPECTIVE;
 		c3d2.fovy = 60;
+		
 	}
 
 	void Preload() override
@@ -225,16 +359,23 @@ public:
 			WinAPI::MBOX(GetWindowHandle(), "Nigger", "GoldEngine - Ver 0.0.2 - early", 0x00000040L | 0x00000000L);
 			Boot();
 		}
+		SetExitKey(KEY_NULL);
+		viewportTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 
+		/*
 		auto files = gcnew List<String^>();
 		files->Add("Models/castle.obj");
+		files->Add("Models/castle_diffuse.png");
 		files->Add("Engine/Models/Error.obj");
 		files->Add("Engine/Models/Skybox_cube.glb");
+		files->Add("Engine/Textures/Error.png");
+		files->Add("Engine/Skybox/Daylight.png");
 
-		FileManager::WriteToCustomFile("Data/assets2.gold", "ThreadcallNull", files->ToArray());
+		FileManager::WriteToCustomFile("Data/engineassets.gold", "ThreadcallNull", files->ToArray());*/
 		//FileManager::WriteCustomFileFormat("Data/assets1.gold", "ThereGoesThePasswordGyat", passwd);
 
-		FileManager::ReadCustomFileFormat("Data/assets2.gold", "ThreadcallNull", passwd);
+		scene = SceneManager::CreateScene("GoldBootManager");
+		FileManager::ReadCustomFileFormat("Data/engineassets.gold", "ThreadcallNull");
 
 		Model model;
 		MaterialMap matMap;
@@ -256,7 +397,7 @@ public:
 		t = dataPack.GetTexture2D(0);
 
 		model = dataPack.GetModel(0);
-		m = { dataPack.GetShader(0), 0,0,0,0, {0}};
+		m = { dataPack.GetShader(0), 0,0,0,0, {0} };
 
 		dataPack.SetShader(1, lightShader);
 
@@ -265,54 +406,44 @@ public:
 
 	void Update() override
 	{
-		if(controlCamera)
+		if (controlCamera && toggleControl)
 			UpdateCamera(&c3d2, CAMERA_FREE);
+
+		if (IsKeyPressed(KEY_F3))
+			toggleControl = !toggleControl;
 
 		Shader lightShader = dataPack.GetShader(1);
 		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };
 		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
 		rPBR::PBRLightUpdate(lightShader, lights[0]);
 
-		for each (Object ^ obj in scene->sceneObjects)
+		for each (Engine::Management::MiddleLevel::SceneObject^ obj in scene->sceneObjects)
 		{
-			// try cast
-			auto newObj = reinterpret_cast<Engine::Internal::Components::Object^>(obj);
 
-			if (newObj != nullptr)
-			{
-				newObj->Update();
-			}
 		}
 
 		if (IsKeyDown(KEY_F1))
 		{
 			ambient_color++;
 		}
-		if (IsKeyDown(KEY_F2)) 
+		if (IsKeyDown(KEY_F2))
 		{
 			ambient_color--;
-		}
-		if (IsKeyPressed(KEY_F3))
-		{
-			controlCamera = !controlCamera;
 		}
 
 		if (IsKeyPressed(KEY_F4))
 		{
 			SceneManager::UnloadScene(scene);
-			scene = SceneManager::CreateScene();
+			scene = SceneManager::CreateScene("Level0");
 			scene->sceneName = "Level0";
 		}
 
 		if (IsKeyPressed(KEY_F5))
 		{
-			Scene^ scn = SceneManager::LoadSceneFromFile("Level0");
-			if (scn != nullptr)
+			SceneManager::LoadSceneFromFile("Level0", scene);
+			if (scene != nullptr)
 			{
-				SceneManager::UnloadScene(scene);
-				scene = scn;
 				TraceLog(LOG_INFO, CastToNative(scene->sceneName));
-				
 			}
 			else
 			{

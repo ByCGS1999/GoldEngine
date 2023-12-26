@@ -41,7 +41,7 @@ namespace Engine::EngineObjects
 		Engine::Internal::Components::Vector3^ target;
 		rPBR::PBRLightType lightType;
 
-		LightSource(String^ name, Engine::Internal::Components::Transform^ t, rPBR::PBRLightType lightType, Engine::Internal::Components::Vector3^ target, float intensity, Shader shader)  : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::LightSource)
+		LightSource(String^ name, Engine::Internal::Components::Transform^ t, rPBR::PBRLightType lightType, Engine::Internal::Components::Vector3^ target, float intensity, Shader shader)  : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::LightSource, nullptr)
 		{
 			nativeLightSource = new Native::NativeLightSource();
 			this->lightType = lightType;
@@ -67,7 +67,7 @@ namespace Engine::EngineObjects
 		System::Collections::Generic::List<LightSource^>^ lightSources;
 
 	public:
-		LightManager(String^ name, Engine::Internal::Components::Transform^ t) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::LightManager)
+		LightManager(String^ name, Engine::Internal::Components::Transform^ t) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::LightManager, nullptr)
 		{
 			lightSources = gcnew System::Collections::Generic::List<LightSource^>();
 		}

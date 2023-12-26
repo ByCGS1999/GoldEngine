@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CameraPack.h" />
+    <ClInclude Include="Cast.h" />
     <ClInclude Include="CastToNative.h" />
     <ClInclude Include="CypherLib.h" />
     <ClInclude Include="DataPack.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="PBRModelRenderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -199,11 +201,8 @@
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="ModelRenderer.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="ScriptSandbox.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -214,14 +213,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="Data\Engine\Models\Error.mtl">
-      <FileType>Document</FileType>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
+    <CopyFileToFolders Include="Data\Engine\Textures\Error.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

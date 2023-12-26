@@ -27,7 +27,7 @@ namespace Engine::EngineObjects
 	public:
 		unsigned int color_hex;
 
-		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::PBR_ModelRenderer)
+		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::PBR_ModelRenderer, nullptr)
 		{
 			rPBR::PBRModel pbrModel = rPBR::PBRModelLoad(&DataPacks::singleton().GetModel(model));
 			color_hex = tint;

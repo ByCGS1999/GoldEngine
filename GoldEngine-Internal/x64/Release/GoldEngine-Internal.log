@@ -1,1 +1,1 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(2686,5): error MSB3030: No se pudo copiar el archivo "C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Data\Engine\Models\Error.mtl" porque no se encontró.
+﻿  GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe

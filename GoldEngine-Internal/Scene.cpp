@@ -2,6 +2,7 @@
 #include "DataPacks.h"
 #include "Transform.h"
 #include "Scene.h"
+#include "SceneObject.h"
 
 using namespace Engine::Management;
 
@@ -37,9 +38,11 @@ void Scene::OnLoad()
 
 // METHODS
  
-void Scene::AddObjectToScene(System::Object^ object)
+void Scene::AddObjectToScene(Engine::Internal::Components::Object^ object)
 {
-	sceneObjects.Add(object);
+	sceneObjects->Add(gcnew ::MiddleLevel::SceneObject(
+		object->type,
+		object));
 }
 
 void Scene::LoadScene()
@@ -50,7 +53,7 @@ void Scene::LoadScene()
 void Scene::UnloadScene()
 {
 	OnUnload();
-	sceneObjects.Clear();
+	sceneObjects->Clear();
 	DataPacks::singleton().FreeAll();
 	System::GC::Collect();
 }

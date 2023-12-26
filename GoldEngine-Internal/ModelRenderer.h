@@ -9,10 +9,11 @@ namespace Engine::EngineObjects
 		public:
 			std::unique_ptr<Model> model;
 			std::unique_ptr<Material> material;
+			std::unique_ptr<Texture2D> texture;
 			unsigned int color_hex;
 
-			NativeModelRenderer(Model m, Material mat, unsigned int hex) : model(std::make_unique<Model>(m)),
-				material(std::make_unique<Material>(mat)),
+			NativeModelRenderer(Model m, Material mat, Texture2D tex, unsigned int hex) : model(std::make_unique<Model>(m)),
+				material(std::make_unique<Material>(mat)), texture(std::make_unique<Texture2D>(tex)),
 				color_hex(hex)
 			{
 
@@ -27,16 +28,70 @@ namespace Engine::EngineObjects
 
 	public:
 		// datapack refs
-		int modelId;
-		int materialId;
+		unsigned int model;
+		unsigned int material;
+		unsigned int texture;
+		unsigned int tint;
 		// methods & constructor
-		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, int model, int material, unsigned int tint);
-		void SetNativeRenderer(Native::NativeModelRenderer* renderer);
-		Native::NativeModelRenderer* GetNativeRenderer();
-		void Update() override;
-		void PhysicsUpdate() override;
-		void Start() override;
-		void Draw() override;
-		void SetColorTint(unsigned int hexValue);
+		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int material, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ModelRenderer, nullptr)
+		{
+			model = model;
+			material = material;
+			tint = tint;
+			texture = texture;
+
+			nativeRenderer = new Native::NativeModelRenderer(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetMaterial(material), DataPacks::singleton().GetTexture2D(texture), tint);
+		}
+
+		ModelRenderer(Engine::Internal::Components::Object^ object) : Object(object->name, object->transform, object->type, object->parent)
+		{
+
+		}
+
+		void SetNativeRenderer(Native::NativeModelRenderer* renderer)
+		{
+			if (nativeRenderer != nullptr)
+				free(nativeRenderer);
+
+			nativeRenderer = renderer;
+		}
+
+		void Init(unsigned int model, unsigned int material, unsigned int texture, unsigned int tint)
+		{
+			model = model;
+			material = material;
+			tint = tint;
+			texture = texture;
+
+			auto modelInst = DataPacks::singleton().GetModel(model);
+			auto materialInst = DataPacks::singleton().GetMaterial(material);
+			auto texInst = DataPacks::singleton().GetTexture2D(texture);
+
+			materialInst.maps[MATERIAL_MAP_ALBEDO].texture = texInst;
+
+			nativeRenderer = new Native::NativeModelRenderer(modelInst, materialInst, texInst, tint);
+		}
+
+		Native::NativeModelRenderer* GetNativeRenderer()
+		{
+			return nativeRenderer;
+		}
+
+
+		void Update() override {}
+		void PhysicsUpdate() override {}
+		void Start() override {}
+
+		void Draw() override
+		{
+			Engine::Internal::Components::Vector3^ internal_v3 = transform->position;
+
+			DrawModel(*nativeRenderer->model, { internal_v3->x, internal_v3->y, internal_v3->z }, transform->scale, GetColor(nativeRenderer->color_hex));
+		}
+
+		void SetColorTint(unsigned int hexValue)
+		{
+			nativeRenderer->color_hex = hexValue;
+		}
 	};
 }

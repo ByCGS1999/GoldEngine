@@ -98,3 +98,8 @@ void Engine::Window::Init()
 {
 
 }
+
+void Engine::Window::DrawImGui()
+{
+
+}
