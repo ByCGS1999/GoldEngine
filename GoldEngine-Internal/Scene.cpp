@@ -42,7 +42,8 @@ void Scene::AddObjectToScene(Engine::Internal::Components::Object^ object)
 {
 	sceneObjects->Add(gcnew ::MiddleLevel::SceneObject(
 		object->type,
-		object));
+		object,
+		""));
 }
 
 void Scene::LoadScene()

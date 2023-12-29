@@ -32,6 +32,46 @@ namespace Engine::Management
 		void UnloadScene();
 		void AddObjectToScene(Engine::Internal::Components::Object^ object);
 		System::Collections::ArrayList^ GetRenderQueue() { return drawQueue; }
+		Engine::Internal::Components::Object^ GetDatamodelMember(System::String^ datamodel) 
+		{ 
+			Engine::Internal::Components::Object^ retn = nullptr; 
+			for each (auto objects in drawQueue) 
+			{
+				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
+
+				if (sceneObject->objectType == Engine::Internal::Components::Datamodel)
+				{
+					if (sceneObject->reference->name == datamodel)
+						retn = sceneObject->reference;
+				}
+			}
+
+			if (retn == nullptr)
+			{
+				auto newMember = AddDatamodelMember(datamodel);
+				auto newObject = gcnew Engine::Management::MiddleLevel::SceneObject(Engine::Internal::Components::ObjectType::Datamodel, newMember, "");
+
+				retn = newMember;
+
+				AddObjectToScene(newMember);
+				drawQueue->Add(newObject);
+			}
+
+			return retn;
+		}
+
+	private protected:
+		Engine::Internal::Components::Object^ AddDatamodelMember(System::String^ datamodel)
+		{
+			return gcnew Engine::Internal::Components::Object(datamodel,
+				gcnew Engine::Internal::Components::Transform(
+					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+					gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
+					1.0f
+				),
+				Engine::Internal::Components::ObjectType::Datamodel,
+				nullptr);
+		}
 
 		// VMethods
 	public:

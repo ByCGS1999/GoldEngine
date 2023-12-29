@@ -53,13 +53,13 @@ ref class EntryPoint : Engine::Window
 
 	void ExecAsIdentifiedObject(Engine::Internal::Components::ObjectType type, System::Object^ object)
 	{
-		if (type == 3)
+		if (type == Engine::Internal::Components::ObjectType::Skybox)
 		{
 			Engine::EngineObjects::Skybox^ skybox = Cast::Dynamic<Engine::EngineObjects::Skybox^>(object);
 			skybox->Draw();
 			skybox->DrawGizmo();
 		}
-		else if (type == 2)
+		else if (type == Engine::Internal::Components::ObjectType::ModelRenderer)
 		{
 			Engine::EngineObjects::ModelRenderer^ modelRenderer = Cast::Dynamic<Engine::EngineObjects::ModelRenderer^>(object);
 			modelRenderer->Draw();
@@ -84,7 +84,7 @@ public:
 	{
 		//WinAPI::FreeCons();
 		SetWindowFlags(4096 | 4 | FLAG_MSAA_4X_HINT);
-		OpenWindow(1280, 720, (const char*)"GoldEngine Editor ver1.1a");
+		OpenWindow(1280, 720, (const char*)"GoldEngine Editor editor-ver0.5c");
 
 		SetFPS(60);
 		Preload();
@@ -154,6 +154,33 @@ public:
 
 		if (ImGui::Begin("Hierarchy", &isOpen, ImGuiWindowFlags_DockNodeHost))
 		{
+			for each (auto object in scene->sceneObjects)
+			{
+				auto objectType = object->objectType;
+				auto reference = object->reference;
+
+				if (objectType == Engine::Internal::Components::Datamodel)
+				{
+					if (reference != nullptr)
+					{
+						ImGui::Selectable(CastToNative(reference->name + " (READONLY)"));
+					}
+				}
+				else
+				{
+					if (reference != nullptr)
+					{
+						if (reference->parent != nullptr)
+						{
+							ImGui::Selectable(CastToNative("\t" + reference->name));
+						}
+						else
+						{
+							ImGui::Selectable(CastToNative(reference->name));
+						}
+					}
+				}
+			}
 
 			ImGui::End();
 		}
@@ -186,33 +213,58 @@ public:
 
 			ImGui::NewLine();
 
-			if (ImGui::Begin("Toolbox", &isOpen, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoScrollbar))
-			{
-				if (ImGui::Button("Model Renderer"))
-				{
-					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
-						"ModelRenderer",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-							1.0f
-						),
-						0,
-						0,
-						0,
-						0xFFFFFFFF
-					);
-					scene->AddObjectToScene(meshRenderer);
-					scene->GetRenderQueue()->Add(
-						gcnew Engine::Management::MiddleLevel::SceneObject(
-							meshRenderer->type, 
-							meshRenderer
-						)
-					);
-				}
-				ImGui::End();
-			}
+			ImGui::End();
+		}
 
+		if (ImGui::Begin("Toolbox", &isOpen, ImGuiWindowFlags_NoScrollbar))
+		{
+			if (ImGui::Button("Model Renderer"))
+			{
+				auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
+					"ModelRenderer",
+					gcnew Engine::Internal::Components::Transform(
+						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+						gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
+						1.0f
+					),
+					0,
+					0,
+					0,
+					0xFFFFFFFF
+				);
+				meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
+				scene->AddObjectToScene(meshRenderer);
+				scene->GetRenderQueue()->Add(
+					gcnew Engine::Management::MiddleLevel::SceneObject(
+						meshRenderer->type,
+						meshRenderer,
+						""
+					)
+				);
+			}
+			if (ImGui::Button("Skybox"))
+			{
+				auto skyBox = gcnew Engine::EngineObjects::Skybox(
+					"Skybox",
+					gcnew Engine::Internal::Components::Transform(
+						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+						gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
+						1.0f
+					),
+					2,
+					0,
+					0
+				);
+				skyBox->SetParent(scene->GetDatamodelMember("workspace"));
+				scene->AddObjectToScene(skyBox);
+				scene->GetRenderQueue()->Add(
+					gcnew Engine::Management::MiddleLevel::SceneObject(
+						skyBox->type,
+						skyBox,
+						""
+					)
+				);
+			}
 			ImGui::End();
 		}
 
@@ -268,7 +320,7 @@ public:
 
 			for each (Engine::Management::MiddleLevel::SceneObject^ obj in scene->GetRenderQueue())
 			{
-				ExecAsIdentifiedObject(obj->objectType, obj->reference);
+				ExecAsIdentifiedObject(obj->objectType, (System::Object^)obj->reference);
 			}
 			//DrawModel(mod, { 0.0f, 0.0f, 0.0f }, 1, WHITE);
 			DrawGrid(10, 1.0f);
@@ -285,7 +337,7 @@ public:
 			{
 				ImGui::SetWindowSize(ImVec2(285, 20), 0);
 				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight() - 25), 0);
-				ImGui::TextColored(ImVec4(0, 0, 0, 255), "Gold Engine Ver: dev-0.0.2-early");
+				ImGui::TextColored(ImVec4(0, 0, 0, 255), "Gold Engine Ver: editor-0.5c");
 				ImGui::End();
 			}
 
@@ -298,7 +350,7 @@ public:
 
 	void Init() override
 	{
-		SceneManager::LoadSceneFromFile("Level0", scene);
+		scene = SceneManager::LoadSceneFromFile("Level0", scene);
 		/*
 		auto workSpace = gcnew Components::Object(
 			"Workspace",
@@ -356,7 +408,7 @@ public:
 	{
 		if (FirstTimeBoot())
 		{
-			WinAPI::MBOX(GetWindowHandle(), "Nigger", "GoldEngine - Ver 0.0.2 - early", 0x00000040L | 0x00000000L);
+			WinAPI::MBOX(GetWindowHandle(), "LPVOID* voidFunc = (LPVOID*)nativeData;\nvoidFunc->Test();", "GoldEngine - Ver 0.5c - editor", 0x00000040L | 0x00000000L);
 			Boot();
 		}
 		SetExitKey(KEY_NULL);
@@ -380,7 +432,7 @@ public:
 		Model model;
 		MaterialMap matMap;
 
-		packedData->ReadFromFile("Assets1", passwd);
+		packedData->ReadFromFile("Assets0", passwd);
 
 		Texture2D t = dataPack.GetTexture2D(1);
 
@@ -440,7 +492,7 @@ public:
 
 		if (IsKeyPressed(KEY_F5))
 		{
-			SceneManager::LoadSceneFromFile("Level0", scene);
+			scene = SceneManager::LoadSceneFromFile("Level0", scene);
 			if (scene != nullptr)
 			{
 				TraceLog(LOG_INFO, CastToNative(scene->sceneName));

@@ -15,13 +15,13 @@ namespace Engine::Managers
 			return System::IO::File::Exists("Data/" + fN + ".scn");
 		}
 
-		static void LoadSceneFromFile(System::String^ fN, Engine::Management::Scene^ loadedScene)
+		static Engine::Management::Scene^ LoadSceneFromFile(System::String^ fN, Engine::Management::Scene^ loadedScene)
 		{
 			if (AssetExists(fN))
 			{
 				auto parsedScene = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Management::Scene^>(System::IO::File::ReadAllText("Data/" + fN + ".scn"));
 
-				loadedScene->sceneName = parsedScene->sceneName;
+				loadedScene->sceneName = fN;
 				loadedScene->assetPack = parsedScene->assetPack;
 				loadedScene->sceneObjects = parsedScene->sceneObjects;
 
@@ -36,39 +36,62 @@ namespace Engine::Managers
 
 					auto referenceObject = (Engine::Internal::Components::Object^)t->reference;
 					auto objectType = t->objectType;
+					auto deserializedData = t->deserializedData;
 
 					auto renderQueue = loadedScene->GetRenderQueue();
 
 					switch (objectType)
 					{
 					case Engine::Internal::Components::Datamodel:
-						renderQueue->Add(
-							gcnew Engine::Management::MiddleLevel::SceneObject(
-								objectType,
-								gcnew Engine::Internal::Components::Object(referenceObject->name, referenceObject->transform, objectType, referenceObject->parent)
-							)
+					{
+						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
 						);
-						break;
-					case Engine::Internal::Components::Skybox:
-						instancedSkybox = gcnew Engine::EngineObjects::Skybox(referenceObject);
+
 						renderQueue->Add(
-							gcnew Engine::Management::MiddleLevel::SceneObject(
-								objectType,
-								instancedSkybox
-							)
+							sceneObject
 						);
-						instancedSkybox->Init(instancedSkybox->material, instancedSkybox->texture);
-						break;
+					}
+					break;
 					case Engine::Internal::Components::ModelRenderer:
-						instancedModelRenderer = gcnew Engine::EngineObjects::ModelRenderer(referenceObject);
-						renderQueue->Add(
-							gcnew Engine::Management::MiddleLevel::SceneObject(
-								objectType,
-								instancedModelRenderer
-							)
+					{
+						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
 						);
-						instancedModelRenderer->Init(instancedModelRenderer->model, instancedModelRenderer->material, instancedModelRenderer->texture, instancedModelRenderer->tint);
-						break;
+
+						renderQueue->Add(
+							sceneObject
+						);
+
+						instancedModelRenderer = sceneObject->GetValue< Engine::EngineObjects::ModelRenderer^ >();
+						Model model = DataPacks::singleton().GetModel(instancedModelRenderer->model);
+						Material material = DataPacks::singleton().GetMaterial(instancedModelRenderer->material);
+						Texture texture = DataPacks::singleton().GetTexture2D(instancedModelRenderer->texture);
+						unsigned int hex = instancedModelRenderer->tint;
+
+						instancedModelRenderer->SetNativeRenderer(new Engine::EngineObjects::Native::NativeModelRenderer(model, material, texture, hex));
+					}
+					break;
+					case Engine::Internal::Components::Skybox:
+					{
+						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
+						);
+
+						renderQueue->Add(
+							sceneObject
+						);
+
+						instancedSkybox = sceneObject->GetValue<Engine::EngineObjects::Skybox^>();
+						instancedSkybox->Init(instancedSkybox->model, instancedSkybox->material, instancedSkybox->texture);
+					}
+					break;
 					}
 				}
 			}
@@ -78,6 +101,8 @@ namespace Engine::Managers
 
 			if (loadedScene == nullptr)
 				TraceLog(LOG_FATAL, "FAILED OPENING SCENE");
+
+			return loadedScene;
 		}
 
 		static Engine::Management::Scene^ CreateScene(System::String^ sceneName)

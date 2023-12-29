@@ -43,11 +43,6 @@ namespace Engine::EngineObjects
 			nativeRenderer = new Native::NativeModelRenderer(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetMaterial(material), DataPacks::singleton().GetTexture2D(texture), tint);
 		}
 
-		ModelRenderer(Engine::Internal::Components::Object^ object) : Object(object->name, object->transform, object->type, object->parent)
-		{
-
-		}
-
 		void SetNativeRenderer(Native::NativeModelRenderer* renderer)
 		{
 			if (nativeRenderer != nullptr)

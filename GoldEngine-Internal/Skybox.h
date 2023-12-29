@@ -21,27 +21,26 @@ namespace Engine::EngineObjects
 		Native::NativeSkybox* nativeSkybox;
 
 	public:
+		unsigned int model;
 		unsigned int material;
 		unsigned int texture;
 
-		Skybox(String^ s, Engine::Internal::Components::Transform^ t, unsigned int matId, unsigned int texturePath) : Object(s, t, Engine::Internal::Components::Skybox, nullptr)
+		Skybox(String^ s, Engine::Internal::Components::Transform^ t, unsigned int modelId, unsigned int matId, unsigned int texturePath) : Object(s, t, Engine::Internal::Components::Skybox, nullptr)
 		{
 			material = matId;
 			texture = texturePath;
+			model = modelId;
 
-			nativeSkybox = new Native::NativeSkybox(LoadModel("Data/tmp/Engine/Models/Skybox_cube.glb"));
+			nativeSkybox = new Native::NativeSkybox(DataPacks::singleton().GetModel(model));
 		}
 
-		Skybox(Engine::Internal::Components::Object ^object) : Object(object->name, object->transform, object->type, object->parent) 
-		{
-
-		}
-
-		void Init(unsigned int matId, unsigned int texturePath)
+		void Init(unsigned int modelId, unsigned int matId, unsigned int texturePath)
 		{
 			material = matId;
 			texture = texturePath;
-			nativeSkybox = new Native::NativeSkybox(LoadModel("Data/tmp/Engine/Models/Skybox_cube.glb"));
+			model = modelId;
+
+			nativeSkybox = new Native::NativeSkybox(DataPacks::singleton().GetModel(model));
 		}
 
 		void Draw() override

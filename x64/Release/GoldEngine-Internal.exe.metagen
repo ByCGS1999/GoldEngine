@@ -163,20 +163,15 @@ Class Cast: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
     Dynamic(Object): PrivateScope, Public, Static, HideBySig
-Class Engine.Management.MiddleLevel.SceneObject: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(Engine.Internal.Components.ObjectType, Engine.Internal.Components.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Engine.Internal.Components.ObjectType objectType : Public
-    Engine.Internal.Components.Object reference : Public
 Class Engine.EngineObjects.Skybox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Engine.Internal.Components.Object
-    Void .ctor(Engine.Internal.Components.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
+    UInt32 model : Public
     UInt32 material : Public
     UInt32 texture : Public
   Methods:
-    Init(UInt32, UInt32): PrivateScope, Public, HideBySig
+    Init(UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig
     Draw(): PrivateScope, Public, Virtual, HideBySig
     DrawGizmo(): PrivateScope, Public, Virtual, HideBySig
     Update(): PrivateScope, Public, Virtual, HideBySig
@@ -186,7 +181,6 @@ Class Engine.EngineObjects.Skybox: AutoLayout, AnsiClass, Class, Public, BeforeF
     SwapMaterial(UInt32): PrivateScope, Public, HideBySig
 Class Engine.EngineObjects.ModelRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Engine.Internal.Components.Object
-    Void .ctor(Engine.Internal.Components.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     UInt32 model : Public
@@ -202,6 +196,14 @@ Class Engine.EngineObjects.ModelRenderer: AutoLayout, AnsiClass, Class, Public, 
     Start(): PrivateScope, Public, Virtual, HideBySig
     Draw(): PrivateScope, Public, Virtual, HideBySig
     SetColorTint(UInt32): PrivateScope, Public, HideBySig
+Class Engine.Management.MiddleLevel.SceneObject: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Engine.Internal.Components.ObjectType, Engine.Internal.Components.Object, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Engine.Internal.Components.ObjectType objectType : Public
+    System.String deserializedData : Public
+  Methods:
+    GetValue<Engine::EngineObjects::Skybox ^>(): PrivateScope, Public, HideBySig
+    GetValue<Engine::EngineObjects::ModelRenderer ^>(): PrivateScope, Public, HideBySig
 Class Engine.Managers.SceneManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:

@@ -7,13 +7,13 @@ namespace Engine::Internal::Components
 {
 	enum ObjectType
 	{
-		Datamodel,
-		Generic,
-		ModelRenderer,
-		Skybox,
-		LightManager,
-		LightSource,
-		PBR_ModelRenderer
+		Datamodel = 1,
+		Generic = 2,
+		ModelRenderer = 3,
+		Skybox = 4,
+		LightManager = 5,
+		LightSource = 6,
+		PBR_ModelRenderer = 7
 	};
 
 	public ref class Object
