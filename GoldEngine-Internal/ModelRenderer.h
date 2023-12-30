@@ -10,9 +10,9 @@ namespace Engine::EngineObjects
 			std::unique_ptr<Model> model;
 			std::unique_ptr<Material> material;
 			std::unique_ptr<Texture2D> texture;
-			unsigned int color_hex;
+			unsigned long color_hex;
 
-			NativeModelRenderer(Model m, Material mat, Texture2D tex, unsigned int hex) : model(std::make_unique<Model>(m)),
+			NativeModelRenderer(Model m, Material mat, Texture2D tex, unsigned long hex) : model(std::make_unique<Model>(m)),
 				material(std::make_unique<Material>(mat)), texture(std::make_unique<Texture2D>(tex)),
 				color_hex(hex)
 			{
@@ -31,14 +31,14 @@ namespace Engine::EngineObjects
 		unsigned int model;
 		unsigned int material;
 		unsigned int texture;
-		unsigned int tint;
+		unsigned long tint;
 		// methods & constructor
-		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int material, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ModelRenderer, nullptr)
+		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int material, unsigned int texture, unsigned long tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ModelRenderer)
 		{
-			model = model;
-			material = material;
-			tint = tint;
-			texture = texture;
+			this->model = model;
+			this->material = material;
+			this->tint = tint;
+			this->texture = texture;
 
 			nativeRenderer = new Native::NativeModelRenderer(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetMaterial(material), DataPacks::singleton().GetTexture2D(texture), tint);
 		}
@@ -51,12 +51,12 @@ namespace Engine::EngineObjects
 			nativeRenderer = renderer;
 		}
 
-		void Init(unsigned int model, unsigned int material, unsigned int texture, unsigned int tint)
+		void Init(unsigned int model, unsigned int material, unsigned int texture, unsigned long tint)
 		{
-			model = model;
-			material = material;
-			tint = tint;
-			texture = texture;
+			this->model = model;
+			this->material = material;
+			this->tint = tint;
+			this->texture = texture;
 
 			auto modelInst = DataPacks::singleton().GetModel(model);
 			auto materialInst = DataPacks::singleton().GetMaterial(material);
@@ -79,9 +79,8 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			Engine::Internal::Components::Vector3^ internal_v3 = transform->position;
-
-			DrawModel(*nativeRenderer->model, { internal_v3->x, internal_v3->y, internal_v3->z }, transform->scale, GetColor(nativeRenderer->color_hex));
+			auto t = GetTransform();
+			DrawModel(*nativeRenderer->model, { t->position->x,t->position->y, t->position->z }, t->scale, GetColor(nativeRenderer->color_hex));
 		}
 
 		void SetColorTint(unsigned int hexValue)

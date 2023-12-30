@@ -13,15 +13,17 @@ namespace Engine::Management
 		// Properties
 	public:
 		System::String^ sceneName;
-		System::String^ assetPack;
+		System::Collections::Generic::List<System::String^>^ assetPacks;
+		System::String^ sceneRequirements;
 		System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneObjects; // Managed storage + object parsing.
 
 		// Constructors
 	public:
-		Scene(String^ name, String^ assetP, System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneO)
+		Scene(String^ name, String^ sR, System::Collections::Generic::List<String^>^ assetP, System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneO)
 		{
 			this->sceneName = name;
-			this->assetPack = assetP;
+			this->assetPacks = assetP;
+			this->sceneRequirements = sR;
 			this->sceneObjects = sceneO;
 			drawQueue = gcnew System::Collections::ArrayList();
 		}
@@ -66,11 +68,11 @@ namespace Engine::Management
 			return gcnew Engine::Internal::Components::Object(datamodel,
 				gcnew Engine::Internal::Components::Transform(
 					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-					gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-					1.0f
+					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+					1.0f,
+					nullptr
 				),
-				Engine::Internal::Components::ObjectType::Datamodel,
-				nullptr);
+				Engine::Internal::Components::ObjectType::Datamodel);
 		}
 
 		// VMethods

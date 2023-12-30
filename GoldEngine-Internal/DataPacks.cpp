@@ -42,7 +42,6 @@ void DataPacks::FreeTextures2D()
 	nativePacks->textures2d.clear();
 }
 
-
 void DataPacks::FreeCameras()
 {
 	nativePacks->cameras.clear();

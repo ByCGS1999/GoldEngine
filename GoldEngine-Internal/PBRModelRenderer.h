@@ -27,7 +27,7 @@ namespace Engine::EngineObjects
 	public:
 		unsigned int color_hex;
 
-		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::PBR_ModelRenderer, nullptr)
+		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::PBR_ModelRenderer)
 		{
 			rPBR::PBRModel pbrModel = rPBR::PBRModelLoad(&DataPacks::singleton().GetModel(model));
 			color_hex = tint;
@@ -61,7 +61,7 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			Engine::Internal::Components::Transform^ t = GetTransform();
+			auto t = GetTransform();
 			rPBR::PBRDrawModel(*nativeRenderer->model, t->position->toNative(), t->scale, GetColor(color_hex));
 		}
 

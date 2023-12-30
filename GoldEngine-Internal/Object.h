@@ -22,15 +22,13 @@ namespace Engine::Internal::Components
 		String^ name;
 		ObjectType type;
 		Transform^ transform;
-		Object^ parent;
 
 		[[JsonConstructorAttribute]]
-		Object(System::String^ n, Transform^ transform, ObjectType t, Object^ parent)
+		Object(System::String^ n, Transform^ transform, ObjectType t)
 		{
 			this->name = n;
 			this->transform = transform;
 			this->type = t;
-			this->parent = parent;
 		}
 		virtual void Start() {}
 		virtual void PhysicsUpdate() {}
@@ -38,6 +36,6 @@ namespace Engine::Internal::Components
 		virtual void Draw() {}
 		virtual void DrawGizmo() {}
 		Transform^ GetTransform() { return transform; }
-		void SetParent(Object^ object) { parent = object; }
+		void SetParent(Object^ object) { transform->parent = object->transform; }
 	};
 }

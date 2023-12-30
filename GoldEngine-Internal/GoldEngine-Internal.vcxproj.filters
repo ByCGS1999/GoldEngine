@@ -287,9 +287,6 @@
     <ClCompile Include="ScriptSandbox.cpp">
       <Filter>Archivos de origen\Engine\ScriptingEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>Archivos de origen\Engine\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Raylib\include\rlImGui.cpp">
       <Filter>raylib\include</Filter>
     </ClCompile>

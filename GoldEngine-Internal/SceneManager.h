@@ -22,8 +22,10 @@ namespace Engine::Managers
 				auto parsedScene = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Management::Scene^>(System::IO::File::ReadAllText("Data/" + fN + ".scn"));
 
 				loadedScene->sceneName = fN;
-				loadedScene->assetPack = parsedScene->assetPack;
+				loadedScene->assetPacks = parsedScene->assetPacks;
 				loadedScene->sceneObjects = parsedScene->sceneObjects;
+				loadedScene->sceneRequirements = parsedScene->sceneRequirements;
+				loadedScene->LoadScene();
 
 				for each (auto t in parsedScene->sceneObjects)
 				{
@@ -96,9 +98,11 @@ namespace Engine::Managers
 				}
 			}
 			else
-
-				loadedScene = gcnew Engine::Management::Scene(fN, "", gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
-
+			{
+				auto assetPacks = gcnew System::Collections::Generic::List<String^>();
+				assetPacks->Add("Data/engineassets.gold");
+				loadedScene = gcnew Engine::Management::Scene(fN, "Assets_"+fN, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
+			}
 			if (loadedScene == nullptr)
 				TraceLog(LOG_FATAL, "FAILED OPENING SCENE");
 
@@ -107,10 +111,13 @@ namespace Engine::Managers
 
 		static Engine::Management::Scene^ CreateScene(System::String^ sceneName)
 		{
+			auto assetPacks = gcnew System::Collections::Generic::List<String^>();
+			assetPacks->Add("Data/engineassets.gold");
+
 			if (sceneName->Equals(""))
-				return gcnew Engine::Management::Scene("Level0", "", gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
+				return gcnew Engine::Management::Scene("Level0", "Assets_Level0", assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
 			else
-				return gcnew Engine::Management::Scene(sceneName, "", gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
+				return gcnew Engine::Management::Scene(sceneName, "Assets_"+sceneName, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
 		}
 
 		static void SaveSceneToFile(Engine::Management::Scene^ scene, unsigned int password)

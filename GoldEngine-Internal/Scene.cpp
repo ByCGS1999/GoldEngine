@@ -3,6 +3,9 @@
 #include "Transform.h"
 #include "Scene.h"
 #include "SceneObject.h"
+#include "WinAPI.h"
+#include "FileManager.h"
+#include "DataPack.h"
 
 using namespace Engine::Management;
 
@@ -48,13 +51,26 @@ void Scene::AddObjectToScene(Engine::Internal::Components::Object^ object)
 
 void Scene::LoadScene()
 {
+	DataPack^ pack = gcnew DataPack();
+	DataPacks::singleton().FreeAll(); // free all the assets
+
+	for each (auto packRoute in assetPacks)
+	{
+		FileManager::ReadCustomFileFormat(packRoute, "ThreadcallNull");
+	}
+
+	pack->ReadFromFile(sceneRequirements, 1234);
+
+	Directory::Delete("Data/tmp/", true);
+
 	OnLoad();
 }
 
 void Scene::UnloadScene()
 {
-	OnUnload();
+	//OnUnload();
 	sceneObjects->Clear();
+	drawQueue->Clear();
 	DataPacks::singleton().FreeAll();
 	System::GC::Collect();
 }

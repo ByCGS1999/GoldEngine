@@ -25,7 +25,7 @@ namespace Engine::EngineObjects
 		unsigned int material;
 		unsigned int texture;
 
-		Skybox(String^ s, Engine::Internal::Components::Transform^ t, unsigned int modelId, unsigned int matId, unsigned int texturePath) : Object(s, t, Engine::Internal::Components::Skybox, nullptr)
+		Skybox(String^ s, Engine::Internal::Components::Transform^ t, unsigned int modelId, unsigned int matId, unsigned int texturePath) : Object(s, t, Engine::Internal::Components::Skybox)
 		{
 			material = matId;
 			texture = texturePath;
@@ -45,7 +45,7 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			Engine::Internal::Components::Transform^ t = GetTransform();
+			auto t = GetTransform();
 			DrawModel(*nativeSkybox->model, { t->position->x,t->position->y, t->position->z }, t->scale, GetColor(0xFFFFFFFF));
 		}
 

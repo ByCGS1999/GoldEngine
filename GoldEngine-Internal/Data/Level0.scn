@@ -1,18 +1,21 @@
 {
   "sceneName": "Level0",
-  "assetPack": "",
+  "assetPacks": [
+    "Data/engineassets.gold"
+  ],
+  "sceneRequirements": "Assets_Level0",
   "sceneObjects": [
     {
       "objectType": 1,
-      "deserializedData": "{\"name\":\"workspace\",\"type\":1,\"transform\":{\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":0.0},\"scale\":1.0},\"parent\":null}"
-    },
-    {
-      "objectType": 3,
-      "deserializedData": "{\"model\":0,\"material\":0,\"texture\":0,\"tint\":0,\"name\":\"ModelRenderer\",\"type\":3,\"transform\":{\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":0.0},\"scale\":1.0},\"parent\":{\"name\":\"workspace\",\"type\":1,\"transform\":{\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":0.0},\"scale\":1.0},\"parent\":null}}"
+      "deserializedData": "{\"name\":\"workspace\",\"type\":1,\"transform\":{\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     },
     {
       "objectType": 4,
-      "deserializedData": "{\"model\":2,\"material\":0,\"texture\":0,\"name\":\"Skybox\",\"type\":4,\"transform\":{\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":0.0},\"scale\":1.0},\"parent\":{\"name\":\"workspace\",\"type\":1,\"transform\":{\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":0.0},\"scale\":1.0},\"parent\":null}}"
+      "deserializedData": "{\"model\":2,\"material\":0,\"texture\":0,\"name\":\"Skybox\",\"type\":4,\"transform\":{\"parent\":{\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+    },
+    {
+      "objectType": 3,
+      "deserializedData": "{\"model\":0,\"material\":0,\"texture\":0,\"tint\":4294967295,\"name\":\"ModelRenderer\",\"type\":3,\"transform\":{\"parent\":{\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     }
   ]
 }

@@ -43,6 +43,10 @@ bool isOpen = true;
 bool toggleControl = true;
 bool initSettings = false;
 bool styleEditor = false;
+bool showCursor = true;
+bool b1, b2, b3, b4, b5, b6, b7, b8;
+
+char fileName[] = "Level0";
 
 ref class EntryPoint : Engine::Window
 {
@@ -75,7 +79,7 @@ public:
 	EntryPoint()
 	{
 		dataPack = DataPacks();
-		packedData = gcnew DataPack();
+		//packedData = gcnew DataPack();
 		Start();
 	}
 
@@ -112,11 +116,11 @@ public:
 			{
 				if (ImGui::MenuItem("New", "", false, true))
 				{
-					ImGui::OpenPopup("New Scene");
+					b1 = true;
 				}
 				if (ImGui::MenuItem("Open", "", false, true))
 				{
-
+					b3 = true;
 				}
 				if (ImGui::MenuItem("Save"))
 				{
@@ -132,8 +136,14 @@ public:
 
 			if (ImGui::BeginMenu("Edit", true))
 			{
+				ImGui::SeparatorText("AssetPacks");
+				if (ImGui::MenuItem("AssetPack Editor"))
+				{
+					b4 = true;
+				}
 				ImGui::EndMenu();
 			}
+
 			if (ImGui::BeginMenu("Help", true))
 			{
 
@@ -154,8 +164,9 @@ public:
 
 		if (ImGui::Begin("Hierarchy", &isOpen, ImGuiWindowFlags_DockNodeHost))
 		{
-			for each (auto object in scene->sceneObjects)
+			for each (auto obj in scene->GetRenderQueue())
 			{
+				Engine::Management::MiddleLevel::SceneObject^ object = (Engine::Management::MiddleLevel::SceneObject^)obj;
 				auto objectType = object->objectType;
 				auto reference = object->reference;
 
@@ -170,7 +181,7 @@ public:
 				{
 					if (reference != nullptr)
 					{
-						if (reference->parent != nullptr)
+						if (reference->GetTransform()->parent != nullptr)
 						{
 							ImGui::Selectable(CastToNative("\t" + reference->name));
 						}
@@ -193,6 +204,7 @@ public:
 
 		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_DockNodeHost))
 		{
+			
 
 			ImGui::End();
 		}
@@ -204,14 +216,26 @@ public:
 
 		if (ImGui::Begin("Game Viewport", &isOpen, ImGuiWindowFlags_DockNodeHost))
 		{
-			ImGui::Spacing();
-			ImGui::SameLine();
+			bool showing = showCursor;
 
-			controlCamera = ImGui::IsWindowFocused();
+			if (IsKeyPressed(KEY_ESCAPE))
+			{
+				showCursor = !showCursor;
+			}
 
-			rlImGuiImageRenderTextureFit(&viewportTexture, true);
-
-			ImGui::NewLine();
+			if (!showCursor)
+			{
+				if (showCursor != showing)
+				{
+					EnableCursor();
+				}
+			}
+			else
+			{
+				DisableCursor();
+			}
+			
+			rlImGuiImageRenderTextureCustom(&viewportTexture, new int[2] { (int)ImGui::GetWindowSize().x, (int)ImGui::GetWindowSize().y }, new float[2] {17.5f, 35.0f});
 
 			ImGui::End();
 		}
@@ -224,8 +248,9 @@ public:
 					"ModelRenderer",
 					gcnew Engine::Internal::Components::Transform(
 						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-						gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-						1.0f
+						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+						1.0f,
+						nullptr
 					),
 					0,
 					0,
@@ -248,8 +273,9 @@ public:
 					"Skybox",
 					gcnew Engine::Internal::Components::Transform(
 						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-						gcnew Engine::Internal::Components::Quaternion(0, 0, 0, 0),
-						1.0f
+						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+						1.0f,
+						nullptr
 					),
 					2,
 					0,
@@ -274,31 +300,130 @@ public:
 			ImGui::End();
 		}
 
-		// popups
-
-		if (ImGui::BeginPopupModal("#New_Scene", &isOpen))
+		if(b1)
 		{
-			ImGui::Text("Do you want to create a new scene?");
+			ImGui::OpenPopup("New Scene");
+		}
+		else if (b2)
+		{
+			ImGui::OpenPopup("Create New Scene");
+		}
+		else if (b3)
+		{
+			ImGui::OpenPopup("Open Scene");
+		}
+		else if (b4)
+		{
+			ImGui::OpenPopup("AssetPack Editor");
+		}
+
+		// popups
+		if (ImGui::BeginPopupModal("New Scene", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::Text("Do you want to create a new scene?\nAll the unsaved changes will be discarded.");
 			ImGui::Separator();
 			if (ImGui::Button("New"))
 			{
-
+				b1 = false;
+				b2 = true;
+				ImGui::CloseCurrentPopup();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Cancel"))
 			{
 				ImGui::CloseCurrentPopup();
-
+				b1 = false;
 			}
 
 			ImGui::EndPopup();
 		}
 
-		if (ImGui::BeginPopupModal("#OpenScene", &isOpen))
+		if (ImGui::BeginPopupModal("Create New Scene", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize))
 		{
+			ImGui::Text("Input Scene Name: ");
+			ImGui::SameLine();
+			ImGui::InputText("", fileName, 1024);
+
+			if (ImGui::Button("Create Scene"))
+			{
+				scene = SceneManager::CreateScene(gcnew System::String(fileName));
+				ImGui::CloseCurrentPopup();
+				b2 = false;
+			}
+			if (ImGui::Button("Cancel"))
+			{
+				b2 = false;
+				ImGui::CloseCurrentPopup();
+			}
 
 			ImGui::EndPopup();
 		}
+
+		if (ImGui::BeginPopupModal("Open Scene", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::Text("Input Scene Name: ");
+			ImGui::SameLine();
+			ImGui::InputText("", fileName, 1024);
+
+			if (ImGui::Button("Open Scene"))
+			{
+				SceneManager::UnloadScene(scene);
+				scene = SceneManager::LoadSceneFromFile(gcnew System::String(fileName), scene);
+				ImGui::CloseCurrentPopup();
+				b3 = false;
+			}
+			if (ImGui::Button("Cancel"))
+			{
+				b3 = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
+		if (ImGui::BeginPopupModal("AssetPack Editor", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			char* data = new char[512];
+			for (int x = 0; x < scene->assetPacks->Count; x++)
+			{
+				if(data != "")
+					free(data);
+
+				data = new char[512];
+				strcpy(data, CastToNative(scene->assetPacks[x]));
+				std::string name = "###" + std::string(CastToNative(scene->assetPacks[x]));
+				if (ImGui::InputText(name.c_str(), data, 512, ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					scene->assetPacks[x] = gcnew String(data);
+				}
+			}
+
+			ImGui::Separator();
+			{
+				if (ImGui::Button("+"))
+				{
+					scene->assetPacks->Add("");
+				}
+				ImGui::SameLine();
+				if(ImGui::Button("-"))
+				{
+					if (scene->assetPacks->Count > 1)
+					{
+						scene->assetPacks->RemoveAt(scene->assetPacks->Count);
+					}
+				}
+			}
+			ImGui::Separator();
+
+			if (ImGui::Button("Close"))
+			{
+				b4 = false; 
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
 	}
 
 	void Exit() override
@@ -318,7 +443,7 @@ public:
 
 			BeginMode3D(c3d2);
 
-			for each (Engine::Management::MiddleLevel::SceneObject^ obj in scene->GetRenderQueue())
+			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 			{
 				ExecAsIdentifiedObject(obj->objectType, (System::Object^)obj->reference);
 			}
@@ -332,12 +457,12 @@ public:
 			EndTextureMode();
 
 			rlImGuiBegin();
-			
+
 			ImGui::Begin("DemoVer", (bool*)true, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking);
 			{
 				ImGui::SetWindowSize(ImVec2(285, 20), 0);
 				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight() - 25), 0);
-				ImGui::TextColored(ImVec4(0, 0, 0, 255), "Gold Engine Ver: editor-0.5c");
+				ImGui::TextColored(ImVec4(255, 255, 255, 255), "Gold Engine Ver: editor-0.5c");
 				ImGui::End();
 			}
 
@@ -351,6 +476,12 @@ public:
 	void Init() override
 	{
 		scene = SceneManager::LoadSceneFromFile("Level0", scene);
+		
+		if (scene->sceneObjects->Count <= 0)
+		{
+			SceneManager::SaveSceneToFile(scene, 1234);
+		}
+
 		/*
 		auto workSpace = gcnew Components::Object(
 			"Workspace",
@@ -362,7 +493,7 @@ public:
 			Components::Datamodel,
 			nullptr
 		);
-		
+
 		auto skyBox = gcnew Engine::EngineObjects::Skybox(
 			"Skybox",
 			gcnew Components::Transform(
@@ -381,7 +512,7 @@ public:
 		auto midLevSkybox = (Engine::Management::MiddleLevel::SceneObject^)scene->GetRenderQueue()[1];
 		auto skyBox = (Engine::EngineObjects::Skybox^)midLevSkybox->reference;
 		auto parent = (Engine::Management::MiddleLevel::SceneObject^)scene->GetRenderQueue()[0];
-		
+
 		skyBox->Init(skyBox->materialId, skyBox->texPath);
 		skyBox->SetupSkyboxImage(0);
 		*/
@@ -391,9 +522,9 @@ public:
 		lights[0] = rPBR::PBRLightCreate(rPBR::LIGHT_POINT, { -5,5,0 }, { .5f,-.5f,0 }, { 255,255,255, 255 }, 2.5f, dataPack.GetShader(1));
 
 		//FileManager::ReadCustomFileFormat("Data/assets1.gold", passwd);
-		 
+
 		cameraPosition = gcnew Engine::Internal::Components::Vector3(0, 0, 0);
-		Directory::Delete("Data/tmp/", true);
+		//Directory::Delete("Data/tmp/", true);
 		//SceneManager::SaveSceneToFile(scene, passwd);
 		//packedData->WriteToFile("Assets1", passwd);
 		Engine::Drawing::Drawing::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
@@ -401,7 +532,7 @@ public:
 		c3d2 = dataPack.GetCamera3D(0);
 		c3d2.projection = CAMERA_PERSPECTIVE;
 		c3d2.fovy = 60;
-		
+
 	}
 
 	void Preload() override
@@ -427,6 +558,7 @@ public:
 		//FileManager::WriteCustomFileFormat("Data/assets1.gold", "ThereGoesThePasswordGyat", passwd);
 
 		scene = SceneManager::CreateScene("GoldBootManager");
+/*
 		FileManager::ReadCustomFileFormat("Data/engineassets.gold", "ThreadcallNull");
 
 		Model model;
@@ -452,24 +584,21 @@ public:
 		m = { dataPack.GetShader(0), 0,0,0,0, {0} };
 
 		dataPack.SetShader(1, lightShader);
-
+		*/
 		Init();
 	}
 
 	void Update() override
 	{
-		if (controlCamera && toggleControl)
+		if (showCursor)
 			UpdateCamera(&c3d2, CAMERA_FREE);
-
-		if (IsKeyPressed(KEY_F3))
-			toggleControl = !toggleControl;
 
 		Shader lightShader = dataPack.GetShader(1);
 		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };
 		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
 		rPBR::PBRLightUpdate(lightShader, lights[0]);
 
-		for each (Engine::Management::MiddleLevel::SceneObject^ obj in scene->sceneObjects)
+		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->sceneObjects)
 		{
 
 		}

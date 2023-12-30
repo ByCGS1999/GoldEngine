@@ -205,7 +205,6 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="ScriptSandbox.cpp" />
-    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>
   <ItemGroup>

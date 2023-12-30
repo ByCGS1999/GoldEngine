@@ -43,13 +43,9 @@ public:
 
 		String^ header = stream->ReadString();
 
-		Console::WriteLine(header);
-
 		if (fileHeader->Equals(header))
 		{
 			short int version = stream->ReadInt16();
-
-			Console::WriteLine(version);
 
 			if (fileVersion == version)
 			{
@@ -60,14 +56,11 @@ public:
 				WinAPI::SetAttribute("Data/tmp/", 1);
 				int assets = stream->ReadInt32();
 
-				Console::WriteLine(assets);
-
 				for (int x = 0; x < assets; x++)
 				{
 					String^ fN = stream->ReadString();
 					unsigned long length = stream->ReadInt32();
 					auto fC = stream->ReadBytes(length);
-					Console::WriteLine(fN);
 					Directory::CreateDirectory(Path::GetDirectoryName("Data/tmp/" + fN));
 					auto fS = File::Open("Data/tmp/" + fN, FileMode::OpenOrCreate);
 					auto bW = gcnew BinaryWriter(fS);

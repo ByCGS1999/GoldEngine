@@ -41,7 +41,7 @@ namespace Engine::EngineObjects
 		Engine::Internal::Components::Vector3^ target;
 		rPBR::PBRLightType lightType;
 
-		LightSource(String^ name, Engine::Internal::Components::Transform^ t, rPBR::PBRLightType lightType, Engine::Internal::Components::Vector3^ target, float intensity, Shader shader)  : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::LightSource, nullptr)
+		LightSource(String^ name, Engine::Internal::Components::Transform^ t, rPBR::PBRLightType lightType, Engine::Internal::Components::Vector3^ target, float intensity, Shader shader)  : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::LightSource)
 		{
 			nativeLightSource = new Native::NativeLightSource();
 			this->lightType = lightType;
@@ -67,7 +67,7 @@ namespace Engine::EngineObjects
 		System::Collections::Generic::List<LightSource^>^ lightSources;
 
 	public:
-		LightManager(String^ name, Engine::Internal::Components::Transform^ t) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::LightManager, nullptr)
+		LightManager(String^ name, Engine::Internal::Components::Transform^ t) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::LightManager)
 		{
 			lightSources = gcnew System::Collections::Generic::List<LightSource^>();
 		}
@@ -108,41 +108,46 @@ namespace Engine::EngineObjects
 
 		void DrawGizmo() override
 		{
-			DrawCubeWires(transform->position->toNative(), 1, 1, 1, RED);
+			auto t = GetTransform();
+
+			DrawCubeWires(t->position->toNative(), 1, 1, 1, RED);
 
 			for each(LightSource^ light in lightSources)
 			{
 				int lightType = light->lightType;
+				
+				auto lightTransform = light->GetTransform();
+
 				if (lightType == rPBR::LIGHT_POINT)
 				{
 					if (light->GetLight().enabled)
 					{
-						DrawSphereWires(light->GetTransform()->position->toNative(), light->intensity, 8, 8, GetColor(light->lightColor));
+						DrawSphereWires(lightTransform->position->toNative(), light->intensity, 8, 8, GetColor(light->lightColor));
 					}
 					else
 					{
-						DrawSphereWires(light->GetTransform()->position->toNative(), light->intensity, 8, 8, {GetColor(light->lightColor).r, GetColor(light->lightColor).g, GetColor(light->lightColor).b, 128});
+						DrawSphereWires(lightTransform->position->toNative(), light->intensity, 8, 8, {GetColor(light->lightColor).r, GetColor(light->lightColor).g, GetColor(light->lightColor).b, 128});
 					}
 				}
 				else if (lightType == rPBR::LIGHT_DIRECTIONAL)
 				{
 					if (light->GetLight().enabled)
 					{
-						DrawLine3D(light->GetTransform()->position->toNative(), light->target->toNative(), GetColor(light->lightColor));
+						DrawLine3D(lightTransform->position->toNative(), light->target->toNative(), GetColor(light->lightColor));
 					}
 					else
 					{
 						Color col = GetColor(light->lightColor);
-						DrawLine3D(light->GetTransform()->position->toNative(), light->target->toNative(), {col.r, col.g, col.b, 128});
+						DrawLine3D(lightTransform->position->toNative(), light->target->toNative(), {col.r, col.g, col.b, 128});
 					}
 				}
 				else if (lightType == rPBR::LIGHT_SPOT)
 				{
-					DrawCylinderWiresEx(light->GetTransform()->position->toNative(), light->target->toNative(), light->GetTransform()->scale, light->intensity, 6, GetColor(light->lightColor));
+					DrawCylinderWiresEx(lightTransform->position->toNative(), light->target->toNative(), lightTransform->scale, light->intensity, 6, GetColor(light->lightColor));
 				}
 				else
 				{
-					DrawSphereWires(light->GetTransform()->position->toNative(), light->intensity, 8, 8, GetColor(light->lightColor));
+					DrawSphereWires(lightTransform->position->toNative(), light->intensity, 8, 8, GetColor(light->lightColor));
 				}
 			}
 		}

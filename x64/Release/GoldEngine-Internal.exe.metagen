@@ -19,15 +19,6 @@ Assembly System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5
 	hash=None, flags=None
 Assembly System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
-Class Engine.Internal.Components.Vector3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Single x : Public
-    Single y : Public
-    Single z : Public
-  Methods:
-    toNative(Vector3*): PrivateScope, Public, HideBySig
-    toColor(Color*): PrivateScope, Public, HideBySig
 Class Engine.Internal.Components.Vector2: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
@@ -35,6 +26,19 @@ Class Engine.Internal.Components.Vector2: AutoLayout, AnsiClass, Class, Public, 
     Single y : Public
   Methods:
     toNative(Vector2*): PrivateScope, Public, HideBySig
+Class Engine.Internal.Components.Vector3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Single x : Public
+    Single y : Public
+    Single z : Public
+  Methods:
+    toVector2(): PrivateScope, Public, HideBySig
+    toNative(Vector3*): PrivateScope, Public, HideBySig
+    toColor(Color*): PrivateScope, Public, HideBySig
+    Lerp(Vector3, Vector3, Single): PrivateScope, Public, Static, HideBySig
+    Add(Vector3, Vector3): PrivateScope, Public, Static, HideBySig
+    Sub(Vector3, Vector3): PrivateScope, Public, Static, HideBySig
 Class Engine.Internal.Components.Quaternion: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(Single, Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
@@ -45,11 +49,14 @@ Class Engine.Internal.Components.Quaternion: AutoLayout, AnsiClass, Class, Publi
   Methods:
     toEuler(): PrivateScope, Public, HideBySig
 Class Engine.Internal.Components.Transform: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(Engine.Internal.Components.Vector3, Engine.Internal.Components.Quaternion, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Engine.Internal.Components.Vector3, Engine.Internal.Components.Vector3, Single, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
+    Engine.Internal.Components.Transform parent : Public
     Engine.Internal.Components.Vector3 position : Public
-    Engine.Internal.Components.Quaternion rotation : Public
+    Engine.Internal.Components.Vector3 rotation : Public
     Single scale : Public
+    Engine.Internal.Components.Vector3 localPosition : Public
+    Engine.Internal.Components.Vector3 localRotation : Public
 Struct ShaderPack: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
   :System.ValueType
 Struct ModelPack: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
@@ -83,12 +90,11 @@ Struct Engine.Internal.Components.CameraType: AutoLayout, AnsiClass, Class, Publ
   Fields:
     Int32 value__ : Public, SpecialName, RTSpecialName
 Class Engine.Internal.Components.Object: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(System.String, Engine.Internal.Components.Transform, Engine.Internal.Components.ObjectType, Engine.Internal.Components.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.String, Engine.Internal.Components.Transform, Engine.Internal.Components.ObjectType): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.String name : Public
     Engine.Internal.Components.ObjectType type : Public
     Engine.Internal.Components.Transform transform : Public
-    Engine.Internal.Components.Object parent : Public
   Methods:
     Start(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
     PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
@@ -186,10 +192,10 @@ Class Engine.EngineObjects.ModelRenderer: AutoLayout, AnsiClass, Class, Public, 
     UInt32 model : Public
     UInt32 material : Public
     UInt32 texture : Public
-    UInt32 tint : Public
+    UInt32 tint IsLong : Public
   Methods:
     SetNativeRenderer(NativeModelRenderer*): PrivateScope, Public, HideBySig
-    Init(UInt32, UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig
+    Init(UInt32, UInt32, UInt32, UInt32 IsLong): PrivateScope, Public, HideBySig
     GetNativeRenderer(): PrivateScope, Public, HideBySig
     Update(): PrivateScope, Public, Virtual, HideBySig
     PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig

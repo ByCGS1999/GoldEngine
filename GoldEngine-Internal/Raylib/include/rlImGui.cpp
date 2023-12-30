@@ -562,6 +562,17 @@ void rlImGuiImageRenderTexture(const RenderTexture* image)
     rlImGuiImageRect(&image->texture, image->texture.width, image->texture.height, Rectangle{ 0,0, float(image->texture.width), -float(image->texture.height) });
 }
 
+void rlImGuiImageRenderTextureCustom(const RenderTexture* image, int scale[2], float offset[2])
+{
+    if (!image)
+        return;
+
+    if (GlobalContext)
+        ImGui::SetCurrentContext(GlobalContext);
+
+    rlImGuiImageRect(&image->texture, scale[0] - offset[0], scale[1] - offset[1], {0.0f, 0.0f, (float)image->texture.width, -(float)image->texture.height});
+}
+
 void rlImGuiImageRenderTextureFit(const RenderTexture* image, bool center)
 {
 	if (!image)

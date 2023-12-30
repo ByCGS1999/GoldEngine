@@ -148,6 +148,13 @@ void rlImGuiImageRenderTexture(const RenderTexture* image);
 
 /// <summary>
 /// Draws a render texture as an image an ImGui Context, automatically flipping the Y axis so it will show correctly on screen
+/// </summary>
+/// <param name="image">The render texture to draw</param>
+/// <param name="scale">Scale of the render viewport</param>
+void rlImGuiImageRenderTextureCustom(const RenderTexture* image, int scale[2], float offset[2]);
+
+/// <summary>
+/// Draws a render texture as an image an ImGui Context, automatically flipping the Y axis so it will show correctly on screen
 /// Fits the render texture to the available content area
 /// </summary>
 /// <param name="image">The render texture to draw</param>
