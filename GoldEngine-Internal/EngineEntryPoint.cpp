@@ -24,6 +24,10 @@
 #include "PBRModelRenderer.h"
 #include "Skybox.h"
 
+// last class to be imported, it must access to all the components included \\
+
+#include "Script.h"
+
 using namespace Engine::Drawing;
 using namespace Engine::Management;
 using namespace Engine::Managers;

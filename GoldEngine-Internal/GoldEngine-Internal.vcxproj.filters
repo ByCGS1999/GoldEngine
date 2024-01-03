@@ -127,6 +127,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Script">
+      <UniqueIdentifier>{baa9c9f2-4cbd-485c-aac6-39300e73a3c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -272,6 +275,9 @@
     </ClInclude>
     <ClInclude Include="Cast.h">
       <Filter>Archivos de origen\Engine\Marshaller</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

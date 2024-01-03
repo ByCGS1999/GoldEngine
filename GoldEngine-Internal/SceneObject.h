@@ -3,6 +3,7 @@
 #include "Cast.h"
 #include "Skybox.h"
 #include "ModelRenderer.h"
+#include "Script.h"
 
 namespace Engine::Management::MiddleLevel
 {
@@ -59,6 +60,13 @@ namespace Engine::Management::MiddleLevel
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::ModelRenderer^>(deserializedData);
 			}
 			break;
+
+			default:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Script^>(deserializedData);
+			}
+			break;
+
 			}
 		}
 		void deserialize()
@@ -89,6 +97,13 @@ namespace Engine::Management::MiddleLevel
 			case Engine::Internal::Components::Datamodel:
 			{
 				Engine::Internal::Components::Object^ genericType = (Engine::Internal::Components::Object^)reference;
+				deserializedData = ToJSON(genericType);
+			}
+			break;
+
+			default:
+			{
+				Engine::EngineObjects::Script^ genericType = (Engine::EngineObjects::Script^)reference;
 				deserializedData = ToJSON(genericType);
 			}
 			break;

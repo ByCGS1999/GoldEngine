@@ -13,7 +13,8 @@ namespace Engine::Internal::Components
 		Skybox = 4,
 		LightManager = 5,
 		LightSource = 6,
-		PBR_ModelRenderer = 7
+		PBR_ModelRenderer = 7,
+		Script = 8
 	};
 
 	public ref class Object

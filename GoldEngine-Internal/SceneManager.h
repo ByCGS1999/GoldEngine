@@ -2,6 +2,7 @@
 
 #include "Skybox.h"
 #include "ModelRenderer.h"
+#include "Script.h"
 
 namespace Engine::Managers
 {
@@ -92,6 +93,19 @@ namespace Engine::Managers
 
 						instancedSkybox = sceneObject->GetValue<Engine::EngineObjects::Skybox^>();
 						instancedSkybox->Init(instancedSkybox->model, instancedSkybox->material, instancedSkybox->texture);
+					}
+					break;
+					default:
+					{
+						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
+						);
+
+						renderQueue->Add(
+							sceneObject
+						);
 					}
 					break;
 					}

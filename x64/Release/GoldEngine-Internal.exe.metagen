@@ -1,5 +1,5 @@
 ImageRuntimeVersion: v4.0.30319
-Assembly GoldEngine-Internal, Version=1.0.*, Culture=Invariant Language (Invariant Country): 
+Assembly GoldEngine-Internal, Version=1.0.*, Culture=Todos los idiomas (todos los países): 
 	hash=SHA1, flags=PublicKey
 Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
 	hash=None, flags=None
@@ -202,6 +202,9 @@ Class Engine.EngineObjects.ModelRenderer: AutoLayout, AnsiClass, Class, Public, 
     Start(): PrivateScope, Public, Virtual, HideBySig
     Draw(): PrivateScope, Public, Virtual, HideBySig
     SetColorTint(UInt32): PrivateScope, Public, HideBySig
+Class Engine.EngineObjects.Script: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
 Class Engine.Management.MiddleLevel.SceneObject: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(Engine.Internal.Components.ObjectType, Engine.Internal.Components.Object, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:

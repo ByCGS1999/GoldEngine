@@ -1,1 +1,73 @@
-﻿  GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe
+﻿  EngineEntryPoint.cpp
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(51,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.h(27,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(20,3): warning C4677: 'LoadSceneFromFile': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.h(7,12):
+  vea la declaración de 'Engine::Management::Scene'
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(127,3): warning C4677: 'CreateScene': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.h(7,12):
+  vea la declaración de 'Engine::Management::Scene'
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(138,3): warning C4677: 'SaveSceneToFile': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.h(7,12):
+  vea la declaración de 'Engine::Management::Scene'
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(156,3): warning C4677: 'UnloadScene': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.h(7,12):
+  vea la declaración de 'Engine::Management::Scene'
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(252,34): warning C4838: la conversión de 'int' en 'float' requiere una conversión de restricción
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(252,34): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(252,48): warning C4838: la conversión de 'int' en 'float' requiere una conversión de restricción
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(252,48): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(252,62): warning C4838: la conversión de 'int' en 'float' requiere una conversión de restricción
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(252,62): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EngineEntryPoint.cpp(21,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(67,65): warning C4677: 'lightSources': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::EngineObjects::LightSource'
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(33,12):
+  vea la declaración de 'Engine::EngineObjects::LightSource'
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(77,3): warning C4677: 'AddLight': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::EngineObjects::LightSource'
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(33,12):
+  vea la declaración de 'Engine::EngineObjects::LightSource'
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(99,3): warning C4677: 'RemoveLight': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::EngineObjects::LightSource'
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(33,12):
+  vea la declaración de 'Engine::EngineObjects::LightSource'
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EngineEntryPoint.cpp(468,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+  Scene.cpp
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(51,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "Scene.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.h(27,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
+  (compilando archivo de origen "Scene.cpp")
+  
+  Generando código...
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(106): warning C4172: devolución de dirección de la variable local o temporal: count
+  AssemblyInfo.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
+  GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe
