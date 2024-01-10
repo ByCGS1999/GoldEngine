@@ -27,24 +27,25 @@ namespace Engine::Management
 			this->sceneObjects = sceneO;
 			drawQueue = gcnew System::Collections::ArrayList();
 		}
-		
+
+
 		// Methods
 	public:
 		void LoadScene();
 		void UnloadScene();
 		void AddObjectToScene(Engine::Internal::Components::Object^ object);
 		System::Collections::ArrayList^ GetRenderQueue() { return drawQueue; }
-		Engine::Internal::Components::Object^ GetDatamodelMember(System::String^ datamodel) 
-		{ 
-			Engine::Internal::Components::Object^ retn = nullptr; 
-			for each (auto objects in drawQueue) 
+		Engine::Internal::Components::Object^ GetDatamodelMember(System::String^ datamodel)
+		{
+			Engine::Internal::Components::Object^ retn = nullptr;
+			for each (auto objects in drawQueue)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
 
 				if (sceneObject->objectType == Engine::Internal::Components::Datamodel)
 				{
-					if (sceneObject->reference->name == datamodel)
-						retn = sceneObject->reference;
+					if (sceneObject->GetReference()->name == datamodel)
+						retn = sceneObject->GetReference();
 				}
 			}
 
@@ -61,6 +62,16 @@ namespace Engine::Management
 
 			return retn;
 		}
+		void CopyRenderQueueToSceneObjects()
+		{
+			sceneObjects->Clear();
+			// serialize all the objects
+			for each (Engine::Management::MiddleLevel::SceneObject ^ object in drawQueue)
+			{
+				object->deserialize();
+				sceneObjects->Add(object);
+			}
+		}
 
 	private protected:
 		Engine::Internal::Components::Object^ AddDatamodelMember(System::String^ datamodel)
@@ -69,7 +80,8 @@ namespace Engine::Management
 				gcnew Engine::Internal::Components::Transform(
 					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
 					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-					1.0f,
+					0.0f,
+					gcnew Engine::Internal::Components::Vector3(1, 1, 1),
 					nullptr
 				),
 				Engine::Internal::Components::ObjectType::Datamodel);

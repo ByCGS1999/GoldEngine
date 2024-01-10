@@ -45,14 +45,14 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>true</CLRSupport>
@@ -144,11 +144,14 @@
     <ClInclude Include="CameraPack.h" />
     <ClInclude Include="Cast.h" />
     <ClInclude Include="CastToNative.h" />
+    <ClInclude Include="Chunk.h" />
+    <ClInclude Include="CubeRenderer.h" />
     <ClInclude Include="CypherLib.h" />
     <ClInclude Include="DataPack.h" />
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="Drawing.h" />
     <ClInclude Include="FileManager.h" />
+    <ClInclude Include="GridRenderer.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="ModelRenderer.h" />
@@ -158,6 +161,10 @@
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="VoxelMatrix.h" />
+    <ClInclude Include="VoxelTypedefs.h" />
+    <ClInclude Include="Voxel.h" />
+    <ClInclude Include="VoxelRenderer.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />

@@ -41,6 +41,20 @@ namespace Engine::Internal::Components
 			return gcnew Engine::Internal::Components::Vector2(x, y);
 		}
 		
+		void Set(float x, float y, float z)
+		{
+			this->x = x;
+			this->y = y;
+			this->z = z;
+		}
+
+		void Set(float* v)
+		{
+			this->x = v[0];
+			this->y = v[1];
+			this->z = v[2];
+		}
+
 		::Vector3 toNative()
 		{
 			return { x,y,z };
@@ -95,26 +109,30 @@ namespace Engine::Internal::Components
 	public ref class Transform
 	{
 	public:
+		String^ name;
 		Transform^ parent;
 		// worldspace
 		Vector3^ position;
 		Vector3^ rotation;
-		float scale;
+		float rotationValue;
+		Vector3^ scale;
 		// localspace
 		Vector3^ localPosition;
 		Vector3^ localRotation;
 
-		Transform(Vector3^ position, Vector3^ rotation, float scale, Transform^ parent)
+		Transform(Vector3^ position, Vector3^ rotation, float rotationValue, Vector3^ scale, Transform^ parent)
 		{
+			this->name = "";
 			this->localPosition = position;
 			this->localRotation = rotation;
 			this->scale = scale;
+			this->rotationValue = rotationValue;
 
 			if (parent != nullptr)
 			{
 				this->parent = parent;
-				this->position = Vector3::Sub(parent->position, this->localPosition);
-				this->rotation = Vector3::Sub(parent->rotation, this->localRotation);
+				this->position = Vector3::Add(parent->position, this->localPosition);
+				this->rotation = Vector3::Add(parent->rotation, this->localRotation);
 			}
 			else
 			{
@@ -123,6 +141,10 @@ namespace Engine::Internal::Components
 			}
 		}
 
+		void SetName(String^ name)
+		{
+			this->name = name;
+		}
 
 	};
 }

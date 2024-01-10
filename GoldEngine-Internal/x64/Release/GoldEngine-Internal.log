@@ -1,26 +1,63 @@
-﻿  EngineEntryPoint.cpp
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(51,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+﻿  AssemblyInfo.cpp
+  CastToNative.cpp
+  DataPack.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\bit(11): warning STL4038: The contents of <bit> are available only with C++20 or later.
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(65,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "DataPack.cpp")
+  
+  DataPacks.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\bit(11): warning STL4038: The contents of <bit> are available only with C++20 or later.
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(65,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "DataPacks.cpp")
+  
+  Drawing.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\bit(11): warning STL4038: The contents of <bit> are available only with C++20 or later.
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(65,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "Drawing.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.h(30,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
+  (compilando archivo de origen "Drawing.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Drawing.cpp(301,12): warning C4101: 'nullTex': variable local sin referencia
+  EngineEntryPoint.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\bit(11): warning STL4038: The contents of <bit> are available only with C++20 or later.
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(65,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
   (compilando archivo de origen "EngineEntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.h(27,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.h(30,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
   (compilando archivo de origen "EngineEntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(20,3): warning C4677: 'LoadSceneFromFile': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Skybox.h(37,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::Skybox::Init' no coincide con un método de clase ref
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Skybox.h(37,8):
+  'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CubeRenderer.h(16,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::CubeRenderer::Init' no coincide con un método de clase ref
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CubeRenderer.h(16,8):
+  'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\GridRenderer.h(18,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::GridRenderer::Init' no coincide con un método de clase ref
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\GridRenderer.h(18,8):
+  'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(22,3): warning C4677: 'LoadSceneFromFile': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
   (compilando archivo de origen "EngineEntryPoint.cpp")
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.h(7,12):
   vea la declaración de 'Engine::Management::Scene'
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(127,3): warning C4677: 'CreateScene': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(163,3): warning C4677: 'CreateScene': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
   (compilando archivo de origen "EngineEntryPoint.cpp")
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.h(7,12):
   vea la declaración de 'Engine::Management::Scene'
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(138,3): warning C4677: 'SaveSceneToFile': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(174,3): warning C4677: 'SaveSceneToFile': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
   (compilando archivo de origen "EngineEntryPoint.cpp")
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.h(7,12):
   vea la declaración de 'Engine::Management::Scene'
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(156,3): warning C4677: 'UnloadScene': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(193,3): warning C4677: 'UnloadScene': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::Management::Scene'
   (compilando archivo de origen "EngineEntryPoint.cpp")
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Scene.h(7,12):
   vea la declaración de 'Engine::Management::Scene'
@@ -43,7 +80,145 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rPBR.h(252,62): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
   (compilando archivo de origen "EngineEntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EngineEntryPoint.cpp(21,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(69,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(70,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(71,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(71,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(78,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(79,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(80,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(80,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(87,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(88,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(89,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(89,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(96,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(97,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(98,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(98,14): warning C4552: "<<": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(114,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(115,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(116,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(117,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(119,13): warning C4244: '=': conversión de '__int64' a 'char'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(139,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(140,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(141,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(142,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(146,9): warning C4309: '=': truncamiento de valor constante
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(150,14): warning C4244: '=': conversión de '__int64' a 'char'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(174,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(175,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(176,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(177,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(193,5): warning C4552: ">>": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(194,8): warning C4804: '>>': uso no seguro del tipo 'bool' en la operación
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(194,5): warning C4552: ">>": el resultado de la expresión no se usa
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelMatrix.h(18,21): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelMatrix.h(20,22): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelMatrix.h(22,23): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(38,30): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(40,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(42,32): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(55,30): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(57,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(59,32): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(76,30): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(78,31): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(80,32): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "EngineEntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EngineEntryPoint.cpp(25,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(67,65): warning C4677: 'lightSources': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'Engine::EngineObjects::LightSource'
   (compilando archivo de origen "EngineEntryPoint.cpp")
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(33,12):
@@ -59,15 +234,191 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(99,3)
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(33,12):
   vea la declaración de 'Engine::EngineObjects::LightSource'
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EngineEntryPoint.cpp(468,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EngineEntryPoint.cpp(650,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  rlImGui.cpp
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rlImGui.cpp(573,70): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\include\rlImGui.cpp(573,48): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
   Scene.cpp
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(51,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\bit(11): warning STL4038: The contents of <bit> are available only with C++20 or later.
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(65,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
   (compilando archivo de origen "Scene.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.h(27,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.h(30,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
   (compilando archivo de origen "Scene.cpp")
   
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Skybox.h(37,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::Skybox::Init' no coincide con un método de clase ref
+  (compilando archivo de origen "Scene.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Skybox.h(37,8):
+  'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CubeRenderer.h(16,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::CubeRenderer::Init' no coincide con un método de clase ref
+  (compilando archivo de origen "Scene.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CubeRenderer.h(16,8):
+  'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\GridRenderer.h(18,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::GridRenderer::Init' no coincide con un método de clase ref
+  (compilando archivo de origen "Scene.cpp")
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\GridRenderer.h(18,8):
+  'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
+  
+  Window.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\bit(11): warning STL4038: The contents of <bit> are available only with C++20 or later.
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(65,26): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+  (compilando archivo de origen "Window.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Object.h(30,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
+  (compilando archivo de origen "Window.cpp")
+  
+  ScriptSandbox.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\bit(11): warning STL4038: The contents of <bit> are available only with C++20 or later.
+  WinAPI.cpp
+  .NETFramework,Version=v4.8.AssemblyAttributes.cpp
   Generando código...
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(368): warning C4793: 'ImGui::BulletText': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(370): warning C4793: 'ImGui::BulletText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(372): warning C4793: 'ImGui::BulletText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(262): warning C4793: 'ImGui::Text': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(264): warning C4793: 'ImGui::Text': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(266): warning C4793: 'ImGui::Text': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(281): warning C4793: 'ImGui::TextColored': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(283): warning C4793: 'ImGui::TextColored': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(285): warning C4793: 'ImGui::TextColored': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(296): warning C4793: 'ImGui::TextDisabled': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(298): warning C4793: 'ImGui::TextDisabled': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(300): warning C4793: 'ImGui::TextDisabled': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(312): warning C4793: 'ImGui::TextWrapped': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(314): warning C4793: 'ImGui::TextWrapped': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(316): warning C4793: 'ImGui::TextWrapped': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(331): warning C4793: 'ImGui::LabelText': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(333): warning C4793: 'ImGui::LabelText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(335): warning C4793: 'ImGui::LabelText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6016): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6018): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6020): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6025): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6027): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6029): warning C4793: 'ImGui::TreeNode': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6061): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6063): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6065): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6070): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6072): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_widgets.cpp(6074): warning C4793: 'ImGui::TreeNodeEx': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_internal.h(460): warning C4793: '`anonymous namespace'::ImRsqrt': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_internal.h(460): warning C4793: '`anonymous namespace'::ImRsqrt': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_internal.h(460): warning C4793: '`anonymous namespace'::ImRsqrt': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7053): warning C4793: 'ExampleAppConsole::AddLog': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7057): warning C4793: 'ExampleAppConsole::AddLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7060): warning C4793: 'ExampleAppConsole::AddLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7390): warning C4793: 'ExampleAppLog::AddLog': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7393): warning C4793: 'ExampleAppLog::AddLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp(7395): warning C4793: 'ExampleAppLog::AddLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1959): warning C4793: 'ImFormatString': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1961): warning C4793: 'ImFormatString': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1967): warning C4793: 'ImFormatString': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1993): warning C4793: 'ImFormatStringToTempBuffer': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1995): warning C4793: 'ImFormatStringToTempBuffer': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(1997): warning C4793: 'ImFormatStringToTempBuffer': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2005): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2013): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2014): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2725): warning C4793: 'ImGuiTextBuffer::appendf': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2727): warning C4793: 'ImGuiTextBuffer::appendf': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2729): warning C4793: 'ImGuiTextBuffer::appendf': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2741): warning C4793: 'ImGuiTextBuffer::appendfv': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2756): warning C4793: 'ImGuiTextBuffer::appendfv': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2005): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2013): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2014): warning C4793: 'ImFormatStringToTempBufferV': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2741): warning C4793: 'ImGuiTextBuffer::appendfv': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(2756): warning C4793: 'ImGuiTextBuffer::appendfv': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(13596): warning C4793: 'ImGui::LogText': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(13602): warning C4793: 'ImGui::LogText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(13604): warning C4793: 'ImGui::LogText': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(11098): warning C4793: 'ImGui::SetItemTooltip': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(11100): warning C4793: 'ImGui::SetItemTooltip': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(11103): warning C4793: 'ImGui::SetItemTooltip': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(11080): warning C4793: 'ImGui::SetTooltip': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(11082): warning C4793: 'ImGui::SetTooltip': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(11084): warning C4793: 'ImGui::SetTooltip': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(20667): warning C4793: 'ImGui::DebugLog': función compilada como nativa :
+  	varargs no admitidos en /clr
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(20669): warning C4793: 'ImGui::DebugLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp(20671): warning C4793: 'ImGui::DebugLog': función compilada como nativa :
+  	Se encontró un elemento intrínseco no admitido en código administrado
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(106): warning C4172: devolución de dirección de la variable local o temporal: count
   AssemblyInfo.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
-  GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe
+  GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.dll

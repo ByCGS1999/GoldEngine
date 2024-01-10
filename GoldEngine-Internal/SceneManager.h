@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Skybox.h"
+#include "GridRenderer.h"
+#include "CubeRenderer.h"
 #include "ModelRenderer.h"
 #include "Script.h"
 
@@ -37,7 +39,7 @@ namespace Engine::Managers
 
 					// PARAMS \\
 
-					auto referenceObject = (Engine::Internal::Components::Object^)t->reference;
+					auto referenceObject = (Engine::Internal::Components::Object^)t->GetReference();
 					auto objectType = t->objectType;
 					auto deserializedData = t->deserializedData;
 
@@ -95,7 +97,7 @@ namespace Engine::Managers
 						instancedSkybox->Init(instancedSkybox->model, instancedSkybox->material, instancedSkybox->texture);
 					}
 					break;
-					default:
+					case Engine::Internal::Components::ObjectType::Script:
 					{
 						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
 							objectType,
@@ -108,6 +110,40 @@ namespace Engine::Managers
 						);
 					}
 					break;
+
+					case Engine::Internal::Components::CubeRenderer:
+					{
+						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
+						);
+
+						renderQueue->Add(
+							sceneObject
+						);
+
+						auto cubeRenderer = sceneObject->GetValue<Engine::EngineObjects::CubeRenderer^>();
+						cubeRenderer->Init(cubeRenderer->color);
+					}
+					break;
+
+					case Engine::Internal::Components::GridRenderer:
+					{
+						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
+						);
+
+						renderQueue->Add(
+							sceneObject
+						);
+
+						auto gridRenderer = sceneObject->GetValue<Engine::EngineObjects::GridRenderer^>();
+						gridRenderer->Init(gridRenderer->lines, gridRenderer->spacing);
+					}
+					break;
 					}
 				}
 			}
@@ -115,7 +151,7 @@ namespace Engine::Managers
 			{
 				auto assetPacks = gcnew System::Collections::Generic::List<String^>();
 				assetPacks->Add("Data/engineassets.gold");
-				loadedScene = gcnew Engine::Management::Scene(fN, "Assets_"+fN, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
+				loadedScene = gcnew Engine::Management::Scene(fN, "Assets_" + fN, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
 			}
 			if (loadedScene == nullptr)
 				TraceLog(LOG_FATAL, "FAILED OPENING SCENE");
@@ -131,13 +167,14 @@ namespace Engine::Managers
 			if (sceneName->Equals(""))
 				return gcnew Engine::Management::Scene("Level0", "Assets_Level0", assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
 			else
-				return gcnew Engine::Management::Scene(sceneName, "Assets_"+sceneName, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
+				return gcnew Engine::Management::Scene(sceneName, "Assets_" + sceneName, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
 		}
-
+		
 		static void SaveSceneToFile(Engine::Management::Scene^ scene, unsigned int password)
 		{
 			if (scene->sceneName)
 			{
+				scene->CopyRenderQueueToSceneObjects();
 				String^ serializedData = Newtonsoft::Json::JsonConvert::SerializeObject(scene, Newtonsoft::Json::Formatting::Indented);
 				String^ cipheredContents = CypherLib::EncryptFileContents(serializedData, password);
 

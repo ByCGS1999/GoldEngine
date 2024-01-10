@@ -143,7 +143,7 @@ namespace Engine::EngineObjects
 				}
 				else if (lightType == rPBR::LIGHT_SPOT)
 				{
-					DrawCylinderWiresEx(lightTransform->position->toNative(), light->target->toNative(), lightTransform->scale, light->intensity, 6, GetColor(light->lightColor));
+					DrawCylinderWiresEx(lightTransform->position->toNative(), light->target->toNative(), lightTransform->scale->x, light->intensity, 6, GetColor(light->lightColor));
 				}
 				else
 				{

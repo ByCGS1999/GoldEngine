@@ -34,7 +34,7 @@ namespace Engine::EngineObjects
 			nativeSkybox = new Native::NativeSkybox(DataPacks::singleton().GetModel(model));
 		}
 
-		void Init(unsigned int modelId, unsigned int matId, unsigned int texturePath)
+		void Init(unsigned int modelId, unsigned int matId, unsigned int texturePath) override
 		{
 			material = matId;
 			texture = texturePath;
@@ -46,7 +46,7 @@ namespace Engine::EngineObjects
 		void Draw() override
 		{
 			auto t = GetTransform();
-			DrawModel(*nativeSkybox->model, { t->position->x,t->position->y, t->position->z }, t->scale, GetColor(0xFFFFFFFF));
+			DrawModelEx(*nativeSkybox->model, t->position->toNative(), t->rotation->toNative(), t->rotationValue , t->scale->toNative(), GetColor(0xFFFFFFFF));
 		}
 
 		void DrawGizmo() override

@@ -80,7 +80,7 @@ namespace Engine::EngineObjects
 		void Draw() override
 		{
 			auto t = GetTransform();
-			DrawModel(*nativeRenderer->model, { t->position->x,t->position->y, t->position->z }, t->scale, GetColor(nativeRenderer->color_hex));
+			DrawModel(*nativeRenderer->model, { t->position->x,t->position->y, t->position->z }, t->scale->x, GetColor(nativeRenderer->color_hex));
 		}
 
 		void SetColorTint(unsigned int hexValue)

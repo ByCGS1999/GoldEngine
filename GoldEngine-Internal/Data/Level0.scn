@@ -7,15 +7,23 @@
   "sceneObjects": [
     {
       "objectType": 1,
-      "deserializedData": "{\"name\":\"workspace\",\"type\":1,\"transform\":{\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+      "deserializedData": "{\"name\":\"workspace\",\"type\":1,\"transform\":{\"name\":\"workspace\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     },
     {
-      "objectType": 4,
-      "deserializedData": "{\"model\":2,\"material\":0,\"texture\":0,\"name\":\"Skybox\",\"type\":4,\"transform\":{\"parent\":{\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+      "objectType": 1,
+      "deserializedData": "{\"name\":\"editor only\",\"type\":1,\"transform\":{\"name\":\"editor only\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     },
     {
-      "objectType": 3,
-      "deserializedData": "{\"model\":0,\"material\":0,\"texture\":0,\"tint\":4294967295,\"name\":\"ModelRenderer\",\"type\":3,\"transform\":{\"parent\":{\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"scale\":1.0,\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+      "objectType": 1,
+      "deserializedData": "{\"name\":\"user interface\",\"type\":1,\"transform\":{\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+    },
+    {
+      "objectType": 15,
+      "deserializedData": "{\"lines\":8,\"spacing\":1.0,\"name\":\"Grid\",\"type\":15,\"transform\":{\"name\":\"\",\"parent\":{\"name\":\"editor only\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+    },
+    {
+      "objectType": 9,
+      "deserializedData": "{\"color\":4294967295,\"name\":\"Cube\",\"type\":9,\"transform\":{\"name\":\"\",\"parent\":{\"name\":\"workspace\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":2.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     }
   ]
 }

@@ -14,7 +14,10 @@ namespace Engine::Internal::Components
 		LightManager = 5,
 		LightSource = 6,
 		PBR_ModelRenderer = 7,
-		Script = 8
+		Script = 8,
+		CubeRenderer = 9,
+		SphereRenderer = 10,
+		GridRenderer = 15
 	};
 
 	public ref class Object
@@ -31,12 +34,17 @@ namespace Engine::Internal::Components
 			this->transform = transform;
 			this->type = t;
 		}
+		virtual void Init() {}
 		virtual void Start() {}
 		virtual void PhysicsUpdate() {}
 		virtual void Update() {}
 		virtual void Draw() {}
 		virtual void DrawGizmo() {}
 		Transform^ GetTransform() { return transform; }
-		void SetParent(Object^ object) { transform->parent = object->transform; }
+		void SetParent(Object^ object) 
+		{ 
+			transform->parent = object->transform;
+			transform->parent->SetName(object->name);
+		}
 	};
 }

@@ -5,6 +5,9 @@
 #include <string>
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
+#include <bit>
+#include <map>
 #include "Raylib/include/raylib.h"
 #include "Raylib/include/raymath.h"
 #include "Raylib/include/rlgl.h"

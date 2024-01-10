@@ -692,7 +692,6 @@ Class Newtonsoft.Json.JsonSerializer: AutoLayout, AnsiClass, Class, Public, Befo
     Deserialize(JsonReader): PrivateScope, Public, HideBySig
     Deserialize(JsonReader, Type): PrivateScope, Public, HideBySig
     DeserializeInternal(JsonReader, Type): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride
-    SetupReader(JsonReader, CultureInfo&(Out), Nullable`1&(Out), Nullable`1&(Out), Nullable`1&(Out), Nullable`1&(Out), String&(Out)): PrivateScope, Assembly, HideBySig
     Serialize(TextWriter, Object): PrivateScope, Public, HideBySig
     Serialize(JsonWriter, Object, Type): PrivateScope, Public, HideBySig
     Serialize(TextWriter, Object, Type): PrivateScope, Public, HideBySig
@@ -704,7 +703,6 @@ Class Newtonsoft.Json.JsonSerializer: AutoLayout, AnsiClass, Class, Public, Befo
     OnError(ErrorEventArgs): PrivateScope, Assembly, HideBySig
 Class Newtonsoft.Json.JsonSerializerSettings: AutoLayout, AnsiClass, Class, Public
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Newtonsoft.Json.JsonSerializerSettings): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.Nullable`1[Newtonsoft.Json.Formatting] _formatting : Assembly
     System.Nullable`1[Newtonsoft.Json.DateFormatHandling] _dateFormatHandling : Assembly
@@ -1430,7 +1428,7 @@ Class Newtonsoft.Json.Utilities.AsyncUtils: AutoLayout, AnsiClass, Class, Abstra
     WriteAsync(TextWriter, String, CancellationToken): PrivateScope, Public, Static, HideBySig
     WriteAsync(TextWriter, Char[], Int32, Int32, CancellationToken): PrivateScope, Public, Static, HideBySig
     ReadAsync(TextReader, Char[], Int32, Int32, CancellationToken): PrivateScope, Public, Static, HideBySig
-    IsCompletedSuccessfully(Task): PrivateScope, Public, Static, HideBySig
+    IsCompletedSucessfully(Task): PrivateScope, Public, Static, HideBySig
 Class Newtonsoft.Json.Utilities.Base64Encoder: AutoLayout, AnsiClass, Class, BeforeFieldInit
     Void .ctor(System.IO.TextWriter): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
@@ -1448,41 +1446,6 @@ Class Newtonsoft.Json.Utilities.BidirectionalDictionary`2[TFirst,TSecond]: AutoL
     Set(TFirst, TSecond): PrivateScope, Public, HideBySig
     TryGetByFirst(TFirst, TSecond&(Out)): PrivateScope, Public, HideBySig
     TryGetBySecond(TSecond, TFirst&(Out)): PrivateScope, Public, HideBySig
-Class Newtonsoft.Json.Utilities.BoxedPrimitives: AutoLayout, AnsiClass, Class, Abstract, Sealed, BeforeFieldInit
-  Fields:
-    System.Object BooleanTrue : Assembly, Static, InitOnly
-    System.Object BooleanFalse : Assembly, Static, InitOnly
-    System.Object Int32_M1 : Assembly, Static, InitOnly
-    System.Object Int32_0 : Assembly, Static, InitOnly
-    System.Object Int32_1 : Assembly, Static, InitOnly
-    System.Object Int32_2 : Assembly, Static, InitOnly
-    System.Object Int32_3 : Assembly, Static, InitOnly
-    System.Object Int32_4 : Assembly, Static, InitOnly
-    System.Object Int32_5 : Assembly, Static, InitOnly
-    System.Object Int32_6 : Assembly, Static, InitOnly
-    System.Object Int32_7 : Assembly, Static, InitOnly
-    System.Object Int32_8 : Assembly, Static, InitOnly
-    System.Object Int64_M1 : Assembly, Static, InitOnly
-    System.Object Int64_0 : Assembly, Static, InitOnly
-    System.Object Int64_1 : Assembly, Static, InitOnly
-    System.Object Int64_2 : Assembly, Static, InitOnly
-    System.Object Int64_3 : Assembly, Static, InitOnly
-    System.Object Int64_4 : Assembly, Static, InitOnly
-    System.Object Int64_5 : Assembly, Static, InitOnly
-    System.Object Int64_6 : Assembly, Static, InitOnly
-    System.Object Int64_7 : Assembly, Static, InitOnly
-    System.Object Int64_8 : Assembly, Static, InitOnly
-    System.Object DoubleNaN : Assembly, Static, InitOnly
-    System.Object DoublePositiveInfinity : Assembly, Static, InitOnly
-    System.Object DoubleNegativeInfinity : Assembly, Static, InitOnly
-    System.Object DoubleZero : Assembly, Static, InitOnly
-    System.Object DoubleNegativeZero : Assembly, Static, InitOnly
-  Methods:
-    Get(Boolean): PrivateScope, Assembly, Static, HideBySig
-    Get(Int32): PrivateScope, Assembly, Static, HideBySig
-    Get(Int64): PrivateScope, Assembly, Static, HideBySig
-    Get(Decimal): PrivateScope, Assembly, Static, HideBySig
-    Get(Double): PrivateScope, Assembly, Static, HideBySig
 Class Newtonsoft.Json.Utilities.CollectionUtils: AutoLayout, AnsiClass, Class, Abstract, Sealed, BeforeFieldInit
   Methods:
     IsNullOrEmpty(ICollection`1): PrivateScope, Public, Static, HideBySig
@@ -2067,8 +2030,6 @@ Class Newtonsoft.Json.Utilities.StringUtils: AutoLayout, AnsiClass, Class, Abstr
     ToKebabCase(String): PrivateScope, Public, Static, HideBySig
     IsHighSurrogate(Char): PrivateScope, Public, Static, HideBySig
     IsLowSurrogate(Char): PrivateScope, Public, Static, HideBySig
-    IndexOf(String, Char): PrivateScope, Public, Static, HideBySig
-    Replace(String, String, String): PrivateScope, Public, Static, HideBySig
     StartsWith(String, Char): PrivateScope, Public, Static, HideBySig
     EndsWith(String, Char): PrivateScope, Public, Static, HideBySig
     Trim(String, Int32, Int32): PrivateScope, Public, Static, HideBySig
@@ -2672,8 +2633,6 @@ Class Newtonsoft.Json.Serialization.JsonSerializerProxy: AutoLayout, AnsiClass, 
   :Newtonsoft.Json.JsonSerializer
     Void .ctor(Newtonsoft.Json.Serialization.JsonSerializerInternalReader): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Newtonsoft.Json.Serialization.JsonSerializerInternalWriter): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Newtonsoft.Json.JsonSerializer _serializer : Assembly, InitOnly
   Properties:
     Newtonsoft.Json.Serialization.IReferenceResolver ReferenceResolver 'get set' : 
     Newtonsoft.Json.Serialization.ITraceWriter TraceWriter 'get set' : 
@@ -3371,7 +3330,6 @@ Class Newtonsoft.Json.Linq.JArray: AutoLayout, AnsiClass, Class, Public, BeforeF
   :Newtonsoft.Json.Linq.JContainer
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Newtonsoft.Json.Linq.JArray): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Newtonsoft.Json.Linq.JArray, Newtonsoft.Json.Linq.JsonCloneSettings): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.Object[]): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Properties:
@@ -3385,7 +3343,7 @@ Class Newtonsoft.Json.Linq.JArray: AutoLayout, AnsiClass, Class, Public, BeforeF
     LoadAsync(JsonReader, JsonLoadSettings, CancellationToken(Optional, HasDefault)): PrivateScope, Public, Static, HideBySig
     get_Type(): PrivateScope, Public, Virtual, HideBySig, SpecialName
     DeepEquals(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
-    CloneToken(JsonCloneSettings(Optional, HasDefault)): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
+    CloneToken(): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     Load(JsonReader): PrivateScope, Public, Static, HideBySig
     Load(JsonReader, JsonLoadSettings): PrivateScope, Public, Static, HideBySig
     Parse(String): PrivateScope, Public, Static, HideBySig
@@ -3414,7 +3372,6 @@ Class Newtonsoft.Json.Linq.JConstructor: AutoLayout, AnsiClass, Class, Public, B
   :Newtonsoft.Json.Linq.JContainer
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Newtonsoft.Json.Linq.JConstructor): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Newtonsoft.Json.Linq.JConstructor, Newtonsoft.Json.Linq.JsonCloneSettings): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.String, System.Object[]): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.String, System.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -3432,7 +3389,7 @@ Class Newtonsoft.Json.Linq.JConstructor: AutoLayout, AnsiClass, Class, Public, B
     set_Name(String): PrivateScope, Public, HideBySig, SpecialName
     get_Type(): PrivateScope, Public, Virtual, HideBySig, SpecialName
     DeepEquals(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
-    CloneToken(JsonCloneSettings(Optional, HasDefault)): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
+    CloneToken(): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     WriteTo(JsonWriter, JsonConverter[]): PrivateScope, Public, Virtual, HideBySig
     get_Item(Object): PrivateScope, Public, Virtual, HideBySig, SpecialName
     set_Item(Object, JToken): PrivateScope, Public, Virtual, HideBySig, SpecialName
@@ -3442,7 +3399,7 @@ Class Newtonsoft.Json.Linq.JConstructor: AutoLayout, AnsiClass, Class, Public, B
 Class Newtonsoft.Json.Linq.JContainer: AutoLayout, AnsiClass, Class, Public, Abstract, BeforeFieldInit
   :Newtonsoft.Json.Linq.JToken
     Void .ctor(): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Newtonsoft.Json.Linq.JContainer, Newtonsoft.Json.Linq.JsonCloneSettings): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(Newtonsoft.Json.Linq.JContainer): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
   Interfaces:
     System.Collections.Generic.IList`1[Newtonsoft.Json.Linq.JToken]
     System.Collections.Generic.ICollection`1[Newtonsoft.Json.Linq.JToken]
@@ -3484,9 +3441,9 @@ Class Newtonsoft.Json.Linq.JContainer: AutoLayout, AnsiClass, Class, Public, Abs
     DescendantsAndSelf(): PrivateScope, Public, HideBySig
     GetDescendants(Boolean): PrivateScope, Assembly, HideBySig
     IsMultiContent(Object): PrivateScope, Assembly, HideBySig
-    EnsureParentToken(JToken, Boolean, Boolean): PrivateScope, Assembly, HideBySig
+    EnsureParentToken(JToken, Boolean): PrivateScope, Assembly, HideBySig
     IndexOfItem(JToken): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride, Abstract
-    InsertItem(Int32, JToken, Boolean, Boolean): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride
+    InsertItem(Int32, JToken, Boolean): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride
     RemoveItemAt(Int32): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride
     RemoveItem(JToken): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride
     GetItem(Int32): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride
@@ -3501,7 +3458,7 @@ Class Newtonsoft.Json.Linq.JContainer: AutoLayout, AnsiClass, Class, Public, Abs
     TryAdd(Object): PrivateScope, Assembly, HideBySig
     AddAndSkipParentCheck(JToken): PrivateScope, Assembly, HideBySig
     AddFirst(Object): PrivateScope, Public, HideBySig
-    TryAddInternal(Int32, Object, Boolean, Boolean): PrivateScope, Assembly, HideBySig
+    TryAddInternal(Int32, Object, Boolean): PrivateScope, Assembly, HideBySig
     CreateFromContent(Object): PrivateScope, Assembly, Static, HideBySig
     CreateWriter(): PrivateScope, Public, HideBySig
     ReplaceAll(Object): PrivateScope, Public, HideBySig
@@ -3537,7 +3494,6 @@ Class Newtonsoft.Json.Linq.JObject: AutoLayout, AnsiClass, Class, Public, Before
   :Newtonsoft.Json.Linq.JContainer
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Newtonsoft.Json.Linq.JObject): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Newtonsoft.Json.Linq.JObject, Newtonsoft.Json.Linq.JsonCloneSettings): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.Object[]): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Interfaces:
@@ -3564,12 +3520,12 @@ Class Newtonsoft.Json.Linq.JObject: AutoLayout, AnsiClass, Class, Public, Before
     remove_PropertyChanging(PropertyChangingEventHandler): PrivateScope, Public, Final, Virtual, HideBySig, VtableLayoutMask, SpecialName
     DeepEquals(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     IndexOfItem(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
-    InsertItem(Int32, JToken, Boolean, Boolean): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
+    InsertItem(Int32, JToken, Boolean): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     ValidateToken(JToken, JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     MergeItem(Object, JsonMergeSettings): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     InternalPropertyChanged(JProperty): PrivateScope, Assembly, HideBySig
     InternalPropertyChanging(JProperty): PrivateScope, Assembly, HideBySig
-    CloneToken(JsonCloneSettings): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
+    CloneToken(): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     get_Type(): PrivateScope, Public, Virtual, HideBySig, SpecialName
     Properties(): PrivateScope, Public, HideBySig
     Property(String): PrivateScope, Public, HideBySig
@@ -3598,7 +3554,6 @@ Class Newtonsoft.Json.Linq.JObject: AutoLayout, AnsiClass, Class, Public, Before
 Class Newtonsoft.Json.Linq.JProperty: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Newtonsoft.Json.Linq.JContainer
     Void .ctor(Newtonsoft.Json.Linq.JProperty): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Newtonsoft.Json.Linq.JProperty, Newtonsoft.Json.Linq.JsonCloneSettings): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.String): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.String, System.Object[]): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.String, System.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -3618,12 +3573,12 @@ Class Newtonsoft.Json.Linq.JProperty: AutoLayout, AnsiClass, Class, Public, Befo
     RemoveItem(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     RemoveItemAt(Int32): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     IndexOfItem(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
-    InsertItem(Int32, JToken, Boolean, Boolean): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
+    InsertItem(Int32, JToken, Boolean): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     ContainsItem(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     MergeItem(Object, JsonMergeSettings): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     ClearItems(): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     DeepEquals(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
-    CloneToken(JsonCloneSettings): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
+    CloneToken(): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     get_Type(): PrivateScope, Public, Virtual, HideBySig, SpecialName
     WriteTo(JsonWriter, JsonConverter[]): PrivateScope, Public, Virtual, HideBySig
     GetDeepHashCode(): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
@@ -3664,21 +3619,11 @@ Class Newtonsoft.Json.Linq.JPropertyKeyedCollection: AutoLayout, AnsiClass, Clas
 Class Newtonsoft.Json.Linq.JRaw: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Newtonsoft.Json.Linq.JValue
     Void .ctor(Newtonsoft.Json.Linq.JRaw): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Newtonsoft.Json.Linq.JRaw, Newtonsoft.Json.Linq.JsonCloneSettings): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.Object): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
     CreateAsync(JsonReader, CancellationToken(Optional, HasDefault)): PrivateScope, Public, Static, HideBySig
     Create(JsonReader): PrivateScope, Public, Static, HideBySig
-    CloneToken(JsonCloneSettings): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
-Class Newtonsoft.Json.Linq.JsonCloneSettings: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Newtonsoft.Json.Linq.JsonCloneSettings SkipCopyAnnotations : Assembly, Static, InitOnly
-  Properties:
-    Boolean CopyAnnotations 'get set' : 
-  Methods:
-    get_CopyAnnotations(): PrivateScope, Public, HideBySig, SpecialName
-    set_CopyAnnotations(Boolean): PrivateScope, Public, HideBySig, SpecialName
+    CloneToken(): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
 Class Newtonsoft.Json.Linq.JsonLoadSettings: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Properties:
@@ -3754,7 +3699,6 @@ Class Newtonsoft.Json.Linq.JToken: AutoLayout, AnsiClass, Class, Public, Abstrac
     SelectTokens(String, Boolean): PrivateScope, Public, HideBySig
     SelectTokens(String, JsonSelectSettings): PrivateScope, Public, HideBySig
     DeepClone(): PrivateScope, Public, HideBySig
-    DeepClone(JsonCloneSettings): PrivateScope, Public, HideBySig
     AddAnnotation(Object): PrivateScope, Public, HideBySig
     Annotation(): PrivateScope, Public, HideBySig
     Annotation(Type): PrivateScope, Public, HideBySig
@@ -3773,7 +3717,7 @@ Class Newtonsoft.Json.Linq.JToken: AutoLayout, AnsiClass, Class, Public, Abstrac
     get_Parent(): PrivateScope, Public, HideBySig, SpecialName
     set_Parent(JContainer): PrivateScope, Assembly, HideBySig, SpecialName
     get_Root(): PrivateScope, Public, HideBySig, SpecialName
-    CloneToken(JsonCloneSettings): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride, Abstract
+    CloneToken(): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride, Abstract
     DeepEquals(JToken): PrivateScope, Assembly, Virtual, HideBySig, VtableLayoutMask, CheckAccessOnOverride, Abstract
     get_Type(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask, Abstract, SpecialName
     get_HasValues(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask, Abstract, SpecialName
@@ -3941,7 +3885,7 @@ Class Newtonsoft.Json.Linq.JTokenWriter: AutoLayout, AnsiClass, Class, Public, B
     WriteStartArray(): PrivateScope, Public, Virtual, HideBySig
     WriteStartConstructor(String): PrivateScope, Public, Virtual, HideBySig
     WritePropertyName(String): PrivateScope, Public, Virtual, HideBySig
-    AddJValue(JValue, JsonToken): PrivateScope, Assembly, HideBySig
+    AddValue(JValue, JsonToken): PrivateScope, Assembly, HideBySig
     WriteValue(Object): PrivateScope, Public, Virtual, HideBySig
     WriteNull(): PrivateScope, Public, Virtual, HideBySig
     WriteUndefined(): PrivateScope, Public, Virtual, HideBySig
@@ -3971,7 +3915,6 @@ Class Newtonsoft.Json.Linq.JTokenWriter: AutoLayout, AnsiClass, Class, Public, B
 Class Newtonsoft.Json.Linq.JValue: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Newtonsoft.Json.Linq.JToken
     Void .ctor(System.Object, Newtonsoft.Json.Linq.JTokenType): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Newtonsoft.Json.Linq.JValue, Newtonsoft.Json.Linq.JsonCloneSettings): PrivateScope, Assembly, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Newtonsoft.Json.Linq.JValue): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(Int64): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
     Void .ctor(System.Decimal): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -4002,7 +3945,7 @@ Class Newtonsoft.Json.Linq.JValue: AutoLayout, AnsiClass, Class, Public, BeforeF
     DeepEquals(JToken): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     get_HasValues(): PrivateScope, Public, Virtual, HideBySig, SpecialName
     Compare(JTokenType, Object, Object): PrivateScope, Assembly, Static, HideBySig
-    CloneToken(JsonCloneSettings): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
+    CloneToken(): PrivateScope, Assembly, Virtual, HideBySig, CheckAccessOnOverride
     CreateComment(String): PrivateScope, Public, Static, HideBySig
     CreateString(String): PrivateScope, Public, Static, HideBySig
     CreateNull(): PrivateScope, Public, Static, HideBySig
@@ -4299,14 +4242,9 @@ Class Newtonsoft.Json.Converters.StringEnumConverter: AutoLayout, AnsiClass, Cla
 Class Newtonsoft.Json.Converters.UnixDateTimeConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Newtonsoft.Json.Converters.DateTimeConverterBase
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-    Void .ctor(Boolean): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.DateTime UnixEpoch : Assembly, Static, InitOnly
-  Properties:
-    Boolean AllowPreEpoch 'get set' : 
   Methods:
-    get_AllowPreEpoch(): PrivateScope, Public, HideBySig, SpecialName
-    set_AllowPreEpoch(Boolean): PrivateScope, Public, HideBySig, SpecialName
     WriteJson(JsonWriter, Object, JsonSerializer): PrivateScope, Public, Virtual, HideBySig
     ReadJson(JsonReader, Type, Object, JsonSerializer): PrivateScope, Public, Virtual, HideBySig
 Class Newtonsoft.Json.Converters.VersionConverter: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit

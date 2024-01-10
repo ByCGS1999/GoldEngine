@@ -16,9 +16,15 @@
 #include <msclr/gcroot.h>
 #include "FileManager.h"
 
+// CUSTOM RENDERERS \\
+
+#include "VoxelRenderer.h"
+
 // INCLUDE ENGINE CLASSES \\
 
 #include "SceneFormat.h";
+#include "CubeRenderer.h"
+#include "GridRenderer.h"
 #include "LightManager.h"
 #include "ModelRenderer.h"
 #include "PBRModelRenderer.h"
@@ -49,6 +55,8 @@ bool initSettings = false;
 bool styleEditor = false;
 bool showCursor = true;
 bool b1, b2, b3, b4, b5, b6, b7, b8;
+bool readonlyLock = false;
+bool fpsCap = true;
 
 char fileName[] = "Level0";
 
@@ -58,9 +66,15 @@ ref class EntryPoint : Engine::Window
 	Scene^ scene;
 	Engine::EngineObjects::LightManager^ lightManager;
 	Engine::Internal::Components::Vector3^ cameraPosition;
+	Engine::Internal::Components::Object^ selectedObject;
 
 	void ExecAsIdentifiedObject(Engine::Internal::Components::ObjectType type, System::Object^ object)
 	{
+		Engine::Internal::Components::Object^ modelRenderer = Cast::Dynamic<Engine::Internal::Components::Object^>(object);
+		modelRenderer->Draw();
+		modelRenderer->DrawGizmo();
+
+		/*
 		if (type == Engine::Internal::Components::ObjectType::Skybox)
 		{
 			Engine::EngineObjects::Skybox^ skybox = Cast::Dynamic<Engine::EngineObjects::Skybox^>(object);
@@ -75,8 +89,11 @@ ref class EntryPoint : Engine::Window
 		}
 		else
 		{
-
+			Engine::Internal::Components::Object^ modelRenderer = Cast::Dynamic<Engine::Internal::Components::Object^>(object);
+			modelRenderer->Draw();
+			modelRenderer->DrawGizmo();
 		}
+		*/
 	}
 
 public:
@@ -94,7 +111,6 @@ public:
 		SetWindowFlags(4096 | 4 | FLAG_MSAA_4X_HINT);
 		OpenWindow(1280, 720, (const char*)"GoldEngine Editor editor-ver0.5c");
 
-		SetFPS(60);
 		Preload();
 
 		Loop();
@@ -160,6 +176,7 @@ public:
 				{
 					styleEditor = !styleEditor;
 				}
+				ImGui::Checkbox("FPS", &fpsCap);
 				ImGui::EndMenu();
 			}
 
@@ -172,26 +189,35 @@ public:
 			{
 				Engine::Management::MiddleLevel::SceneObject^ object = (Engine::Management::MiddleLevel::SceneObject^)obj;
 				auto objectType = object->objectType;
-				auto reference = object->reference;
+				auto reference = object->GetReference();
 
 				if (objectType == Engine::Internal::Components::Datamodel)
 				{
 					if (reference != nullptr)
 					{
-						ImGui::Selectable(CastToNative(reference->name + " (READONLY)"));
-					}
-				}
-				else
-				{
-					if (reference != nullptr)
-					{
-						if (reference->GetTransform()->parent != nullptr)
+						if (ImGui::Selectable(CastToNative(reference->name + " (READONLY)")))
 						{
-							ImGui::Selectable(CastToNative("\t" + reference->name));
+							readonlyLock = true;
+							selectedObject = reference;
 						}
-						else
+
+						for each (auto child_obj in scene->GetRenderQueue())
 						{
-							ImGui::Selectable(CastToNative(reference->name));
+							Engine::Management::MiddleLevel::SceneObject^ tmp = (Engine::Management::MiddleLevel::SceneObject^)child_obj;
+							auto _objectType = tmp->objectType;
+							auto _reference = tmp->GetReference();
+
+							if (_reference->GetTransform()->parent != nullptr) 
+							{
+								if (_reference->GetTransform()->parent->name == reference->transform->name)
+								{
+									if (ImGui::Selectable(CastToNative("\t" + _reference->name)))
+									{
+										readonlyLock = false;
+										selectedObject = _reference;
+									}
+								}
+							}
 						}
 					}
 				}
@@ -202,13 +228,90 @@ public:
 
 		if (ImGui::Begin("Properties", &isOpen, ImGuiWindowFlags_DockNodeHost))
 		{
+			if (selectedObject == nullptr)
+			{
+				ImGui::Text("Select an object to edit it's properties.");
+			}
+			else
+			{
+				ImGui::SeparatorText("Object Properties");
+				char* objectName = new char[128];
+
+				strcpy(objectName, CastToNative(selectedObject->name));
+
+				if (ImGui::InputText("Name", objectName, 128, ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+				{
+					selectedObject->name = gcnew String(objectName);
+				}
+
+				ImGui::SeparatorText("Transform");
+
+				// position
+				float pos[3] = {
+					selectedObject->GetTransform()->position->x,
+					selectedObject->GetTransform()->position->y,
+					selectedObject->GetTransform()->position->z
+				};
+
+				if (ImGui::DragFloat3("Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+				{
+					selectedObject->GetTransform()->position = gcnew Engine::Internal::Components::Vector3(pos[0], pos[1], pos[2]);
+				}
+
+				// rotation
+				float rot[3] = {
+					selectedObject->GetTransform()->rotation->x,
+					selectedObject->GetTransform()->rotation->y,
+					selectedObject->GetTransform()->rotation->z
+				};
+
+				if (ImGui::DragFloat3("Rotation", rot, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+				{
+					selectedObject->GetTransform()->rotation = gcnew Engine::Internal::Components::Vector3(rot[0], rot[1], rot[2]);
+				}
+
+				float rot_angle = selectedObject->GetTransform()->rotationValue;
+
+				if (ImGui::DragFloat("Rotation Value", &rot_angle, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+				{
+					selectedObject->GetTransform()->rotationValue = rot_angle;
+				}
+
+				// scale
+
+				float scale[3] = {
+					selectedObject->GetTransform()->scale->x,
+					selectedObject->GetTransform()->scale->y,
+					selectedObject->GetTransform()->scale->z
+				};
+
+				if (ImGui::DragFloat3("Scale", scale, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+				{
+					selectedObject->GetTransform()->scale = gcnew Engine::Internal::Components::Vector3(scale[0], scale[1], scale[2]);
+				}
+			}
 
 			ImGui::End();
 		}
 
-		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_DockNodeHost | ImGuiWindowFlags_MenuBar))
 		{
-			
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::BeginMenu("Assets"))
+				{
+					if (ImGui::MenuItem("Pack Setup"))
+					{
+						b5 = true;
+					}
+					if (ImGui::MenuItem("Scene Loader Setup"))
+					{
+						b6 = true;
+					}
+				}
+
+				ImGui::EndMenu();
+			}
 
 			ImGui::End();
 		}
@@ -238,63 +341,123 @@ public:
 			{
 				DisableCursor();
 			}
-			
+
 			rlImGuiImageRenderTextureCustom(&viewportTexture, new int[2] { (int)ImGui::GetWindowSize().x, (int)ImGui::GetWindowSize().y }, new float[2] {17.5f, 35.0f});
 
 			ImGui::End();
 		}
 
-		if (ImGui::Begin("Toolbox", &isOpen, ImGuiWindowFlags_NoScrollbar))
+		if (ImGui::Begin("Toolbox", &isOpen, ImGuiWindowFlags_AlwaysVerticalScrollbar))
 		{
-			if (ImGui::Button("Model Renderer"))
+			ImGui::SeparatorText("Engine Internal Objects");
+
+			if (ImGui::BeginListBox(""))
 			{
-				auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
-					"ModelRenderer",
-					gcnew Engine::Internal::Components::Transform(
-						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-						1.0f,
-						nullptr
-					),
-					0,
-					0,
-					0,
-					0xFFFFFFFF
-				);
-				meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
-				scene->AddObjectToScene(meshRenderer);
-				scene->GetRenderQueue()->Add(
-					gcnew Engine::Management::MiddleLevel::SceneObject(
-						meshRenderer->type,
-						meshRenderer,
-						""
-					)
-				);
+				if (ImGui::Button("Model Renderer"))
+				{
+					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
+						"ModelRenderer",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							0.0f,
+							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							nullptr
+						),
+						0,
+						0,
+						0,
+						0xFFFFFFFF
+					);
+					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
+					scene->AddObjectToScene(meshRenderer);
+					scene->GetRenderQueue()->Add(
+						gcnew Engine::Management::MiddleLevel::SceneObject(
+							meshRenderer->type,
+							meshRenderer,
+							""
+						)
+					);
+				}
+
+				if (ImGui::Button("Skybox"))
+				{
+					auto skyBox = gcnew Engine::EngineObjects::Skybox(
+						"Skybox",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							0.0f,
+							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							nullptr
+						),
+						2,
+						0,
+						0
+					);
+					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
+					scene->AddObjectToScene(skyBox);
+					scene->GetRenderQueue()->Add(
+						gcnew Engine::Management::MiddleLevel::SceneObject(
+							skyBox->type,
+							skyBox,
+							""
+						)
+					);
+				}
+
+				if (ImGui::Button("Cube Renderer"))
+				{
+					auto skyBox = gcnew Engine::EngineObjects::CubeRenderer(
+						"Cube",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							0.0f,
+							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							nullptr
+						),
+						0xFFFFFFFF
+					);
+					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
+					scene->AddObjectToScene(skyBox);
+					scene->GetRenderQueue()->Add(
+						gcnew Engine::Management::MiddleLevel::SceneObject(
+							skyBox->type,
+							skyBox,
+							""
+						)
+					);
+				}
+
+				if (ImGui::Button("Grid Renderer"))
+				{
+					auto skyBox = gcnew Engine::EngineObjects::GridRenderer(
+						"Grid",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							0.0f,
+							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							nullptr
+						),
+						8,
+						1.0f
+					);
+					skyBox->SetParent(scene->GetDatamodelMember("editor only"));
+					scene->AddObjectToScene(skyBox);
+					scene->GetRenderQueue()->Add(
+						gcnew Engine::Management::MiddleLevel::SceneObject(
+							skyBox->type,
+							skyBox,
+							""
+						)
+					);
+				}
+
+				ImGui::EndListBox();
 			}
-			if (ImGui::Button("Skybox"))
-			{
-				auto skyBox = gcnew Engine::EngineObjects::Skybox(
-					"Skybox",
-					gcnew Engine::Internal::Components::Transform(
-						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-						gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-						1.0f,
-						nullptr
-					),
-					2,
-					0,
-					0
-				);
-				skyBox->SetParent(scene->GetDatamodelMember("workspace"));
-				scene->AddObjectToScene(skyBox);
-				scene->GetRenderQueue()->Add(
-					gcnew Engine::Management::MiddleLevel::SceneObject(
-						skyBox->type,
-						skyBox,
-						""
-					)
-				);
-			}
+
 			ImGui::End();
 		}
 
@@ -304,7 +467,7 @@ public:
 			ImGui::End();
 		}
 
-		if(b1)
+		if (b1)
 		{
 			ImGui::OpenPopup("New Scene");
 		}
@@ -320,8 +483,28 @@ public:
 		{
 			ImGui::OpenPopup("AssetPack Editor");
 		}
+		else if (b6)
+		{
+			ImGui::OpenPopup("Scene Loader Editor");
+		}
 
 		// popups
+
+		if (ImGui::BeginPopupModal("Scene Loader Editor", (bool*)false, ImGuiWindowFlags_NoScrollbar))
+		{
+			char* data = new char;
+
+			ImGui::InputTextMultiline("", data, sizeof(data+256), {ImGui::GetWindowSize().x - 20, ImGui::GetWindowSize().y - 60});
+
+			if (ImGui::Button("Close"))
+			{
+				b6 = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+
 		if (ImGui::BeginPopupModal("New Scene", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			ImGui::Text("Do you want to create a new scene?\nAll the unsaved changes will be discarded.");
@@ -390,7 +573,7 @@ public:
 			char* data = new char[512];
 			for (int x = 0; x < scene->assetPacks->Count; x++)
 			{
-				if(data != "")
+				if (data != "")
 					free(data);
 
 				data = new char[512];
@@ -409,7 +592,7 @@ public:
 					scene->assetPacks->Add("");
 				}
 				ImGui::SameLine();
-				if(ImGui::Button("-"))
+				if (ImGui::Button("-"))
 				{
 					if (scene->assetPacks->Count > 1)
 					{
@@ -421,7 +604,7 @@ public:
 
 			if (ImGui::Button("Close"))
 			{
-				b4 = false; 
+				b4 = false;
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -449,10 +632,9 @@ public:
 
 			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 			{
-				ExecAsIdentifiedObject(obj->objectType, (System::Object^)obj->reference);
+				ExecAsIdentifiedObject(obj->objectType, (System::Object^)obj->GetReference());
 			}
 			//DrawModel(mod, { 0.0f, 0.0f, 0.0f }, 1, WHITE);
-			DrawGrid(10, 1.0f);
 
 			EndMode3D();
 
@@ -480,7 +662,7 @@ public:
 	void Init() override
 	{
 		scene = SceneManager::LoadSceneFromFile("Level0", scene);
-		
+
 		if (scene->sceneObjects->Count <= 0)
 		{
 			SceneManager::SaveSceneToFile(scene, 1234);
@@ -537,6 +719,10 @@ public:
 		c3d2.projection = CAMERA_PERSPECTIVE;
 		c3d2.fovy = 60;
 
+		scene->GetDatamodelMember("workspace");
+		scene->GetDatamodelMember("editor only");
+		scene->GetDatamodelMember("user interface");
+
 	}
 
 	void Preload() override
@@ -562,7 +748,7 @@ public:
 		//FileManager::WriteCustomFileFormat("Data/assets1.gold", "ThereGoesThePasswordGyat", passwd);
 
 		scene = SceneManager::CreateScene("GoldBootManager");
-/*
+		/*
 		FileManager::ReadCustomFileFormat("Data/engineassets.gold", "ThreadcallNull");
 
 		Model model;
@@ -589,6 +775,7 @@ public:
 
 		dataPack.SetShader(1, lightShader);
 		*/
+
 		Init();
 	}
 
@@ -596,6 +783,16 @@ public:
 	{
 		if (showCursor)
 			UpdateCamera(&c3d2, CAMERA_FREE);
+
+		if (fpsCap)
+		{
+			SetFPS(60);
+		}
+		else
+		{
+			SetFPS(-1);
+		}
+
 
 		Shader lightShader = dataPack.GetShader(1);
 		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };

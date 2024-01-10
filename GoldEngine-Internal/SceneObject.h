@@ -2,6 +2,8 @@
 
 #include "Cast.h"
 #include "Skybox.h"
+#include "CubeRenderer.h"
+#include "GridRenderer.h"
 #include "ModelRenderer.h"
 #include "Script.h"
 
@@ -12,7 +14,7 @@ namespace Engine::Management::MiddleLevel
 	public:
 		Engine::Internal::Components::ObjectType objectType;
 		System::String^ deserializedData;
-	public protected:
+	private:
 		Engine::Internal::Components::Object^ reference;
 
 	public:
@@ -32,7 +34,12 @@ namespace Engine::Management::MiddleLevel
 			}
 		}
 
-	private:
+		Engine::Internal::Components::Object^ GetReference()
+		{
+			return reference;
+		}
+
+	public:
 		void serialize()
 		{
 			switch (objectType)
@@ -61,7 +68,19 @@ namespace Engine::Management::MiddleLevel
 			}
 			break;
 
-			default:
+			case Engine::Internal::Components::ObjectType::CubeRenderer:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::CubeRenderer^>(deserializedData);
+			}
+			break;
+
+			case Engine::Internal::Components::ObjectType::GridRenderer:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::GridRenderer^>(deserializedData);
+			}
+			break;
+
+			case Engine::Internal::Components::ObjectType::Script:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Script^>(deserializedData);
 			}
@@ -98,6 +117,20 @@ namespace Engine::Management::MiddleLevel
 			{
 				Engine::Internal::Components::Object^ genericType = (Engine::Internal::Components::Object^)reference;
 				deserializedData = ToJSON(genericType);
+			}
+			break;
+
+			case Engine::Internal::Components::CubeRenderer:
+			{
+				Engine::EngineObjects::CubeRenderer^ modelRenderer = (Engine::EngineObjects::CubeRenderer^)reference;
+				deserializedData = ToJSON(modelRenderer);
+			}
+			break;
+
+			case Engine::Internal::Components::GridRenderer:
+			{
+				Engine::EngineObjects::GridRenderer^ modelRenderer = (Engine::EngineObjects::GridRenderer^)reference;
+				deserializedData = ToJSON(modelRenderer);
 			}
 			break;
 

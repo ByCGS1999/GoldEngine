@@ -130,6 +130,24 @@
     <Filter Include="Archivos de origen\Engine\EngineObjects\Script">
       <UniqueIdentifier>{baa9c9f2-4cbd-485c-aac6-39300e73a3c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines">
+      <UniqueIdentifier>{8cd565ea-b573-41fb-ac22-1833499cbb34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\RTBR">
+      <UniqueIdentifier>{2fdfb2aa-f8d5-466e-bdb5-6ad801abfad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR">
+      <UniqueIdentifier>{495424b5-1e59-4996-b963-1dd85699c192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel">
+      <UniqueIdentifier>{fbe6c539-35ab-4a90-abb1-37cdc22137b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs">
+      <UniqueIdentifier>{fa234a6f-8b88-4072-80f6-22a397997e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\BasicGeometry">
+      <UniqueIdentifier>{386a6d34-ef1f-4138-a991-277bd5a30896}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -278,6 +296,27 @@
     </ClInclude>
     <ClInclude Include="Script.h">
       <Filter>Archivos de origen\Engine\EngineObjects\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Voxel.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelTypedefs.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
+    </ClInclude>
+    <ClInclude Include="Chunk.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="VoxelMatrix.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="GridRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
