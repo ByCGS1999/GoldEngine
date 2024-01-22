@@ -45,14 +45,14 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>true</CLRSupport>
@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AsmLoader.h" />
     <ClInclude Include="CameraPack.h" />
     <ClInclude Include="Cast.h" />
     <ClInclude Include="CastToNative.h" />
@@ -150,8 +151,12 @@
     <ClInclude Include="DataPack.h" />
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="Drawing.h" />
+    <ClInclude Include="EngineIncludes.h" />
     <ClInclude Include="FileManager.h" />
+    <ClInclude Include="GlIncludes.h" />
     <ClInclude Include="GridRenderer.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="ModelRenderer.h" />
@@ -175,7 +180,6 @@
     <ClInclude Include="Includes.h" />
     <ClInclude Include="MaterialPack.h" />
     <ClInclude Include="ModelPack.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h" />
     <ClInclude Include="Raylib\include\glad.h" />
     <ClInclude Include="Raylib\include\IconsFontAwesome6.h" />
@@ -189,9 +193,6 @@
     <ClInclude Include="Raylib\include\rlImGuiColors.h" />
     <ClInclude Include="Raylib\include\rPBR.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="ScriptBehaviour.cpp" />
-    <ClInclude Include="ScriptBehaviour.h" />
-    <ClInclude Include="ScriptSandbox.h" />
     <ClInclude Include="ShaderPack.h" />
     <ClInclude Include="Texture2DPack.h" />
     <ClInclude Include="Transform.h" />
@@ -200,19 +201,13 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CastToNative.cpp" />
-    <ClCompile Include="DataPack.cpp" />
-    <ClCompile Include="DataPacks.cpp" />
-    <ClCompile Include="Drawing.cpp" />
-    <ClCompile Include="EngineEntryPoint.cpp" />
+    <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Window.cpp" />
-    <ClCompile Include="ScriptSandbox.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>
   <ItemGroup>

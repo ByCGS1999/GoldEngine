@@ -8,7 +8,7 @@ namespace Engine::EngineObjects
 		unsigned long color;
 
 	public:
-		CubeRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned long tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::CubeRenderer)
+		CubeRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned long tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::CubeRenderer)
 		{
 			this->color = tint;
 		}

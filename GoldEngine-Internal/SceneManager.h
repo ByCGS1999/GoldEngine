@@ -4,13 +4,23 @@
 #include "GridRenderer.h"
 #include "CubeRenderer.h"
 #include "ModelRenderer.h"
+#include "PBRModelRenderer.h"
+#include "AsmLoader.h"
 #include "Script.h"
+#include "Scene.h"
 
 namespace Engine::Managers
 {
 	public ref class SceneManager
 	{
 	private:
+		static System::Collections::Generic::List<EngineAssembly^> ^assemblyManager;
+
+	public:
+		static void SetAssemblyManager(System::Collections::Generic::List <EngineAssembly^>^ manager)
+		{
+			assemblyManager = manager;
+		}
 
 	public:
 		static bool AssetExists(System::String^ fN)
@@ -22,12 +32,14 @@ namespace Engine::Managers
 		{
 			if (AssetExists(fN))
 			{
-				auto parsedScene = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Management::Scene^>(System::IO::File::ReadAllText("Data/" + fN + ".scn"));
+				auto fileContents = System::IO::File::ReadAllText("Data/" + fN + ".scn");
+				auto parsedScene = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Management::Scene^>(fileContents);
 
 				loadedScene->sceneName = fN;
 				loadedScene->assetPacks = parsedScene->assetPacks;
 				loadedScene->sceneObjects = parsedScene->sceneObjects;
 				loadedScene->sceneRequirements = parsedScene->sceneRequirements;
+				
 				loadedScene->LoadScene();
 
 				for each (auto t in parsedScene->sceneObjects)
@@ -47,7 +59,7 @@ namespace Engine::Managers
 
 					switch (objectType)
 					{
-					case Engine::Internal::Components::Datamodel:
+					case Engine::Internal::Components::ObjectType::Datamodel:
 					{
 						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
 							objectType,
@@ -60,7 +72,7 @@ namespace Engine::Managers
 						);
 					}
 					break;
-					case Engine::Internal::Components::ModelRenderer:
+					case Engine::Internal::Components::ObjectType::ModelRenderer:
 					{
 						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
 							objectType,
@@ -81,7 +93,7 @@ namespace Engine::Managers
 						instancedModelRenderer->SetNativeRenderer(new Engine::EngineObjects::Native::NativeModelRenderer(model, material, texture, hex));
 					}
 					break;
-					case Engine::Internal::Components::Skybox:
+					case Engine::Internal::Components::ObjectType::Skybox:
 					{
 						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
 							objectType,
@@ -104,6 +116,16 @@ namespace Engine::Managers
 							nullptr,
 							deserializedData
 						);
+						
+						Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)sceneObject->GetReference();
+
+						for each (auto assembly in assemblyManager)
+						{
+							if (assembly->hasType(script->assemblyReference))
+							{
+								sceneObject->SetReference((Engine::Internal::Components::Object^)assembly->CastToType(script, script->assemblyReference));
+							}
+						}
 
 						renderQueue->Add(
 							sceneObject
@@ -111,7 +133,7 @@ namespace Engine::Managers
 					}
 					break;
 
-					case Engine::Internal::Components::CubeRenderer:
+					case Engine::Internal::Components::ObjectType::CubeRenderer:
 					{
 						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
 							objectType,
@@ -128,7 +150,37 @@ namespace Engine::Managers
 					}
 					break;
 
-					case Engine::Internal::Components::GridRenderer:
+					case Engine::Internal::Components::ObjectType::PBR_ModelRenderer:
+					{
+						auto sceneObj = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
+						);
+
+						renderQueue->Add(sceneObj);
+
+						auto pbrRenderer = sceneObj->GetValue<Engine::EngineObjects::PBRModelRenderer^>();
+						pbrRenderer->Init(pbrRenderer->model_id, pbrRenderer->shader_id, pbrRenderer->texture_id, pbrRenderer->color_hex);
+					}
+					break;
+
+					case Engine::Internal::Components::ObjectType::LightSource:
+					{
+						auto sceneObj = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
+						);
+
+						renderQueue->Add(sceneObj);
+
+						auto lightSource = sceneObj->GetValue<Engine::EngineObjects::LightSource^>();
+						lightSource->Init(lightSource->lightColor, lightSource->intensity, lightSource->target, lightSource->lightType, lightSource->shaderId);
+					}
+					break;
+
+					case Engine::Internal::Components::ObjectType::GridRenderer:
 					{
 						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
 							objectType,
@@ -151,7 +203,7 @@ namespace Engine::Managers
 			{
 				auto assetPacks = gcnew System::Collections::Generic::List<String^>();
 				assetPacks->Add("Data/engineassets.gold");
-				loadedScene = gcnew Engine::Management::Scene(fN, "Assets_" + fN, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
+				loadedScene = gcnew Engine::Management::Scene(fN, "Assets_" + fN, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>());
 			}
 			if (loadedScene == nullptr)
 				TraceLog(LOG_FATAL, "FAILED OPENING SCENE");
@@ -165,9 +217,9 @@ namespace Engine::Managers
 			assetPacks->Add("Data/engineassets.gold");
 
 			if (sceneName->Equals(""))
-				return gcnew Engine::Management::Scene("Level0", "Assets_Level0", assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
+				return gcnew Engine::Management::Scene("Level0", "Assets_Level0", assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>());
 			else
-				return gcnew Engine::Management::Scene(sceneName, "Assets_" + sceneName, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>());
+				return gcnew Engine::Management::Scene(sceneName, "Assets_" + sceneName, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>());
 		}
 		
 		static void SaveSceneToFile(Engine::Management::Scene^ scene, unsigned int password)
@@ -193,5 +245,6 @@ namespace Engine::Managers
 		{
 			loadedScene->UnloadScene();
 		}
+
 	};
 }

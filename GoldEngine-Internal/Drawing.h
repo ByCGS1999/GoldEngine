@@ -5,7 +5,6 @@
 #include "CastToNative.h"
 
 #include <vector>
-#include "Object.h"
 #include "Transform.h"
 #include "DataPacks.h"
 
@@ -18,52 +17,286 @@ namespace Engine::Drawing
 	{
 	public:
 		// -- MASTER
-		static void HL_BeginRendering();
-		static void HL_EndRendering();
-		static void HL_ClearBackground(unsigned int color);
+		inline static void HL_BeginRendering()
+		{
+			BeginDrawing();
+		}
+
+		inline static void HL_EndRendering()
+		{
+			EndDrawing();
+		}
+
+		inline static void HL_ClearBackground(unsigned int color)
+		{
+			ClearBackground(GetColor(color));
+		}
 		// -- CAMERA
-		static void HL_SetCameraFov(unsigned int cameraId, float fov);
-		static void HL_SetCameraProjection(unsigned int cameraId, int projection);
+		inline static void HL_SetCameraFov(unsigned int cameraId, float fov)
+		{
+			Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
+			c.fovy = fov;
+		}
+
+		inline static void HL_SetCameraProjection(unsigned int cameraId, int projection)
+		{
+			Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
+			c.projection = projection;
+		}
+
 		// -- LOADING
-		static void HL_LoadShader(unsigned int shaderId, System::String^ vertexShaderFile, System::String^ fragmentShaderFile);
-		static void HL_LoadModel(unsigned int modelId, System::String^ fileName);
-		static void HL_LoadTexture2D(unsigned int textureId, System::String^ fileName);
+		inline static void HL_LoadShader(unsigned int shaderId, System::String^ vertexShaderFile, System::String^ fragmentShaderFile)
+		{
+			const char* vsFile = CastToNative(vertexShaderFile);
+			const char* fsFile = CastToNative(fragmentShaderFile);
+
+			Shader s = LoadShader(vsFile, fsFile);
+
+			DataPacks::singleton().AddShader(shaderId, s);
+		}
+
+		inline static void HL_LoadModel(unsigned int modelId, System::String^ fileName)
+		{
+			Model model = LoadModel(CastToNative(fileName));
+			DataPacks::singleton().AddModel(modelId, model);
+		}
+
+		inline static void HL_LoadTexture2D(unsigned int textureId, System::String^ fileName)
+		{
+			Texture2D texture = LoadTexture(CastToNative(fileName));
+		}
+
 		// -- UNLOADING / FREEING
-		static void HL_UnloadEnvironment();
-		static void HL_FreeCameras();
-		static void HL_FreeModels();
-		static void HL_FreeShaders();
-		static void HL_FreeAll();
+		inline static void HL_FreeCameras()
+		{
+			DataPacks::singleton().FreeCameras();
+		}
+
+		inline static void HL_FreeModels()
+		{
+			DataPacks::singleton().FreeModels();
+		}
+
+		inline static void HL_FreeShaders()
+		{
+			DataPacks::singleton().FreeShaders();
+		}
+
+		inline static void HL_FreeAll()
+		{
+			DataPacks::singleton().FreeAll();
+		}
+
 		// -- CONFIGURATION
-		static void HL_SetMaxLights(int ammount);
-		static void HL_SetMaterialShader(unsigned int materialId, unsigned int shaderId);
-		static void HL_SetMaterialTexture(unsigned int materialId, unsigned int textureId);
+		inline static void HL_SetMaterialShader(unsigned int materialId, unsigned int shaderId)
+		{
+			Material* material = &DataPacks::singleton().GetMaterial(materialId);
+			Shader* shader = &DataPacks::singleton().GetShader(shaderId);
+
+			material->shader = *shader;
+		}
+		inline static void HL_SetMaterialTexture(unsigned int materialId, unsigned int textureId)
+		{
+			Material m = DataPacks::singleton().GetMaterial(materialId);
+			Texture2D t = DataPacks::singleton().GetTexture2D(textureId);
+			MaterialMap mMap;
+
+			mMap.texture = t;
+			m.maps = &mMap;
+		}
 		// -- CREATION
-		static void HL_CreateEnvironment(String^ fileName, int cubemapSize, int irradianceSize, int prefilterSize, int brdfSize);
-		static void HL_CreateMaterial(unsigned int materialId);
-		static void HL_CreateLight();
-		static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialEuler, Engine::Internal::Components::CameraType cameraType);
-		static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialEuler, Engine::Internal::Components::Vector3^ up, Engine::Internal::Components::CameraType cameraType);
-		static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector2^ position, Engine::Internal::Components::CameraType cameraType);
-		static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::CameraType cameraType);
+		inline static void HL_CreateMaterial(unsigned int materialId)
+		{
+			Material newMaterial;
+
+			DataPacks::singleton().AddMaterial(materialId, newMaterial);
+		}
+
+		inline static void HL_CreateLight()
+		{
+
+		}
+
+		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialforward, Engine::Internal::Components::CameraType cameraType)
+		{
+			Vector3 rlib_position;
+			Vector3 rlib_forward;
+			Camera3D camera;
+
+			rlib_position.x = initialPosition->x;
+			rlib_position.y = initialPosition->y;
+			rlib_position.z = initialPosition->z;
+			rlib_forward.x = initialforward->x;
+			rlib_forward.y = initialforward->y;
+			rlib_forward.z = initialforward->z;
+
+			camera.position = rlib_position;
+			camera.target = rlib_forward;
+
+			DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
+		}
+
+		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ forward, Engine::Internal::Components::Vector3^ up, Engine::Internal::Components::CameraType cameraType)
+		{
+			Vector3 rlib_position;
+			Vector3 rlib_forward;
+			Vector3 rlib_up;
+			Camera3D camera;
+
+			rlib_position.x = initialPosition->x;
+			rlib_position.y = initialPosition->y;
+			rlib_position.z = initialPosition->z;
+			rlib_forward.x = forward->x;
+			rlib_forward.y = forward->y;
+			rlib_forward.z = forward->z;
+			rlib_up.x = up->x;
+			rlib_up.y = up->y;
+			rlib_up.z = up->z;
+
+			camera.position = rlib_position;
+			camera.target = rlib_forward;
+			camera.up = rlib_up;
+			camera.projection = CAMERA_PERSPECTIVE;
+
+			DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
+		}
+
+		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector2^ position, Engine::Internal::Components::CameraType cameraType)
+		{
+			Vector2 rlib_position;
+			Camera2D camera;
+			rlib_position.x = position->x;
+			rlib_position.y = position->y;
+			camera.target = rlib_position;
+
+			DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
+		}
+		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::CameraType cameraType)
+		{
+			Vector3 rlib_position;
+			Camera3D camera;
+
+			rlib_position.x = initialPosition->x;
+			rlib_position.y = initialPosition->y;
+			rlib_position.z = initialPosition->z;
+
+			camera.position = rlib_position;
+
+			DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
+		}
 		// -- RENDERING / DRAWING
-		static void HL_DrawRectangle(int posX, int posY, int width, int height, unsigned int hexCode);
-		static void HL_DrawGrid(int slices, float spaces);
-		static void HL_DrawSkybox(unsigned int cameraId, Engine::Internal::Components::CameraType cameraType);
-		static void HL_DrawCube(Engine::Internal::Components::Vector3^ position, Engine::Internal::Components::Vector3^ scale, unsigned int color);
-		static void HL_DrawModel(unsigned int modelId, Engine::Internal::Components::Vector3^ position, float scale, unsigned int tint);
-		static void HL_DrawEllipse(int centerX, int centerY, float radiusH, float radiusY, unsigned int hexCode);
-		static void HL_DrawTexture(unsigned int textureId, int posX, int posY, unsigned int tint);
+		inline static void HL_DrawRectangle(int posX, int posY, int width, int height, unsigned int hexCode)
+		{
+			DrawRectangle(posX, posY, width, height, GetColor(hexCode));
+		}
+
+		inline static void HL_DrawGrid(int slices, float spaces)
+		{
+			DrawGrid(slices, spaces);
+		}
+
+		inline static void HL_DrawCube(Engine::Internal::Components::Vector3^ position, Engine::Internal::Components::Vector3^ scale, unsigned int color) {
+			Vector3 rlib_v3;
+			rlib_v3.x = position->x;
+			rlib_v3.y = position->y;
+			rlib_v3.z = position->z;
+
+			DrawCube(rlib_v3, scale->x, scale->y, scale->z, GetColor(color));
+		}
+
+		inline static void HL_DrawModel(unsigned int modelId, Engine::Internal::Components::Vector3^ position, float scale, unsigned int tint)
+		{
+			Model m = DataPacks::singleton().GetModel(modelId);
+			Vector3 convertedVector;
+
+
+			convertedVector.x = position->x;
+			convertedVector.y = position->y;
+			convertedVector.z = position->z;
+
+			DrawModel(m, convertedVector, scale, GetColor(tint));
+		}
+
+		inline static void HL_DrawEllipse(int centerX, int centerY, float radiusH, float radiusY, unsigned int hexCode)
+		{
+			DrawEllipse(centerX, centerY, radiusH, radiusY, GetColor(hexCode));
+		}
+
+		inline static void HL_DrawTexture(unsigned int textureId, int posX, int posY, unsigned int tint)
+		{
+			Texture2D t = DataPacks::singleton().GetTexture2D(textureId);
+			Texture2D nullTex;
+
+			DrawTexture(t, posX, posY, GetColor(tint));
+		}
+
 		// -- MODES
-		static void HL_BeginShaderMode(unsigned int shaderId);
-		static void HL_EndShaderMode();
-		static void HL_Begin3DMode(unsigned int cameraId);
-		static void HL_Begin2DMode(unsigned int cameraId);
-		static void HL_EndMode(int mode);
+		inline static void HL_BeginShaderMode(unsigned int shaderId)
+		{
+			Shader s = DataPacks::singleton().GetShader(shaderId);
+
+			BeginShaderMode(s);
+		}
+
+		inline static void HL_EndShaderMode()
+		{
+			EndShaderMode();
+		}
+
+		inline static void HL_Begin3DMode(unsigned int cameraId)
+		{
+			Camera3D c = (Camera3D)DataPacks::singleton().GetCamera3D(cameraId);
+
+			BeginMode3D(c);
+		}
+
+		inline static void HL_Begin2DMode(unsigned int cameraId)
+		{
+			Camera2D c = (Camera2D)DataPacks::singleton().GetCamera2D(cameraId);
+			BeginMode2D(c);
+		}
+
+		inline static void HL_EndMode(int mode)
+		{
+			switch (mode)
+			{
+			case 0:
+				EndMode3D();
+				break;
+			case 1:
+				EndMode2D();
+				break;
+			}
+		}
+
 		// -- YIELDING
-		static void HL_Wait(double seconds);
+		inline static void HL_Wait(double seconds)
+		{
+			WaitTime(seconds);
+		}
+
 		// -- UPDATE
-		static void HL_UpdateCamera(unsigned int cameraId, Engine::Internal::Components::CameraType camType, int mode);
-		static void HL_SetModelTexture(unsigned int modelId, unsigned int materialId);
+		inline static void HL_UpdateCamera(unsigned int cameraId, Engine::Internal::Components::CameraType camType, int mode)
+		{
+			switch (camType)
+			{
+			case Engine::Internal::Components::CameraType::C2D:
+				Camera2D cam2d = DataPacks::singleton().GetCamera2D(cameraId);
+				UpdateCamera((Camera*)&cam2d, (CameraMode)mode);
+				break;
+			case Engine::Internal::Components::CameraType::C3D:
+				Camera3D cam3d = DataPacks::singleton().GetCamera3D(cameraId);
+				UpdateCamera(&cam3d, (CameraMode)mode);
+				break;
+			}
+		}
+
+		inline static void HL_SetModelTexture(unsigned int modelId, unsigned int materialId)
+		{
+			Material* m = &DataPacks::singleton().GetMaterial(materialId);
+			Model* mod = &DataPacks::singleton().GetModel(modelId);
+
+			mod->materials = m;
+		}
 	};
 }

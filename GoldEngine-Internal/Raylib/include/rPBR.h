@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef RPBR_H
+#define RPBR_H
+
 namespace rPBR
 {
     /**********************************************************************************************
@@ -36,8 +39,6 @@ namespace rPBR
 
 using namespace rPBR;
 
-#ifndef RPBR_H
-#define RPBR_H
 #include "raylib.h"
 
 
@@ -487,5 +488,5 @@ using namespace rPBR;
         pbrModel.model = LoadModelFromMesh(mesh);
         return pbrModel;
     }
-#endif // RPBR_IMPLEMENTATION
 }
+#endif // rPBR_IMPL

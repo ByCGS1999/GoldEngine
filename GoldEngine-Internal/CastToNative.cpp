@@ -12,6 +12,14 @@ const char* CastToNative(System::String^ value)
 	return ctx.marshal_as<const char*>(value);
 }
 
+std::string CastStringToNative(System::String^ value)
+{
+	System::Text::Encoding^ u8 = System::Text::Encoding::ASCII;
+	array<unsigned char>^ bytes = u8->GetBytes(value);
+	pin_ptr<unsigned char> pinnedPtr = &bytes[0];
+	return std::string((char*)pinnedPtr);
+}
+
 template <class returnal, class input>
 returnal CastToNativeType(input value)
 {

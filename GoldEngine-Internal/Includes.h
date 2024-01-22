@@ -8,9 +8,4 @@
 #include <inttypes.h>
 #include <bit>
 #include <map>
-#include "Raylib/include/raylib.h"
-#include "Raylib/include/raymath.h"
-#include "Raylib/include/rlgl.h"
-#include "Raylib/include/raygui.h"
-#include "Raylib/include/rlImGui.h"
 #include "imgui/imgui.h"

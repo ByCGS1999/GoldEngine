@@ -6,13 +6,15 @@
   "models": {
     "0": "Data/tmp/Engine/Models/Error.obj",
     "1": "Data/tmp/Models/castle.obj",
-    "2": "Data/tmp/Engine/Models/Skybox_cube.glb"
+    "2": "Data/tmp/Engine/Models/Skybox_cube.glb",
+    "3": "Data/Game/Models/Spaceship.obj"
   },
   "materials": {
     "0": 0
   },
   "textures2d": {
+    "0": "Data/tmp/Models/castle_diffuse.png",
     "1": "Data/tmp/Engine/Skybox/Daylight.png",
-    "0": "Data/tmp/Models/castle_diffuse.png"
+    "2": "Data/Game/Models/Spaceship.png"
   }
 }

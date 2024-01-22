@@ -1,11 +1,9 @@
 #pragma once
 
-#include "Cast.h"
-#include "Skybox.h"
-#include "CubeRenderer.h"
-#include "GridRenderer.h"
-#include "ModelRenderer.h"
-#include "Script.h"
+#include "Includes.h"
+#include "Transform.h"
+#include "GlIncludes.h"
+#include "EngineIncludes.h"
 
 namespace Engine::Management::MiddleLevel
 {
@@ -24,11 +22,11 @@ namespace Engine::Management::MiddleLevel
 			reference = obj;
 			deserializedData = data;
 
-			if (obj == nullptr && deserializedData != "")
+			if (obj == nullptr && deserializedData != "" && deserializedData != nullptr)
 			{
 				serialize();
 			}
-			else if(obj != nullptr && deserializedData == "")
+			else if (obj != nullptr && deserializedData == "")
 			{
 				deserialize();
 			}
@@ -39,52 +37,75 @@ namespace Engine::Management::MiddleLevel
 			return reference;
 		}
 
+		void SetReference(Engine::Internal::Components::Object^ ref)
+		{
+			this->reference = ref;
+		}
+
 	public:
 		void serialize()
 		{
-			switch (objectType)
+			switch ((Engine::Internal::Components::ObjectType)objectType)
 			{
 			case Engine::Internal::Components::ObjectType::Skybox:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Skybox^>(deserializedData);
+				break;
 			}
-			break;
-			
+
 			case Engine::Internal::Components::ObjectType::Generic:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Internal::Components::Object^>(deserializedData);
+				break;
 			}
-			break;
 
 			case Engine::Internal::Components::ObjectType::Datamodel:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Internal::Components::Object^>(deserializedData);
+				break;
 			}
-			break;
 
 			case Engine::Internal::Components::ObjectType::ModelRenderer:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::ModelRenderer^>(deserializedData);
+				break;
 			}
-			break;
 
 			case Engine::Internal::Components::ObjectType::CubeRenderer:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::CubeRenderer^>(deserializedData);
+				break;
 			}
-			break;
 
 			case Engine::Internal::Components::ObjectType::GridRenderer:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::GridRenderer^>(deserializedData);
+				break;
 			}
-			break;
+
+			case Engine::Internal::Components::ObjectType::PBR_ModelRenderer:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::PBRModelRenderer^>(deserializedData);
+				break;
+			}
+
+			case Engine::Internal::Components::ObjectType::LightManager:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::LightManager^>(deserializedData);
+				break;
+			}
+
+			case Engine::Internal::Components::ObjectType::LightSource:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::LightSource^>(deserializedData);
+				break;
+			}
 
 			case Engine::Internal::Components::ObjectType::Script:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Script^>(deserializedData);
+				break;
 			}
-			break;
 
 			}
 		}
@@ -92,54 +113,75 @@ namespace Engine::Management::MiddleLevel
 		{
 			switch (objectType)
 			{
-			case Engine::Internal::Components::Skybox:
+			case Engine::Internal::Components::ObjectType::Skybox:
 			{
 				Engine::EngineObjects::Skybox^ skybox = (Engine::EngineObjects::Skybox^)reference;
 				deserializedData = ToJSON(skybox);
+				break;
 			}
-			break;
-			
-			case Engine::Internal::Components::Generic:
+
+			case Engine::Internal::Components::ObjectType::Generic:
 			{
 				Engine::Internal::Components::Object^ genericType = (Engine::Internal::Components::Object^)reference;
 				deserializedData = ToJSON(genericType);
+				break;
 			}
-			break;
 
-			case Engine::Internal::Components::ModelRenderer:
+			case Engine::Internal::Components::ObjectType::ModelRenderer:
 			{
 				Engine::EngineObjects::ModelRenderer^ modelRenderer = (Engine::EngineObjects::ModelRenderer^)reference;
 				deserializedData = ToJSON(modelRenderer);
+				break;
 			}
-			break;
 
-			case Engine::Internal::Components::Datamodel:
+			case Engine::Internal::Components::ObjectType::Datamodel:
 			{
 				Engine::Internal::Components::Object^ genericType = (Engine::Internal::Components::Object^)reference;
 				deserializedData = ToJSON(genericType);
+				break;
 			}
-			break;
 
-			case Engine::Internal::Components::CubeRenderer:
+			case Engine::Internal::Components::ObjectType::CubeRenderer:
 			{
 				Engine::EngineObjects::CubeRenderer^ modelRenderer = (Engine::EngineObjects::CubeRenderer^)reference;
 				deserializedData = ToJSON(modelRenderer);
+				break;
 			}
-			break;
 
-			case Engine::Internal::Components::GridRenderer:
+			case Engine::Internal::Components::ObjectType::GridRenderer:
 			{
 				Engine::EngineObjects::GridRenderer^ modelRenderer = (Engine::EngineObjects::GridRenderer^)reference;
 				deserializedData = ToJSON(modelRenderer);
+				break;
 			}
-			break;
+
+			case Engine::Internal::Components::ObjectType::PBR_ModelRenderer:
+			{
+				Engine::EngineObjects::PBRModelRenderer^ pbrModelRenderer = (Engine::EngineObjects::PBRModelRenderer^)reference;
+				deserializedData = ToJSON(pbrModelRenderer);
+				break;
+			}
+
+			case Engine::Internal::Components::ObjectType::LightManager:
+			{
+				Engine::EngineObjects::LightManager^ pbrModelRenderer = (Engine::EngineObjects::LightManager^)reference;
+				deserializedData = ToJSON(pbrModelRenderer);
+				break;
+			}
+
+			case Engine::Internal::Components::ObjectType::LightSource:
+			{
+				Engine::EngineObjects::LightSource^ pbrModelRenderer = (Engine::EngineObjects::LightSource^)reference;
+				deserializedData = ToJSON(pbrModelRenderer);
+				break;
+			}
 
 			default:
 			{
 				Engine::EngineObjects::Script^ genericType = (Engine::EngineObjects::Script^)reference;
 				deserializedData = ToJSON(genericType);
+				break;
 			}
-			break;
 			}
 		}
 

@@ -25,13 +25,32 @@ namespace Engine::EngineObjects
 		int emissiveCnt = 0;
 
 	public:
+		unsigned int model_id;
+		unsigned int shader_id;
+		unsigned int texture_id;
 		unsigned int color_hex;
 
-		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::PBR_ModelRenderer)
+		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer)
+		{
+			rPBR::PBRModel pbrModel = rPBR::PBRModelLoad(&DataPacks::singleton().GetModel(model));
+			model_id = model;
+			color_hex = tint;
+			shader_id = shader;
+			texture_id = texture;
+			nativeRenderer = new Native::NativePBRModelRenderer(pbrModel);
+			rPBR::PBRMaterialSetup(&nativeRenderer->material, DataPacks::singleton().GetShader(shader), nullptr);
+			rPBR::PBRLoadTextures(&nativeRenderer->material, rPBR::PBRTexType::PBR_TEXTURE_ALBEDO, DataPacks::singleton().GetTexture2D(texture));
+		}
+
+		void Init(unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint)
 		{
 			rPBR::PBRModel pbrModel = rPBR::PBRModelLoad(&DataPacks::singleton().GetModel(model));
 			color_hex = tint;
+			shader_id = shader;
+			texture_id = texture;
 			nativeRenderer = new Native::NativePBRModelRenderer(pbrModel);
+			rPBR::PBRMaterialSetup(&nativeRenderer->material, DataPacks::singleton().GetShader(shader), nullptr);
+			rPBR::PBRLoadTextures(&nativeRenderer->material, rPBR::PBRTexType::PBR_TEXTURE_ALBEDO, DataPacks::singleton().GetTexture2D(texture));
 		}
 
 		void SetTexture(unsigned int textureId, rPBR::PBRTexType texType)
@@ -56,7 +75,7 @@ namespace Engine::EngineObjects
 
 		void SetupMaterial(unsigned int shaderId) 
 		{
-			rPBR::PBRMaterialSetup(&nativeRenderer->material, DataPacks::singleton().GetShader(shaderId), NULL);
+			rPBR::PBRMaterialSetup(&nativeRenderer->material, DataPacks::singleton().GetShader(shaderId), nullptr);
 		}
 
 		void Draw() override

@@ -21,12 +21,6 @@
     <Filter Include="Archivos de origen\Engine\Marshaller">
       <UniqueIdentifier>{84639636-2dd0-4fda-95a1-d80dc406fbbe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\ScriptingEngine">
-      <UniqueIdentifier>{62ca2674-a016-44ad-88bd-ee0cd47abe5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\ScriptingEngine\GenericReference">
-      <UniqueIdentifier>{7f29082c-5229-4c0c-8258-71bead84b8d5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="raylib\include">
       <UniqueIdentifier>{a58c4469-bad3-4eed-aee2-c8b1af098c30}</UniqueIdentifier>
     </Filter>
@@ -148,6 +142,12 @@
     <Filter Include="Archivos de origen\Engine\EngineObjects\BasicGeometry">
       <UniqueIdentifier>{386a6d34-ef1f-4138-a991-277bd5a30896}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\ScriptingAPI">
+      <UniqueIdentifier>{62ca2674-a016-44ad-88bd-ee0cd47abe5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\EngineTools">
+      <UniqueIdentifier>{6d13b602-baec-4651-bcfb-eea23e4403db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -158,18 +158,6 @@
     </ClInclude>
     <ClInclude Include="CastToNative.h">
       <Filter>Archivos de origen\Engine\Marshaller</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptSandbox.h">
-      <Filter>Archivos de origen\Engine\ScriptingEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptBehaviour.cpp">
-      <Filter>Archivos de origen\Engine\ScriptingEngine\GenericReference</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptBehaviour.h">
-      <Filter>Archivos de origen\Engine\ScriptingEngine\GenericReference</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Archivos de origen\Engine\Object</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Archivos de origen\Engine\Object</Filter>
@@ -318,19 +306,28 @@
     <ClInclude Include="GridRenderer.h">
       <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
     </ClInclude>
+    <ClInclude Include="AsmLoader.h">
+      <Filter>Archivos de origen\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineIncludes.h">
+      <Filter>Archivos de origen\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="GlIncludes.h">
+      <Filter>Archivos de origen\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Archivos de origen\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="CastToNative.cpp">
       <Filter>Archivos de origen\Engine\Marshaller</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptSandbox.cpp">
-      <Filter>Archivos de origen\Engine\ScriptingEngine</Filter>
     </ClCompile>
     <ClCompile Include="Raylib\include\rlImGui.cpp">
       <Filter>raylib\include</Filter>
@@ -350,23 +347,11 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Drawing.cpp">
-      <Filter>Archivos de origen\Engine\HLAPI</Filter>
-    </ClCompile>
-    <ClCompile Include="DataPacks.cpp">
-      <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
-    </ClCompile>
-    <ClCompile Include="EngineEntryPoint.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Archivos de origen\Engine\Management\Instance</Filter>
-    </ClCompile>
-    <ClCompile Include="DataPack.cpp">
-      <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
-    </ClCompile>
     <ClCompile Include="WinAPI.cpp">
       <Filter>Archivos de origen\Engine\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="EntryPoint.cpp">
+      <Filter>Archivos de origen\EngineTools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

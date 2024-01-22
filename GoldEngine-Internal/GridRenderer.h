@@ -9,7 +9,7 @@ namespace Engine::EngineObjects
 		float spacing;
 
 	public:
-		GridRenderer(String^ name, Engine::Internal::Components::Transform^ trans, int lines, float spacing) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::GridRenderer)
+		GridRenderer(String^ name, Engine::Internal::Components::Transform^ trans, int lines, float spacing) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::GridRenderer)
 		{
 			this->lines = lines;
 			this->spacing = spacing;

@@ -1,0 +1,302 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly GoldEngine-Internal, Version=1.0.*, Culture=Todos los idiomas (todos los países): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed: 
+	hash=None, flags=None
+Assembly System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Net.Http, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a: 
+	hash=None, flags=None
+Assembly System.Numerics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class Engine.Internal.Components.Vector2: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Single x : Public
+    Single y : Public
+  Methods:
+    toNative(Vector2*): PrivateScope, Public, HideBySig
+Class Engine.Internal.Components.Vector3: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Single x : Public
+    Single y : Public
+    Single z : Public
+  Methods:
+    toVector2(): PrivateScope, Public, HideBySig
+    Set(Single*): PrivateScope, Public, HideBySig
+    Set(Single, Single, Single): PrivateScope, Public, HideBySig
+    toNative(Vector3*): PrivateScope, Public, HideBySig
+    toColor(Color*): PrivateScope, Public, HideBySig
+    Lerp(Vector3, Vector3, Single): PrivateScope, Public, Static, HideBySig
+    Add(Vector3, Vector3): PrivateScope, Public, Static, HideBySig
+    Sub(Vector3, Vector3): PrivateScope, Public, Static, HideBySig
+Class Engine.Internal.Components.Quaternion: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Single, Single, Single, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Single x : Public
+    Single y : Public
+    Single z : Public
+    Single w : Public
+  Methods:
+    toEuler(): PrivateScope, Public, HideBySig
+Class Engine.Internal.Components.Transform: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Engine.Internal.Components.Vector3, Engine.Internal.Components.Vector3, Single, Engine.Internal.Components.Vector3, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String name : Public
+    Engine.Internal.Components.Transform parent : Public
+    Engine.Internal.Components.Vector3 position : Public
+    Engine.Internal.Components.Vector3 rotation : Public
+    Single rotationValue : Public
+    Engine.Internal.Components.Vector3 scale : Public
+    Engine.Internal.Components.Vector3 localPosition : Public
+    Engine.Internal.Components.Vector3 localRotation : Public
+  Methods:
+    SetName(String): PrivateScope, Public, HideBySig
+Struct ShaderPack: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct ModelPack: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct CameraPack: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct MaterialPack: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct Texture2DPack: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct NativeDataPack: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Struct DataPacks: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Class DataPack: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.Collections.Generic.Dictionary`2[System.UInt32,System.String] shaders : Public
+    System.Collections.Generic.Dictionary`2[System.UInt32,System.String] models : Public
+    System.Collections.Generic.Dictionary`2[System.UInt32,System.UInt32] materials : Public
+    System.Collections.Generic.Dictionary`2[System.UInt32,System.String] textures2d : Public
+  Methods:
+    AddShader(Shader*, UInt32, SByte*, SByte*): PrivateScope, Public, HideBySig
+    AddModel(Model*, UInt32, SByte*): PrivateScope, Public, HideBySig
+    AddMaterials(Material*, UInt32, UInt32): PrivateScope, Public, HideBySig
+    AddTextures2D(Texture*, UInt32, SByte*): PrivateScope, Public, HideBySig
+    WriteToFile(String, UInt32): PrivateScope, Public, HideBySig
+    ReadFromFile(String, UInt32): PrivateScope, Public, HideBySig
+Struct Engine.Internal.Components.CameraType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+Class Engine.Internal.Components.Object: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(System.String, Engine.Internal.Components.Transform, Engine.Internal.Components.ObjectType): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String name : Public
+    Engine.Internal.Components.ObjectType type : Public
+    Engine.Internal.Components.Transform transform : Public
+  Methods:
+    Init(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    Start(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    Update(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    Draw(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    DrawGizmo(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    GetTransform(): PrivateScope, Public, HideBySig
+    SetParent(Object): PrivateScope, Public, HideBySig
+Class Engine.Drawing.Drawing: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    HL_BeginRendering(): PrivateScope, Public, Static, HideBySig
+    HL_EndRendering(): PrivateScope, Public, Static, HideBySig
+    HL_ClearBackground(UInt32): PrivateScope, Public, Static, HideBySig
+    HL_SetCameraFov(UInt32, Single): PrivateScope, Public, Static, HideBySig
+    HL_SetCameraProjection(UInt32, Int32): PrivateScope, Public, Static, HideBySig
+    HL_LoadShader(UInt32, String, String): PrivateScope, Public, Static, HideBySig
+    HL_LoadModel(UInt32, String): PrivateScope, Public, Static, HideBySig
+    HL_LoadTexture2D(UInt32, String): PrivateScope, Public, Static, HideBySig
+    HL_UnloadEnvironment(): PrivateScope, Public, Static, HideBySig
+    HL_FreeCameras(): PrivateScope, Public, Static, HideBySig
+    HL_FreeModels(): PrivateScope, Public, Static, HideBySig
+    HL_FreeShaders(): PrivateScope, Public, Static, HideBySig
+    HL_FreeAll(): PrivateScope, Public, Static, HideBySig
+    HL_SetMaxLights(Int32): PrivateScope, Public, Static, HideBySig
+    HL_SetMaterialShader(UInt32, UInt32): PrivateScope, Public, Static, HideBySig
+    HL_SetMaterialTexture(UInt32, UInt32): PrivateScope, Public, Static, HideBySig
+    HL_CreateEnvironment(String, Int32, Int32, Int32, Int32): PrivateScope, Public, Static, HideBySig
+    HL_CreateMaterial(UInt32): PrivateScope, Public, Static, HideBySig
+    HL_CreateLight(): PrivateScope, Public, Static, HideBySig
+    HL_CreateCamera(UInt32, Vector3, CameraType): PrivateScope, Public, Static, HideBySig
+    HL_CreateCamera(UInt32, Vector2, CameraType): PrivateScope, Public, Static, HideBySig
+    HL_CreateCamera(UInt32, Vector3, Vector3, Vector3, CameraType): PrivateScope, Public, Static, HideBySig
+    HL_CreateCamera(UInt32, Vector3, Vector3, CameraType): PrivateScope, Public, Static, HideBySig
+    HL_DrawRectangle(Int32, Int32, Int32, Int32, UInt32): PrivateScope, Public, Static, HideBySig
+    HL_DrawGrid(Int32, Single): PrivateScope, Public, Static, HideBySig
+    HL_DrawSkybox(UInt32, CameraType): PrivateScope, Public, Static, HideBySig
+    HL_DrawCube(Vector3, Vector3, UInt32): PrivateScope, Public, Static, HideBySig
+    HL_DrawModel(UInt32, Vector3, Single, UInt32): PrivateScope, Public, Static, HideBySig
+    HL_DrawEllipse(Int32, Int32, Single, Single, UInt32): PrivateScope, Public, Static, HideBySig
+    HL_DrawTexture(UInt32, Int32, Int32, UInt32): PrivateScope, Public, Static, HideBySig
+    HL_BeginShaderMode(UInt32): PrivateScope, Public, Static, HideBySig
+    HL_EndShaderMode(): PrivateScope, Public, Static, HideBySig
+    HL_Begin3DMode(UInt32): PrivateScope, Public, Static, HideBySig
+    HL_Begin2DMode(UInt32): PrivateScope, Public, Static, HideBySig
+    HL_EndMode(Int32): PrivateScope, Public, Static, HideBySig
+    HL_Wait(Double): PrivateScope, Public, Static, HideBySig
+    HL_UpdateCamera(UInt32, CameraType, Int32): PrivateScope, Public, Static, HideBySig
+    HL_SetModelTexture(UInt32, UInt32): PrivateScope, Public, Static, HideBySig
+Struct WinAPI: AutoLayout, AnsiClass, Class, Public, SequentialLayout, Sealed, BeforeFieldInit
+  :System.ValueType
+Class Engine.Window: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    FirstTimeBoot(): PrivateScope, Public, HideBySig
+    Boot(): PrivateScope, Public, HideBySig
+    SetWindowFlags(UInt32): PrivateScope, Public, HideBySig
+    OpenWindow(Int32, Int32, SByte*): PrivateScope, Public, HideBySig
+    OpenWindow(Int32, Int32, String): PrivateScope, Public, HideBySig
+    AddToDraw(Action): PrivateScope, Public, HideBySig
+    ResetPhysics(): PrivateScope, Public, HideBySig
+    SetFPS(Int32): PrivateScope, Public, HideBySig
+    GetFPS(): PrivateScope, Public, HideBySig
+    Loop(): PrivateScope, Public, HideBySig
+    Preload(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    Init(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    Exit(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    Draw(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    Update(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    DrawImGui(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+Class Cast: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Dynamic(Object): PrivateScope, Public, Static, HideBySig
+Class Engine.EngineObjects.Skybox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    UInt32 model : Public
+    UInt32 material : Public
+    UInt32 texture : Public
+  Methods:
+    Init(UInt32, UInt32, UInt32): PrivateScope, Public, Virtual, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+    DrawGizmo(): PrivateScope, Public, Virtual, HideBySig
+    Update(): PrivateScope, Public, Virtual, HideBySig
+    PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig
+    Start(): PrivateScope, Public, Virtual, HideBySig
+    SetupSkyboxImage(): PrivateScope, Public, HideBySig
+    SwapMaterial(UInt32): PrivateScope, Public, HideBySig
+Class Engine.EngineObjects.CubeRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    UInt32 color IsLong : Public
+  Methods:
+    Init(UInt32 IsLong): PrivateScope, Public, Virtual, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+Class Engine.EngineObjects.GridRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform, Int32, Single): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Int32 lines : Public
+    Single spacing : Public
+  Methods:
+    Init(Int32, Single): PrivateScope, Public, Virtual, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+Class Engine.EngineObjects.ModelRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    UInt32 model : Public
+    UInt32 material : Public
+    UInt32 texture : Public
+    UInt32 tint IsLong : Public
+  Methods:
+    SetNativeRenderer(NativeModelRenderer*): PrivateScope, Public, HideBySig
+    Init(UInt32, UInt32, UInt32, UInt32 IsLong): PrivateScope, Public, HideBySig
+    GetNativeRenderer(): PrivateScope, Public, HideBySig
+    Update(): PrivateScope, Public, Virtual, HideBySig
+    PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig
+    Start(): PrivateScope, Public, Virtual, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+    SetColorTint(UInt32): PrivateScope, Public, HideBySig
+Class Engine.EngineObjects.Script: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+Class Engine.Management.MiddleLevel.SceneObject: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(Engine.Internal.Components.ObjectType, Engine.Internal.Components.Object, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Engine.Internal.Components.ObjectType objectType : Public
+    System.String deserializedData : Public
+  Methods:
+    GetReference(): PrivateScope, Public, HideBySig
+    serialize(): PrivateScope, Public, HideBySig
+    deserialize(): PrivateScope, Public, HideBySig
+    GetValue<Engine::EngineObjects::Skybox ^>(): PrivateScope, Public, HideBySig
+    GetValue<Engine::EngineObjects::ModelRenderer ^>(): PrivateScope, Public, HideBySig
+    GetValue<Engine::EngineObjects::CubeRenderer ^>(): PrivateScope, Public, HideBySig
+    GetValue<Engine::EngineObjects::GridRenderer ^>(): PrivateScope, Public, HideBySig
+Class Engine.Managers.SceneManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    AssetExists(String): PrivateScope, Public, Static, HideBySig
+    LoadSceneFromFile(String, Scene): PrivateScope, Public, Static, HideBySig
+    CreateScene(String): PrivateScope, Public, Static, HideBySig
+    SaveSceneToFile(Scene, UInt32): PrivateScope, Public, Static, HideBySig
+    UnloadScene(Scene): PrivateScope, Public, Static, HideBySig
+Class FileManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    WriteToCustomFile(String, String, String[]): PrivateScope, Public, Static, HideBySig
+    ReadCustomFileFormat(String, String): PrivateScope, Public, Static, HideBySig
+Class SceneFormat: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String sceneName : Public
+    System.Collections.Generic.List`1[Engine.Internal.Components.Object] sceneObjects : Public
+Class Engine.EngineObjects.LightManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.Collections.Generic.List`1[Engine.EngineObjects.LightSource] lightSources : Public
+  Methods:
+    AddLight(LightSource, UInt32): PrivateScope, Public, HideBySig
+    RemoveLight(LightSource): PrivateScope, Public, HideBySig
+    getLightCount(): PrivateScope, Public, HideBySig
+    DrawGizmo(): PrivateScope, Public, Virtual, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+    Update(): PrivateScope, Public, Virtual, HideBySig
+Class Engine.EngineObjects.PBRModelRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    UInt32 color_hex : Public
+  Methods:
+    SetTexture(UInt32, PBRTexType): PrivateScope, Public, HideBySig
+    SetVector(Vector2, PBRVec2Type): PrivateScope, Public, HideBySig
+    SetColor(PBRColorType, Color): PrivateScope, Public, HideBySig
+    SetMaterial(Int32): PrivateScope, Public, HideBySig
+    SetupMaterial(UInt32): PrivateScope, Public, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+    Update(): PrivateScope, Public, Virtual, HideBySig
+Class Engine.Scripting.ScriptBehaviour: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Start(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    Update(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    FixedUpdate(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+    OnCollision(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
+Class Engine.Scripting.ScriptSandbox: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.Collections.ArrayList scripts : Public
+  Methods:
+    AddScript(ScriptBehaviour): PrivateScope, Public, HideBySig
+    ExecuteUpdate(): PrivateScope, Public, HideBySig
+    ExecuteFixedUpdate(): PrivateScope, Public, HideBySig

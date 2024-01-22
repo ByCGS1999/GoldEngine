@@ -4,26 +4,44 @@
     "Data/engineassets.gold"
   ],
   "sceneRequirements": "Assets_Level0",
+  "skyColor": 255,
+  "scene_assemblies": [],
   "sceneObjects": [
     {
       "objectType": 1,
-      "deserializedData": "{\"name\":\"workspace\",\"type\":1,\"transform\":{\"name\":\"workspace\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+      "deserializedData": "{\"name\":\"workspace\",\"type\":1,\"transform\":{\"uid\":\"06b17b0e-7f28-446b-88fb-66fa577050f1\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+    },
+    {
+      "objectType": 5,
+      "deserializedData": "{\"color\":4294967295,\"name\":\"Cube\",\"type\":5,\"transform\":{\"uid\":\"6e525115-fa54-4c71-9d97-f5509286a82e\",\"name\":\"\",\"parent\":{\"uid\":\"06b17b0e-7f28-446b-88fb-66fa577050f1\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":-2.85000062,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+    },
+    {
+      "objectType": 4,
+      "deserializedData": "{\"lines\":8,\"spacing\":1.0,\"name\":\"Grid\",\"type\":4,\"transform\":{\"uid\":\"16d9bf63-f915-4867-87b5-c56280c895e4\",\"name\":\"\",\"parent\":{\"uid\":\"d354bb36-26c5-48b8-80dc-5f55c2cc7374\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":1.2,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     },
     {
       "objectType": 1,
-      "deserializedData": "{\"name\":\"editor only\",\"type\":1,\"transform\":{\"name\":\"editor only\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+      "deserializedData": "{\"name\":\"editor only\",\"type\":1,\"transform\":{\"uid\":\"d354bb36-26c5-48b8-80dc-5f55c2cc7374\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     },
     {
       "objectType": 1,
-      "deserializedData": "{\"name\":\"user interface\",\"type\":1,\"transform\":{\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+      "deserializedData": "{\"name\":\"user interface\",\"type\":1,\"transform\":{\"uid\":\"f8feb9cd-6467-4f64-aaaf-65457d428cc6\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     },
     {
-      "objectType": 15,
-      "deserializedData": "{\"lines\":8,\"spacing\":1.0,\"name\":\"Grid\",\"type\":15,\"transform\":{\"name\":\"\",\"parent\":{\"name\":\"editor only\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+      "objectType": 3,
+      "deserializedData": "{\"model\":3,\"material\":0,\"texture\":2,\"tint\":4294967295,\"name\":\"ModelRenderer\",\"type\":3,\"transform\":{\"uid\":\"06f8c9d8-7a06-46d9-a59f-0e70a6f8a370\",\"name\":\"\",\"parent\":{\"uid\":\"06b17b0e-7f28-446b-88fb-66fa577050f1\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     },
     {
-      "objectType": 9,
-      "deserializedData": "{\"color\":4294967295,\"name\":\"Cube\",\"type\":9,\"transform\":{\"name\":\"\",\"parent\":{\"name\":\"workspace\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":2.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+      "objectType": 8,
+      "deserializedData": "{\"model_id\":0,\"shader_id\":0,\"texture_id\":0,\"color_hex\":4294967295,\"name\":\"PBRModelRenderer\",\"type\":8,\"transform\":{\"uid\":\"4a5daf1c-e1b1-4c0b-9ba7-040f9d8ad60f\",\"name\":\"\",\"parent\":{\"uid\":\"06b17b0e-7f28-446b-88fb-66fa577050f1\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.01,\"y\":-1.81999993,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+    },
+    {
+      "objectType": 6,
+      "deserializedData": "{\"lightSources\":[{\"lightColor\":4278190335,\"intensity\":1.0,\"shaderId\":1,\"target\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"lightType\":1,\"name\":\"Point Light\",\"type\":7,\"transform\":{\"uid\":\"8d2070f2-6d57-459e-b984-26628f5bd17e\",\"name\":\"\",\"parent\":{\"uid\":\"059b3bca-348e-44de-91f9-95436ce34dc4\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":-1.62,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}],\"name\":\"Lighting\",\"type\":6,\"transform\":{\"uid\":\"059b3bca-348e-44de-91f9-95436ce34dc4\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
+    },
+    {
+      "objectType": 7,
+      "deserializedData": "{\"lightColor\":4278190335,\"intensity\":1.0,\"shaderId\":1,\"target\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"lightType\":1,\"name\":\"Point Light\",\"type\":7,\"transform\":{\"uid\":\"8d2070f2-6d57-459e-b984-26628f5bd17e\",\"name\":\"\",\"parent\":{\"uid\":\"059b3bca-348e-44de-91f9-95436ce34dc4\",\"name\":\"\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":-1.62,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0}}}"
     }
   ]
 }

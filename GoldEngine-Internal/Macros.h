@@ -8,6 +8,6 @@
 #define DllExport __declspec(dllexport)
 #define DllImport __declspec(dllimport)
 #define Engine_GCObject Engine::Internal::Components::Object^
-
+#define PRODUCTION_BUILD false
 
 const int max_lights = 4;
