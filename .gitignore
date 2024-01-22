@@ -2,3 +2,5 @@
 *.exe
 *.vsidx
 /.vs
+./Solutions/*
+./x64/*
