@@ -49,8 +49,9 @@ namespace Engine::EngineObjects
 			shader_id = shader;
 			texture_id = texture;
 			nativeRenderer = new Native::NativePBRModelRenderer(pbrModel);
-			rPBR::PBRMaterialSetup(&nativeRenderer->material, DataPacks::singleton().GetShader(shader), nullptr);
-			rPBR::PBRLoadTextures(&nativeRenderer->material, rPBR::PBRTexType::PBR_TEXTURE_ALBEDO, DataPacks::singleton().GetTexture2D(texture));
+			SetupMaterial(shader);
+			SetTexture(texture, rPBR::PBR_TEXTURE_ALBEDO);
+			SetColor(rPBR::PBR_COLOR_ALBEDO, GetColor(tint));
 		}
 
 		void SetTexture(unsigned int textureId, rPBR::PBRTexType texType)

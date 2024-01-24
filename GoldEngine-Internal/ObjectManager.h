@@ -1,19 +1,9 @@
 #pragma once
 
-// Engine namespaces
-using namespace Engine;
-using namespace Engine::Drawing;
-using namespace Engine::EngineObjects;
-using namespace Engine::EngineObjects::Native;
-using namespace Engine::Internal;
-using namespace Engine::Internal::Components;
-using namespace Engine::Management;
-using namespace Engine::Management::MiddleLevel;
-using namespace Engine::Managers;
-
 // System namespaces
+using namespace System;
+using namespace System::Collections;
 using namespace System::Collections::Generic;
-
 
 namespace Engine::Scripting
 {
@@ -41,11 +31,11 @@ namespace Engine::Scripting
 
 	private:
 		ArrayList^ sceneObjects;
-		Scene^ loadedScene;
+		Engine::Management::Scene^ loadedScene;
 		Engine::Scripting::SceneTarget target = Engine::Scripting::RenderQueue; // by default hook RenderQueue
 
 	public:
-		ObjectManager(Scene^ loadedScene)
+		ObjectManager(Engine::Management::Scene^ loadedScene)
 		{
 			if (loadedScene != nullptr)
 			{
@@ -116,7 +106,7 @@ namespace Engine::Scripting
 		}
 
 	public:
-		Scene^ GetLoadedScene()
+		Engine::Management::Scene^ GetLoadedScene()
 		{
 			return loadedScene;
 		}
@@ -136,12 +126,22 @@ namespace Engine::Scripting
 			return objects;
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetGameObjectsByType(Type^ type)
+		List<Engine::Internal::Components::Object^>^ GetObjectsOfType(Engine::Internal::Components::ObjectType type)
 		{
-			return gcnew List<Engine::Internal::Components::Object^>();
+			auto objects = gcnew List<Engine::Internal::Components::Object^>();
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->objectType == type)
+				{
+					objects->Add(t->GetReference());
+				}
+			}
+
+			return objects;
 		}
 
-		Engine::Internal::Components::Object^ GetFirstGameObjectByName(System::String^ name)
+		Engine::Internal::Components::Object^ GetFirstObjectOfName(System::String^ name)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
@@ -154,14 +154,32 @@ namespace Engine::Scripting
 			return nullptr;
 		}
 
-		Engine::Internal::Components::Object^ GetFirstGameObjectByType(Type^ name)
+		Engine::Internal::Components::Object^ GetFirstObjectOfType(System::String^ assemblyType)
 		{
-			return nullptr;
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->GetValue<Engine::EngineObjects::Script^>()->assemblyReference == assemblyType)
+				{
+					return t->GetReference();
+				}
+			}
+		}
+
+		Engine::Internal::Components::Object^ GetFirstObjectOfType(Engine::Internal::Components::ObjectType type)
+		{
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->objectType == type)
+				{
+					return t->GetReference();
+				}
+			}
 		}
 
 		Engine::Internal::Components::Object^ GetObjectFromTransform(Engine::Internal::Components::Transform^ transform)
 		{
 			return nullptr;
 		}
+
 	};
 }

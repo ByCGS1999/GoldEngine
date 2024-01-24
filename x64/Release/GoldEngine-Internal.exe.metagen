@@ -81,6 +81,7 @@ Class Engine.Internal.Components.Object: AutoLayout, AnsiClass, Class, Public, B
     Engine.Internal.Components.ObjectType type : Public
     Engine.Internal.Components.Transform transform : Public
   Methods:
+    Init(Object IsConst): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
     Init(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
     Start(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
     PhysicsUpdate(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
@@ -168,6 +169,14 @@ Class SceneFormat: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Fields:
     System.String sceneName : Public
     System.Collections.Generic.List`1[Engine.Internal.Components.Object] sceneObjects : Public
+Class Engine.EngineObjects.BoundingBoxRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    UInt32 color IsLong : Public
+  Methods:
+    Init(UInt32 IsLong): PrivateScope, Public, Virtual, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
 Class Engine.EngineObjects.CubeRenderer: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Engine.Internal.Components.Object
     Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -185,15 +194,32 @@ Class Engine.EngineObjects.GridRenderer: AutoLayout, AnsiClass, Class, Public, B
   Methods:
     Init(Int32, Single): PrivateScope, Public, Virtual, HideBySig
     Draw(): PrivateScope, Public, Virtual, HideBySig
+Class Engine.EngineObjects.LightSource: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform, UInt32, Int32, Engine.Internal.Components.Vector3, Single, UInt32): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    UInt32 lightColor IsLong : Public
+    Single intensity : Public
+    UInt32 shaderId : Public
+    Engine.Internal.Components.Vector3 target : Public
+    rPBR.PBRLightType lightType : Public
+  Methods:
+    Init(UInt32 IsLong, Single, Vector3, Int32, UInt32): PrivateScope, Public, Virtual, HideBySig
+    Update(): PrivateScope, Public, Virtual, HideBySig
+    DrawGizmo(): PrivateScope, Public, Virtual, HideBySig
+    Draw(): PrivateScope, Public, Virtual, HideBySig
+    GetLight(PBRLight*): PrivateScope, Public, HideBySig
+    GetShader(Shader*): PrivateScope, Public, HideBySig
 Class Engine.EngineObjects.LightManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Engine.Internal.Components.Object
     Void .ctor(System.String, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    System.Collections.Generic.List`1[Engine.EngineObjects.LightSource] lightSources : Public
   Methods:
+    singleton(): PrivateScope, Public, Static, HideBySig
+    getLight(Int32): PrivateScope, Public, HideBySig
     AddLight(LightSource, UInt32): PrivateScope, Public, HideBySig
     RemoveLight(LightSource): PrivateScope, Public, HideBySig
     getLightCount(): PrivateScope, Public, HideBySig
+    hasLight(LightSource): PrivateScope, Public, HideBySig
     DrawGizmo(): PrivateScope, Public, Virtual, HideBySig
     Draw(): PrivateScope, Public, Virtual, HideBySig
     Update(): PrivateScope, Public, Virtual, HideBySig
@@ -252,6 +278,11 @@ Class Engine.EngineObjects.Script: AutoLayout, AnsiClass, Class, Public, BeforeF
     Void .ctor(System.String, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.String assemblyReference : Public
+Class Engine.EngineObjects.Daemon: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.Internal.Components.Object
+    Void .ctor(System.String, Engine.Internal.Components.Transform): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    System.String assemblyReference : Public
 Class Engine.Management.MiddleLevel.SceneObject: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(Engine.Internal.Components.ObjectType, Engine.Internal.Components.Object, System.String): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
@@ -268,6 +299,8 @@ Class Engine.Management.MiddleLevel.SceneObject: AutoLayout, AnsiClass, Class, P
     GetValue<Engine::EngineObjects::GridRenderer ^>(): PrivateScope, Public, HideBySig
     GetValue<Engine::EngineObjects::PBRModelRenderer ^>(): PrivateScope, Public, HideBySig
     GetValue<Engine::EngineObjects::LightSource ^>(): PrivateScope, Public, HideBySig
+    GetValue<Engine::EngineObjects::Script ^>(): PrivateScope, Public, HideBySig
+    GetValue<Engine::EngineObjects::BoundingBoxRenderer ^>(): PrivateScope, Public, HideBySig
 Class DataPack: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
@@ -287,14 +320,19 @@ Class FileManager: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Methods:
     WriteToCustomFile(String, String, String[]): PrivateScope, Public, Static, HideBySig
     ReadCustomFileFormat(String, String): PrivateScope, Public, Static, HideBySig
+Class Engine.Preload.PreloadScript: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Preload(): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
 Class Engine.Management.Scene: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
-    Void .ctor(System.String, System.String, System.Collections.Generic.List`1[System.String], System.Collections.Generic.List`1[Engine.Management.MiddleLevel.SceneObject], UInt32, System.Collections.Generic.List`1[System.String]): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+    Void .ctor(System.String, System.String, System.Collections.Generic.List`1[System.String], System.Collections.Generic.List`1[Engine.Management.MiddleLevel.SceneObject], UInt32, System.Collections.Generic.List`1[System.String], System.Collections.Generic.List`1[System.String]): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.String sceneName : Public
     System.Collections.Generic.List`1[System.String] assetPacks : Public
     System.String sceneRequirements : Public
     UInt32 skyColor IsLong : Public
     System.Collections.Generic.List`1[System.String] scene_assemblies : Public
+    System.Collections.Generic.List`1[System.String] preload_scripts : Public
     System.Collections.Generic.List`1[Engine.Management.MiddleLevel.SceneObject] sceneObjects : Public
   Methods:
     LoadScene(): PrivateScope, Public, HideBySig
@@ -336,10 +374,16 @@ Class Engine.Scripting.ObjectManager: AutoLayout, AnsiClass, Class, Public, Befo
     SetTarget(Int32): PrivateScope, Public, HideBySig
     GetLoadedScene(): PrivateScope, Public, HideBySig
     GetGameObjectsByName(String): PrivateScope, Public, HideBySig
-    GetGameObjectsByType(Type): PrivateScope, Public, HideBySig
-    GetFirstGameObjectByName(String): PrivateScope, Public, HideBySig
-    GetFirstGameObjectByType(Type): PrivateScope, Public, HideBySig
+    GetObjectsOfType(ObjectType): PrivateScope, Public, HideBySig
+    GetFirstObjectOfName(String): PrivateScope, Public, HideBySig
+    GetFirstObjectOfType(ObjectType): PrivateScope, Public, HideBySig
+    GetFirstObjectOfType(String): PrivateScope, Public, HideBySig
     GetObjectFromTransform(Transform): PrivateScope, Public, HideBySig
+Class Engine.EngineObjects.Daemons.LightDaemon: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+  :Engine.EngineObjects.Daemon
+    Void .ctor(System.String, Engine.Internal.Components.Transform, Engine.EngineObjects.LightManager): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Update(): PrivateScope, Public, Virtual, HideBySig
 Struct Engine.Internal.Components.ObjectType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
   :System.Enum
   Fields:
@@ -354,6 +398,8 @@ Struct Engine.Internal.Components.ObjectType: AutoLayout, AnsiClass, Class, Publ
     Engine.Internal.Components.ObjectType LightSource = 7 : Public, Static, Literal, HasDefault
     Engine.Internal.Components.ObjectType PBR_ModelRenderer = 8 : Public, Static, Literal, HasDefault
     Engine.Internal.Components.ObjectType Script = 9 : Public, Static, Literal, HasDefault
+    Engine.Internal.Components.ObjectType BoundingBoxRenderer = 10 : Public, Static, Literal, HasDefault
+    Engine.Internal.Components.ObjectType Daemon = 11 : Public, Static, Literal, HasDefault
 Struct Engine.Internal.Components.CameraType: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
   :System.Enum
   Fields:

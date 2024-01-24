@@ -22,7 +22,8 @@
 
 // INCLUDE ENGINE CLASSES \\
 
-#include "SceneFormat.h";
+#include "SceneFormat.h"
+#include "BoundingBoxRenderer.h"
 #include "CubeRenderer.h"
 #include "GridRenderer.h"
 #include "LightManager.h"
@@ -40,11 +41,25 @@
 #include "ObjectManager.h"
 #include "AsmLoader.h"
 
-using namespace Engine::Drawing;
-using namespace Engine::Management;
-using namespace Engine::Managers;
-using namespace Engine::Internal;
+// Daemons (Daemons are tasks that are ran mandatory by the engine, these cannot be displayed by the hierarchy)
+
+#include "Daemon.h"
+#include "LightDm.h"
+
+// Preload queue & scripts, can be used for loading/unloading certain data or doing operations with shaders, materials, models whatever.
+
+#include "PreloadScript.h"
+
+
+using namespace Engine;
+using namespace Engine::EngineObjects;
 using namespace Engine::EngineObjects::Native;
+using namespace Engine::Internal;
+using namespace Engine::Internal::Components;
+using namespace Engine::Management;
+using namespace Engine::Management::MiddleLevel;
+using namespace Engine::Managers;
+using namespace Engine::Scripting;
 
 unsigned int passwd = 0;
 
@@ -92,20 +107,33 @@ ref class EditorWindow : Engine::Window
 
 			if (_reference != reference)
 			{
-				if (_type != ObjectType::Datamodel || _type != ObjectType::LightManager)
+				if (_reference->transform->parent != nullptr)
 				{
-					if (_reference->transform->parent != nullptr)
+					if (_reference->transform->parent->uid == reference->GetTransform()->uid)
 					{
-						if (_reference->transform->parent->uid == reference->GetTransform()->uid)
+						String^ refName = "";
+						for (int x = 0; x < depth; x++)
 						{
-							String^ refName = "";
-							for (int x = 0; x < depth; x++)
+							refName += "\t";
+						}
+
+						refName += _reference->name;
+
+						if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager)
+						{
+							if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)")))
 							{
-								refName += "\t";
+								if (reparentLock)
+									reparentObject = _reference;
+								else
+								{
+									readonlyLock = true;
+									selectedObject = _reference;
+								}
 							}
-
-							refName += _reference->name;
-
+						}
+						else
+						{
 							if (ImGui::Selectable(CastToNative(refName)))
 							{
 								if (reparentLock)
@@ -116,9 +144,8 @@ ref class EditorWindow : Engine::Window
 									selectedObject = _reference;
 								}
 							}
-
-							this->DrawHierarchyInherits(scene, _reference, depth + 1);
 						}
+						DrawHierarchyInherits(scene, _reference, depth + 1);
 					}
 				}
 			}
@@ -143,7 +170,7 @@ public:
 
 		assemblies->Add(newAssembly);
 
-		for each (EngineAssembly^ assembly in assemblies)
+		for each (EngineAssembly ^ assembly in assemblies)
 		{
 			assembly->ListAssemblyTypes();
 		}
@@ -227,87 +254,30 @@ public:
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Script Assemblies", true))
+			if (ImGui::BeginMenu("Scripts", true))
 			{
+				ImGui::SeparatorText("Scene");
+				if (ImGui::MenuItem("Scene Assemblies"))
+				{
 
+				}
+				if (ImGui::MenuItem("Preload Assemblies"))
+				{
+
+				}
+				ImGui::SeparatorText("Shaders");
 				ImGui::EndMenu();
 			}
 
 			ImGui::EndMainMenuBar();
 		}
 
-		if (ImGui::Begin("Hierarchy", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		if (ImGui::Begin("Hierarchy", &isOpen))
 		{
 			ImGui::Text("Scene Objects: %d", scene->GetRenderQueue()->Count);
 			ImGui::Separator();
 
-			/*
-			for each (auto obj in scene->GetRenderQueue())
-			{
-				Engine::Management::MiddleLevel::SceneObject^ object = (Engine::Management::MiddleLevel::SceneObject^)obj;
-				auto objectType = object->objectType;
-				auto reference = object->GetReference();
-
-				if (reference != nullptr)
-				{
-					if (objectType == Engine::Internal::Components::ObjectType::Datamodel)
-					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (READONLY)")))
-						{
-							if (reparentLock)
-								reparentObject = reference;
-							else
-							{
-								readonlyLock = true;
-								selectedObject = reference;
-							}
-						}
-					}
-					else if (reference->GetTransform()->parent == nullptr)
-					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (UNPARENTED)")))
-						{
-							readonlyLock = false;
-							selectedObject = reference;
-						}
-					}
-					else
-					{
-						for each (auto child_obj in scene->GetRenderQueue())
-						{
-							Engine::Management::MiddleLevel::SceneObject^ tmp = (Engine::Management::MiddleLevel::SceneObject^)child_obj;
-							auto _objectType = tmp->objectType;
-							auto _reference = tmp->GetReference();
-
-							if (_objectType != Engine::Internal::Components::ObjectType::Datamodel)
-							{
-								if (_reference != reference)
-								{
-									if (_reference->GetTransform()->GetParent() != nullptr)
-									{
-										if (_reference->GetTransform()->GetParent()->name == reference->transform->name)
-										{
-											if (ImGui::Selectable(CastToNative("\t" + _reference->name)))
-											{
-												if (reparentLock)
-													reparentObject = _reference;
-												else
-												{
-													readonlyLock = false;
-													selectedObject = _reference;
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			*/
-
-			for each (SceneObject^ obj in scene->GetRenderQueue())
+			for each (SceneObject ^ obj in scene->GetRenderQueue())
 			{
 				auto reference = obj->GetReference();
 				auto type = obj->objectType;
@@ -316,7 +286,7 @@ public:
 				{
 					if (type == ObjectType::Datamodel || type == ObjectType::LightManager)
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (READONLY)")))
+						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)")))
 						{
 							if (reparentLock)
 								reparentObject = reference;
@@ -324,37 +294,6 @@ public:
 							{
 								readonlyLock = true;
 								selectedObject = reference;
-							}
-						}
-
-						for each (SceneObject ^ _obj in scene->GetRenderQueue())
-						{
-							auto _reference = _obj->GetReference();
-							auto _type = _obj->objectType;
-
-							if (_reference != reference)
-							{
-								if (_type != ObjectType::Datamodel || _type != ObjectType::LightManager)
-								{
-									if (_reference->transform->parent != nullptr)
-									{
-										if (_reference->transform->parent->uid == reference->GetTransform()->uid)
-										{
-											if (ImGui::Selectable(CastToNative("\t" + _reference->name)))
-											{
-												if (reparentLock)
-													reparentObject = _reference;
-												else
-												{
-													readonlyLock = false;
-													selectedObject = _reference;
-												}
-											}
-
-											DrawHierarchyInherits(scene, _reference, 2);
-										}
-									}
-								}
 							}
 						}
 					}
@@ -372,13 +311,15 @@ public:
 						}
 					}
 				}
+
+				DrawHierarchyInherits(scene, reference, 1);
 			}
 
 
 			ImGui::End();
 		}
 
-		if (ImGui::Begin("Properties", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		if (ImGui::Begin("Properties", &isOpen))
 		{
 			if (selectedObject == nullptr)
 			{
@@ -456,12 +397,15 @@ public:
 					if (!readonlyLock)
 						reparentLock = true;
 				}
+
+				ImGui::SeparatorText("Object Info");
+				ImGui::Text(CastStringToNative(selectedObject->type.ToString()).c_str());
 			}
 
 			ImGui::End();
 		}
 
-		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_DockNodeHost | ImGuiWindowFlags_MenuBar))
+		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_MenuBar))
 		{
 			if (ImGui::BeginMenuBar())
 			{
@@ -488,7 +432,7 @@ public:
 			ImGui::ShowStyleEditor(&ImGui::GetStyle());
 		}
 
-		if (ImGui::Begin("Game Viewport", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		if (ImGui::Begin("Game Viewport", &isOpen))
 		{
 			bool showing = showCursor;
 
@@ -647,6 +591,30 @@ public:
 					);
 				}
 
+				if (ImGui::Button("BoundingBox Renderer"))
+				{
+					auto skyBox = gcnew Engine::EngineObjects::BoundingBoxRenderer(
+						"BoundingBox",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							0.0f,
+							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							nullptr
+						),
+						0xFFFFFFFF
+					);
+					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
+					scene->AddObjectToScene(skyBox);
+					scene->GetRenderQueue()->Add(
+						gcnew Engine::Management::MiddleLevel::SceneObject(
+							skyBox->type,
+							skyBox,
+							""
+						)
+					);
+				}
+
 				if (ImGui::Button("Grid Renderer"))
 				{
 					auto skyBox = gcnew Engine::EngineObjects::GridRenderer(
@@ -694,7 +662,7 @@ public:
 			ImGui::End();
 		}
 
-		if (ImGui::Begin("Console", &isOpen, ImGuiWindowFlags_DockNodeHost))
+		if (ImGui::Begin("Console", &isOpen))
 		{
 
 			ImGui::End();
@@ -749,7 +717,7 @@ public:
 
 			if (ImGui::InputTextMultiline("", data, size, { ImGui::GetWindowSize().x - 20, ImGui::GetWindowSize().y - 60 }))
 			{
-				System::String ^str = gcnew System::String(data);
+				System::String^ str = gcnew System::String(data);
 
 				System::IO::File::WriteAllText("Data/" + scene->sceneRequirements + ".asset", str);
 			}
@@ -922,10 +890,19 @@ public:
 
 		scene = SceneManager::LoadSceneFromFile("Level0", scene);
 
-		if (!scene->ExistsDatamodelMember("Lighting"))
+		scene->Preload();
+
+		Shader lightShader = dataPack.GetShader(1);
+
+		lightShader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(lightShader, "viewPos");
+
+		dataPack.SetShader(1, lightShader);
+
+		scene->GetDatamodelMember("workspace");
+
+		if (!scene->ExistsDatamodelMember("lighting"))
 		{
-			TraceLog(LOG_INFO, "Creating lightdm");
-			lightManager = gcnew LightManager("Lighting",
+			lightManager = gcnew LightManager("lighting",
 				gcnew Engine::Internal::Components::Transform(
 					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
 					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
@@ -940,12 +917,27 @@ public:
 		}
 		else
 		{
-			lightManager = (LightManager^)scene->GetDatamodelMember("Lighting");
+			lightManager = (LightManager^)scene->GetDatamodelMember("lighting");
 		}
 
-		scene->GetDatamodelMember("workspace");
+
 		scene->GetDatamodelMember("editor only");
-		scene->GetDatamodelMember("user interface");
+		scene->GetDatamodelMember("gui");
+		auto daemonParent = scene->GetDatamodelMember("daemons");
+
+		auto lightdm = gcnew Engine::EngineObjects::Daemons::LightDaemon("lightdm",
+			gcnew Engine::Internal::Components::Transform(
+				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+				0.0f,
+				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+				nullptr
+			),
+			lightManager
+		);
+		lightdm->SetParent(daemonParent);
+		scene->PushToRenderQueue(lightdm);
+		scene->AddObjectToScene(lightdm);
 
 		/*
 		auto workSpace = gcnew Components::Object(
@@ -981,10 +973,10 @@ public:
 		skyBox->Init(skyBox->materialId, skyBox->texPath);
 		skyBox->SetupSkyboxImage(0);
 		*/
-		int numLights = 1;
-		SetShaderValue(dataPack.GetShader(1), GetShaderLocation(dataPack.GetShader(1), "numOfLights"), &numLights, SHADER_UNIFORM_INT);
+		//int numLights = 1;
+		//SetShaderValue(dataPack.GetShader(1), GetShaderLocation(dataPack.GetShader(1), "numOfLights"), &numLights, SHADER_UNIFORM_INT);
 		rPBR::PBRSetAmbient(dataPack.GetShader(1), { 0, 0, 0, 255 }, 0.0f);
-		lights[0] = rPBR::PBRLightCreate(rPBR::LIGHT_POINT, { -5,5,0 }, { .5f,-.5f,0 }, { 255,255,255, 255 }, 2.5f, dataPack.GetShader(1));
+		//lights[0] = rPBR::PBRLightCreate(rPBR::LIGHT_POINT, { -5,5,0 }, { .5f,-.5f,0 }, { 255,255,255, 255 }, 2.5f, dataPack.GetShader(1));
 
 		//FileManager::ReadCustomFileFormat("Data/assets1.gold", passwd);
 
@@ -1041,9 +1033,6 @@ public:
 		m.maps = &matMap;
 
 		Shader s = dataPack.GetShader(0);
-		Shader lightShader = dataPack.GetShader(1);
-
-		lightShader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(lightShader, "viewPos");
 
 		t = dataPack.GetTexture2D(0);
 
@@ -1070,11 +1059,16 @@ public:
 			SetFPS(-1);
 		}
 
-
 		Shader lightShader = dataPack.GetShader(1);
 		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };
 		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
-		rPBR::PBRLightUpdate(lightShader, lights[0]);
+
+		auto light = lightManager->getLight(0);
+		if (light != nullptr)
+		{
+			rPBR::PBRLightUpdate(lightShader, light->GetLight());
+		}
+		//lightManager->Update();
 
 		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->sceneObjects)
 		{

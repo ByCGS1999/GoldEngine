@@ -1,5 +1,4 @@
 #pragma once
-
 #include <list>
 
 namespace Engine::EngineObjects
@@ -30,7 +29,7 @@ namespace Engine::EngineObjects
 		};
 	}
 
-	ref class LightSource : public Engine::Internal::Components::Object
+	public ref class LightSource : public Engine::Internal::Components::Object
 	{
 	private:
 		Native::NativeLightSource* nativeLightSource;
@@ -42,23 +41,33 @@ namespace Engine::EngineObjects
 		Engine::Internal::Components::Vector3^ target;
 		rPBR::PBRLightType lightType;
 
-		LightSource(String^ name, Engine::Internal::Components::Transform^ t, unsigned long lightColor, rPBR::PBRLightType lightType, Engine::Internal::Components::Vector3^ target, float intensity, unsigned int shader)  : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::ObjectType::LightSource)
+		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned long lightColor, int lightType, Engine::Internal::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource)
 		{
 			nativeLightSource = new Native::NativeLightSource();
-			this->lightType = lightType;
+			this->lightType = (rPBR::PBRLightType)lightType;
 			this->lightColor = lightColor;
 			this->target = target;
 			this->shaderId = shader;
 			this->intensity = intensity;
 			nativeLightSource->SetShader(DataPacks::singleton().GetShader(shader));
-			nativeLightSource->SetLight(rPBR::PBRLightCreate(lightType, GetTransform()->position->toNative(), target->toNative(), GetColor(lightColor), intensity, DataPacks::singleton().GetShader(shader)));
+			auto light = rPBR::PBRLightCreate(
+				this->lightType,
+				GetTransform()->position->toNative(),
+				this->target->toNative(),
+				GetColor(this->lightColor),
+				this->intensity,
+				DataPacks::singleton().GetShader(this->shaderId)
+			);
+			nativeLightSource->SetLight(light);
 			nativeLightSource->SetLightEnabled(true);
+
 		}
 
-		void Init(unsigned long lightColor, float intensity, Engine::Internal::Components::Vector3^ target, rPBR::PBRLightType lightType, unsigned int shaderId) override
+		void Init(unsigned long lightColor, float intensity, Engine::Internal::Components::Vector3^ target, int lightType, unsigned int shaderId) override
 		{
 			nativeLightSource = new Native::NativeLightSource();
-			this->lightType = lightType;
+			this->lightColor = lightColor;
+			this->lightType = (rPBR::PBRLightType)lightType;
 			this->target = target;
 			this->intensity = intensity;
 			nativeLightSource->SetShader(DataPacks::singleton().GetShader(shaderId));
@@ -68,7 +77,7 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
-			nativeLightSource->UpdateLighting();
+
 		}
 
 		void DrawGizmo() override
@@ -121,39 +130,67 @@ namespace Engine::EngineObjects
 
 	public ref class LightManager : public Engine::Internal::Components::Object
 	{
-	public:
-		System::Collections::Generic::List<LightSource^>^ lightSources;
+	private:
+		System::Collections::Generic::List<Engine::EngineObjects::LightSource^>^ lightSources;
+		static LightManager^ lightdm;
 
 	public:
 		LightManager(String^ name, Engine::Internal::Components::Transform^ t) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::ObjectType::LightManager)
 		{
-			lightSources = gcnew System::Collections::Generic::List<LightSource^>();
+			lightdm = this;
+			lightSources = gcnew System::Collections::Generic::List<Engine::EngineObjects::LightSource^>();
 		}
 
 	public:
-		int AddLight(LightSource^ light, unsigned int shaderId)
+		static LightManager^ singleton()
 		{
-			lightSources->Add(light);
-			
-			Shader s = DataPacks::singleton().GetShader(shaderId);
-
-			int numOfLightsLoc = GetShaderLocation(s, "numOfLights");
-
-			std::vector<rPBR::PBRLight> _light;
-
-			for (int x = 0; x < lightSources->Count; x++)
-			{
-				_light.push_back(lightSources[x]->GetLight());
-			}
-
-			TraceLog(LOG_INFO, "Lights %d", _light.size());
-
-			SetShaderValue(s, numOfLightsLoc, &rPBR::lightsCount, SHADER_UNIFORM_INT);
-
-			return lightSources->IndexOf(light);
+			return lightdm;
 		}
 
-		void RemoveLight(LightSource^ light)
+	public:
+		Engine::EngineObjects::LightSource^ getLight(int index)
+		{
+			if (lightSources->Count > index)
+			{
+				return lightSources[index];
+			}
+			else
+			{
+				return nullptr;
+			}
+		}
+
+	public:
+		int AddLight(Engine::EngineObjects::LightSource^ light, unsigned int shaderId)
+		{
+			if (!lightSources->Contains(light))
+			{
+				lightSources->Add(light);
+
+				Shader s = DataPacks::singleton().GetShader(shaderId);
+
+				int numOfLightsLoc = GetShaderLocation(s, "numOfLights");
+
+				std::vector<rPBR::PBRLight> _light;
+
+				for (int x = 0; x < lightSources->Count; x++)
+				{
+					_light.push_back(lightSources[x]->GetLight());
+				}
+
+				TraceLog(LOG_INFO, "Lights %d", _light.size());
+
+				SetShaderValue(s, numOfLightsLoc, &rPBR::lightsCount, SHADER_UNIFORM_INT);
+
+				return lightSources->IndexOf(light);
+			}
+			else
+			{
+				return -1;
+			}
+		}
+
+		void RemoveLight(Engine::EngineObjects::LightSource^ light)
 		{
 			lightSources->Remove(light);
 		}
@@ -164,11 +201,14 @@ namespace Engine::EngineObjects
 			return &count;
 		}
 
+		bool hasLight(LightSource^ source)
+		{
+			return lightSources->Contains(source);
+		}
+
 		void DrawGizmo() override
 		{
-			auto t = GetTransform();
 
-			DrawCubeWires(t->position->toNative(), 1, 1, 1, RED);
 		}
 
 		void Draw() override
@@ -178,7 +218,10 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
-
+			for each (auto light in lightSources)
+			{
+				rPBR::PBRLightUpdate(light->GetShader(), light->GetLight());
+			}
 		}
 	};
 }

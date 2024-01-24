@@ -13,7 +13,7 @@
     "0": 0
   },
   "textures2d": {
-    "0": "Data/tmp/Models/castle_diffuse.png",
+    "0": "Data/Models/castle_diffuse.png",
     "1": "Data/tmp/Engine/Skybox/Daylight.png",
     "2": "Data/Game/Models/Spaceship.png"
   }

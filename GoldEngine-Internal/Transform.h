@@ -18,7 +18,9 @@ namespace Engine::Internal::Components
 		LightManager = 6,
 		LightSource = 7,
 		PBR_ModelRenderer = 8,
-		Script = 9
+		Script = 9,
+		BoundingBoxRenderer = 10,
+		Daemon = 11
 	};
 
 	public ref class Vector2
@@ -234,6 +236,7 @@ namespace Engine::Internal::Components
 			this->type = t;
 		}
 		virtual void Init() {}
+		virtual void Init(const Object^ object) {}
 		virtual void Start() {}
 		virtual void PhysicsUpdate() {}
 		virtual void Update() {}

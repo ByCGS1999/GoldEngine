@@ -202,7 +202,7 @@ using namespace rPBR;
     static int lightsCount = 0;    // Current amount of created lights
 
     // Create a light and get shader locations
-    PBRLight PBRLightCreate(int type, Vector3 position, Vector3 target, Color color, float intensity, Shader shader)
+    PBRLight PBRLightCreate(int type, ::Vector3 position, ::Vector3 target, Color color, float intensity, Shader shader)
     {
         PBRLight light = { 0 };
 

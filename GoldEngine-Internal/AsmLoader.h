@@ -46,6 +46,10 @@ public:
 						types->Add(t);
 
 					}
+					else if (t->Namespace->Contains("Preload"))
+					{
+						types->Add(t);
+					}
 				}
 			}
 		}

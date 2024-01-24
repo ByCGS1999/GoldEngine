@@ -196,6 +196,24 @@ namespace Engine::Managers
 						gridRenderer->Init(gridRenderer->lines, gridRenderer->spacing);
 					}
 					break;
+
+
+					case Engine::Internal::Components::ObjectType::BoundingBoxRenderer:
+					{
+						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(
+							objectType,
+							nullptr,
+							deserializedData
+						);
+
+						renderQueue->Add(
+							sceneObject
+						);
+
+						auto boundingBox = sceneObject->GetValue<Engine::EngineObjects::BoundingBoxRenderer^>();
+						boundingBox->Init(boundingBox->color);
+					}
+					break;
 					}
 				}
 			}
@@ -203,7 +221,7 @@ namespace Engine::Managers
 			{
 				auto assetPacks = gcnew System::Collections::Generic::List<String^>();
 				assetPacks->Add("Data/engineassets.gold");
-				loadedScene = gcnew Engine::Management::Scene(fN, "Assets_" + fN, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>());
+				loadedScene = gcnew Engine::Management::Scene(fN, "Assets_" + fN, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>(), gcnew System::Collections::Generic::List<System::String^>());
 			}
 			if (loadedScene == nullptr)
 				TraceLog(LOG_FATAL, "FAILED OPENING SCENE");
@@ -217,9 +235,9 @@ namespace Engine::Managers
 			assetPacks->Add("Data/engineassets.gold");
 
 			if (sceneName->Equals(""))
-				return gcnew Engine::Management::Scene("Level0", "Assets_Level0", assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>());
+				return gcnew Engine::Management::Scene("Level0", "Assets_Level0", assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>(), gcnew System::Collections::Generic::List<System::String^>());
 			else
-				return gcnew Engine::Management::Scene(sceneName, "Assets_" + sceneName, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>());
+				return gcnew Engine::Management::Scene(sceneName, "Assets_" + sceneName, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>(), gcnew System::Collections::Generic::List<System::String^>());
 		}
 		
 		static void SaveSceneToFile(Engine::Management::Scene^ scene, unsigned int password)

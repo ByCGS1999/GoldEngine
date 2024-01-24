@@ -107,6 +107,17 @@ namespace Engine::Management::MiddleLevel
 				break;
 			}
 
+			case Engine::Internal::Components::ObjectType::BoundingBoxRenderer:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::BoundingBoxRenderer^>(deserializedData);
+				break;
+			}
+
+			case Engine::Internal::Components::ObjectType::Daemon:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Daemon^>(deserializedData);
+				break;
+			}
 			}
 		}
 		void deserialize()
@@ -172,6 +183,20 @@ namespace Engine::Management::MiddleLevel
 			case Engine::Internal::Components::ObjectType::LightSource:
 			{
 				Engine::EngineObjects::LightSource^ pbrModelRenderer = (Engine::EngineObjects::LightSource^)reference;
+				deserializedData = ToJSON(pbrModelRenderer);
+				break;
+			}
+
+			case Engine::Internal::Components::ObjectType::BoundingBoxRenderer:
+			{
+				Engine::EngineObjects::BoundingBoxRenderer^ pbrModelRenderer = (Engine::EngineObjects::BoundingBoxRenderer^)reference;
+				deserializedData = ToJSON(pbrModelRenderer);
+				break;
+			}
+
+			case Engine::Internal::Components::ObjectType::Daemon:
+			{
+				Engine::EngineObjects::Daemon^ pbrModelRenderer = (Engine::EngineObjects::Daemon^)reference;
 				deserializedData = ToJSON(pbrModelRenderer);
 				break;
 			}

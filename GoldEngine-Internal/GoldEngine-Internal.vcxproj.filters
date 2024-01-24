@@ -96,9 +96,6 @@
     <Filter Include="Archivos de origen\Engine\Windows">
       <UniqueIdentifier>{eaefb023-df10-41a1-a6b8-7316371dfeaf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\LightManager">
-      <UniqueIdentifier>{d66d5953-30f7-41ef-a9b8-2c3af8bab6d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Engine\EngineObjects\PBR">
       <UniqueIdentifier>{bf3d51b6-a8c1-4740-9bb4-9464f1fa50c0}</UniqueIdentifier>
     </Filter>
@@ -147,6 +144,15 @@
     </Filter>
     <Filter Include="Archivos de origen\EngineTools">
       <UniqueIdentifier>{6d13b602-baec-4651-bcfb-eea23e4403db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Lighting">
+      <UniqueIdentifier>{d66d5953-30f7-41ef-a9b8-2c3af8bab6d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\BasicGeometry\Bounding">
+      <UniqueIdentifier>{543f12c8-fedf-4946-9e1f-3190a4b5974c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Preload">
+      <UniqueIdentifier>{01657b83-b3e8-46b8-b76f-01e55e991879}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -268,7 +274,7 @@
       <Filter>Archivos de origen\Engine\Windows</Filter>
     </ClInclude>
     <ClInclude Include="LightManager.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\LightManager</Filter>
+      <Filter>Archivos de origen\Engine\EngineObjects\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="PBRModelRenderer.h">
       <Filter>Archivos de origen\Engine\EngineObjects\PBR\PBRModelRenderer</Filter>
@@ -320,6 +326,18 @@
     </ClInclude>
     <ClInclude Include="GlIncludes.h">
       <Filter>Archivos de origen\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBoxRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry\Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="LightDm.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Daemon.h">
+      <Filter>Archivos de origen\Engine\EngineObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="PreloadScript.h">
+      <Filter>Archivos de origen\Engine\Preload</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,8 @@
 #include "DataPack.h"
 #include "FileManager.h"
 #include "SceneObject.h"
+#include "AsmLoader.h"
+#include "PreloadScript.h"
 
 
 namespace Engine::Management
@@ -12,6 +14,7 @@ namespace Engine::Management
 		// Privates
 	private:
 		System::Collections::ArrayList^ drawQueue; // Unlike Java, in C#/C++ CLR arraylists don't need to be from an specified type (This is what we're using for game rendering & updating.)
+		System::Collections::Generic::List<EngineAssembly^>^ assemblies; // loaded assemblies -> passcall from scene_assemblies -> get assemblies for preloading -> tbh idk what more.
 
 		// Properties
 	public:
@@ -20,16 +23,18 @@ namespace Engine::Management
 		System::String^ sceneRequirements;
 		unsigned long skyColor;
 		System::Collections::Generic::List<System::String^>^ scene_assemblies;
+		System::Collections::Generic::List<System::String^>^ preload_scripts;
 		System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneObjects; // Managed storage + object parsing.
 
 		// Constructors
 	public:
-		Scene(String^ name, String^ sR, System::Collections::Generic::List<String^>^ assetP, System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneO, unsigned long skyTint, System::Collections::Generic::List<System::String^>^ assemblies)
+		Scene(String^ name, String^ sR, System::Collections::Generic::List<String^>^ assetP, System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneO, unsigned long skyTint, System::Collections::Generic::List<System::String^>^ assemblies, System::Collections::Generic::List<String^>^ preloadCode)
 		{
 			this->sceneName = name;
 			this->assetPacks = assetP;
 			this->sceneRequirements = sR;
 			this->sceneObjects = sceneO;
+			this->preload_scripts = preloadCode;
 			this->skyColor = skyTint;
 			scene_assemblies = assemblies;
 			drawQueue = gcnew System::Collections::ArrayList();
@@ -193,7 +198,24 @@ namespace Engine::Management
 		}
 		virtual void Preload()
 		{
+			for each (auto t in scene_assemblies)
+			{
+				auto newAssembly = gcnew EngineAssembly();
+				newAssembly->LoadAssemblyFromFile(t);
+				assemblies->Add(newAssembly);
+			}
 
+			for each (auto p in preload_scripts)
+			{
+				for each (auto a in assemblies)
+				{
+					if (a->hasType(p))
+					{
+						auto newInst = a->Create<Engine::Preload::PreloadScript^>(p);
+						newInst->Preload();
+					}
+				}
+			}
 		}
 	};
 }
