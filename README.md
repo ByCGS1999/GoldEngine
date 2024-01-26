@@ -30,6 +30,6 @@ Supported Platforms:</br>
     MacOS [] ^ same</br>
     Android [] - if you want to make a game for android with this you must be drunk or smth tbh.</br>
 
-About Projects:
-    GoldEngine-Internal -> Entire game engine, from window management to low level asset management.
-    GoldEngine-Editor -> Example of scripts using the Scripting API. (Docs might come soon, idk.)
+About Projects:</br>
+    GoldEngine-Internal -> Entire game engine, from window management to low level asset management.</br>
+    GoldEngine-Editor -> Example of scripts using the Scripting API. (Docs might come soon, idk.)</br>
