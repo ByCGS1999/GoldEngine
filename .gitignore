@@ -4,3 +4,11 @@
 /.vs
 ./Solutions/*
 ./x64/*
+./x64/
+./Solutions/
+x64
+Solutions
+x64/
+Solutions/
+**/Solutions
+**/x64

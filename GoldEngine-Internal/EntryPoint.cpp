@@ -836,7 +836,6 @@ public:
 
 			ImGui::EndPopup();
 		}
-
 	}
 
 	void Exit() override
