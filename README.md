@@ -29,3 +29,7 @@ Supported Platforms:</br>
     Linux [] - not tested, probably would work fine with wine64.</br>
     MacOS [] ^ same</br>
     Android [] - if you want to make a game for android with this you must be drunk or smth tbh.</br>
+
+About Projects:
+    GoldEngine-Internal -> Entire game engine, from window management to low level asset management.
+    GoldEngine-Editor -> Example of scripts using the Scripting API. (Docs might come soon, idk.)
