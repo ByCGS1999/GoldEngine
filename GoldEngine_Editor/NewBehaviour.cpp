@@ -24,13 +24,13 @@ namespace UserScripts
 	public:
 		void Update() override
 		{
-			/*
-			
-			Engine::Internal::Components::Object^ object = ObjectManager::singleton()->GetFirstGameObjectByName("Cube");
+			Engine::Internal::Components::Object^ object = ObjectManager::singleton()->GetFirstObjectOfName("Cube"); // Obtain the first object with the name 'Cube'
 
 			if (object != nullptr)
 			{
 				auto trans = object->GetTransform();
+
+				// Translate its position depending on the keypress (W - UP) - (S - DOWN);
 
 				if (InputManager::IsKeyDown(KEY_W))
 				{
@@ -41,8 +41,6 @@ namespace UserScripts
 					trans->position->Sub(Vector3::Lerp(transform->position, gcnew Vector3(0, increment, 0), smoothness));
 				}
 			}
-			
-			*/
 		}
 
 		void Draw() override
