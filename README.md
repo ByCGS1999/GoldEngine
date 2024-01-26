@@ -2,30 +2,30 @@ Gold Engine, C++ MSCLR Game Engine.
 
 Gold Engine is a Game Engine written with C++ under the MSCLR/CLI.
 
-Features:
+Features:</br>
   Editor [x]</br>
-  Playback Engine []
-  Lighting [x]
-  PBR [x]
-  Scripting API [x]
-  Assembly Management [x]
-  Physics Engine []
-  Asset Management & Packing [x]
-  Scene Management [x]
-  Embedded default objects [x]
-  Object Based System [x]
-  Entity Component System [] - NOR PLANNED
-  64 Bit Support [x]
-  32 Bit Support []
+  Playback Engine []</br>
+  Lighting [x]</br>
+  PBR [x]</br>
+  Scripting API [x]</br>
+  Assembly Management [x]</br>
+  Physics Engine []</br>
+  Asset Management & Packing [x]</br>
+  Scene Management [x]</br>
+  Embedded default objects [x]</br>
+  Object Based System [x]</br>
+  Entity Component System [] - NOR PLANNED</br>
+  64 Bit Support [x]</br>
+  32 Bit Support []</br>
 
-Requirements:
-  C++ MSCLR.
-  VS2022 or higher. (2019 might work aswell)
-  .NET Framework 4.8. (4.7.2 might work aswell)
-  A brain. (NOT OPTIONAL)
+Requirements:</br>
+  C++ MSCLR.</br>
+  VS2022 or higher. (2019 might work aswell)</br>
+  .NET Framework 4.8. (4.7.2 might work aswell)</br>
+  A brain. (NOT OPTIONAL)</br>
 
-Supported Platforms:
-    Windows [x]
-    Linux [] - not tested, probably would work fine with wine64.
-    MacOS [] ^ same
-    Android [] - if you want to make a game for android with this you must be drunk or smth tbh.
+Supported Platforms:</br>
+    Windows [x]</br>
+    Linux [] - not tested, probably would work fine with wine64.</br>
+    MacOS [] ^ same</br>
+    Android [] - if you want to make a game for android with this you must be drunk or smth tbh.</br>
