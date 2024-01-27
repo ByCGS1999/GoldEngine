@@ -713,7 +713,7 @@ public:
 			int size = t->ToCharArray()->Length + heapAlloc;
 			data = new char[size];
 
-			strcpy(data, CastToNative(t));
+			strcpy(data, CastStringToNative(t).c_str());
 
 			if (ImGui::InputTextMultiline("", data, size, { ImGui::GetWindowSize().x - 20, ImGui::GetWindowSize().y - 60 }))
 			{
