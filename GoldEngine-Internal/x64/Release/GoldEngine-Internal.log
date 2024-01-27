@@ -165,38 +165,38 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(78,3
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(80,32): warning C4018: '<': no coinciden signed/unsigned
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\BoundingBoxRenderer.h(16,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::BoundingBoxRenderer::Init' no coincide con un método de clase ref
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\BoundingBoxRenderer.h(16,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::BoundingBoxRenderer::Init' no coincide con un método de clase ref
   (compilando archivo de origen "EntryPoint.cpp")
-  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\BoundingBoxRenderer.h(16,8):
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\BoundingBoxRenderer.h(16,8):
   'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CubeRenderer.h(16,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::CubeRenderer::Init' no coincide con un método de clase ref
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\CubeRenderer.h(16,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::CubeRenderer::Init' no coincide con un método de clase ref
   (compilando archivo de origen "EntryPoint.cpp")
-  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CubeRenderer.h(16,8):
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\CubeRenderer.h(16,8):
   'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\GridRenderer.h(18,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::GridRenderer::Init' no coincide con un método de clase ref
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\GridRenderer.h(18,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::GridRenderer::Init' no coincide con un método de clase ref
   (compilando archivo de origen "EntryPoint.cpp")
-  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\GridRenderer.h(18,8):
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\GridRenderer.h(18,8):
   'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(66,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::LightSource::Init' no coincide con un método de clase ref
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\LightManager.h(66,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::LightSource::Init' no coincide con un método de clase ref
   (compilando archivo de origen "EntryPoint.cpp")
-  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(66,8):
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\LightManager.h(66,8):
   'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Skybox.h(37,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::Skybox::Init' no coincide con un método de clase ref
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\Skybox.h(37,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::Skybox::Init' no coincide con un método de clase ref
   (compilando archivo de origen "EntryPoint.cpp")
-  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Skybox.h(37,8):
+  C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\Skybox.h(37,8):
   'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(21,3): warning C4677: 'SetAssemblyManager': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'EngineAssembly'
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(16,3): warning C4677: 'SetAssemblyManager': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'EngineAssembly'
   (compilando archivo de origen "EntryPoint.cpp")
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(3,11):
   vea la declaración de 'EngineAssembly'
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(874,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\LightManager.h(201): warning C4172: devolución de dirección de la variable local o temporal: count
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(863,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\LightManager.h(201): warning C4172: devolución de dirección de la variable local o temporal: count
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ObjectManager.h(177): warning C4715: 'Engine::Scripting::ObjectManager::GetFirstObjectOfType': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(134): warning C4715: 'EngineAssembly::Create<Engine::Preload::PreloadScript ^>': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ObjectManager.h(166): warning C4715: 'Engine::Scripting::ObjectManager::GetFirstObjectOfType': no todas las rutas de acceso de control devuelven un valor

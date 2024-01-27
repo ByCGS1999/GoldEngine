@@ -8,16 +8,16 @@
 // INCLUDE ENGINE CLASSES \\
 
 #include "SceneFormat.h"
-#include "BoundingBoxRenderer.h"
-#include "CubeRenderer.h"
-#include "GridRenderer.h"
-#include "LightManager.h"
-#include "ModelRenderer.h"
-#include "PBRModelRenderer.h"
-#include "Skybox.h"
+#include "Objects/BoundingBoxRenderer.h"
+#include "Objects/CubeRenderer.h"
+#include "Objects/GridRenderer.h"
+#include "Objects/LightManager.h"
+#include "Objects/ModelRenderer.h"
+#include "Objects/PBRModelRenderer.h"
+#include "Objects/Skybox.h"
 
 // last class to be imported, it must access to all the components included \\
 
-#include "Script.h"
+#include "Objects/Script.h"
 
-#include "Daemon.h"
+#include "Objects/Daemon.h"

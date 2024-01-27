@@ -23,17 +23,7 @@
 // INCLUDE ENGINE CLASSES \\
 
 #include "SceneFormat.h"
-#include "BoundingBoxRenderer.h"
-#include "CubeRenderer.h"
-#include "GridRenderer.h"
-#include "LightManager.h"
-#include "ModelRenderer.h"
-#include "PBRModelRenderer.h"
-#include "Skybox.h"
-
-// last class to be imported, it must access to all the components included \\
-
-#include "Script.h"
+#include "EngineIncludes.h"
 
 // last but not least, the assembly loader.
 
@@ -43,8 +33,7 @@
 
 // Daemons (Daemons are tasks that are ran mandatory by the engine, these cannot be displayed by the hierarchy)
 
-#include "Daemon.h"
-#include "LightDm.h"
+#include "Objects/LightDm.h"
 
 // Preload queue & scripts, can be used for loading/unloading certain data or doing operations with shaders, materials, models whatever.
 

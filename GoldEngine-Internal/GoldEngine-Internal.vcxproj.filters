@@ -261,23 +261,11 @@
     <ClInclude Include="Window.h">
       <Filter>Archivos de origen\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="ModelRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Skybox.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Skybox</Filter>
-    </ClInclude>
     <ClInclude Include="DataPack.h">
       <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
     </ClInclude>
     <ClInclude Include="WinAPI.h">
       <Filter>Archivos de origen\Engine\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="LightManager.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="PBRModelRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\PBR\PBRModelRenderer</Filter>
     </ClInclude>
     <ClInclude Include="FileManager.h">
       <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
@@ -287,9 +275,6 @@
     </ClInclude>
     <ClInclude Include="Cast.h">
       <Filter>Archivos de origen\Engine\Marshaller</Filter>
-    </ClInclude>
-    <ClInclude Include="Script.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Script</Filter>
     </ClInclude>
     <ClInclude Include="Voxel.h">
       <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel</Filter>
@@ -306,12 +291,6 @@
     <ClInclude Include="VoxelMatrix.h">
       <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
     </ClInclude>
-    <ClInclude Include="CubeRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
-    </ClInclude>
-    <ClInclude Include="GridRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
-    </ClInclude>
     <ClInclude Include="AsmLoader.h">
       <Filter>Archivos de origen\Engine</Filter>
     </ClInclude>
@@ -327,17 +306,38 @@
     <ClInclude Include="GlIncludes.h">
       <Filter>Archivos de origen\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="BoundingBoxRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry\Bounding</Filter>
-    </ClInclude>
-    <ClInclude Include="LightDm.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Lighting</Filter>
-    </ClInclude>
-    <ClInclude Include="Daemon.h">
-      <Filter>Archivos de origen\Engine\EngineObjects</Filter>
-    </ClInclude>
     <ClInclude Include="PreloadScript.h">
       <Filter>Archivos de origen\Engine\Preload</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\BoundingBoxRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry\Bounding</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GridRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\CubeRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\LightDm.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\LightManager.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ModelRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\PBRModelRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\PBR\PBRModelRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Script.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Skybox.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Daemon.h">
+      <Filter>Archivos de origen\Engine\EngineObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,7 @@
 #pragma once
 
-#include "Skybox.h"
-#include "GridRenderer.h"
-#include "CubeRenderer.h"
-#include "ModelRenderer.h"
-#include "PBRModelRenderer.h"
+#include "EngineIncludes.h"
 #include "AsmLoader.h"
-#include "Script.h"
 #include "Scene.h"
 
 namespace Engine::Managers
