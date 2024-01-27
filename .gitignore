@@ -12,3 +12,5 @@ x64/
 Solutions/
 **/Solutions
 **/x64
+./GoldEngine-Internal/Data/**
+./GoldEngine-Internal/Data/*
