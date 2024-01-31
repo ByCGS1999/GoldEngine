@@ -153,6 +153,7 @@
     <ClInclude Include="EngineIncludes.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
+    <ClInclude Include="ImguiHook.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Macros.h" />

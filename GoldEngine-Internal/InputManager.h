@@ -24,5 +24,40 @@ namespace Engine::Scripting
 		{
 			return ::IsKeyPressedRepeat(key_id);
 		}
+
+		static Engine::Internal::Components::Vector2^ GetMousePosition()
+		{
+			return gcnew Engine::Internal::Components::Vector2(GetMousePosition()->x, GetMousePosition()->y);
+		}
+
+		static bool MouseButton1Up()
+		{
+			return IsMouseButtonUp(MOUSE_BUTTON_LEFT);
+		}
+
+		static bool MouseButton2Up()
+		{
+			return IsMouseButtonUp(MOUSE_BUTTON_RIGHT);
+		}
+
+		static bool MouseButton1Down()
+		{
+			return IsMouseButtonDown(MOUSE_BUTTON_LEFT);
+		}
+
+		static bool MouseButton2Down()
+		{
+			return IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
+		}
+
+		static bool MouseButton1Pressed()
+		{
+			return IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+		}
+
+		static bool MouseButton2Pressed()
+		{
+			return IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
+		}
 	};
 }

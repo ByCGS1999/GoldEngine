@@ -181,5 +181,12 @@ namespace Engine::Scripting
 			return nullptr;
 		}
 
+		Engine::Internal::Components::Object^ Instantiate(Engine::Internal::Components::Object^ newObject)
+		{
+			loadedScene->AddObjectToScene(newObject);
+			loadedScene->PushToRenderQueue(newObject);
+
+			return newObject;
+		}
 	};
 }

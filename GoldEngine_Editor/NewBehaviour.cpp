@@ -1,5 +1,5 @@
 #include <cstdio>
-#include "Keys.h"
+#include "Typedefs.h"
 
 using namespace Engine::EngineObjects;
 using namespace Engine::Management;
@@ -29,7 +29,7 @@ namespace UserScripts
 			if (object != nullptr)
 			{
 				auto trans = object->GetTransform();
-
+				
 				// Translate its position depending on the keypress (W - UP) - (S - DOWN);
 
 				if (InputManager::IsKeyDown(KEY_W))
@@ -46,6 +46,20 @@ namespace UserScripts
 		void Draw() override
 		{
 
+		}
+
+		void DrawGizmo() override
+		{
+
+		}
+
+		void DrawImGUI() override
+		{
+			if (ImguiHook::ImGui_begin("TEST WINDOW", (bool*)false, ImGuiWindowFlags_NoCollapse))
+			{
+				ImguiHook::ImGui_text("Window created using imgui hook api.");
+				ImguiHook::ImGui_end();
+			}
 		}
 	};
 

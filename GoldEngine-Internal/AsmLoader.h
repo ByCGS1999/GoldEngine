@@ -100,6 +100,38 @@ public:
 		return (System::Object^)object;
 	}
 
+	auto Create(Type^ targetType, String^ str)
+	{
+		if (loadedAssembly != nullptr)
+		{
+			Type^ storedType = nullptr;
+
+			for each (Type ^ type in loadedAssembly->GetTypes())
+			{
+				if (type->FullName->Equals(str))
+				{
+					storedType = type;
+				}
+			}
+
+			auto transform = gcnew Engine::Internal::Components::Transform(
+				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+				0.0f,
+				gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+				nullptr
+			);
+
+			auto params = gcnew System::Collections::Generic::List<System::Object^>();
+
+			params->Add(storedType->Name + " - Reflected");
+			params->Add(transform);
+
+			if (storedType != nullptr)
+				return System::Convert::ChangeType(System::Activator::CreateInstance(storedType, params->ToArray()), targetType);
+		}
+	}
+
 	template <class T>
 	T Create(String^ str)
 	{

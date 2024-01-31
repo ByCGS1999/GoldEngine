@@ -83,7 +83,7 @@ namespace Engine::Internal::Components
 			return GetColor(x + y + z);
 		}
 
-		void Add(int x, int y, int z)
+		void Add(float x, float y, float z)
 		{
 			this->x += x;
 			this->y += y;
@@ -97,7 +97,35 @@ namespace Engine::Internal::Components
 			this->z += origin->z;
 		}
 
-		void Sub(int x, int y, int z)
+		void Multiply(Vector3^ origin)
+		{
+			this->x *= origin->x;
+			this->y *= origin->y;
+			this->z *= origin->z;
+		}
+
+		void Multiply(float x, float y, float z)
+		{
+			this->x *= x;
+			this->y *= y;
+			this->z *= z;
+		}
+
+		void Divide(Vector3^ origin)
+		{
+			this->x /= origin->x;
+			this->y /= origin->y;
+			this->z /= origin->z;
+		}
+
+		void Divide(float x, float y, float z)
+		{
+			this->x /= x;
+			this->y /= y;
+			this->z /= z;
+		}
+
+		void Sub(float x, float y, float z)
 		{
 			this->x -= x;
 			this->y -= y;
@@ -128,6 +156,16 @@ namespace Engine::Internal::Components
 		static Vector3^ Sub(Vector3^ left, Vector3^ right)
 		{
 			return gcnew Vector3(left->x - right->x, left->y - right->y, left->z - right->z);
+		}
+
+		static Vector3^ Multiply(Vector3^ left, Vector3^ right)
+		{
+			return gcnew Vector3(left->x * right->x, left->y * right->y, left->z * right->z);
+		}
+
+		static Vector3^ Divide(Vector3^ left, Vector3^ right)
+		{
+			return gcnew Vector3(left->x / right->x, left->y / right->y, left->z / right->z);
 		}
 	};
 
@@ -166,6 +204,13 @@ namespace Engine::Internal::Components
 		// localspace
 		Vector3^ localPosition;
 		Vector3^ localRotation;
+		// CONSTANT VECTORS
+		const Engine::Internal::Components::Vector3^ forward = gcnew Vector3(0, 0, 1);
+		const Engine::Internal::Components::Vector3^ top = gcnew Vector3(0, 1, 0);
+		const Engine::Internal::Components::Vector3^ right = gcnew Vector3(1, 0, 0);
+		const Engine::Internal::Components::Vector3^ backward = gcnew Vector3(0, 0, -1);
+		const Engine::Internal::Components::Vector3^ down = gcnew Vector3(0, -1, 0);
+		const Engine::Internal::Components::Vector3^ left = gcnew Vector3(-1, 0, 0);
 
 	private:
 		Object^ gameObject;
@@ -192,6 +237,11 @@ namespace Engine::Internal::Components
 				this->position = this->localPosition;
 				this->rotation = this->localRotation;
 			}
+		}
+
+		Object^ getGameObject()
+		{
+			return this->gameObject;
 		}
 
 		void SetReference(Object^ gameObject)
@@ -242,6 +292,7 @@ namespace Engine::Internal::Components
 		virtual void Update() {}
 		virtual void Draw() {}
 		virtual void DrawGizmo() {}
+		virtual void DrawImGUI() {}
 		Transform^ GetTransform() { return transform; }
 		void SetParent(Object^ object)
 		{

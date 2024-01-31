@@ -122,7 +122,7 @@
     <ClCompile Include="NewBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Keys.h" />
+    <ClInclude Include="Typedefs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

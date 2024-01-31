@@ -27,6 +27,7 @@
 
 // last but not least, the assembly loader.
 
+#include "ImguiHook.h"
 #include "InputManager.h"
 #include "ObjectManager.h"
 #include "AsmLoader.h"
@@ -642,7 +643,10 @@ public:
 					{
 						if (ImGui::Button(CastToNative(T->Name)))
 						{
-							WinAPI::MBOX((void*)GetWindowHandle(), "NOT IMPLEMENTED YET", "Gold Editor", 0x00000040L | 0x00000000L);
+							Engine::EngineObjects::Script^ retn = assembly->Create<Engine::EngineObjects::Script^>(T->FullName);
+							scene->PushToRenderQueue(retn);
+							scene->AddObjectToScene(retn);
+							//WinAPI::MBOX((void*)GetWindowHandle(), "NOT IMPLEMENTED YET", "Gold Editor", 0x00000040L | 0x00000000L);
 						}
 					}
 				}
@@ -863,6 +867,14 @@ public:
 				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight() - 25), 0);
 				ImGui::TextColored(ImVec4(255, 255, 255, 255), "Gold Engine Ver: editor-0.5c");
 				ImGui::End();
+			}
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
+			{
+				if (obj->GetReference() != nullptr)
+				{
+					obj->GetReference()->DrawImGUI();
+				}
 			}
 
 			DrawImGui();
@@ -1129,7 +1141,9 @@ public:
 
 int main()
 {
-	passwd = CypherLib::GetPasswordBytes(ENCRYPTION_PASSWORD);
+	std::string password = std::string(ENCRYPTION_PASSWORD);
+
+	passwd = CypherLib::GetPasswordBytes(password.c_str());
 
 #if PRODUCTION_BUILD
 	gcnew GameWindow();

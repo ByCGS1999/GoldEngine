@@ -339,6 +339,9 @@
     <ClInclude Include="Objects\Daemon.h">
       <Filter>Archivos de origen\Engine\EngineObjects</Filter>
     </ClInclude>
+    <ClInclude Include="ImguiHook.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">

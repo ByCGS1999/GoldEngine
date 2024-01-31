@@ -23,7 +23,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Keys.h">
+    <ClInclude Include="Typedefs.h">
       <Filter>Internal</Filter>
     </ClInclude>
   </ItemGroup>
