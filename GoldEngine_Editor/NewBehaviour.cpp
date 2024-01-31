@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <Windows.h>
 #include "Typedefs.h"
 
 using namespace Engine::EngineObjects;
@@ -6,6 +7,8 @@ using namespace Engine::Management;
 using namespace Engine::Managers;
 using namespace Engine::Scripting;
 using namespace Engine::Internal::Components;
+
+bool checked = false;
 
 namespace UserScripts
 {
@@ -58,6 +61,13 @@ namespace UserScripts
 			if (ImguiHook::ImGui_begin("TEST WINDOW", (bool*)false, ImGuiWindowFlags_NoCollapse))
 			{
 				ImguiHook::ImGui_text("Window created using imgui hook api.");
+
+				if (ImguiHook::ImGui_checkbox("Test", &checked))
+				{
+					WinAPI::MBOXA(nullptr, "WTF UR DOING?", "Yes", MB_OK | MB_TOPMOST);
+					System::Environment::Exit(1);
+				}
+
 				ImguiHook::ImGui_end();
 			}
 		}

@@ -998,7 +998,7 @@ public:
 	{
 		if (FirstTimeBoot())
 		{
-			WinAPI::MBOX(GetWindowHandle(), "LPVOID* voidFunc = (LPVOID*)nativeData;\nvoidFunc->Test();", "GoldEngine - Ver 0.5c - editor", 0x00000040L | 0x00000000L);
+			WinAPI::MBOXA(GetWindowHandle(), "LPVOID* voidFunc = (LPVOID*)nativeData;\nvoidFunc->Test();", "GoldEngine - Ver 0.5c - editor", 0x00000040L | 0x00000000L);
 			Boot();
 		}
 		SetExitKey(KEY_NULL);

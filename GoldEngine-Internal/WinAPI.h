@@ -1,8 +1,8 @@
 #pragma once
-public class WinAPI
+public ref class WinAPI
 {
 public:
-	static void MBOX(void* winHandle, const char* contents, const char* owner, unsigned int flags);
+	static void MBOXA(void* winHandle, const char* contents, const char* owner, unsigned int flags);
 	static void FreeCons();
 	static void AllocCons();
 	static void SetWindowStatus(void* winHandle, int windowId);

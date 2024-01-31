@@ -26,5 +26,10 @@ namespace Engine::Scripting
 		{
 			return ImGui::Text(CastStringToNative(name).c_str());
 		}
+
+		static bool ImGui_checkbox(String^ name, bool* checked)
+		{
+			return ImGui::Checkbox(CastStringToNative(name).c_str(), checked);
+		}
 	};
 }
