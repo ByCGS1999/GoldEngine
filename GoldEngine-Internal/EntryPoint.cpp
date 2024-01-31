@@ -3,7 +3,7 @@
 #include "Window.h"
 #include "Includes.h"
 #include "GlIncludes.h"
-#include "Drawing.h"
+#include "DataManager.h"
 #include "Cast.h"
 #include "Transform.h"
 #include "CypherLib.h"
@@ -892,11 +892,13 @@ public:
 
 		scene->Preload();
 
+		/*
 		Shader lightShader = dataPack.GetShader(1);
 
 		lightShader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(lightShader, "viewPos");
 
 		dataPack.SetShader(1, lightShader);
+		*/
 
 		scene->GetDatamodelMember("workspace");
 
@@ -984,7 +986,7 @@ public:
 		//Directory::Delete("Data/tmp/", true);
 		//SceneManager::SaveSceneToFile(scene, passwd);
 		//packedData->WriteToFile("Assets1", passwd);
-		Engine::Drawing::Drawing::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
+		Engine::Internal::DataManager::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
 
 		c3d2 = dataPack.GetCamera3D(0);
 		c3d2.projection = CAMERA_PERSPECTIVE;

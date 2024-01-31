@@ -25,6 +25,16 @@ public:
 					{
 						Console::WriteLine("Type Found: " + type->FullName);
 					}
+					else if (type->Namespace->Contains("PreloadScripts"))
+					{
+						Console::WriteLine("Type Found: " + type->FullName);
+					}
+#if !PRODUCTION_BUILD
+					else if (type->Namespace->Contains("EditorScripts"))
+					{
+						Console::WriteLine("Type Found: " + type->FullName);
+					}
+#endif
 				}
 			}
 		}
@@ -44,12 +54,17 @@ public:
 					if (t->Namespace->Contains("UserScripts"))
 					{
 						types->Add(t);
-
 					}
-					else if (t->Namespace->Contains("Preload"))
+					else if (t->Namespace->Contains("PreloadScripts"))
 					{
 						types->Add(t);
 					}
+#if !PRODUCTION_BUILD
+					else if (t->Namespace->Contains("EditorScripts"))
+					{
+						types->Add(t);
+					}
+#endif
 				}
 			}
 		}

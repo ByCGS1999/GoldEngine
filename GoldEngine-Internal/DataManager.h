@@ -8,12 +8,12 @@
 #include "Transform.h"
 #include "DataPacks.h"
 
-namespace Engine::Drawing
+namespace Engine::Internal
 {
 	/// <summary>
 	/// Binding to the raylib abstraction layer
 	/// </summary>
-	public ref class Drawing
+	public ref class DataManager
 	{
 	public:
 		// -- MASTER
@@ -196,7 +196,7 @@ namespace Engine::Drawing
 		}
 
 		inline static void HL_DrawCube(Engine::Internal::Components::Vector3^ position, Engine::Internal::Components::Vector3^ scale, unsigned int color) {
-			Vector3 rlib_v3;
+			::Vector3 rlib_v3;
 			rlib_v3.x = position->x;
 			rlib_v3.y = position->y;
 			rlib_v3.z = position->z;
@@ -207,7 +207,7 @@ namespace Engine::Drawing
 		inline static void HL_DrawModel(unsigned int modelId, Engine::Internal::Components::Vector3^ position, float scale, unsigned int tint)
 		{
 			Model m = DataPacks::singleton().GetModel(modelId);
-			Vector3 convertedVector;
+			::Vector3 convertedVector;
 
 
 			convertedVector.x = position->x;

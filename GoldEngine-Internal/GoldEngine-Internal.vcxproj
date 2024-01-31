@@ -149,7 +149,7 @@
     <ClInclude Include="CypherLib.h" />
     <ClInclude Include="DataPack.h" />
     <ClInclude Include="DataPacks.h" />
-    <ClInclude Include="Drawing.h" />
+    <ClInclude Include="DataManager.h" />
     <ClInclude Include="EngineIncludes.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
@@ -279,6 +279,11 @@
       <FileType>Document</FileType>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/Textured/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/Textured/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="binaries\FBX2glTF.exe">
+      <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/bin/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/bin/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <None Include="Raylib\lib\raylib.dll" />
   </ItemGroup>

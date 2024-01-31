@@ -154,6 +154,12 @@
     <Filter Include="Archivos de origen\Engine\Preload">
       <UniqueIdentifier>{01657b83-b3e8-46b8-b76f-01e55e991879}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Binaries">
+      <UniqueIdentifier>{b1b4b331-1638-4172-bb5c-b7cd6337f6a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Binaries\fbx2gltf">
+      <UniqueIdentifier>{fbcbac8e-c827-4c12-a648-8df3d5c14398}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -213,7 +219,7 @@
     <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h">
       <Filter>raylib\include</Filter>
     </ClInclude>
-    <ClInclude Include="Drawing.h">
+    <ClInclude Include="DataManager.h">
       <Filter>Archivos de origen\Engine\HLAPI</Filter>
     </ClInclude>
     <ClInclude Include="DataPacks.h">
@@ -412,6 +418,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Textures\Error.png">
       <Filter>Data\Engine\Textures</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="binaries\FBX2glTF.exe">
+      <Filter>Binaries\fbx2gltf</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

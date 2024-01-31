@@ -10,7 +10,7 @@ using namespace Engine::Internal::Components;
 
 bool checked = false;
 
-namespace UserScripts
+namespace EditorScripts
 {
 	ref class NewBehaviour : public Engine::EngineObjects::Script
 	{
@@ -81,5 +81,17 @@ namespace UserScripts
 
 		}
 
+	};
+}
+
+namespace PreloadScripts
+{
+	ref class PreloadAssets : Engine::Preload::PreloadScript
+	{
+	public:
+		void Preload() override
+		{
+
+		}
 	};
 }

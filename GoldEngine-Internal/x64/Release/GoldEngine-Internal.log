@@ -24,7 +24,7 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(83,26): 
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(281,4): warning C5030: Atributo [[JsonConstructorAttribute]] no reconocido
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Drawing.h(228,14): warning C4101: 'nullTex': variable local sin referencia
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataManager.h(228,14): warning C4101: 'nullTex': variable local sin referencia
   (compilando archivo de origen "EntryPoint.cpp")
   
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(69,14): warning C4552: "<<": el resultado de la expresión no se usa
@@ -197,11 +197,11 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(16,3)
   
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(867,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\LightManager.h(201): warning C4172: devolución de dirección de la variable local o temporal: count
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(133): warning C4715: 'EngineAssembly::Create': no todas las rutas de acceso de control devuelven un valor
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(148): warning C4715: 'EngineAssembly::Create': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\InputManager.h(31): warning C4717: 'Engine::Scripting::InputManager::GetMousePosition': recursiva para todas las rutas de acceso de control; la función provocará el desbordamiento de la pila en tiempo de ejecución
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ObjectManager.h(177): warning C4715: 'Engine::Scripting::ObjectManager::GetFirstObjectOfType': no todas las rutas de acceso de control devuelven un valor
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(166): warning C4715: 'EngineAssembly::Create<Engine::Preload::PreloadScript ^>': no todas las rutas de acceso de control devuelven un valor
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(166): warning C4715: 'EngineAssembly::Create<Engine::EngineObjects::Script ^>': no todas las rutas de acceso de control devuelven un valor
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(181): warning C4715: 'EngineAssembly::Create<Engine::Preload::PreloadScript ^>': no todas las rutas de acceso de control devuelven un valor
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(181): warning C4715: 'EngineAssembly::Create<Engine::EngineObjects::Script ^>': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ObjectManager.h(166): warning C4715: 'Engine::Scripting::ObjectManager::GetFirstObjectOfType': no todas las rutas de acceso de control devuelven un valor
   AssemblyInfo.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
   GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe
