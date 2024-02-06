@@ -160,6 +160,9 @@
     <Filter Include="Binaries\fbx2gltf">
       <UniqueIdentifier>{fbcbac8e-c827-4c12-a648-8df3d5c14398}</UniqueIdentifier>
     </Filter>
+    <Filter Include="imgui\TextEditor">
+      <UniqueIdentifier>{66308d28-2328-4ed9-87c7-a853aec34b01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -348,6 +351,9 @@
     <ClInclude Include="ImguiHook.h">
       <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
     </ClInclude>
+    <ClInclude Include="imgui\TextEditor\TextEditor.h">
+      <Filter>imgui\TextEditor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -379,6 +385,9 @@
     </ClCompile>
     <ClCompile Include="EntryPoint.cpp">
       <Filter>Archivos de origen\EngineTools</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\TextEditor\TextEditor.cpp">
+      <Filter>imgui\TextEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

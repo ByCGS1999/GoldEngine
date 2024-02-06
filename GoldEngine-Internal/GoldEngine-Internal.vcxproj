@@ -154,6 +154,7 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
     <ClInclude Include="ImguiHook.h" />
+    <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Macros.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui\TextEditor\TextEditor.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>

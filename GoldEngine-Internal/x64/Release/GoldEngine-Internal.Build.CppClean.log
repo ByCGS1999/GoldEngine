@@ -7,10 +7,9 @@ c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\imgui_ta
 c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\imgui_draw.obj
 c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\imgui_demo.obj
 c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\imgui.obj
-c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\entrypoint.obj
-c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\datapacks.obj
 c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\casttonative.obj
 c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\assemblyinfo.obj
+c:\users\carles\source\repos\goldengine\goldengine-internal\x64\release\entrypoint.obj
 c:\users\carles\source\repos\goldengine\x64\release\data\engine\textures\error.png
 c:\users\carles\source\repos\goldengine\x64\release\data\engine\models\error.obj
 c:\users\carles\source\repos\goldengine\x64\release\data\engine\shaders\base.fs
@@ -20,6 +19,7 @@ c:\users\carles\source\repos\goldengine\x64\release\data\engine\shaders\rpbr\pbr
 c:\users\carles\source\repos\goldengine\x64\release\data\engine\shaders\rpbr\pbr.vs
 c:\users\carles\source\repos\goldengine\x64\release\data\engine\shaders\textured\albedo.fs
 c:\users\carles\source\repos\goldengine\x64\release\data\engine\shaders\textured\albedo.vs
+c:\users\carles\source\repos\goldengine\x64\release\data\bin\fbx2gltf.exe
 c:\users\carles\source\repos\goldengine\x64\release\newtonsoft.json.dll
 c:\users\carles\source\repos\goldengine\x64\release\goldengine-internal.exe
 c:\users\carles\source\repos\goldengine\x64\release\goldengine-internal.pdb

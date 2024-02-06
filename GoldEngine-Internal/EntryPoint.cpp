@@ -1,4 +1,4 @@
-#include "Macros.h"
+﻿#include "Macros.h"
 #include "WinAPI.h"
 #include "Window.h"
 #include "Includes.h"
@@ -74,6 +74,10 @@ bool b1, b2, b3, b4, b5, b6, b7, b8, b9;
 bool readonlyLock = false;
 bool fpsCap = true;
 bool reparentLock = false;
+TextEditor* codeEditor = new TextEditor();
+ImVec2 codeEditorSize;
+auto language = TextEditor::LanguageDefinition::CPlusPlus();
+bool codeEditorOpen = false;
 
 char fileName[] = "Level0";
 
@@ -228,19 +232,16 @@ public:
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Help", true))
+			if (ImGui::BeginMenu("View", true))
 			{
-
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Editor", true))
-			{
-				if (ImGui::MenuItem("Style Editor"))
+				if (ImGui::MenuItem("Editor View"))
 				{
-					styleEditor = !styleEditor;
+
 				}
-				ImGui::Checkbox("FPS", &fpsCap);
+				if (ImGui::MenuItem("Game View"))
+				{
+
+				}
 				ImGui::EndMenu();
 			}
 
@@ -256,8 +257,30 @@ public:
 
 				}
 				ImGui::SeparatorText("Shaders");
+				ImGui::SeparatorText("Tools");
+				if (ImGui::MenuItem("Script Editor"))
+				{
+					codeEditorOpen = !codeEditorOpen;
+				}
 				ImGui::EndMenu();
 			}
+
+			if (ImGui::BeginMenu("Editor", true))
+			{
+				if (ImGui::MenuItem("Style Editor"))
+				{
+					styleEditor = !styleEditor;
+				}
+				ImGui::Checkbox("FPS", &fpsCap);
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Help", true))
+			{
+
+				ImGui::EndMenu();
+			}
+
 
 			ImGui::EndMainMenuBar();
 		}
@@ -307,6 +330,110 @@ public:
 
 
 			ImGui::End();
+		}
+
+		if (codeEditorOpen)
+		{
+			if (ImGui::Begin("Embedded Code Editor", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar))
+			{
+				if (ImGui::BeginMenuBar())
+				{
+					if (ImGui::BeginMenu("File"))
+					{
+
+						if (ImGui::MenuItem("Exit"))
+						{
+							codeEditorOpen = false;
+						}
+						ImGui::EndMenu();
+					}
+
+
+					if (ImGui::BeginMenu("Language"))
+					{
+						if (ImGui::MenuItem("C++"))
+						{
+							language = TextEditor::LanguageDefinition::CPlusPlus();
+						}
+						if (ImGui::MenuItem("GLSL"))
+						{
+							language = TextEditor::LanguageDefinition::GLSL();
+						}
+						if (ImGui::MenuItem("Lua"))
+						{
+							language = TextEditor::LanguageDefinition::Lua();
+						}
+
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::BeginMenu("Templates"))
+					{
+						if (ImGui::MenuItem("C++ Script Template"))
+						{
+							codeEditor->SetText(std::string(R"(#include <cstdio>
+#include <Windows.h>
+#include "Typedefs.h"
+
+using namespace Engine::EngineObjects;
+using namespace Engine::Management;
+using namespace Engine::Managers;
+using namespace Engine::Scripting;
+using namespace Engine::Internal::Components;
+
+namespace UserScripts
+{
+	public ref class NewBehaviour : public Engine::EngineObjects::Script
+	{
+	public:
+		NewBehaviour(System::String^ name, Engine::Internal::Components::Transform^ transform) : Script(name, transform)
+		{
+
+		}
+
+	public:
+		void Update() override
+		{
+
+		}
+
+		void Draw() override
+		{
+
+		}
+
+		void DrawGizmo() override
+		{
+
+		}
+
+		void DrawImGUI() override
+		{
+
+		}
+	};
+}
+)"));
+						}
+						if (ImGui::MenuItem("GLSL"))
+						{
+							language = TextEditor::LanguageDefinition::GLSL();
+						}
+						if (ImGui::MenuItem("Lua"))
+						{
+							language = TextEditor::LanguageDefinition::Lua();
+						}
+
+						ImGui::EndMenu();
+					}
+
+					ImGui::EndMenuBar();
+				}
+			}
+
+			codeEditor->SetLanguageDefinition(language);
+
+			codeEditor->Render("Embedded Code Editor");
 		}
 
 		if (ImGui::Begin("Properties", &isOpen))
@@ -1005,6 +1132,13 @@ public:
 		}
 		SetExitKey(KEY_NULL);
 		viewportTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+
+		// initialize editor assets
+
+		DataManager::HL_LoadTexture2D(0xE1, "Data/EditorAssets/Run.png");
+		DataManager::HL_LoadTexture2D(0xE2, "Data/EditorAssets/Stop.png");
+
+		// end of editor assets
 
 		/*
 		auto files = gcnew List<String^>();

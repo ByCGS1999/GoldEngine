@@ -14,4 +14,10 @@ public:
 		shaderId = id;
 		shaderReference = ref;
 	}
+
+public:
+	Shader GetReference()
+	{
+		return shaderReference;
+	}
 };
