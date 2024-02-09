@@ -12,15 +12,13 @@ public:
 
 	Chunk* chunks;
 	float voxelSize = 1.0f;
-	Mesh voxelMesh;
 
 	// CONSTRUCTOR \\
 
 	VoxelRenderer(__int8 width, __int8 height, __int8 depth)
 	{
-		chunks = new Chunk(width, height, depth);
+		chunks = new Chunk(width, height, depth, voxelSize);
 		RandomizeVoxelColors();
-		voxelMesh = GenMeshCube(voxelSize, voxelSize, voxelSize);
 	}
 
 
@@ -52,6 +50,7 @@ public:
 	}
 	void RandomizeVoxelColors()
 	{
+		
 		for (unsigned int x = 0; x < chunks->w; x++)
 		{
 			for (unsigned int y = 0; y < chunks->h; y++)
@@ -60,9 +59,7 @@ public:
 				{
 					auto voxel = chunks->voxelMatrix->Get(x, y, z);
 
-					unsigned int baseColor = 0x000000FF;
-
-					unsigned int color = baseColor + (rand() % 0xFFFFFFFF + 0x000000FF);
+					unsigned int color = GetRandomValue(0x252525FF, 0xFFFFFFFF);
 
 					voxel.SetColor(color);
 
@@ -73,6 +70,9 @@ public:
 	}
 	void Render()
 	{
+		chunks->Render();
+
+		/*
 		for (unsigned int x = 0; x < chunks->w; x++)
 		{
 			for (unsigned int y = 0; y < chunks->h; y++)
@@ -81,7 +81,7 @@ public:
 				{
 					auto voxel = chunks->voxelMatrix->Get(x, y, z);
 
-					unsigned int color = voxel.color;
+					unsigned int color = voxel.GetColor();
 
 					float _x, _y, _z;
 					float newX, newY, newZ;
@@ -94,12 +94,13 @@ public:
 					newY = (float)(_y * voxelSize) + voxelSize;
 					newZ = (float)(_z * voxelSize) + voxelSize;
 
-					if (voxel.render)
+					if (voxel.GetRender())
 					{
-						DrawModel(LoadModelFromMesh(voxelMesh), {_x,_y,_z}, voxelSize, GetColor(voxel.color));
+						DrawModel(LoadModelFromMesh(voxelMesh), {_x,_y,_z}, voxelSize, GetColor(voxel.GetColor()));
 					}
 				}
 			}
 		}
+		*/
 	}
 };

@@ -33,7 +33,7 @@ serialize/deserialize to/from __int64 (8 bytes);
 
 struct Voxel
 {
-public:
+private:
 	uint32_t color;
 	bool render;
 
@@ -48,6 +48,16 @@ public:
 	{
 		this->color = 0xFFFFFFFF;
 		this->render = false;
+	}
+
+	bool GetRender()
+	{
+		return render;
+	}
+
+	uint32_t GetColor()
+	{
+		return color;
 	}
 
 	void SetRender(bool value)

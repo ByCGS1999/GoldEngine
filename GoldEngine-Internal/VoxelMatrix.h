@@ -48,4 +48,9 @@ public:
 
 		data[x][y][z] = value;
 	}
+
+	auto GetRaw()
+	{
+		return data;
+	}
 };

@@ -1,6 +1,7 @@
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AssemblyInfo.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\AssemblyInfo.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\CastToNative.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\CastToNative.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\EntryPoint.obj
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imguistyleserializer.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\imguistyleserializer.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\imgui.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_demo.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\imgui_demo.obj
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\imgui\imgui_draw.cpp;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Release\imgui_draw.obj

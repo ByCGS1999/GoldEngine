@@ -27,106 +27,106 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Transform.h(281,4): 
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataManager.h(228,14): warning C4101: 'nullTex': variable local sin referencia
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(69,14): warning C4552: "<<": el resultado de la expresión no se usa
-  (compilando archivo de origen "EntryPoint.cpp")
-  
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(70,14): warning C4552: "<<": el resultado de la expresión no se usa
-  (compilando archivo de origen "EntryPoint.cpp")
-  
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(71,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
-  (compilando archivo de origen "EntryPoint.cpp")
-  
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(71,14): warning C4552: "<<": el resultado de la expresión no se usa
-  (compilando archivo de origen "EntryPoint.cpp")
-  
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(78,14): warning C4552: "<<": el resultado de la expresión no se usa
-  (compilando archivo de origen "EntryPoint.cpp")
-  
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(79,14): warning C4552: "<<": el resultado de la expresión no se usa
-  (compilando archivo de origen "EntryPoint.cpp")
-  
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(80,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
   (compilando archivo de origen "EntryPoint.cpp")
   
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(80,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(87,14): warning C4552: "<<": el resultado de la expresión no se usa
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(81,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
+  (compilando archivo de origen "EntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(81,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(88,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(89,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
-  (compilando archivo de origen "EntryPoint.cpp")
-  
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(89,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(96,14): warning C4552: "<<": el resultado de la expresión no se usa
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(90,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
+  (compilando archivo de origen "EntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(90,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(97,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(98,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
-  (compilando archivo de origen "EntryPoint.cpp")
-  
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(98,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(114,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(99,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(115,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(99,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(116,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(106,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(117,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(107,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(119,13): warning C4244: '=': conversión de '__int64' a 'char'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(108,24): warning C4293: '<<': recuento de desplazamientos negativo o demasiado grande; comportamiento impredecible
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(139,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(108,14): warning C4552: "<<": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(140,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(124,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(141,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(125,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(142,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(126,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(146,9): warning C4309: '=': truncamiento de valor constante
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(127,17): warning C4244: '+=': conversión de '__int64' a 'unsigned long'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(150,14): warning C4244: '=': conversión de '__int64' a 'char'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(129,13): warning C4244: '=': conversión de '__int64' a 'char'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(174,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(149,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(175,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(150,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(176,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(151,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(177,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(152,17): warning C4244: '+=': conversión de '__int64' a 'unsigned int'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(193,5): warning C4552: ">>": el resultado de la expresión no se usa
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(156,9): warning C4309: '=': truncamiento de valor constante
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(194,8): warning C4804: '>>': uso no seguro del tipo 'bool' en la operación
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(160,14): warning C4244: '=': conversión de '__int64' a 'char'; posible pérdida de datos
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(194,5): warning C4552: ">>": el resultado de la expresión no se usa
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(184,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+  (compilando archivo de origen "EntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(185,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+  (compilando archivo de origen "EntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(186,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+  (compilando archivo de origen "EntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(187,17): warning C4244: '+=': conversión de '__int64' a 'uint32_t'; posible pérdida de datos
+  (compilando archivo de origen "EntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(203,5): warning C4552: ">>": el resultado de la expresión no se usa
+  (compilando archivo de origen "EntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(204,8): warning C4804: '>>': uso no seguro del tipo 'bool' en la operación
+  (compilando archivo de origen "EntryPoint.cpp")
+  
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Voxel.h(204,5): warning C4552: ">>": el resultado de la expresión no se usa
   (compilando archivo de origen "EntryPoint.cpp")
   
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelMatrix.h(18,21): warning C4018: '<': no coinciden signed/unsigned
@@ -138,31 +138,22 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelMatrix.h(20,22)
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelMatrix.h(22,23): warning C4018: '<': no coinciden signed/unsigned
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(38,30): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(36,30): warning C4018: '<': no coinciden signed/unsigned
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(40,31): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(38,31): warning C4018: '<': no coinciden signed/unsigned
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(42,32): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(40,32): warning C4018: '<': no coinciden signed/unsigned
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(55,30): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(54,30): warning C4018: '<': no coinciden signed/unsigned
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(57,31): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(56,31): warning C4018: '<': no coinciden signed/unsigned
   (compilando archivo de origen "EntryPoint.cpp")
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(59,32): warning C4018: '<': no coinciden signed/unsigned
-  (compilando archivo de origen "EntryPoint.cpp")
-  
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(76,30): warning C4018: '<': no coinciden signed/unsigned
-  (compilando archivo de origen "EntryPoint.cpp")
-  
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(78,31): warning C4018: '<': no coinciden signed/unsigned
-  (compilando archivo de origen "EntryPoint.cpp")
-  
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(80,32): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\VoxelRenderer.h(58,32): warning C4018: '<': no coinciden signed/unsigned
   (compilando archivo de origen "EntryPoint.cpp")
   
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\BoundingBoxRenderer.h(16,8): warning C4490: 'override': uso incorrecto del especificador de invalidación; 'Engine::EngineObjects::BoundingBoxRenderer::Init' no coincide con un método de clase ref
@@ -195,7 +186,7 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(16,3)
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(3,11):
   vea la declaración de 'EngineAssembly'
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(994,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(1049,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\LightManager.h(201): warning C4172: devolución de dirección de la variable local o temporal: count
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(148): warning C4715: 'EngineAssembly::Create': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\InputManager.h(31): warning C4717: 'Engine::Scripting::InputManager::GetMousePosition': recursiva para todas las rutas de acceso de control; la función provocará el desbordamiento de la pila en tiempo de ejecución

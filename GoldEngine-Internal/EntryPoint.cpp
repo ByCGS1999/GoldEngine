@@ -40,6 +40,9 @@
 
 #include "PreloadScript.h"
 
+#include "native/json.hpp"
+#include "imguistyleserializer.h"
+
 
 using namespace Engine;
 using namespace Engine::EngineObjects;
@@ -78,6 +81,8 @@ TextEditor* codeEditor = new TextEditor();
 ImVec2 codeEditorSize;
 auto language = TextEditor::LanguageDefinition::CPlusPlus();
 bool codeEditorOpen = false;
+VoxelRenderer* renderer;
+std::string styleFN;
 
 char fileName[] = "Level0";
 
@@ -178,6 +183,7 @@ public:
 		//WinAPI::FreeCons();
 		SetWindowFlags(4096 | 4 | FLAG_MSAA_4X_HINT);
 		OpenWindow(1280, 720, (const char*)"GoldEngine Editor editor-ver0.5c");
+		renderer = new VoxelRenderer(4,4,4);
 
 		Preload();
 
@@ -267,9 +273,18 @@ public:
 
 			if (ImGui::BeginMenu("Editor", true))
 			{
-				if (ImGui::MenuItem("Style Editor"))
+				if (ImGui::BeginMenu("Style", true))
 				{
-					styleEditor = !styleEditor;
+					if (ImGui::MenuItem("Style Editor"))
+					{
+						styleEditor = !styleEditor;
+					}
+					if (ImGui::MenuItem("Save/Load Style"))
+					{
+						b7 = true;
+					}
+
+					ImGui::EndMenu();
 				}
 				ImGui::Checkbox("FPS", &fpsCap);
 				ImGui::EndMenu();
@@ -808,6 +823,10 @@ namespace UserScripts
 		{
 			ImGui::OpenPopup("Scene Loader Editor");
 		}
+		else if (b7)
+		{
+			ImGui::OpenPopup("Save/Load Style");
+		}
 
 		if (reparentLock)
 		{
@@ -823,6 +842,40 @@ namespace UserScripts
 		}
 
 		// popups
+
+		if (ImGui::BeginPopupModal("Save/Load Style", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
+		{
+			char* tmp = new char[styleFN.size()+32] {};
+
+			strcpy(tmp, styleFN.c_str());
+
+			ImGui::Text("File Name:");
+			ImGui::SameLine();
+			if (ImGui::InputText("###FILE_NAME", tmp, styleFN.size()+32, ImGuiInputTextFlags_CallbackCompletion))
+			{
+				styleFN = tmp;
+			}
+
+			ImGui::NewLine();
+
+			if (ImGui::Button("Save"))
+			{
+				ImGui::SaveStyle(styleFN.c_str(), ImGui::GetStyle());
+				b7 = false;
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Load"))
+			{
+				ImGui::LoadStyle(styleFN.c_str(), ImGui::GetStyle());
+				b7 = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			delete[] tmp;
+
+			ImGui::EndPopup();
+		}
 
 		if (ImGui::BeginPopupModal("Scene Loader Editor", (bool*)false, ImGuiWindowFlags_NoScrollbar))
 		{
@@ -980,6 +1033,8 @@ namespace UserScripts
 				ExecAsIdentifiedObject(obj->objectType, (System::Object^)obj->GetReference());
 			}
 
+			renderer->Render();
+
 			EndMode3D();
 
 			DrawFPS(0, 0);
@@ -1125,6 +1180,8 @@ namespace UserScripts
 
 	void Preload() override
 	{
+		ImGui::LoadStyle("EditorStyle.ini");
+
 		if (FirstTimeBoot())
 		{
 			WinAPI::MBOXA(GetWindowHandle(), "LPVOID* voidFunc = (LPVOID*)nativeData;\nvoidFunc->Test();", "GoldEngine - Ver 0.5c - editor", 0x00000040L | 0x00000000L);

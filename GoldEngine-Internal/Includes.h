@@ -6,7 +6,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
+#include <fstream>
 #include <bit>
 #include <map>
 #include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 #include "imgui/TextEditor/TextEditor.h"

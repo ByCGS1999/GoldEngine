@@ -108,9 +108,6 @@
     <Filter Include="Data\Engine\Shaders\Runtime\Lighting">
       <UniqueIdentifier>{bac28715-06e8-45d9-bb39-fab1a90bd275}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data\Engine\Textures">
-      <UniqueIdentifier>{4906a301-d328-4c2e-b0fd-8f75ea6b5098}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Engine\Management\MiddleLevel">
       <UniqueIdentifier>{539ae321-1426-4428-90f7-5bb797a2fb37}</UniqueIdentifier>
     </Filter>
@@ -162,6 +159,15 @@
     </Filter>
     <Filter Include="imgui\TextEditor">
       <UniqueIdentifier>{66308d28-2328-4ed9-87c7-a853aec34b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Engine\Textures">
+      <UniqueIdentifier>{4906a301-d328-4c2e-b0fd-8f75ea6b5098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Native">
+      <UniqueIdentifier>{de4e4d3d-9b5c-43dd-861e-e98c5aeb001d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Editor">
+      <UniqueIdentifier>{a3986d25-1246-4e1c-b842-df40194a65d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -354,6 +360,12 @@
     <ClInclude Include="imgui\TextEditor\TextEditor.h">
       <Filter>imgui\TextEditor</Filter>
     </ClInclude>
+    <ClInclude Include="native\json.hpp">
+      <Filter>Archivos de origen\Engine\Native</Filter>
+    </ClInclude>
+    <ClInclude Include="imguistyleserializer.h">
+      <Filter>Archivos de origen\Engine\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -388,6 +400,9 @@
     </ClCompile>
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp">
       <Filter>imgui\TextEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="imguistyleserializer.cpp">
+      <Filter>Archivos de origen\Engine\Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

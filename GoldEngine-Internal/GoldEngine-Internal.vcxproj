@@ -154,8 +154,10 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
     <ClInclude Include="ImguiHook.h" />
+    <ClInclude Include="imguistyleserializer.h" />
     <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="native\json.hpp" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Macros.h" />
     <ClInclude Include="Objects\BoundingBoxRenderer.h" />
@@ -208,6 +210,7 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="CastToNative.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="imguistyleserializer.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
