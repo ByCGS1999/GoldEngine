@@ -1,5 +1,7 @@
 #pragma once
 
+using namespace Engine::Assets::Storage;
+
 namespace Engine::EngineObjects
 {
 	namespace Native
@@ -58,7 +60,7 @@ namespace Engine::EngineObjects
 			this->tint = tint;
 			this->texture = texture;
 
-			auto modelInst = DataPacks::singleton().GetModel(model);
+			auto modelInst = Engine::Assets::Storage::DataPacks::singleton().GetModel(model);
 			auto materialInst = DataPacks::singleton().GetMaterial(material);
 			auto texInst = DataPacks::singleton().GetTexture2D(texture);
 

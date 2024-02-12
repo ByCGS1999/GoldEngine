@@ -1,17 +1,20 @@
 #pragma once
 
-public class MaterialPack
+namespace Engine::Assets::Storage::Types
 {
-public:
-	unsigned int MaterialId;
-
-public:
-	Material MaterialReference;
-
-public:
-	MaterialPack(unsigned int id, Material ref)
+	public class MaterialPack
 	{
-		MaterialId = id;
-		MaterialReference = ref;
-	}
-};
+	public:
+		unsigned int MaterialId;
+
+	public:
+		Material MaterialReference;
+
+	public:
+		MaterialPack(unsigned int id, Material ref)
+		{
+			MaterialId = id;
+			MaterialReference = ref;
+		}
+	};
+}

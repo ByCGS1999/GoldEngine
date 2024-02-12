@@ -1,17 +1,20 @@
 #pragma once
 
-public class Texture2DPack
+namespace Engine::Assets::Storage::Types
 {
-public:
-	unsigned int textureId;
-
-public:
-	Texture2D textureReference;
-
-public:
-	Texture2DPack(unsigned int id, Texture2D ref)
+	public class Texture2DPack
 	{
-		textureId = id;
-		textureReference = ref;
-	}
-};
+	public:
+		unsigned int textureId;
+
+	public:
+		Texture2D textureReference;
+
+	public:
+		Texture2DPack(unsigned int id, Texture2D ref)
+		{
+			textureId = id;
+			textureReference = ref;
+		}
+	};
+}

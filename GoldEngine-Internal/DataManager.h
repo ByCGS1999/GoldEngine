@@ -58,7 +58,7 @@ namespace Engine::Internal
 		inline static void HL_LoadModel(unsigned int modelId, System::String^ fileName)
 		{
 			Model model = LoadModel(CastToNative(fileName));
-			DataPacks::singleton().AddModel(modelId, model);
+			Engine::Assets::Storage::DataPacks::singleton().AddModel(modelId, model);
 		}
 
 		inline static void HL_LoadTexture2D(unsigned int textureId, System::String^ fileName)
@@ -69,36 +69,36 @@ namespace Engine::Internal
 		// -- UNLOADING / FREEING
 		inline static void HL_FreeCameras()
 		{
-			DataPacks::singleton().FreeCameras();
+			Engine::Assets::Storage::DataPacks::singleton().FreeCameras();
 		}
 
 		inline static void HL_FreeModels()
 		{
-			DataPacks::singleton().FreeModels();
+			Engine::Assets::Storage::DataPacks::singleton().FreeModels();
 		}
 
 		inline static void HL_FreeShaders()
 		{
-			DataPacks::singleton().FreeShaders();
+			Engine::Assets::Storage::DataPacks::singleton().FreeShaders();
 		}
 
 		inline static void HL_FreeAll()
 		{
-			DataPacks::singleton().FreeAll();
+			Engine::Assets::Storage::DataPacks::singleton().FreeAll();
 		}
 
 		// -- CONFIGURATION
 		inline static void HL_SetMaterialShader(unsigned int materialId, unsigned int shaderId)
 		{
-			Material* material = &DataPacks::singleton().GetMaterial(materialId);
-			Shader* shader = &DataPacks::singleton().GetShader(shaderId);
+			Material* material = &Engine::Assets::Storage::DataPacks::singleton().GetMaterial(materialId);
+			Shader* shader = &Engine::Assets::Storage::DataPacks::singleton().GetShader(shaderId);
 
 			material->shader = *shader;
 		}
 		inline static void HL_SetMaterialTexture(unsigned int materialId, unsigned int textureId)
 		{
-			Material m = DataPacks::singleton().GetMaterial(materialId);
-			Texture2D t = DataPacks::singleton().GetTexture2D(textureId);
+			Material m = Engine::Assets::Storage::DataPacks::singleton().GetMaterial(materialId);
+			Texture2D t = Engine::Assets::Storage::DataPacks::singleton().GetTexture2D(textureId);
 			MaterialMap mMap;
 
 			mMap.texture = t;
@@ -233,7 +233,7 @@ namespace Engine::Internal
 		// -- MODES
 		inline static void HL_BeginShaderMode(unsigned int shaderId)
 		{
-			Shader s = DataPacks::singleton().GetShader(shaderId);
+			Shader s = Engine::Assets::Storage::DataPacks::singleton().GetShader(shaderId);
 
 			BeginShaderMode(s);
 		}
@@ -245,14 +245,14 @@ namespace Engine::Internal
 
 		inline static void HL_Begin3DMode(unsigned int cameraId)
 		{
-			Camera3D c = (Camera3D)DataPacks::singleton().GetCamera3D(cameraId);
+			Camera3D c = (Camera3D)Engine::Assets::Storage::DataPacks::singleton().GetCamera3D(cameraId);
 
 			BeginMode3D(c);
 		}
 
 		inline static void HL_Begin2DMode(unsigned int cameraId)
 		{
-			Camera2D c = (Camera2D)DataPacks::singleton().GetCamera2D(cameraId);
+			Camera2D c = (Camera2D)Engine::Assets::Storage::DataPacks::singleton().GetCamera2D(cameraId);
 			BeginMode2D(c);
 		}
 
@@ -281,11 +281,11 @@ namespace Engine::Internal
 			switch (camType)
 			{
 			case Engine::Internal::Components::CameraType::C2D:
-				Camera2D cam2d = DataPacks::singleton().GetCamera2D(cameraId);
+				Camera2D cam2d = Engine::Assets::Storage::DataPacks::singleton().GetCamera2D(cameraId);
 				UpdateCamera((Camera*)&cam2d, (CameraMode)mode);
 				break;
 			case Engine::Internal::Components::CameraType::C3D:
-				Camera3D cam3d = DataPacks::singleton().GetCamera3D(cameraId);
+				Camera3D cam3d = Engine::Assets::Storage::DataPacks::singleton().GetCamera3D(cameraId);
 				UpdateCamera(&cam3d, (CameraMode)mode);
 				break;
 			}
@@ -293,8 +293,8 @@ namespace Engine::Internal
 
 		inline static void HL_SetModelTexture(unsigned int modelId, unsigned int materialId)
 		{
-			Material* m = &DataPacks::singleton().GetMaterial(materialId);
-			Model* mod = &DataPacks::singleton().GetModel(modelId);
+			Material* m = &Engine::Assets::Storage::DataPacks::singleton().GetMaterial(materialId);
+			Model* mod = &Engine::Assets::Storage::DataPacks::singleton().GetModel(modelId);
 
 			mod->materials = m;
 		}

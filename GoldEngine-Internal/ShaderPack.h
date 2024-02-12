@@ -1,23 +1,25 @@
 #pragma once
-
-public class ShaderPack
+namespace Engine::Assets::Storage::Types
 {
-public:
-	unsigned int shaderId;
-
-public:
-	Shader shaderReference;
-
-public:
-	ShaderPack(unsigned int id, Shader ref)
+	public class ShaderPack
 	{
-		shaderId = id;
-		shaderReference = ref;
-	}
+	public:
+		unsigned int shaderId;
 
-public:
-	Shader GetReference()
-	{
-		return shaderReference;
-	}
-};
+	public:
+		Shader shaderReference;
+
+	public:
+		ShaderPack(unsigned int id, Shader ref)
+		{
+			shaderId = id;
+			shaderReference = ref;
+		}
+
+	public:
+		Shader GetReference()
+		{
+			return shaderReference;
+		}
+	};
+}

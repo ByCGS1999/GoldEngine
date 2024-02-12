@@ -2,80 +2,84 @@
 using namespace System;
 using namespace System::IO;
 
-public ref class FileManager
+namespace Engine::Assets::IO
 {
-	static String^ fileHeader = "GOLD ";
-	static short int fileVersion = 100;
-
-public:
-	static void WriteToCustomFile(String^ fileName, String^ password, array<String^>^ inFile)
+	public ref class FileManager
 	{
-		auto file = File::Open(fileName, FileMode::OpenOrCreate);
+		static String^ fileHeader = "GOLD ";
+		static short int fileVersion = 100;
 
-		auto stream = gcnew BinaryWriter(file);
-		stream->Flush();
-		stream->Write(fileHeader);
-		stream->Write(fileVersion);
-
-		auto deflateStream = gcnew Compression::DeflateStream(file, Compression::CompressionMode::Compress);
-		stream = gcnew BinaryWriter(deflateStream);
-
-		stream->Write(inFile->Length); // assets in file
-		for (int x = 0; x < inFile->Length; x++)
+	public:
+		static void WriteToCustomFile(String^ fileName, String^ password, array<String^>^ inFile)
 		{
-			auto fileName = inFile[x];
-			stream->Write(fileName); // write model name
-			auto contents = File::ReadAllBytes("Data/" + inFile[x]);
-			stream->Write(contents->Length);
-			stream->Write(contents);
+			auto file = File::Open(fileName, FileMode::OpenOrCreate);
+
+			auto stream = gcnew BinaryWriter(file);
+			stream->Flush();
+			stream->Write(fileHeader);
+			stream->Write(fileVersion);
+
+			auto deflateStream = gcnew Compression::DeflateStream(file, Compression::CompressionMode::Compress);
+			stream = gcnew BinaryWriter(deflateStream);
+
+			stream->Write(inFile->Length); // assets in file
+			for (int x = 0; x < inFile->Length; x++)
+			{
+				auto fileName = inFile[x];
+				stream->Write(fileName); // write model name
+				auto contents = File::ReadAllBytes("Data/" + inFile[x]);
+				stream->Write(contents->Length);
+				stream->Write(contents);
+			}
+
+			stream->Close();
+			deflateStream->Close();
+			file->Close();
 		}
 
-		stream->Close();
-		deflateStream->Close();
-		file->Close();
-	}
-
-	static void ReadCustomFileFormat(String^ fileName, String^ password)
-	{
-		auto file = File::Open(fileName, FileMode::OpenOrCreate);
-		
-		auto stream = gcnew BinaryReader(file);
-
-		String^ header = stream->ReadString();
-
-		if (fileHeader->Equals(header))
+		static void ReadCustomFileFormat(String^ fileName, String^ password)
 		{
-			short int version = stream->ReadInt16();
+			auto file = File::Open(fileName, FileMode::OpenOrCreate);
 
-			if (fileVersion == version)
+			auto stream = gcnew BinaryReader(file);
+
+			String^ header = stream->ReadString();
+
+			if (fileHeader->Equals(header))
 			{
-				auto deflateStream = gcnew Compression::DeflateStream(file, Compression::CompressionMode::Decompress);
-				stream = gcnew BinaryReader(deflateStream);
+				short int version = stream->ReadInt16();
 
-				Directory::CreateDirectory("Data/tmp/");
-				WinAPI::SetAttribute("Data/tmp/", 1);
-				int assets = stream->ReadInt32();
-
-				for (int x = 0; x < assets; x++)
+				if (fileVersion == version)
 				{
-					String^ fN = stream->ReadString();
-					unsigned long length = stream->ReadInt32();
-					auto fC = stream->ReadBytes(length);
-					Directory::CreateDirectory(Path::GetDirectoryName("Data/tmp/" + fN));
-					auto fS = File::Open("Data/tmp/" + fN, FileMode::OpenOrCreate);
-					auto bW = gcnew BinaryWriter(fS);
-					bW->Flush();
-					bW->Write(
-						fC
-					);
-					bW->Close();
+					auto deflateStream = gcnew Compression::DeflateStream(file, Compression::CompressionMode::Decompress);
+					stream = gcnew BinaryReader(deflateStream);
+
+					Directory::CreateDirectory("Data/tmp/");
+					WinAPI::SetAttribute("Data/tmp/", 1);
+					int assets = stream->ReadInt32();
+
+					for (int x = 0; x < assets; x++)
+					{
+						String^ fN = stream->ReadString();
+						unsigned long length = stream->ReadInt32();
+						auto fC = stream->ReadBytes(length);
+						Directory::CreateDirectory(Path::GetDirectoryName("Data/tmp/" + fN));
+						auto fS = File::Open("Data/tmp/" + fN, FileMode::OpenOrCreate);
+						auto bW = gcnew BinaryWriter(fS);
+						bW->Flush();
+						bW->Write(
+							fC
+						);
+						bW->Close();
+					}
 				}
 			}
+
+
+			stream->Close();
 		}
 
+	};
 
-		stream->Close();
-	}
 
-};
-
+}

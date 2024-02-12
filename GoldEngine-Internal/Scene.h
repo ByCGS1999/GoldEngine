@@ -6,6 +6,9 @@
 #include "AsmLoader.h"
 #include "PreloadScript.h"
 
+using namespace Engine::Assets::IO;
+using namespace Engine::Assets::Storage;
+using namespace Engine::Assets::Management;
 
 namespace Engine::Management
 {
@@ -50,7 +53,7 @@ namespace Engine::Management
 
 			for each (auto packRoute in assetPacks)
 			{
-				FileManager::ReadCustomFileFormat(packRoute, "ThreadcallNull");
+				Engine::Assets::IO::FileManager::ReadCustomFileFormat(packRoute, "ThreadcallNull");
 			}
 
 			pack->ReadFromFile(sceneRequirements, 1234);

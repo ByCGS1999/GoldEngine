@@ -83,6 +83,7 @@ auto language = TextEditor::LanguageDefinition::CPlusPlus();
 bool codeEditorOpen = false;
 VoxelRenderer* renderer;
 std::string styleFN;
+Texture modelTexture;
 
 char fileName[] = "Level0";
 
@@ -551,10 +552,52 @@ namespace UserScripts
 					{
 						b6 = true;
 					}
+				
+					ImGui::EndMenu();
 				}
-
-				ImGui::EndMenu();
+				ImGui::EndMenuBar();
 			}
+
+			for each (String ^ f in Directory::GetFiles("./Data/", "*", SearchOption::AllDirectories))
+			{
+				if (f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".fbx") || f->Contains(".vox")) // model types
+				{
+					array<String^>^ tmp = f->Split('/');
+					auto t = tmp[tmp->Length - 1] + "\n";
+					printf(CastStringToNative(t).c_str());
+					if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
+					{
+						
+
+						auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
+							"ModelRenderer",
+							gcnew Engine::Internal::Components::Transform(
+								gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+								gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+								0.0f,
+								gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+								nullptr
+							),
+							0,
+							0,
+							0,
+							0xFFFFFFFF
+						);
+						meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
+						scene->AddObjectToScene(meshRenderer);
+						scene->GetRenderQueue()->Add(
+							gcnew Engine::Management::MiddleLevel::SceneObject(
+								meshRenderer->type,
+								meshRenderer,
+								""
+							)
+						);
+					}
+					ImGui::SameLine();
+					ImGui::Text(CastStringToNative(t).c_str());
+				}
+			}
+
 
 			ImGui::End();
 		}
@@ -1074,6 +1117,10 @@ namespace UserScripts
 
 		scene->Preload();
 
+		modelTexture = LoadTexture("./Data/EditorAssets/Model.png");
+
+		dataPack.AddTexture2D(256, modelTexture);
+
 		/*
 		Shader lightShader = dataPack.GetShader(1);
 
@@ -1255,13 +1302,6 @@ namespace UserScripts
 		Shader lightShader = dataPack.GetShader(1);
 		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };
 		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
-
-		auto light = lightManager->getLight(0);
-		if (light != nullptr)
-		{
-			rPBR::PBRLightUpdate(lightShader, light->GetLight());
-		}
-		//lightManager->Update();
 
 		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->sceneObjects)
 		{

@@ -1,17 +1,20 @@
 #pragma once
 
-public class ModelPack
+namespace Engine::Assets::Storage::Types
 {
-public:
-	unsigned int ModelId;
-
-public:
-	Model ModelReference;
-
-public:
-	ModelPack(unsigned int id, Model ref)
+	public class ModelPack
 	{
-		ModelId = id;
-		ModelReference = ref;
-	}
-};
+	public:
+		unsigned int ModelId;
+
+	public:
+		Model ModelReference;
+
+	public:
+		ModelPack(unsigned int id, Model ref)
+		{
+			ModelId = id;
+			ModelReference = ref;
+		}
+	};
+}
