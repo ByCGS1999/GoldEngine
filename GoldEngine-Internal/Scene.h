@@ -18,6 +18,7 @@ namespace Engine::Management
 	private:
 		System::Collections::ArrayList^ drawQueue; // Unlike Java, in C#/C++ CLR arraylists don't need to be from an specified type (This is what we're using for game rendering & updating.)
 		System::Collections::Generic::List<EngineAssembly^>^ assemblies; // loaded assemblies -> passcall from scene_assemblies -> get assemblies for preloading -> tbh idk what more.
+		DataPack^ sceneDatapack;
 
 		// Properties
 	public:
@@ -40,15 +41,20 @@ namespace Engine::Management
 			this->preload_scripts = preloadCode;
 			this->skyColor = skyTint;
 			scene_assemblies = assemblies;
+			this->sceneDatapack = gcnew DataPack();
 			drawQueue = gcnew System::Collections::ArrayList();
 		}
 
 
 		// Methods
 	public:
+		DataPack^ getSceneDataPack()
+		{
+			return sceneDatapack;
+		}
+
 		void LoadScene()
 		{
-			DataPack^ pack = gcnew DataPack();
 			DataPacks::singleton().FreeAll(); // free all the assets
 
 			for each (auto packRoute in assetPacks)
@@ -56,7 +62,7 @@ namespace Engine::Management
 				Engine::Assets::IO::FileManager::ReadCustomFileFormat(packRoute, "ThreadcallNull");
 			}
 
-			pack->ReadFromFile(sceneRequirements, 1234);
+			sceneDatapack->ReadFromFile(sceneRequirements, 1234);
 
 			Directory::Delete("Data/tmp/", true);
 
@@ -219,6 +225,8 @@ namespace Engine::Management
 					}
 				}
 			}
+
+			LoadScene();
 		}
 	};
 }

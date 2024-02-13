@@ -164,7 +164,6 @@ public:
 	{
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
-		//packedData = gcnew DataPack();
 		auto newAssembly = gcnew EngineAssembly();
 		newAssembly->LoadAssemblyFromFile("Data/Asm/GoldEngine_ScriptAssembly.dll");
 
@@ -567,7 +566,20 @@ namespace UserScripts
 					printf(CastStringToNative(t).c_str());
 					if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
 					{
-						
+						unsigned int assetId = 0;
+						auto res = packedData->hasAsset(Engine::Assets::Management::assetType::_Model, f);
+						if (!std::get<0>(res))
+						{
+							assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Model);
+
+							packedData->AddModel(assetId, CastStringToNative(f).c_str());
+
+							packedData->WriteToFile(packedData->getFile(), passwd);
+						}
+						else
+						{
+							assetId = std::get<1>(res);
+						}
 
 						auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
 							"ModelRenderer",
@@ -578,8 +590,8 @@ namespace UserScripts
 								gcnew Engine::Internal::Components::Vector3(1, 1, 1),
 								nullptr
 							),
-							0,
-							0,
+							assetId,
+							1,
 							0,
 							0xFFFFFFFF
 						);
@@ -1116,6 +1128,8 @@ namespace UserScripts
 		scene = SceneManager::LoadSceneFromFile("Level0", scene);
 
 		scene->Preload();
+
+		packedData = scene->getSceneDataPack();
 
 		modelTexture = LoadTexture("./Data/EditorAssets/Model.png");
 

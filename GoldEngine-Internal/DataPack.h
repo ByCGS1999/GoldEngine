@@ -10,9 +10,13 @@ using namespace System::IO;
 
 namespace Engine::Assets::Management
 {
+	typedef enum assetType { _Model, _Shader, _Texture2D, _Material };
 
 	public ref class DataPack
 	{
+	private:
+		String^ fileTarget;
+
 	private:
 		void ParseContentData()
 		{
@@ -117,6 +121,140 @@ namespace Engine::Assets::Management
 			return tex;
 		}
 
+		bool hasAsset(assetType aTyp, unsigned int value)
+		{
+			switch (aTyp)
+			{
+			case _Shader:
+				for each (auto T in shaders)
+				{
+					if (T.Key == value) 
+					{
+						return true;
+					}
+				}
+				return false;
+				break;
+			case _Material:
+				for each (auto T in materials)
+				{
+					if (T.Key == value)
+					{
+						return true;
+					}
+				}
+				return false;
+				break;
+			case _Model:
+				for each (auto T in models)
+				{
+					if (T.Key == value)
+					{
+						return true;
+					}
+				}
+				return false;
+				break;
+			case _Texture2D:
+				for each (auto T in textures2d)
+				{
+					if (T.Key == value)
+					{
+						return true;
+					}
+				}
+				return false;
+				break;
+			}
+		}
+
+		std::tuple<bool, int> hasAsset(assetType aTyp, String^ value)
+		{
+			switch (aTyp)
+			{
+			case _Shader:
+				for each (auto T in shaders)
+				{
+					if (T.Value == value)
+					{
+						return std::tuple<bool, int>(true, T.Key);
+					}
+				}
+				return std::tuple<bool, int>(false, 0);
+				break;
+			case _Material:
+				for each (auto T in materials)
+				{
+					if (T.Value == std::atoi(CastStringToNative(value).c_str()))
+					{
+						return std::tuple<bool, int>(true, T.Key);
+					}
+				}
+				return std::tuple<bool, int>(false, 0);
+				break;
+			case _Model:
+				for each (auto T in models)
+				{
+					if (T.Value == value)
+					{
+						return std::tuple<bool, int>(true, T.Key);
+					}
+				}
+				return std::tuple<bool, int>(false, 0);
+				break;
+			case _Texture2D:
+				for each (auto T in textures2d)
+				{
+					if (T.Value == value)
+					{
+						return std::tuple<bool, int>(true, T.Key);
+					}
+				}
+				return std::tuple<bool, int>(false, 0);
+				break;
+			}
+		}
+
+		unsigned int GetAssetID(assetType type)
+		{
+			unsigned int assetId = 0;
+
+			switch (type)
+			{
+			case _Material:
+				for each (auto T in materials)
+				{
+					assetId = Math::Max(assetId, T.Key + 1);
+				}
+				break;
+			case _Model:
+				for each (auto T in models)
+				{
+					assetId = Math::Max(assetId, T.Key + 1);
+				}
+				break;
+			case _Shader:
+				for each (auto T in shaders)
+				{
+					assetId = Math::Max(assetId, T.Key + 1);
+				}
+				break;
+			case _Texture2D:
+				for each (auto T in textures2d)
+				{
+					assetId = Math::Max(assetId, T.Key + 1);
+				}
+				break;
+			}
+
+			return assetId;
+		}
+
+		String^ getFile()
+		{
+			return fileTarget;
+		}
+
 		void WriteToFile(System::String^ fileName, unsigned int password)
 		{
 			if (AssetExists(fileName))
@@ -142,6 +280,8 @@ namespace Engine::Assets::Management
 				DataPack^ pack = Newtonsoft::Json::JsonConvert::DeserializeObject<DataPack^>(File::ReadAllText("Data/" + fileName + ".asset"));
 				String^ serializedData = Newtonsoft::Json::JsonConvert::SerializeObject(this, Newtonsoft::Json::Formatting::Indented);
 				String^ cipheredContents = CypherLib::EncryptFileContents(serializedData, password);
+
+				fileTarget = fileName;
 
 				CloneDataPack(pack);
 				//System::IO::File::WriteAllText("Data/" + scene->sceneName + ".scn", System::Convert::ToBase64String(Encoding::UTF8->GetBytes(cipheredContents)));

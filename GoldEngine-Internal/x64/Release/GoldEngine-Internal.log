@@ -181,18 +181,23 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\Skybox.h(37,
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\Skybox.h(37,8):
   'new' U 'override' solamente se permiten cuando existe el correspondiente método de base de una clase ref
   
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataPack.h(13,67): warning C4091: 'typedef ': se ha omitido a la izquierda de 'Engine::Assets::Management::assetType' cuando no hay ninguna variable declarada
+  (compilando archivo de origen "EntryPoint.cpp")
+  
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(16,3): warning C4677: 'SetAssemblyManager': la signatura de un miembro no privado contiene un tipo privado de ensamblado de 'EngineAssembly'
   (compilando archivo de origen "EntryPoint.cpp")
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(3,11):
   vea la declaración de 'EngineAssembly'
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(1092,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(1104,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\LightManager.h(201): warning C4172: devolución de dirección de la variable local o temporal: count
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataPack.h(169): warning C4715: 'Engine::Assets::Management::DataPack::hasAsset': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(148): warning C4715: 'EngineAssembly::Create': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\InputManager.h(31): warning C4717: 'Engine::Scripting::InputManager::GetMousePosition': recursiva para todas las rutas de acceso de control; la función provocará el desbordamiento de la pila en tiempo de ejecución
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ObjectManager.h(177): warning C4715: 'Engine::Scripting::ObjectManager::GetFirstObjectOfType': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(181): warning C4715: 'EngineAssembly::Create<Engine::Preload::PreloadScript ^>': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(181): warning C4715: 'EngineAssembly::Create<Engine::EngineObjects::Script ^>': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\ObjectManager.h(166): warning C4715: 'Engine::Scripting::ObjectManager::GetFirstObjectOfType': no todas las rutas de acceso de control devuelven un valor
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataPack.h(216): warning C4715: 'Engine::Assets::Management::DataPack::hasAsset': no todas las rutas de acceso de control devuelven un valor
   AssemblyInfo.obj : se encontró un módulo MSIL; vinculación incremental deshabilitada para MSIL; ejecutando vínculo completo
   GoldEngine-Internal.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\x64\Release\GoldEngine-Internal.exe
