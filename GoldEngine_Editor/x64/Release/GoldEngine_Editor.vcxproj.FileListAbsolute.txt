@@ -1,2 +1,0 @@
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine_Editor\x64\Release\GoldEngine_Editor.vcxproj.AssemblyReference.cache
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine_Editor\x64\Release\GoldEngine_Editor.vcxproj.CopyComplete
