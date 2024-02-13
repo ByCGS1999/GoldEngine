@@ -15,3 +15,5 @@ Solutions/
 ./GoldEngine-Internal/Data/**
 ./GoldEngine-Internal/Data/*
 ./GoldEngine-Internal/Binaries/*
+./GoldEngine-Internal/x64/*
+./GoldEngine_Editor/x64/*
