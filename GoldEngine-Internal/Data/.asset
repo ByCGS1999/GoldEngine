@@ -1,8 +1,0 @@
-{
-  "shaders": {},
-  "models": {
-    "0": "./Data/Engine\\Models\\Skybox_sphere.glb"
-  },
-  "materials": {},
-  "textures2d": {}
-}

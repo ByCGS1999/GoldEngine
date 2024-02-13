@@ -189,7 +189,7 @@ C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\SceneManager.h(16,3)
   C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(3,11):
   vea la declaración de 'EngineAssembly'
   
-C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(1104,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\EntryPoint.cpp(1139,53): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Objects\LightManager.h(201): warning C4172: devolución de dirección de la variable local o temporal: count
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\DataPack.h(169): warning C4715: 'Engine::Assets::Management::DataPack::hasAsset': no todas las rutas de acceso de control devuelven un valor
 C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\AsmLoader.h(148): warning C4715: 'EngineAssembly::Create': no todas las rutas de acceso de control devuelven un valor

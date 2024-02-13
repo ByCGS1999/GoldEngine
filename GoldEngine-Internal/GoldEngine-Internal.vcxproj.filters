@@ -169,6 +169,9 @@
     <Filter Include="Archivos de origen\Engine\Editor">
       <UniqueIdentifier>{a3986d25-1246-4e1c-b842-df40194a65d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\EditorAssets">
+      <UniqueIdentifier>{363e5041-ea71-49a0-86a4-165b28ddbc77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -445,6 +448,15 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="binaries\FBX2glTF.exe">
       <Filter>Binaries\fbx2gltf</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Model.png">
+      <Filter>Data\EditorAssets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Run.png">
+      <Filter>Data\EditorAssets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Stop.png">
+      <Filter>Data\EditorAssets</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

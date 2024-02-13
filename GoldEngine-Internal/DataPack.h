@@ -255,6 +255,11 @@ namespace Engine::Assets::Management
 			return fileTarget;
 		}
 
+		String^ getFileContents()
+		{
+			return File::ReadAllText(getFile());
+		}
+
 		void WriteToFile(System::String^ fileName, unsigned int password)
 		{
 			if (AssetExists(fileName))

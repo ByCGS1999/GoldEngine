@@ -229,6 +229,24 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Model.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Run.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Stop.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Data\Engine\Models\Error.obj">

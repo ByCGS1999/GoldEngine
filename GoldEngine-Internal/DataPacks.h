@@ -50,16 +50,37 @@ namespace Engine::Assets::Storage
 
 		void FreeShaders()
 		{
+			for (auto p : nativePacks->shaders)
+			{
+				if (&p.shaderReference != nullptr)
+				{
+					UnloadShader(p.shaderReference);
+				}
+			}
+
 			nativePacks->shaders.clear();
 		}
 
 		void FreeMaterials()
 		{
+			for (auto p : nativePacks->materials)
+			{
+				//UnloadMaterial(p.MaterialReference);
+			}
+
 			nativePacks->materials.clear();
 		}
 
 		void FreeModels()
 		{
+			for (auto p : nativePacks->models)
+			{
+				if (&p.ModelReference != nullptr)
+				{
+					UnloadModel(p.ModelReference);
+				}
+			}
+
 			nativePacks->models.clear();
 		}
 
@@ -70,6 +91,14 @@ namespace Engine::Assets::Storage
 
 		void FreeTextures2D()
 		{
+			for (auto p : nativePacks->textures2d)
+			{
+				if (&p.textureReference != nullptr)
+				{
+					UnloadTexture(p.textureReference);
+				}
+			}
+
 			nativePacks->textures2d.clear();
 		}
 

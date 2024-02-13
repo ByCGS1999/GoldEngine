@@ -84,6 +84,7 @@ bool codeEditorOpen = false;
 VoxelRenderer* renderer;
 std::string styleFN;
 Texture modelTexture;
+std::string codeEditorFile;
 
 char fileName[] = "Level0";
 
@@ -98,6 +99,144 @@ ref class EditorWindow : Engine::Window
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scripting::ObjectManager^ objectManager;
 
+private:
+	void SetEditorCode(std::string fileName, std::string fileContents)
+	{
+		std::ofstream stream(codeEditorFile.c_str());
+
+		if (stream.good())
+		{
+			stream.clear();
+			stream << codeEditor->GetText();
+		}
+
+		stream.close();
+
+		codeEditorFile = fileName;
+
+		codeEditor->SetText(fileContents.c_str());
+	}
+
+	void CodeEditor()
+	{
+		if (ImGui::Begin("Embedded Code Editor", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar))
+		{
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::BeginMenu("File"))
+				{
+					if (ImGui::MenuItem("Open"))
+					{
+
+					}
+					if (ImGui::MenuItem("Save"))
+					{
+						std::ofstream stream(codeEditorFile.c_str());
+
+						if (stream.good())
+						{
+							stream.clear();
+							stream << codeEditor->GetText();
+						}
+
+						stream.close();
+					}
+					ImGui::Separator();
+					if (ImGui::MenuItem("Exit"))
+					{
+						codeEditorOpen = false;
+					}
+					ImGui::EndMenu();
+				}
+
+
+				if (ImGui::BeginMenu("Language"))
+				{
+					if (ImGui::MenuItem("C++"))
+					{
+						language = TextEditor::LanguageDefinition::CPlusPlus();
+					}
+					if (ImGui::MenuItem("GLSL"))
+					{
+						language = TextEditor::LanguageDefinition::GLSL();
+					}
+					if (ImGui::MenuItem("Lua"))
+					{
+						language = TextEditor::LanguageDefinition::Lua();
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Templates"))
+				{
+					if (ImGui::MenuItem("C++ Script Template"))
+					{
+						codeEditor->SetText(std::string(R"(#include <cstdio>
+#include <Windows.h>
+#include "Typedefs.h"
+
+using namespace Engine::EngineObjects;
+using namespace Engine::Management;
+using namespace Engine::Managers;
+using namespace Engine::Scripting;
+using namespace Engine::Internal::Components;
+
+namespace UserScripts
+{
+	public ref class NewBehaviour : public Engine::EngineObjects::Script
+	{
+	public:
+		NewBehaviour(System::String^ name, Engine::Internal::Components::Transform^ transform) : Script(name, transform)
+		{
+
+		}
+
+	public:
+		void Update() override
+		{
+
+		}
+
+		void Draw() override
+		{
+
+		}
+
+		void DrawGizmo() override
+		{
+
+		}
+
+		void DrawImGUI() override
+		{
+
+		}
+	};
+}
+)"));
+					}
+					if (ImGui::MenuItem("GLSL"))
+					{
+						language = TextEditor::LanguageDefinition::GLSL();
+					}
+					if (ImGui::MenuItem("Lua"))
+					{
+						language = TextEditor::LanguageDefinition::Lua();
+					}
+
+					ImGui::EndMenu();
+				}
+
+				ImGui::EndMenuBar();
+			}
+		}
+
+		codeEditor->SetLanguageDefinition(language);
+
+		codeEditor->Render("Embedded Code Editor");
+	}
+
 	void DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::Object^ reference, int depth)
 	{
 		for each (SceneObject ^ _obj in scene->GetRenderQueue())
@@ -105,48 +244,45 @@ ref class EditorWindow : Engine::Window
 			auto _reference = _obj->GetReference();
 			auto _type = _obj->objectType;
 
-			if (_reference != reference)
+			if (_reference->transform->parent != nullptr)
 			{
-				if (_reference->transform->parent != nullptr)
+				if (_reference->transform->parent->uid == reference->GetTransform()->uid)
 				{
-					if (_reference->transform->parent->uid == reference->GetTransform()->uid)
+					String^ refName = "";
+					for (int x = 0; x < depth; x++)
 					{
-						String^ refName = "";
-						for (int x = 0; x < depth; x++)
-						{
-							refName += "\t";
-						}
-
-						refName += _reference->name;
-
-						if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager)
-						{
-							if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)")))
-							{
-								if (reparentLock)
-									reparentObject = _reference;
-								else
-								{
-									readonlyLock = true;
-									selectedObject = _reference;
-								}
-							}
-						}
-						else
-						{
-							if (ImGui::Selectable(CastToNative(refName)))
-							{
-								if (reparentLock)
-									reparentObject = _reference;
-								else
-								{
-									readonlyLock = false;
-									selectedObject = _reference;
-								}
-							}
-						}
-						DrawHierarchyInherits(scene, _reference, depth + 1);
+						refName += "\t";
 					}
+
+					refName += _reference->name;
+
+					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager)
+					{
+						if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)")))
+						{
+							if (reparentLock)
+								reparentObject = _reference;
+							else
+							{
+								readonlyLock = true;
+								selectedObject = _reference;
+							}
+						}
+					}
+					else
+					{
+						if (ImGui::Selectable(CastToNative(refName)))
+						{
+							if (reparentLock)
+								reparentObject = _reference;
+							else
+							{
+								readonlyLock = false;
+								selectedObject = _reference;
+							}
+						}
+					}
+					DrawHierarchyInherits(scene, _reference, depth + 1);
 				}
 			}
 		}
@@ -183,7 +319,7 @@ public:
 		//WinAPI::FreeCons();
 		SetWindowFlags(4096 | 4 | FLAG_MSAA_4X_HINT);
 		OpenWindow(1280, 720, (const char*)"GoldEngine Editor editor-ver0.5c");
-		renderer = new VoxelRenderer(4,4,4);
+		//renderer = new VoxelRenderer(4,4,4);
 
 		Preload();
 
@@ -349,106 +485,7 @@ public:
 
 		if (codeEditorOpen)
 		{
-			if (ImGui::Begin("Embedded Code Editor", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar))
-			{
-				if (ImGui::BeginMenuBar())
-				{
-					if (ImGui::BeginMenu("File"))
-					{
-
-						if (ImGui::MenuItem("Exit"))
-						{
-							codeEditorOpen = false;
-						}
-						ImGui::EndMenu();
-					}
-
-
-					if (ImGui::BeginMenu("Language"))
-					{
-						if (ImGui::MenuItem("C++"))
-						{
-							language = TextEditor::LanguageDefinition::CPlusPlus();
-						}
-						if (ImGui::MenuItem("GLSL"))
-						{
-							language = TextEditor::LanguageDefinition::GLSL();
-						}
-						if (ImGui::MenuItem("Lua"))
-						{
-							language = TextEditor::LanguageDefinition::Lua();
-						}
-
-						ImGui::EndMenu();
-					}
-
-					if (ImGui::BeginMenu("Templates"))
-					{
-						if (ImGui::MenuItem("C++ Script Template"))
-						{
-							codeEditor->SetText(std::string(R"(#include <cstdio>
-#include <Windows.h>
-#include "Typedefs.h"
-
-using namespace Engine::EngineObjects;
-using namespace Engine::Management;
-using namespace Engine::Managers;
-using namespace Engine::Scripting;
-using namespace Engine::Internal::Components;
-
-namespace UserScripts
-{
-	public ref class NewBehaviour : public Engine::EngineObjects::Script
-	{
-	public:
-		NewBehaviour(System::String^ name, Engine::Internal::Components::Transform^ transform) : Script(name, transform)
-		{
-
-		}
-
-	public:
-		void Update() override
-		{
-
-		}
-
-		void Draw() override
-		{
-
-		}
-
-		void DrawGizmo() override
-		{
-
-		}
-
-		void DrawImGUI() override
-		{
-
-		}
-	};
-}
-)"));
-						}
-						if (ImGui::MenuItem("GLSL"))
-						{
-							language = TextEditor::LanguageDefinition::GLSL();
-						}
-						if (ImGui::MenuItem("Lua"))
-						{
-							language = TextEditor::LanguageDefinition::Lua();
-						}
-
-						ImGui::EndMenu();
-					}
-
-					ImGui::EndMenuBar();
-				}
-			}
-
-			codeEditor->SetLanguageDefinition(language);
-
-			codeEditor->Render("Embedded Code Editor");
+			CodeEditor();
 		}
 
 		if (ImGui::Begin("Properties", &isOpen))
@@ -1088,8 +1125,6 @@ namespace UserScripts
 				ExecAsIdentifiedObject(obj->objectType, (System::Object^)obj->GetReference());
 			}
 
-			renderer->Render();
-
 			EndMode3D();
 
 			DrawFPS(0, 0);
@@ -1102,7 +1137,7 @@ namespace UserScripts
 			{
 				ImGui::SetWindowSize(ImVec2(285, 20), 0);
 				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight() - 25), 0);
-				ImGui::TextColored(ImVec4(255, 255, 255, 255), "Gold Engine Ver: editor-0.5c");
+				ImGui::TextColored(ImVec4(255, 255, 255, 255), "Gold Engine Ver: editor-0.5d");
 				ImGui::End();
 			}
 
