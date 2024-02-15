@@ -5,7 +5,6 @@
 #include "GlIncludes.h"
 #include "Transform.h"
 #include "Packs.h"
-#include "ModelPack.h"
 #include "CameraPack.h"
 #include "MaterialPack.h"
 #include "Texture2DPack.h"
@@ -136,13 +135,15 @@ namespace Engine::Assets::Storage
 		}
 
 
-		Engine::Assets::Storage::Types::ModelPack GetModelPack(unsigned int modelPackId)
+		Engine::Assets::Storage::Types::ModelPack* GetModelPack(unsigned int modelPackId)
 		{
-			Engine::Assets::Storage::Types::ModelPack shader = Engine::Assets::Storage::Types::ModelPack(-1, { 0 });
+			Engine::Assets::Storage::Types::ModelPack* shader = nullptr;
 
-			for each (Engine::Assets::Storage::Types::ModelPack sP in nativePacks->models)
+			for (int x = 0; x < nativePacks->models.size(); x++)
 			{
-				if (sP.ModelId == modelPackId)
+				auto sP = &nativePacks->models[x];
+
+				if (sP->getId()  == modelPackId)
 				{
 					shader = sP;
 					break;
@@ -252,11 +253,13 @@ namespace Engine::Assets::Storage
 			Model retn;
 			bool hasModel = false;
 
-			for each (Engine::Assets::Storage::Types::ModelPack  mP in nativePacks->models)
+			for (int x = 0; x < nativePacks->models.size(); x++)
 			{
-				if (mP.ModelId == modelId)
+				auto mP = &nativePacks->models[x];
+
+				if (mP->getId() == modelId)
 				{
-					retn = mP.ModelReference;
+					retn = mP->getResource();
 					hasModel = true;
 					break;
 				}
@@ -327,11 +330,13 @@ namespace Engine::Assets::Storage
 		{
 			bool hasModel = false;
 
-			for each (Engine::Assets::Storage::Types::ModelPack  model in nativePacks->models)
+			for (int x = 0; x < nativePacks->models.size(); x++)
 			{
-				if (model.ModelId == modelId)
+				auto sP = &nativePacks->models[x];
+
+				if (sP->getId() == modelId)
 				{
-					model.ModelReference = modelRef;
+					sP->setResource(modelRef);
 					hasModel = true;
 					break;
 				}

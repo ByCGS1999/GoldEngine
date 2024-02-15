@@ -26,8 +26,7 @@ namespace Engine::Assets::Storage::Types
 
 		void setResource(Shader s)
 		{
-			Shader* ptr = resource.release();
-			delete ptr;
+			freealloc();
 			resource = std::make_unique<Shader>(s);
 		}
 
@@ -35,6 +34,37 @@ namespace Engine::Assets::Storage::Types
 		{
 			UnloadShader(*resource);
 			Shader* resPtr = resource.release();
+			delete resPtr;
+		}
+	};
+	
+	public struct ModelPack
+	{
+	private:
+		unsigned int id;
+		std::unique_ptr<Model> resource;
+
+	public:
+		ModelPack(unsigned int id, Model res)
+		{
+			this->id = id;
+			this->resource = std::make_unique<Model>(res);
+		}
+
+	public:
+		unsigned int getId() const { return id; }
+		Model getResource() const { return *resource; }
+
+		void setResource(Model s)
+		{
+			freealloc();
+			resource = std::make_unique<Model>(s);
+		}
+
+		void freealloc()
+		{
+			UnloadModel(*resource);
+			Model* resPtr = resource.release();
 			delete resPtr;
 		}
 	};
