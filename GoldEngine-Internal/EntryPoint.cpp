@@ -603,7 +603,6 @@ public:
 				{
 					array<String^>^ tmp = f->Split('/');
 					auto t = tmp[tmp->Length - 1] + "\n";
-					printf(CastStringToNative(t).c_str());
 					if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
 					{
 						unsigned int assetId = 0;
@@ -1049,7 +1048,8 @@ public:
 			if (ImGui::Button("Open Scene"))
 			{
 				SceneManager::UnloadScene(scene);
-				scene = SceneManager::LoadSceneFromFile(gcnew System::String(fileName), scene);
+				scene = SceneManager::LoadSceneFromFile(gcnew System::String(fileName), scene, passwd);
+				scene->LoadScene();
 				ImGui::CloseCurrentPopup();
 				b3 = false;
 			}
@@ -1162,12 +1162,6 @@ public:
 	void Init() override
 	{
 		SceneManager::SetAssemblyManager(assemblies);
-
-		scene = SceneManager::LoadSceneFromFile("Level0", scene);
-
-		scene->Preload();
-
-		packedData = scene->getSceneDataPack();
 
 		modelTexture = LoadTexture("./Data/EditorAssets/Model.png");
 
@@ -1289,10 +1283,21 @@ public:
 		SetExitKey(KEY_NULL);
 		viewportTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 
+		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
+		scene->LoadScene();
+
+		while (!scene->sceneLoaded())
+		{
+			DataManager::HL_Wait(1.0f);
+		}
+
+		packedData = scene->getSceneDataPack();
+
 		// initialize editor assets
 
 		DataManager::HL_LoadTexture2D(0xE1, "Data/EditorAssets/Run.png");
 		DataManager::HL_LoadTexture2D(0xE2, "Data/EditorAssets/Stop.png");
+		DataManager::HL_LoadShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
 
 		// end of editor assets
 
@@ -1308,7 +1313,6 @@ public:
 		FileManager::WriteToCustomFile("Data/engineassets.gold", "ThreadcallNull", files->ToArray());*/
 		//FileManager::WriteCustomFileFormat("Data/assets1.gold", "ThereGoesThePasswordGyat", passwd);
 
-		scene = SceneManager::CreateScene("GoldBootManager");
 		/*
 		FileManager::ReadCustomFileFormat("Data/engineassets.gold", "ThreadcallNull");
 

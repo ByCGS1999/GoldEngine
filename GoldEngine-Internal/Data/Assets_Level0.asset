@@ -1,25 +1,10 @@
 {
   "shaders": {
-    "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs",
-    "1": "Data/Engine/Shaders/rPBR/pbr.vs:^:Data/Engine/Shaders/rPBR/pbr.fs"
+    "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs"
   },
   "models": {
-    "0": "Data/tmp/Engine/Models/Error.obj",
-    "1": "Data/tmp/Models/castle.obj",
-    "2": "Data/tmp/Engine/Models/Skybox_cube.glb",
-    "3": "Data/Game/Models/Spaceship.obj",
-    "4": "./Data/Engine\\Models\\Skybox_sphere.glb",
-    "5": "./Data/Game\\Models\\Spaceship.obj",
-    "6": "./Data/Models\\castle.obj",
-    "7": "./Data/Engine\\Models\\Skybox_cube.glb",
-    "8": "./Data/Engine\\Models\\Error.obj"
+    "0": "./Data/Engine\\Models\\Skybox_sphere.glb"
   },
-  "materials": {
-    "0": 0
-  },
-  "textures2d": {
-    "0": "Data/Models/castle_diffuse.png",
-    "1": "Data/tmp/Engine/Skybox/Daylight.png",
-    "2": "Data/Game/Models/Spaceship.png"
-  }
+  "materials": {},
+  "textures2d": {}
 }

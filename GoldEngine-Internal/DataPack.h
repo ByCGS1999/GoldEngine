@@ -16,6 +16,8 @@ namespace Engine::Assets::Management
 	{
 	private:
 		String^ fileTarget;
+		unsigned int password;
+		static DataPack^ singletonRef = nullptr;
 
 	private:
 		void ParseContentData()
@@ -73,14 +75,7 @@ namespace Engine::Assets::Management
 			ParseContentData();
 		}
 
-	public:
-		System::Collections::Generic::Dictionary<unsigned int, String^>^ shaders;
-		System::Collections::Generic::Dictionary<unsigned int, String^>^ models;
-		System::Collections::Generic::Dictionary<unsigned int, unsigned int>^ materials;
-		System::Collections::Generic::Dictionary<unsigned int, String^>^ textures2d;
-
-	public:
-		DataPack()
+		void Create()
 		{
 			shaders = gcnew Dictionary<unsigned int, String^>();
 			models = gcnew Dictionary<unsigned int, String^>();
@@ -88,12 +83,46 @@ namespace Engine::Assets::Management
 			textures2d = gcnew Dictionary<unsigned int, String^>();
 		}
 
-		Shader AddShader(unsigned int id, const char* vertexShader, const char* fragmentShader)
+	public:
+		System::Collections::Generic::Dictionary<unsigned int, String^>^ shaders;
+		System::Collections::Generic::Dictionary<unsigned int, String^>^ models;
+		System::Collections::Generic::Dictionary<unsigned int, unsigned int>^ materials;
+		System::Collections::Generic::Dictionary<unsigned int, String^>^ textures2d;
+
+	public:
+		DataPack(String^ fileName)
 		{
-			shaders->Add(id, gcnew String(vertexShader) + ":^:" + gcnew String(fragmentShader));
-			Shader s = LoadShader(vertexShader, fragmentShader);
-			DataPacks::singleton().AddShader(id, s);
-			return s;
+			shaders = gcnew Dictionary<unsigned int, String^>();
+			models = gcnew Dictionary<unsigned int, String^>();
+			materials = gcnew Dictionary<unsigned int, unsigned int>();
+			textures2d = gcnew Dictionary<unsigned int, String^>();
+			singletonRef = this;
+			fileTarget = fileName;
+		}
+
+		Shader AddShader(unsigned int id, String^ vs, String^ fs)
+		{
+			if (!shaders->ContainsKey(id))
+			{
+				shaders->Add(id, vs + ":^:" + fs);
+
+				std::string vertexShader = "";
+				std::string fragmentShader = "";
+
+				vertexShader = CastStringToNative(vs);
+				fragmentShader = CastStringToNative(vs);
+
+				Shader s = LoadShader(vertexShader.c_str(), fragmentShader.c_str());
+				DataPacks::singleton().AddShader(id, s);
+
+				WriteToFile(fileTarget, password);
+
+				return s;
+			}
+			else
+			{
+				return DataPacks::singleton().GetShader(id);
+			}
 		}
 
 		Model AddModel(unsigned int id, const char* path)
@@ -113,12 +142,29 @@ namespace Engine::Assets::Management
 			return m;
 		}
 
-		Texture2D AddTextures2D(unsigned int id, const char* path)
+		Texture2D AddTextures2D(unsigned int id, String^ tex)
 		{
-			Texture2D tex = LoadTexture(path);
-			textures2d->Add(id, gcnew String(path));
-			DataPacks::singleton().AddTexture2D(id, tex);
-			return tex;
+			if (!textures2d->ContainsKey(id))
+			{
+				textures2d->Add(id, tex);
+
+				std::string text = "";
+
+				text = CastStringToNative(tex);
+
+				Texture2D tex = LoadTexture(text.c_str());
+				DataPacks::singleton().AddTexture2D(id, tex);
+
+				WriteToFile(fileTarget, password);
+
+				DataPacks::singleton().AddTexture2D(id, tex);
+
+				return tex;
+			}
+			else
+			{
+				return DataPacks::singleton().GetTexture2D(id);
+			}
 		}
 
 		bool hasAsset(assetType aTyp, unsigned int value)
@@ -262,6 +308,8 @@ namespace Engine::Assets::Management
 
 		void WriteToFile(System::String^ fileName, unsigned int password)
 		{
+			this->password = password;
+
 			if (AssetExists(fileName))
 			{
 				String^ serializedData = Newtonsoft::Json::JsonConvert::SerializeObject(this, Newtonsoft::Json::Formatting::Indented);
@@ -280,13 +328,13 @@ namespace Engine::Assets::Management
 
 		void ReadFromFile(System::String^ fileName, unsigned int password)
 		{
+			this->password = password;
+
 			if (AssetExists(fileName))
 			{
 				DataPack^ pack = Newtonsoft::Json::JsonConvert::DeserializeObject<DataPack^>(File::ReadAllText("Data/" + fileName + ".asset"));
 				String^ serializedData = Newtonsoft::Json::JsonConvert::SerializeObject(this, Newtonsoft::Json::Formatting::Indented);
 				String^ cipheredContents = CypherLib::EncryptFileContents(serializedData, password);
-
-				fileTarget = fileName;
 
 				CloneDataPack(pack);
 				//System::IO::File::WriteAllText("Data/" + scene->sceneName + ".scn", System::Convert::ToBase64String(Encoding::UTF8->GetBytes(cipheredContents)));
@@ -294,10 +342,18 @@ namespace Engine::Assets::Management
 			else
 			{
 				// create file and rerun save
-				TraceLog(LOG_FATAL, "[CORE]: I/O OPERATION FAILED, FILE NOT FOUND");
+				printf("[CORE]: I/O OPERATION FAILED, FILE %s NOT FOUND", CastStringToNative(fileName).c_str());
+				System::IO::File::Create("Data/" + fileName + ".asset")->Close();
+				WriteToFile(fileName, password);
+
+				ReadFromFile(fileName, password);
 			}
 		}
-	};
 
+		static DataPack^ singleton()
+		{
+			return singletonRef;
+		}
+	};
 
 }

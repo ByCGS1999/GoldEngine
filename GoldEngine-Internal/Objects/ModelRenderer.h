@@ -4,30 +4,8 @@ using namespace Engine::Assets::Storage;
 
 namespace Engine::EngineObjects
 {
-	namespace Native
-	{
-		class NativeModelRenderer
-		{
-		public:
-			std::unique_ptr<Model> model;
-			std::unique_ptr<Material> material;
-			std::unique_ptr<Texture2D> texture;
-			unsigned long color_hex;
-
-			NativeModelRenderer(Model m, Material mat, Texture2D tex, unsigned long hex) : model(std::make_unique<Model>(m)),
-				material(std::make_unique<Material>(mat)), texture(std::make_unique<Texture2D>(tex)),
-				color_hex(hex)
-			{
-
-			}
-		};
-	}
-
 	public ref class ModelRenderer : public Engine::Internal::Components::Object
 	{
-	private:
-		Native::NativeModelRenderer* nativeRenderer;
-
 	public:
 		// datapack refs
 		unsigned int model;
@@ -41,16 +19,6 @@ namespace Engine::EngineObjects
 			this->material = material;
 			this->tint = tint;
 			this->texture = texture;
-
-			nativeRenderer = new Native::NativeModelRenderer(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetMaterial(material), DataPacks::singleton().GetTexture2D(texture), tint);
-		}
-
-		void SetNativeRenderer(Native::NativeModelRenderer* renderer)
-		{
-			if (nativeRenderer != nullptr)
-				free(nativeRenderer);
-
-			nativeRenderer = renderer;
 		}
 
 		void Init(unsigned int model, unsigned int material, unsigned int texture, unsigned long tint)
@@ -65,15 +33,7 @@ namespace Engine::EngineObjects
 			auto texInst = DataPacks::singleton().GetTexture2D(texture);
 
 			materialInst.maps[MATERIAL_MAP_ALBEDO].texture = texInst;
-
-			nativeRenderer = new Native::NativeModelRenderer(modelInst, materialInst, texInst, tint);
 		}
-
-		Native::NativeModelRenderer* GetNativeRenderer()
-		{
-			return nativeRenderer;
-		}
-
 
 		void Update() override {}
 		void PhysicsUpdate() override {}
@@ -83,16 +43,16 @@ namespace Engine::EngineObjects
 		{
 			auto t = GetTransform();
 			DrawModel(
-				*nativeRenderer->model, 
+				DataPacks::singleton().GetModel(model),
 				{ t->position->x,t->position->y, t->position->z }, 
 				t->scale->x, 
-				GetColor(nativeRenderer->color_hex)
+				GetColor(tint)
 			);
 		}
 
 		void SetColorTint(unsigned int hexValue)
 		{
-			nativeRenderer->color_hex = hexValue;
+			tint = hexValue;
 		}
 	};
 }

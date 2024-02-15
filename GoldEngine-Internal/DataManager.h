@@ -6,6 +6,7 @@
 
 #include <vector>
 #include "Transform.h"
+#include "DataPack.h"
 #include "DataPacks.h"
 
 namespace Engine::Internal
@@ -45,28 +46,28 @@ namespace Engine::Internal
 		}
 
 		// -- LOADING
+		
+		// Load a shader into the datapacks
 		inline static void HL_LoadShader(unsigned int shaderId, System::String^ vertexShaderFile, System::String^ fragmentShaderFile)
 		{
-			const char* vsFile = CastToNative(vertexShaderFile);
-			const char* fsFile = CastToNative(fragmentShaderFile);
-
-			Shader s = LoadShader(vsFile, fsFile);
-
-			DataPacks::singleton().AddShader(shaderId, s);
+			Engine::Assets::Management::DataPack::singleton()->AddShader(shaderId, vertexShaderFile, fragmentShaderFile);
 		}
 
+		// Load a model into the datapacks
 		inline static void HL_LoadModel(unsigned int modelId, System::String^ fileName)
 		{
 			Model model = LoadModel(CastToNative(fileName));
 			Engine::Assets::Storage::DataPacks::singleton().AddModel(modelId, model);
 		}
 
+		// Load a texture into the datapacks
 		inline static void HL_LoadTexture2D(unsigned int textureId, System::String^ fileName)
 		{
-			Texture2D texture = LoadTexture(CastToNative(fileName));
+			Engine::Assets::Management::DataPack::singleton()->AddTextures2D(textureId, fileName);
 		}
 
 		// -- UNLOADING / FREEING
+
 		inline static void HL_FreeCameras()
 		{
 			Engine::Assets::Storage::DataPacks::singleton().FreeCameras();

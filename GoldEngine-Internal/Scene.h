@@ -20,6 +20,7 @@ namespace Engine::Management
 		System::Collections::Generic::List<EngineAssembly^>^ assemblies; // loaded assemblies -> passcall from scene_assemblies -> get assemblies for preloading -> tbh idk what more.
 		DataPack^ sceneDatapack;
 		bool sceneFinishedLoading;
+		unsigned int password;
 
 		// Properties
 	public:
@@ -42,11 +43,16 @@ namespace Engine::Management
 			this->preload_scripts = preloadCode;
 			this->skyColor = skyTint;
 			scene_assemblies = assemblies;
-			this->sceneDatapack = gcnew DataPack();
+			this->sceneDatapack = gcnew DataPack(sceneRequirements);
 			drawQueue = gcnew System::Collections::ArrayList();
 			this->sceneFinishedLoading = false;
 		}
 
+	public:
+		void setPassword(unsigned int passwd)
+		{
+			password = passwd;
+		}
 
 		// Methods
 	public:
@@ -59,6 +65,8 @@ namespace Engine::Management
 
 		void LoadScene()
 		{
+			printf("Loading scene\n");
+
 			if(DataPacks::singleton().dataPackHasAssets())
 				DataPacks::singleton().FreeAll(); // free all the assets
 
@@ -67,7 +75,7 @@ namespace Engine::Management
 				Engine::Assets::IO::FileManager::ReadCustomFileFormat(packRoute, "ThreadcallNull");
 			}
 
-			sceneDatapack->ReadFromFile(sceneRequirements, 1234);
+			sceneDatapack->ReadFromFile(sceneRequirements, password);
 
 			Directory::Delete("Data/tmp/", true);
 
@@ -78,6 +86,8 @@ namespace Engine::Management
 
 		void UnloadScene()
 		{
+			printf("Unloading scene\n");
+
 			//OnUnload();
 			sceneObjects->Clear();
 			drawQueue->Clear();
@@ -220,6 +230,8 @@ namespace Engine::Management
 				newAssembly->LoadAssemblyFromFile(t);
 				assemblies->Add(newAssembly);
 			}
+
+			sceneDatapack->ReadFromFile(sceneRequirements, password);
 
 			for each (auto p in preload_scripts)
 			{

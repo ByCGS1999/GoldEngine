@@ -30,12 +30,6 @@
     <Filter Include="Archivos de origen\Engine\ObjectManagement">
       <UniqueIdentifier>{734d2dff-1260-4726-b83d-00d76a1f3524}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\ObjectManagement\Shaders">
-      <UniqueIdentifier>{fda82e73-fb34-4960-9ee5-593279e6ab3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\ObjectManagement\Models">
-      <UniqueIdentifier>{8bdc4cb0-1afe-4050-8a22-2e48235c6ce1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Engine\HLAPI">
       <UniqueIdentifier>{9b437e7d-5295-4f14-bd28-6d61f0a38f22}</UniqueIdentifier>
     </Filter>
@@ -239,12 +233,6 @@
     </ClInclude>
     <ClInclude Include="DataPacks.h">
       <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderPack.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelPack.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement\Models</Filter>
     </ClInclude>
     <ClInclude Include="CameraPack.h">
       <Filter>Archivos de origen\Engine\ObjectManagement\Cameras</Filter>

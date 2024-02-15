@@ -89,15 +89,12 @@ namespace Engine::Assets::Storage
 
 		void FreeModels()
 		{
-			/*
 			for (int x = 0; x < nativePacks->models.size(); x++)
 			{
-				if (&nativePacks->models[x].ModelReference != nullptr)
-				{
-					UnloadModel(nativePacks->models[x].ModelReference);
-				}
+				auto sP = &nativePacks->models[x];
+
+				sP->freealloc();
 			}
-			*/
 
 			nativePacks->models.clear();
 		}
@@ -126,6 +123,8 @@ namespace Engine::Assets::Storage
 		{
 			if (this->nativePacks == nullptr)
 				return;
+
+			printf("Freeing and unloading loaded assets\n");
 
 			FreeModels();
 			FreeTextures2D();
@@ -268,8 +267,6 @@ namespace Engine::Assets::Storage
 			if (!hasModel)
 			{
 				retn = LoadModel("Data/Engine/Models/Error.obj");
-				Material defaultMaterial = LoadMaterialDefault();
-				retn.materials = &defaultMaterial;
 			}
 
 			return retn;

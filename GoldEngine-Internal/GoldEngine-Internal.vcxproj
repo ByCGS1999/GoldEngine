@@ -188,7 +188,6 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="MaterialPack.h" />
-    <ClInclude Include="ModelPack.h" />
     <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h" />
     <ClInclude Include="Raylib\include\glad.h" />
     <ClInclude Include="Raylib\include\IconsFontAwesome6.h" />
@@ -202,7 +201,6 @@
     <ClInclude Include="Raylib\include\rlImGuiColors.h" />
     <ClInclude Include="Raylib\include\rPBR.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="ShaderPack.h" />
     <ClInclude Include="Texture2DPack.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="WinAPI.h" />

@@ -23,19 +23,19 @@ namespace Engine::Managers
 			return System::IO::File::Exists("Data/" + fN + ".scn");
 		}
 
-		static Engine::Management::Scene^ LoadSceneFromFile(System::String^ fN, Engine::Management::Scene^ loadedScene)
+		static Engine::Management::Scene^ LoadSceneFromFile(System::String^ fN, Engine::Management::Scene^ loadedScene, unsigned int passwd)
 		{
 			if (AssetExists(fN))
 			{
 				auto fileContents = System::IO::File::ReadAllText("Data/" + fN + ".scn");
 				auto parsedScene = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Management::Scene^>(fileContents);
 
-				loadedScene->sceneName = fN;
-				loadedScene->assetPacks = parsedScene->assetPacks;
-				loadedScene->sceneObjects = parsedScene->sceneObjects;
-				loadedScene->sceneRequirements = parsedScene->sceneRequirements;
-				
-				loadedScene->LoadScene();
+				if (loadedScene != nullptr)
+					loadedScene->UnloadScene();
+				else
+					loadedScene = CreateScene(fN);
+
+				loadedScene->setPassword(passwd);
 
 				for each (auto t in parsedScene->sceneObjects)
 				{
@@ -49,7 +49,6 @@ namespace Engine::Managers
 					auto referenceObject = (Engine::Internal::Components::Object^)t->GetReference();
 					auto objectType = t->objectType;
 					auto deserializedData = t->deserializedData;
-
 					auto renderQueue = loadedScene->GetRenderQueue();
 
 					switch (objectType)
@@ -85,7 +84,7 @@ namespace Engine::Managers
 						Texture texture = DataPacks::singleton().GetTexture2D(instancedModelRenderer->texture);
 						unsigned int hex = instancedModelRenderer->tint;
 
-						instancedModelRenderer->SetNativeRenderer(new Engine::EngineObjects::Native::NativeModelRenderer(model, material, texture, hex));
+						//instancedModelRenderer->SetNativeRenderer(new Engine::EngineObjects::Native::NativeModelRenderer(model, material, texture, hex));
 					}
 					break;
 					case Engine::Internal::Components::ObjectType::Skybox:
@@ -220,6 +219,8 @@ namespace Engine::Managers
 			}
 			if (loadedScene == nullptr)
 				TraceLog(LOG_FATAL, "FAILED OPENING SCENE");
+
+			loadedScene->Preload();
 
 			return loadedScene;
 		}
