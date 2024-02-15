@@ -16,7 +16,6 @@ namespace Engine::Assets::Management
 	{
 	private:
 		String^ fileTarget;
-		unsigned int password;
 		static DataPack^ singletonRef = nullptr;
 
 	private:
@@ -100,6 +99,11 @@ namespace Engine::Assets::Management
 			fileTarget = fileName;
 		}
 
+		static void SetSingletonReference(DataPack^ reference)
+		{
+			singletonRef = reference;
+		}
+
 		Shader AddShader(unsigned int id, String^ vs, String^ fs)
 		{
 			if (!shaders->ContainsKey(id))
@@ -115,8 +119,6 @@ namespace Engine::Assets::Management
 				Shader s = LoadShader(vertexShader.c_str(), fragmentShader.c_str());
 				DataPacks::singleton().AddShader(id, s);
 
-				WriteToFile(fileTarget, password);
-
 				return s;
 			}
 			else
@@ -127,10 +129,19 @@ namespace Engine::Assets::Management
 
 		Model AddModel(unsigned int id, const char* path)
 		{
-			Model m = LoadModel(path);
-			DataPacks::singleton().AddModel(id, m);
-			models->Add(id, gcnew String(path));
-			return m;
+			if (!models->ContainsKey(id))
+			{
+				models->Add(id, gcnew String(path));
+				Model m = LoadModel(path);
+
+				DataPacks::singleton().AddModel(id, m);
+
+				return m;
+			}
+			else
+			{
+				return DataPacks::singleton().GetModel(id);
+			}
 		}
 
 		Material AddMaterials(unsigned int id, unsigned int shaderId)
@@ -154,8 +165,6 @@ namespace Engine::Assets::Management
 
 				Texture2D tex = LoadTexture(text.c_str());
 				DataPacks::singleton().AddTexture2D(id, tex);
-
-				WriteToFile(fileTarget, password);
 
 				DataPacks::singleton().AddTexture2D(id, tex);
 
@@ -308,8 +317,6 @@ namespace Engine::Assets::Management
 
 		void WriteToFile(System::String^ fileName, unsigned int password)
 		{
-			this->password = password;
-
 			if (AssetExists(fileName))
 			{
 				String^ serializedData = Newtonsoft::Json::JsonConvert::SerializeObject(this, Newtonsoft::Json::Formatting::Indented);
@@ -328,8 +335,6 @@ namespace Engine::Assets::Management
 
 		void ReadFromFile(System::String^ fileName, unsigned int password)
 		{
-			this->password = password;
-
 			if (AssetExists(fileName))
 			{
 				DataPack^ pack = Newtonsoft::Json::JsonConvert::DeserializeObject<DataPack^>(File::ReadAllText("Data/" + fileName + ".asset"));

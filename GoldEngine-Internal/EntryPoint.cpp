@@ -966,7 +966,7 @@ public:
 				ImGui::CloseCurrentPopup();
 			}
 
-			delete[] tmp;
+			delete &tmp;
 
 			ImGui::EndPopup();
 		}
@@ -1163,9 +1163,15 @@ public:
 	{
 		SceneManager::SetAssemblyManager(assemblies);
 
-		modelTexture = LoadTexture("./Data/EditorAssets/Model.png");
+		DataPack::SetSingletonReference(packedData);
 
-		dataPack.AddTexture2D(256, modelTexture);
+		modelTexture = packedData->AddTextures2D(256, "./Data/EditorAssets/Model.png");
+		DataManager::HL_LoadTexture2D(0xE1, "Data/EditorAssets/Run.png");
+		DataManager::HL_LoadTexture2D(0xE2, "Data/EditorAssets/Stop.png");
+		DataManager::HL_LoadShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
+
+		packedData->WriteToFile(packedData->getFile(), passwd);
+
 
 		/*
 		Shader lightShader = dataPack.GetShader(1);
@@ -1261,7 +1267,7 @@ public:
 		//Directory::Delete("Data/tmp/", true);
 		//SceneManager::SaveSceneToFile(scene, passwd);
 		//packedData->WriteToFile("Assets1", passwd);
-		Engine::Internal::DataManager::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
+		DataManager::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
 
 		c3d2 = dataPack.GetCamera3D(0);
 		c3d2.projection = CAMERA_PERSPECTIVE;
@@ -1283,6 +1289,8 @@ public:
 		SetExitKey(KEY_NULL);
 		viewportTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 
+		scene = SceneManager::CreateScene("GoldEngineBoot");
+
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
 		scene->LoadScene();
 
@@ -1294,10 +1302,6 @@ public:
 		packedData = scene->getSceneDataPack();
 
 		// initialize editor assets
-
-		DataManager::HL_LoadTexture2D(0xE1, "Data/EditorAssets/Run.png");
-		DataManager::HL_LoadTexture2D(0xE2, "Data/EditorAssets/Stop.png");
-		DataManager::HL_LoadShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
 
 		// end of editor assets
 

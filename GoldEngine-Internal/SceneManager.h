@@ -30,10 +30,15 @@ namespace Engine::Managers
 				auto fileContents = System::IO::File::ReadAllText("Data/" + fN + ".scn");
 				auto parsedScene = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Management::Scene^>(fileContents);
 
-				if (loadedScene != nullptr)
+				if (loadedScene != nullptr) 
+				{
 					loadedScene->UnloadScene();
-				else
 					loadedScene = CreateScene(fN);
+				}
+				else
+				{
+					loadedScene = CreateScene(fN);
+				}
 
 				loadedScene->setPassword(passwd);
 

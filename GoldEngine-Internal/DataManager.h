@@ -56,8 +56,7 @@ namespace Engine::Internal
 		// Load a model into the datapacks
 		inline static void HL_LoadModel(unsigned int modelId, System::String^ fileName)
 		{
-			Model model = LoadModel(CastToNative(fileName));
-			Engine::Assets::Storage::DataPacks::singleton().AddModel(modelId, model);
+			Engine::Assets::Management::DataPack::singleton()->AddModel(modelId, CastStringToNative(fileName).c_str());
 		}
 
 		// Load a texture into the datapacks
@@ -91,10 +90,10 @@ namespace Engine::Internal
 		// -- CONFIGURATION
 		inline static void HL_SetMaterialShader(unsigned int materialId, unsigned int shaderId)
 		{
-			Material* material = &Engine::Assets::Storage::DataPacks::singleton().GetMaterial(materialId);
-			Shader* shader = &Engine::Assets::Storage::DataPacks::singleton().GetShader(shaderId);
+			Material material = Engine::Assets::Storage::DataPacks::singleton().GetMaterial(materialId);
+			Shader shader = Engine::Assets::Storage::DataPacks::singleton().GetShader(shaderId);
 
-			material->shader = *shader;
+			material.shader = shader;
 		}
 		inline static void HL_SetMaterialTexture(unsigned int materialId, unsigned int textureId)
 		{
@@ -106,11 +105,9 @@ namespace Engine::Internal
 			m.maps = &mMap;
 		}
 		// -- CREATION
-		inline static void HL_CreateMaterial(unsigned int materialId)
+		inline static void HL_CreateMaterial(unsigned int materialId, unsigned int shaderId)
 		{
-			Material newMaterial;
-
-			DataPacks::singleton().AddMaterial(materialId, newMaterial);
+			Engine::Assets::Management::DataPack::singleton()->AddMaterials(materialId, shaderId);
 		}
 
 		inline static void HL_CreateLight()
@@ -294,10 +291,10 @@ namespace Engine::Internal
 
 		inline static void HL_SetModelTexture(unsigned int modelId, unsigned int materialId)
 		{
-			Material* m = &Engine::Assets::Storage::DataPacks::singleton().GetMaterial(materialId);
-			Model* mod = &Engine::Assets::Storage::DataPacks::singleton().GetModel(modelId);
+			Material m = Engine::Assets::Storage::DataPacks::singleton().GetMaterial(materialId);
+			Model mod = Engine::Assets::Storage::DataPacks::singleton().GetModel(modelId);
 
-			mod->materials = m;
+			mod.materials = &m;
 		}
 	};
 }

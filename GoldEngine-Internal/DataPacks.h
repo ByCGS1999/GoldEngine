@@ -274,6 +274,8 @@ namespace Engine::Assets::Storage
 
 		Shader GetShader(unsigned int shaderId)
 		{
+			printf("Read inst from id %d\n", shaderId);
+
 			Shader shader;
 
 			bool hasShader = false;
@@ -293,6 +295,7 @@ namespace Engine::Assets::Storage
 			if (!hasShader)
 			{
 				shader = LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
+				AddShader(shaderId, shader);
 			}
 
 			return shader;
