@@ -1,4 +1,5 @@
 #pragma once
+/*
 namespace Engine::Assets::Storage::Types
 {
 	public class ShaderPack
@@ -22,4 +23,4 @@ namespace Engine::Assets::Storage::Types
 			return shaderReference;
 		}
 	};
-}
+}*/

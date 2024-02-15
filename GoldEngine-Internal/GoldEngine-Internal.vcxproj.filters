@@ -172,6 +172,9 @@
     <Filter Include="Data\EditorAssets">
       <UniqueIdentifier>{363e5041-ea71-49a0-86a4-165b28ddbc77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\ObjectManagement\Types">
+      <UniqueIdentifier>{014d52e1-2403-456a-898e-daa5e640d34b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -368,6 +371,9 @@
     </ClInclude>
     <ClInclude Include="imguistyleserializer.h">
       <Filter>Archivos de origen\Engine\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Packs.h">
+      <Filter>Archivos de origen\Engine\ObjectManagement\Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

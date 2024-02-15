@@ -4,7 +4,7 @@
 #include "Includes.h"
 #include "GlIncludes.h"
 #include "Transform.h"
-#include "ShaderPack.h"
+#include "Packs.h"
 #include "ModelPack.h"
 #include "CameraPack.h"
 #include "MaterialPack.h"
@@ -48,14 +48,26 @@ namespace Engine::Assets::Storage
 			singleton_Ref = this;
 		}
 
+		bool dataPackHasAssets()
+		{
+			int assetCount = 0;
+
+			assetCount += nativePacks->shaders.size();
+			assetCount += nativePacks->models.size();
+			assetCount += nativePacks->textures2d.size();
+			assetCount += nativePacks->materials.size();
+			assetCount += nativePacks->cameras.size();
+
+			return (assetCount >= 0);
+		}
+
 		void FreeShaders()
 		{
-			for (auto p : nativePacks->shaders)
+			for (int x = 0; x < nativePacks->shaders.size(); x++)
 			{
-				if (&p.shaderReference != nullptr)
-				{
-					UnloadShader(p.shaderReference);
-				}
+				auto sP = &nativePacks->shaders[x];
+
+				sP->freealloc();
 			}
 
 			nativePacks->shaders.clear();
@@ -63,23 +75,30 @@ namespace Engine::Assets::Storage
 
 		void FreeMaterials()
 		{
-			for (auto p : nativePacks->materials)
+			/*
+			for (int x = 0; x < nativePacks->materials.size(); x++)
 			{
-				//UnloadMaterial(p.MaterialReference);
+				if (&nativePacks->materials[x].MaterialReference != nullptr)
+				{
+					UnloadMaterial(nativePacks->materials[x].MaterialReference);
+				}
 			}
+			*/
 
 			nativePacks->materials.clear();
 		}
 
 		void FreeModels()
 		{
-			for (auto p : nativePacks->models)
+			/*
+			for (int x = 0; x < nativePacks->models.size(); x++)
 			{
-				if (&p.ModelReference != nullptr)
+				if (&nativePacks->models[x].ModelReference != nullptr)
 				{
-					UnloadModel(p.ModelReference);
+					UnloadModel(nativePacks->models[x].ModelReference);
 				}
 			}
+			*/
 
 			nativePacks->models.clear();
 		}
@@ -91,19 +110,24 @@ namespace Engine::Assets::Storage
 
 		void FreeTextures2D()
 		{
-			for (auto p : nativePacks->textures2d)
+			/*
+			for (int x = 0; x < nativePacks->textures2d.size(); x++)
 			{
-				if (&p.textureReference != nullptr)
+				if (&nativePacks->textures2d[x].textureReference != nullptr)
 				{
-					UnloadTexture(p.textureReference);
+					UnloadTexture(nativePacks->textures2d[x].textureReference);
 				}
 			}
+			*/
 
 			nativePacks->textures2d.clear();
 		}
 
 		void FreeAll()
 		{
+			if (this->nativePacks == nullptr)
+				return;
+
 			FreeModels();
 			FreeTextures2D();
 			FreeMaterials();
@@ -129,13 +153,15 @@ namespace Engine::Assets::Storage
 		}
 
 
-		Engine::Assets::Storage::Types::ShaderPack GetShaderPack(unsigned int shaderId)
+		Engine::Assets::Storage::Types::ShaderPack* GetShaderPack(unsigned int shaderId)
 		{
-			Engine::Assets::Storage::Types::ShaderPack shader = Engine::Assets::Storage::Types::ShaderPack(-1, { 0, {0} });
+			Engine::Assets::Storage::Types::ShaderPack* shader = nullptr;
 
-			for each (Engine::Assets::Storage::Types::ShaderPack  sP in nativePacks->shaders)
+			for (int x = 0; x < nativePacks->shaders.size(); x++)
 			{
-				if (sP.shaderId == shaderId)
+				auto sP = &nativePacks->shaders[x];
+
+				if (sP->getId() == shaderId)
 				{
 					shader = sP;
 					break;
@@ -252,11 +278,13 @@ namespace Engine::Assets::Storage
 
 			bool hasShader = false;
 
-			for each (Engine::Assets::Storage::Types::ShaderPack  sP in nativePacks->shaders)
+			for (int x = 0; x < nativePacks->shaders.size(); x++)
 			{
-				if (sP.shaderId == shaderId)
+				auto sP = &nativePacks->shaders[x];
+
+				if (sP->getId() == shaderId)
 				{
-					shader = sP.shaderReference;
+					shader = sP->getResource();
 					hasShader = true;
 					break;
 				}
@@ -274,11 +302,13 @@ namespace Engine::Assets::Storage
 		{
 			bool hasShader = false;
 
-			for each (Engine::Assets::Storage::Types::ShaderPack  s in nativePacks->shaders)
+			for (int x = 0; x < nativePacks->shaders.size(); x++)
 			{
-				if (s.shaderId == shaderId)
+				auto sP = &nativePacks->shaders[x];
+
+				if (sP->getId() == shaderId)
 				{
-					s.shaderReference = shader; // overwrite shader reference
+					sP->setResource(shader); // overwrite shader reference
 					hasShader = true;
 					break;
 				}
@@ -416,7 +446,7 @@ namespace Engine::Assets::Storage
 
 		void SetShader(unsigned int shaderId, Shader value)
 		{
-			nativePacks->shaders[shaderId].shaderReference = value;
+			nativePacks->shaders[shaderId].setResource(value);
 		}
 
 		static DataPacks singleton()

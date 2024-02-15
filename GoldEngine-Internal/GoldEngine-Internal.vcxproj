@@ -170,6 +170,7 @@
     <ClInclude Include="Objects\PBRModelRenderer.h" />
     <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\Skybox.h" />
+    <ClInclude Include="Packs.h" />
     <ClInclude Include="PreloadScript.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />

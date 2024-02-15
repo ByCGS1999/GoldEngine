@@ -290,9 +290,12 @@ namespace UserScripts
 
 	void ExecAsIdentifiedObject(Engine::Internal::Components::ObjectType type, System::Object^ object)
 	{
-		Engine::Internal::Components::Object^ modelRenderer = (Engine::Internal::Components::Object^)object;
-		modelRenderer->Draw();
-		modelRenderer->DrawGizmo();
+		if (scene->sceneLoaded())
+		{
+			Engine::Internal::Components::Object^ modelRenderer = (Engine::Internal::Components::Object^)object;
+			modelRenderer->Draw();
+			modelRenderer->DrawGizmo();
+		}
 	}
 
 public:
