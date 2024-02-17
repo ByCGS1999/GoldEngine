@@ -30,6 +30,8 @@
 #include "ImguiHook.h"
 #include "InputManager.h"
 #include "ObjectManager.h"
+#include "LoggingAPI.h"
+#include "LuaVM.h"
 #include "AsmLoader.h"
 
 // Daemons (Daemons are tasks that are ran mandatory by the engine, these cannot be displayed by the hierarchy)
@@ -102,6 +104,7 @@ ref class EditorWindow : Engine::Window
 	Engine::Internal::Components::Object^ reparentObject;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scripting::ObjectManager^ objectManager;
+	Engine::Scripting::Lua::LuaVM^ vm;
 
 private:
 	void SaveEditorCode()
@@ -381,7 +384,7 @@ public:
 	{
 		//WinAPI::FreeCons();
 		SetWindowFlags(4096 | 4 | FLAG_MSAA_4X_HINT);
-		OpenWindow(1280, 720, (const char*)"GoldEngine Editor editor-ver0.5c");
+		OpenWindow(1280, 720, (const char*)"GoldEngine Editor editor-ver0.5d");
 		//renderer = new VoxelRenderer(4,4,4);
 
 		Preload();
@@ -1335,7 +1338,6 @@ public:
 		c3d2.fovy = 60;
 
 		objectManager = gcnew Scripting::ObjectManager(scene);
-
 	}
 
 	void Preload() override

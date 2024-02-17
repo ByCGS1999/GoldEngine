@@ -363,6 +363,12 @@
     <ClInclude Include="Packs.h">
       <Filter>Archivos de origen\Engine\ObjectManagement\Types</Filter>
     </ClInclude>
+    <ClInclude Include="LoggingAPI.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaVM.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -451,6 +457,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Stop.png">
       <Filter>Data\EditorAssets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="lua54.dll">
+      <Filter>Binaries</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
