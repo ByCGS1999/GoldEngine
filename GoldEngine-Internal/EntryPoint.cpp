@@ -86,6 +86,10 @@ std::string styleFN;
 Texture modelTexture;
 std::string codeEditorFile;
 
+bool ce1, ce2, ce3, ce4, ce5, ce6;
+
+std::string codeEditorChunk;
+
 char fileName[] = "Level0";
 
 ref class EditorWindow : Engine::Window
@@ -100,8 +104,19 @@ ref class EditorWindow : Engine::Window
 	Scripting::ObjectManager^ objectManager;
 
 private:
+	void SaveEditorCode()
+	{
+		if (codeEditorFile != "")
+		{
+			File::WriteAllText(gcnew String(codeEditorFile.c_str()), gcnew String(codeEditor->GetText().c_str()));
+		}
+	}
+
+private:
 	void SetEditorCode(std::string fileName, std::string fileContents)
 	{
+		SaveEditorCode();
+
 		std::ofstream stream(codeEditorFile.c_str());
 
 		if (stream.good())
@@ -115,6 +130,8 @@ private:
 		codeEditorFile = fileName;
 
 		codeEditor->SetText(fileContents.c_str());
+
+		codeEditorChunk = fileContents.c_str();
 	}
 
 	void CodeEditor()
@@ -125,9 +142,20 @@ private:
 			{
 				if (ImGui::BeginMenu("File"))
 				{
+					if (ImGui::MenuItem("New"))
+					{
+						if (codeEditor->GetText().c_str() != codeEditorChunk.c_str())
+						{
+							ce1 = true;
+						}
+					}
+					ImGui::Separator();
 					if (ImGui::MenuItem("Open"))
 					{
-
+						if (codeEditor->GetText() != codeEditorChunk)
+						{
+							ce1 = true;
+						}
 					}
 					if (ImGui::MenuItem("Save"))
 					{
@@ -140,6 +168,8 @@ private:
 						}
 
 						stream.close();
+
+						codeEditorChunk = codeEditor->GetText();
 					}
 					ImGui::Separator();
 					if (ImGui::MenuItem("Exit"))
@@ -230,11 +260,41 @@ namespace UserScripts
 
 				ImGui::EndMenuBar();
 			}
+
+			if (ce1)
+			{
+				ImGui::OpenPopup("Code Editor - Save Changes");
+			}
+
+			if (ImGui::BeginPopupModal("Code Editor - Save Changes", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::Text("You have unsaved changes, do you want to save them?");
+
+				if (ImGui::Button("Yes"))
+				{
+					ce1 = false;
+					SaveEditorCode();
+					SetEditorCode("Data/NewFile.txt", "");
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("No"))
+				{
+					ce1 = false;
+					SetEditorCode("Data/NewFile.txt", "");
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
+
+
+			codeEditor->SetLanguageDefinition(language);
+
+			codeEditor->Render("Embedded Code Editor");
+
+			ImGui::End();
 		}
-
-		codeEditor->SetLanguageDefinition(language);
-
-		codeEditor->Render("Embedded Code Editor");
 	}
 
 	void DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::Object^ reference, int depth)
@@ -589,7 +649,8 @@ public:
 					}
 					if (ImGui::MenuItem("Scene Loader Setup"))
 					{
-						b6 = true;
+						SetEditorCode(CastStringToNative("Data/" + scene->sceneRequirements + ".asset"), CastStringToNative(System::IO::File::ReadAllText("Data/" + scene->sceneRequirements + ".asset")));
+						codeEditorOpen = true;
 					}
 				
 					ImGui::EndMenu();
@@ -915,7 +976,7 @@ public:
 		}
 		else if (b6)
 		{
-			ImGui::OpenPopup("Scene Loader Editor");
+			//ImGui::OpenPopup("Scene Loader Editor");
 		}
 		else if (b7)
 		{
