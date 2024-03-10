@@ -158,7 +158,6 @@
     <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LoggingAPI.h" />
-    <ClInclude Include="LuaVM.h" />
     <ClInclude Include="native\json.hpp" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Macros.h" />
@@ -284,12 +283,12 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.fs">
+    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.frag">
       <FileType>Document</FileType>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.vs">
+    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.vert">
       <FileType>Document</FileType>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/rPBR/%(Filename)%(Extension)</DestinationFileName>
@@ -309,9 +308,6 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/bin/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/bin/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="lua54.dll">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
     <None Include="Raylib\lib\raylib.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -319,14 +315,8 @@
     <Library Include="Raylib\lib\raylibdll.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="KeraLua">
-      <HintPath>..\netasm\KeraLua.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\netasm\json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLua">
-      <HintPath>..\netasm\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

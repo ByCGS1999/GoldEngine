@@ -1,6 +1,6 @@
 #version 330
 
-#define MAX_LIGHTS              100
+#define MAX_LIGHTS              %lightcount%
 #define LIGHT_DIRECTIONAL       0
 #define LIGHT_POINT             1
 #define LIGHT_SPOT              2

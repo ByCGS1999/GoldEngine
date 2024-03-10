@@ -31,7 +31,6 @@
 #include "InputManager.h"
 #include "ObjectManager.h"
 #include "LoggingAPI.h"
-#include "LuaVM.h"
 #include "AsmLoader.h"
 
 // Daemons (Daemons are tasks that are ran mandatory by the engine, these cannot be displayed by the hierarchy)
@@ -104,7 +103,6 @@ ref class EditorWindow : Engine::Window
 	Engine::Internal::Components::Object^ reparentObject;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scripting::ObjectManager^ objectManager;
-	Engine::Scripting::Lua::LuaVM^ vm;
 
 private:
 	void SaveEditorCode()
@@ -300,16 +298,19 @@ namespace UserScripts
 		}
 	}
 
-	void DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::Object^ reference, int depth)
+	void DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::Object^ parent, int depth)
 	{
 		for each (SceneObject ^ _obj in scene->GetRenderQueue())
 		{
 			auto _reference = _obj->GetReference();
 			auto _type = _obj->objectType;
 
+			if (parent->Equals(_reference))
+				continue;
+
 			if (_reference->transform->parent != nullptr)
 			{
-				if (_reference->transform->parent->uid == reference->GetTransform()->uid)
+				if (_reference->transform->parent->uid == parent->GetTransform()->uid)
 				{
 					String^ refName = "";
 					for (int x = 0; x < depth; x++)
@@ -321,7 +322,7 @@ namespace UserScripts
 
 					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager)
 					{
-						if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)")))
+						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)").c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -334,7 +335,7 @@ namespace UserScripts
 					}
 					else
 					{
-						if (ImGui::Selectable(CastToNative(refName)))
+						if (ImGui::Selectable(CastStringToNative(refName).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -344,10 +345,13 @@ namespace UserScripts
 								selectedObject = _reference;
 							}
 						}
+
+						DrawHierarchyInherits(scene, _reference, depth + 1);
 					}
-					DrawHierarchyInherits(scene, _reference, depth + 1);
 				}
+
 			}
+
 		}
 	}
 
@@ -512,6 +516,7 @@ public:
 				auto reference = obj->GetReference();
 				auto type = obj->objectType;
 
+				
 				if (reference != nullptr)
 				{
 					if (type == ObjectType::Datamodel || type == ObjectType::LightManager)
@@ -526,6 +531,8 @@ public:
 								selectedObject = reference;
 							}
 						}
+
+						DrawHierarchyInherits(scene, reference, 1);
 					}
 					else if (reference->GetTransform()->parent == nullptr)
 					{
@@ -539,10 +546,10 @@ public:
 								selectedObject = reference;
 							}
 						}
+
+						DrawHierarchyInherits(scene, reference, 1);
 					}
 				}
-
-				DrawHierarchyInherits(scene, reference, 1);
 			}
 
 
@@ -619,14 +626,15 @@ public:
 				}
 
 				ImGui::SeparatorText("Parent");
-				if (selectedObject->GetTransform()->parent != nullptr)
-				{
-					ImGui::Text(CastToNative(selectedObject->GetTransform()->GetParent()->name));
-				}
-				else
+				if (selectedObject->GetTransform()->parent == nullptr)
 				{
 					ImGui::Text(CastToNative("None"));
 				}
+				else
+				{
+					ImGui::Text(CastStringToNative(ObjectManager::singleton()->GetGameObjectByUid(selectedObject->GetTransform()->GetParent()->uid)->name).c_str());
+				}
+
 				if (ImGui::Button("Change Parent"))
 				{
 					if (!readonlyLock)
@@ -1030,7 +1038,7 @@ public:
 				ImGui::CloseCurrentPopup();
 			}
 
-			delete &tmp;
+			delete tmp;
 
 			ImGui::EndPopup();
 		}
@@ -1236,7 +1244,6 @@ public:
 
 		packedData->WriteToFile(packedData->getFile(), passwd);
 
-
 		/*
 		Shader lightShader = dataPack.GetShader(1);
 
@@ -1256,7 +1263,9 @@ public:
 					0.0f,
 					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
 					nullptr
-				)
+				),
+				"Data/Engine/Shaders/rPBR/pbr.vert",
+				"Data/Engine/Shaders/rPBR/pbr.frag"
 			);
 
 			scene->PushToRenderQueue(lightManager);

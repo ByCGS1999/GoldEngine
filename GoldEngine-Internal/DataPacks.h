@@ -72,6 +72,19 @@ namespace Engine::Assets::Storage
 			nativePacks->shaders.clear();
 		}
 
+		void FreeShader(unsigned int shaderId)
+		{
+			for (int x = 0; x < nativePacks->shaders.size(); x++)
+			{
+				auto sP = &nativePacks->shaders[x];
+
+				if (sP->getId() == shaderId)
+				{
+					sP->freealloc();
+				}
+			}
+		}
+
 		void FreeMaterials()
 		{
 			/*

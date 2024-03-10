@@ -133,12 +133,17 @@ namespace Engine::EngineObjects
 	private:
 		System::Collections::Generic::List<Engine::EngineObjects::LightSource^>^ lightSources;
 		static LightManager^ lightdm;
+	public:
+		String^ vs_path;
+		String^ fs_path;
 
 	public:
-		LightManager(String^ name, Engine::Internal::Components::Transform^ t) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::ObjectType::LightManager)
+		LightManager(String^ name, Engine::Internal::Components::Transform^ t, String^ vs, String^ fs) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::ObjectType::LightManager)
 		{
 			lightdm = this;
 			lightSources = gcnew System::Collections::Generic::List<Engine::EngineObjects::LightSource^>();
+			vs_path = vs;
+			fs_path = fs;
 		}
 
 	public:
@@ -167,9 +172,23 @@ namespace Engine::EngineObjects
 			{
 				lightSources->Add(light);
 
-				Shader s = DataPacks::singleton().GetShader(shaderId);
+				String^ vs_net = File::ReadAllText(vs_path);
+				String^ fs_net = File::ReadAllText(fs_path);
 
+				fs_net = fs_net->Replace("%numlights%", lightSources->Count.ToString());
+
+				Shader s = LoadShaderFromMemory(CastStringToNative(vs_net).c_str(), CastStringToNative(fs_net).c_str());
+				
 				int numOfLightsLoc = GetShaderLocation(s, "numOfLights");
+				
+				if (&DataPacks::singleton().GetShader(shaderId) == nullptr)
+				{
+					DataPacks::singleton().AddShader(shaderId, s);
+				}
+				else
+				{
+					DataPacks::singleton().SetShader(shaderId, s);
+				}
 
 				std::vector<rPBR::PBRLight> _light;
 

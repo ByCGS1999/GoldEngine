@@ -366,9 +366,6 @@
     <ClInclude Include="LoggingAPI.h">
       <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
     </ClInclude>
-    <ClInclude Include="LuaVM.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -431,10 +428,10 @@
     <CopyFileToFolders Include="Data\Engine\Skybox\Default.hdr">
       <Filter>Data\Engine\Skybox</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.fs">
+    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.frag">
       <Filter>Data\Engine\Shaders\rPBR</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.vs">
+    <CopyFileToFolders Include="Data\Engine\Shaders\rPBR\pbr.vert">
       <Filter>Data\Engine\Shaders\rPBR</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\textured\albedo.fs">
@@ -457,9 +454,6 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Stop.png">
       <Filter>Data\EditorAssets</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="lua54.dll">
-      <Filter>Binaries</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

@@ -176,6 +176,19 @@ namespace Engine::Scripting
 			}
 		}
 
+		Engine::Internal::Components::Object^ GetGameObjectByUid(System::String^ uid)
+		{
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->GetReference()->GetTransform()->uid == uid)
+				{
+					return t->GetReference();
+				}
+			}
+
+			return nullptr;
+		}
+
 		Engine::Internal::Components::Object^ GetObjectFromTransform(Engine::Internal::Components::Transform^ transform)
 		{
 			return nullptr;
