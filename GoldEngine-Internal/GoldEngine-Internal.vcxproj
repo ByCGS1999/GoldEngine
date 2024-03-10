@@ -176,6 +176,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneObject.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="VoxelMatrix.h" />
     <ClInclude Include="VoxelTypedefs.h" />
     <ClInclude Include="Voxel.h" />

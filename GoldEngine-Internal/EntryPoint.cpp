@@ -31,6 +31,7 @@
 #include "InputManager.h"
 #include "ObjectManager.h"
 #include "LoggingAPI.h"
+#include "ShaderManager.h"
 #include "AsmLoader.h"
 
 // Daemons (Daemons are tasks that are ran mandatory by the engine, these cannot be displayed by the hierarchy)

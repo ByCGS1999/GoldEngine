@@ -366,6 +366,9 @@
     <ClInclude Include="LoggingAPI.h">
       <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">

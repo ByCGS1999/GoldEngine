@@ -87,6 +87,11 @@ namespace Engine::Internal
 			Engine::Assets::Storage::DataPacks::singleton().FreeAll();
 		}
 
+		inline static void HL_FreeShader(unsigned int shaderId)
+		{
+			Engine::Assets::Storage::DataPacks::singleton().FreeShader(shaderId);
+		}
+
 		// -- CONFIGURATION
 		inline static void HL_SetMaterialShader(unsigned int materialId, unsigned int shaderId)
 		{
