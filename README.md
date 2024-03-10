@@ -7,6 +7,8 @@ Features:</br>
   Editor Customizable Style [x]</br>
   Playback Engine []</br>
   Lighting [x]</br>
+  Dynamic Lighting []</br>
+  Global Illumination (GI) []</br>
   PBR [x]</br>
   Scripting API [x]</br>
   Assembly Management [x]</br>
