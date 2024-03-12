@@ -105,6 +105,12 @@ namespace Engine::Scripting
 			}
 		}
 
+	private:
+		Engine::Internal::Components::Object^ GetObjectFromScene(Engine::Management::MiddleLevel::SceneObject^ sceneObject)
+		{
+			return sceneObject->GetReference();
+		}
+
 	public:
 		Engine::Management::Scene^ GetLoadedScene()
 		{
@@ -176,6 +182,25 @@ namespace Engine::Scripting
 			}
 		}
 
+		List<Engine::Internal::Components::Object^>^ GetChildrenOf(Engine::Internal::Components::Object^ parent)
+		{
+			List<Engine::Internal::Components::Object^>^ newList = gcnew List<Engine::Internal::Components::Object^>();
+
+			for each (Engine::Management::MiddleLevel::SceneObject^ object in sceneObjects)
+			{
+				auto v = GetObjectFromScene(object);
+				if (v->transform->parent != nullptr)
+				{
+					if (v->transform->GetParent()->uid == parent->transform->uid)
+					{
+						newList->Add(v);
+					}
+				}
+			}
+
+			return newList;
+		}
+
 		Engine::Internal::Components::Object^ GetGameObjectByUid(System::String^ uid)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
@@ -200,6 +225,40 @@ namespace Engine::Scripting
 			loadedScene->PushToRenderQueue(newObject);
 
 			return newObject;
+		}
+
+		void Destroy(Engine::Internal::Components::Object^ object)
+		{
+			for each (Engine::Management::MiddleLevel::SceneObject^ objTmp in sceneObjects)
+			{
+				auto v = GetObjectFromScene(objTmp);
+
+				if (v != nullptr)
+				{
+					if (v == object)
+					{
+						auto type = v->type;
+
+						if (type == Engine::Internal::Components::ObjectType::Datamodel || type == Engine::Internal::Components::ObjectType::Daemon || type == Engine::Internal::Components::ObjectType::LightManager)
+							return;
+
+						// REPARENT ALL THE CHILDREN TO NULL (SET AS UNPARENTED).
+						List<Engine::Internal::Components::Object^>^ objectList = ObjectManager::singleton()->GetChildrenOf(object);
+
+						for each (auto obj in objectList)
+						{
+							obj->transform->SetParent(nullptr);
+						}
+
+						// PURGE THE OBJECT FROM THE SCENE
+						loadedScene->RemoveObjectFromScene(objTmp);
+
+						// call destroy method (for self impl)
+						object->Destroy();
+						break;
+					}
+				}
+			}
 		}
 	};
 }

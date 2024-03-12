@@ -82,7 +82,14 @@ namespace Engine::EngineObjects
 		void Draw() override
 		{
 			auto t = GetTransform();
-			rPBR::PBRDrawModel(*nativeRenderer->model, t->position->toNative(), t->scale->x, GetColor(color_hex));
+			Color c =
+			{
+				color_hex >> 0,
+				color_hex >> 8,
+				color_hex >> 16,
+				color_hex >> 24
+			};
+			rPBR::PBRDrawModel(*nativeRenderer->model, t->position->toNative(), t->scale->x, c);
 		}
 
 		void Update() override

@@ -35,13 +35,14 @@ namespace Engine::EngineObjects
 		Native::NativeLightSource* nativeLightSource;
 
 	public:
-		unsigned long lightColor;
+		unsigned int lightColor;
 		float intensity;
 		unsigned int shaderId;
 		Engine::Internal::Components::Vector3^ target;
 		rPBR::PBRLightType lightType;
+		bool enabled;
 
-		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned long lightColor, int lightType, Engine::Internal::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource)
+		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned int lightColor, int lightType, Engine::Internal::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource)
 		{
 			nativeLightSource = new Native::NativeLightSource();
 			this->lightType = (rPBR::PBRLightType)lightType;
@@ -60,10 +61,10 @@ namespace Engine::EngineObjects
 			);
 			nativeLightSource->SetLight(light);
 			nativeLightSource->SetLightEnabled(true);
-
+			enabled = true;
 		}
 
-		void Init(unsigned long lightColor, float intensity, Engine::Internal::Components::Vector3^ target, int lightType, unsigned int shaderId) override
+		void Init(unsigned int lightColor, float intensity, Engine::Internal::Components::Vector3^ target, int lightType, unsigned int shaderId) override
 		{
 			nativeLightSource = new Native::NativeLightSource();
 			this->lightColor = lightColor;
@@ -71,17 +72,36 @@ namespace Engine::EngineObjects
 			this->target = target;
 			this->intensity = intensity;
 			nativeLightSource->SetShader(DataPacks::singleton().GetShader(shaderId));
-			nativeLightSource->SetLight(rPBR::PBRLightCreate(lightType, GetTransform()->position->toNative(), target->toNative(), GetColor(lightColor), intensity, DataPacks::singleton().GetShader(shaderId)));
+			Color c =
+			{
+				lightColor >> 0,
+				lightColor >> 8,
+				lightColor >> 16,
+				lightColor >> 24
+			};
+			nativeLightSource->SetLight(rPBR::PBRLightCreate(lightType, GetTransform()->position->toNative(), target->toNative(), c, intensity, DataPacks::singleton().GetShader(shaderId)));
 			nativeLightSource->SetLightEnabled(true);
+			enabled = true;
 		}
+
+		rPBR::PBRLight GetLight() { return nativeLightSource->getLight(); }
+		Shader GetShader() { return nativeLightSource->getShader(); }
 
 		void Update() override
 		{
-
+			nativeLightSource->SetLightEnabled(enabled);
 		}
 
 		void DrawGizmo() override
 		{
+			Color c =
+			{
+				lightColor >> 0,
+				lightColor >> 8,
+				lightColor >> 16,
+				lightColor >> 24
+			};
+
 			int lightType = this->lightType;
 
 			auto lightTransform = this->GetTransform();
@@ -90,32 +110,31 @@ namespace Engine::EngineObjects
 			{
 				if (this->GetLight().enabled)
 				{
-					DrawSphereWires(lightTransform->position->toNative(), this->intensity, 8, 8, GetColor(this->lightColor));
+					DrawSphereWires(lightTransform->position->toNative(), this->intensity, 8, 8, c);
 				}
 				else
 				{
-					DrawSphereWires(lightTransform->position->toNative(), this->intensity, 8, 8, { GetColor(this->lightColor).r, GetColor(this->lightColor).g, GetColor(this->lightColor).b, 128 });
+					DrawSphereWires(lightTransform->position->toNative(), this->intensity, 8, 8, { c.r, c.g, c.b, 128 });
 				}
 			}
 			else if (lightType == rPBR::LIGHT_DIRECTIONAL)
 			{
 				if (this->GetLight().enabled)
 				{
-					DrawLine3D(lightTransform->position->toNative(), this->target->toNative(), GetColor(this->lightColor));
+					DrawLine3D(lightTransform->position->toNative(), this->target->toNative(), c);
 				}
 				else
 				{
-					Color col = GetColor(this->lightColor);
-					DrawLine3D(lightTransform->position->toNative(), this->target->toNative(), { col.r, col.g, col.b, 128 });
+					DrawLine3D(lightTransform->position->toNative(), this->target->toNative(), { c.r, c.g, c.b, 128 });
 				}
 			}
 			else if (lightType == rPBR::LIGHT_SPOT)
 			{
-				DrawCylinderWiresEx(lightTransform->position->toNative(), this->target->toNative(), lightTransform->scale->x, this->intensity, 6, GetColor(this->lightColor));
+				DrawCylinderWiresEx(lightTransform->position->toNative(), this->target->toNative(), lightTransform->scale->x, this->intensity, 6, c);
 			}
 			else
 			{
-				DrawSphereWires(lightTransform->position->toNative(), this->intensity, 8, 8, GetColor(this->lightColor));
+				DrawSphereWires(lightTransform->position->toNative(), this->intensity, 8, 8, c);
 			}
 		}
 
@@ -123,9 +142,6 @@ namespace Engine::EngineObjects
 		{
 
 		}
-
-		rPBR::PBRLight GetLight() { return nativeLightSource->getLight(); }
-		Shader GetShader() { return nativeLightSource->getShader(); }
 	};
 
 	public ref class LightManager : public Engine::Internal::Components::Object

@@ -11,9 +11,9 @@ namespace Engine::EngineObjects
 		unsigned int model;
 		unsigned int material;
 		unsigned int texture;
-		unsigned long tint;
+		unsigned int tint;
 		// methods & constructor
-		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int material, unsigned int texture, unsigned long tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer)
+		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int material, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer)
 		{
 			this->model = model;
 			this->material = material;
@@ -21,7 +21,7 @@ namespace Engine::EngineObjects
 			this->texture = texture;
 		}
 
-		void Init(unsigned int model, unsigned int material, unsigned int texture, unsigned long tint)
+		void Init(unsigned int model, unsigned int material, unsigned int texture, unsigned int tint)
 		{
 			this->model = model;
 			this->material = material;
@@ -31,7 +31,7 @@ namespace Engine::EngineObjects
 			auto modelInst = Engine::Assets::Storage::DataPacks::singleton().GetModel(model);
 			auto materialInst = DataPacks::singleton().GetMaterial(material);
 			auto texInst = DataPacks::singleton().GetTexture2D(texture);
-
+			
 			materialInst.maps[MATERIAL_MAP_ALBEDO].texture = texInst;
 		}
 
@@ -42,17 +42,31 @@ namespace Engine::EngineObjects
 		void Draw() override
 		{
 			auto t = GetTransform();
+
+			Color c =
+			{
+				tint >> 0,
+				tint >> 8,
+				tint >> 16,
+				tint >> 24
+			};
+
 			DrawModel(
 				DataPacks::singleton().GetModel(model),
-				{ t->position->x,t->position->y, t->position->z }, 
-				t->scale->x, 
-				GetColor(tint)
+				{ t->position->x,t->position->y, t->position->z },
+				t->scale->x,
+				c
 			);
 		}
 
 		void SetColorTint(unsigned int hexValue)
 		{
 			tint = hexValue;
+		}
+
+		void Destroy() override
+		{
+			Object::Destroy();
 		}
 	};
 }

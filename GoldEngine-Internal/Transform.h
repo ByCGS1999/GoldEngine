@@ -271,7 +271,7 @@ namespace Engine::Internal::Components
 		}
 	};
 
-	public ref class Object
+	public ref class Object : IDisposable
 	{
 	public:
 		String^ name;
@@ -285,6 +285,15 @@ namespace Engine::Internal::Components
 			this->transform = transform;
 			this->type = t;
 		}
+
+	private:
+		~Object()
+		{
+			delete name;
+			delete transform;
+		}
+
+	public:
 		virtual void Init() {}
 		virtual void Init(const Object^ object) {}
 		virtual void Start() {}
@@ -297,6 +306,11 @@ namespace Engine::Internal::Components
 		void SetParent(Object^ object)
 		{
 			transform->SetParent(object->transform);
+		}
+
+		virtual void Destroy()
+		{
+			delete this;
 		}
 	};
 }

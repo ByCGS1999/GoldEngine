@@ -446,7 +446,7 @@
     <CopyFileToFolders Include="Data\Engine\Textures\Error.png">
       <Filter>Data\Engine\Textures</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="binaries\FBX2glTF.exe">
+    <CopyFileToFolders Include="Binaries\FBX2glTF.exe">
       <Filter>Binaries\fbx2gltf</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Model.png">

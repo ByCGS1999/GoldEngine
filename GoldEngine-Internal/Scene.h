@@ -95,6 +95,19 @@ namespace Engine::Management
 			System::GC::Collect();
 		}
 
+		void RemoveObjectFromScene(Engine::Management::MiddleLevel::SceneObject^ object)
+		{
+			if (sceneObjects->Contains(object))
+			{
+				sceneObjects->Remove(object);
+			}
+
+			if (drawQueue->Contains(object))
+			{
+				drawQueue->Remove(object);
+			}
+		}
+
 		void AddObjectToScene(Engine::Internal::Components::Object^ object)
 		{
 			auto tmp = gcnew Engine::Management::MiddleLevel::SceneObject(

@@ -78,6 +78,7 @@ bool showCursor = true;
 bool b1, b2, b3, b4, b5, b6, b7, b8, b9;
 bool readonlyLock = false;
 bool fpsCap = true;
+bool fpsCheck = true;
 bool reparentLock = false;
 TextEditor* codeEditor = new TextEditor();
 ImVec2 codeEditorSize;
@@ -111,6 +112,78 @@ private:
 		if (codeEditorFile != "")
 		{
 			File::WriteAllText(gcnew String(codeEditorFile.c_str()), gcnew String(codeEditor->GetText().c_str()));
+		}
+	}
+
+private:
+	void SpecializedPropertyEditor(Engine::Internal::Components::Object^ object)
+	{
+		if (object != nullptr)
+		{
+			auto type = object->type;
+
+			switch (type)
+			{
+			case ObjectType::ModelRenderer: // MODEL RENDERER
+			{
+				Engine::EngineObjects::ModelRenderer^ renderer = Cast::Dynamic<Engine::EngineObjects::ModelRenderer^>(object);
+				unsigned int modelId = renderer->model;
+				unsigned int materialId = renderer->material;
+				unsigned int textureId = renderer->texture;
+				unsigned long tint = renderer->tint;
+
+				ImGui::SeparatorText("Model Renderer");
+				ImGui::Text("Model ID: ");
+				ImGui::SameLine();
+				ImGui::InputScalar("###MODELID_SETTER", ImGuiDataType_U32, &modelId, (const void*)1, (const void*)1);
+				ImGui::Text("Material ID: ");
+				ImGui::SameLine();
+				ImGui::InputScalar("###MATERIALID_SETTER", ImGuiDataType_U32, &materialId, (const void*)1, (const void*)1);
+				ImGui::Text("Texture ID: ");
+				ImGui::SameLine();
+				ImGui::InputScalar("###TEXTUREID_SETTER", ImGuiDataType_U32, &textureId, (const void*)1, (const void*)1);
+
+				auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(tint));
+
+				float rawData[4] =
+				{
+					float4.x,
+					float4.y,
+					float4.z,
+					float4.w
+				};
+
+				ImGui::Text("Tint Editor: ");
+				ImGui::SameLine();
+				if (ImGui::ColorPicker4("###TINT_SETTER", rawData))
+				{
+					renderer->SetColorTint(ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3])));
+				}
+			}
+			break;
+
+			case ObjectType::LightSource:
+			{
+				Engine::EngineObjects::LightSource^ light = Cast::Dynamic<Engine::EngineObjects::LightSource^>(object);
+				bool lightEnabled = light->enabled;
+				ImGui::SeparatorText("Light Source");
+				ImGui::Text("Enabled: ");
+				ImGui::SameLine();
+				if (ImGui::Checkbox("###LIGHT_ENABLED", &lightEnabled))
+				{
+					if (lightEnabled)
+					{
+						light->enabled = true;
+					}
+					else
+					{
+						light->enabled = false;
+					}
+				}
+			}
+			break;
+
+			}
 		}
 	}
 
@@ -323,7 +396,7 @@ namespace UserScripts
 
 					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager)
 					{
-						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)").c_str()))
+						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->transform->uid).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -336,7 +409,7 @@ namespace UserScripts
 					}
 					else
 					{
-						if (ImGui::Selectable(CastStringToNative(refName).c_str()))
+						if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->transform->uid).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -493,7 +566,10 @@ public:
 
 					ImGui::EndMenu();
 				}
-				ImGui::Checkbox("FPS", &fpsCap);
+				if (ImGui::Checkbox("FPS", &fpsCheck))
+				{
+					fpsCap = fpsCheck;
+				}
 				ImGui::EndMenu();
 			}
 
@@ -517,12 +593,12 @@ public:
 				auto reference = obj->GetReference();
 				auto type = obj->objectType;
 
-				
+
 				if (reference != nullptr)
 				{
 					if (type == ObjectType::Datamodel || type == ObjectType::LightManager)
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)")))
+						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)" + "###" + reference->transform->uid)))
 						{
 							if (reparentLock)
 								reparentObject = reference;
@@ -537,7 +613,7 @@ public:
 					}
 					else if (reference->GetTransform()->parent == nullptr)
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (UNPARENTED)")))
+						if (ImGui::Selectable(CastToNative(reference->name + " (UNPARENTED)" + "###" + reference->transform->uid)))
 						{
 							if (reparentLock)
 								reparentObject = reference;
@@ -570,6 +646,13 @@ public:
 			}
 			else
 			{
+				ImGui::SeparatorText("Instance");
+
+				if (ImGui::Button("Destroy Object"))
+				{
+					ObjectManager::singleton()->Destroy(selectedObject);
+				}
+
 				ImGui::SeparatorText("Object Properties");
 				char* objectName = new char[128];
 
@@ -642,8 +725,7 @@ public:
 						reparentLock = true;
 				}
 
-				ImGui::SeparatorText("Object Info");
-				ImGui::Text(CastStringToNative(selectedObject->type.ToString()).c_str());
+				SpecializedPropertyEditor(selectedObject);
 			}
 
 			ImGui::End();
@@ -664,7 +746,7 @@ public:
 						SetEditorCode(CastStringToNative("Data/" + scene->sceneRequirements + ".asset"), CastStringToNative(System::IO::File::ReadAllText("Data/" + scene->sceneRequirements + ".asset")));
 						codeEditorOpen = true;
 					}
-				
+
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenuBar();
@@ -1012,13 +1094,13 @@ public:
 
 		if (ImGui::BeginPopupModal("Save/Load Style", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
 		{
-			char* tmp = new char[styleFN.size()+32] {};
+			char* tmp = new char[styleFN.size() + 32] {};
 
 			strcpy(tmp, styleFN.c_str());
 
 			ImGui::Text("File Name:");
 			ImGui::SameLine();
-			if (ImGui::InputText("###FILE_NAME", tmp, styleFN.size()+32, ImGuiInputTextFlags_CallbackCompletion))
+			if (ImGui::InputText("###FILE_NAME", tmp, styleFN.size() + 32, ImGuiInputTextFlags_CallbackCompletion))
 			{
 				styleFN = tmp;
 			}
@@ -1436,7 +1518,7 @@ public:
 		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };
 		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
 
-		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->sceneObjects)
+		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 		{
 			if (obj->GetReference() != nullptr)
 			{

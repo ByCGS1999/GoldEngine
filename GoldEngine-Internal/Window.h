@@ -46,6 +46,7 @@ namespace Engine
 		void OpenWindow(int width, int height, const char* name)
 		{
 			InitWindow(width, height, name);
+			InitAudioDevice();
 			rlImGuiSetup(true);
 		}
 
@@ -81,6 +82,7 @@ namespace Engine
 
 			rlImGuiShutdown();
 			Exit();
+			CloseAudioDevice();
 			CloseWindow();
 		}
 
