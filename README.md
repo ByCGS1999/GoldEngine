@@ -20,6 +20,7 @@ Features:</br>
   Entity Component System [] - NOR PLANNED</br>
   64 Bit Support [x]</br>
   32 Bit Support []</br>
+  LuaVM [x] - Thanks To MoonSharp, it somehow works with C++/CLI<br>
 
 Requirements:</br>
   C++ MSCLR.</br>
