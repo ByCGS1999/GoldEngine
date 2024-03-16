@@ -169,6 +169,12 @@
     <Filter Include="Archivos de origen\Engine\ObjectManagement\Types">
       <UniqueIdentifier>{014d52e1-2403-456a-898e-daa5e640d34b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\ScriptingAPI\Lua">
+      <UniqueIdentifier>{3eeb32de-0fc6-4579-b348-f8ef91848f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\FileExplorer">
+      <UniqueIdentifier>{4b25e3d2-b7f0-47a1-a619-5d87a8925f4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -368,6 +374,12 @@
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="LuaVM.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\FileExplorer\filedialog.h">
+      <Filter>imgui\FileExplorer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

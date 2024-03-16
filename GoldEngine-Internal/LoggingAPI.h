@@ -6,6 +6,7 @@ using namespace System::Collections::Generic;
 
 namespace Engine::Scripting
 {
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Logging abstract
 	{
 	public:

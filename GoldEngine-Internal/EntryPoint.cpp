@@ -15,6 +15,7 @@
 #include "DataPack.h"
 #include <msclr/gcroot.h>
 #include "FileManager.h"
+#include "imgui/FileExplorer/filedialog.h"
 
 // CUSTOM RENDERERS \\
 
@@ -44,6 +45,9 @@
 
 #include "native/json.hpp"
 #include "imguistyleserializer.h"
+
+// lua virtual machine
+#include "LuaVM.h"
 
 
 using namespace Engine;
@@ -88,6 +92,8 @@ VoxelRenderer* renderer;
 std::string styleFN;
 Texture modelTexture;
 std::string codeEditorFile;
+bool fileDialogOpen = false;
+
 
 bool ce1, ce2, ce3, ce4, ce5, ce6;
 
@@ -105,6 +111,8 @@ ref class EditorWindow : Engine::Window
 	Engine::Internal::Components::Object^ reparentObject;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scripting::ObjectManager^ objectManager;
+	Engine::Lua::VM::LuaVM^ luaVM;
+	Engine::Editor::Gui::fileExplorer^ fileExplorer = gcnew Engine::Editor::Gui::fileExplorer(new std::string("File Explorer"));
 
 private:
 	void SaveEditorCode()
@@ -245,6 +253,26 @@ private:
 						stream.close();
 
 						codeEditorChunk = codeEditor->GetText();
+					}
+					ImGui::Separator();
+					if (ImGui::BeginMenu("Compiler"))
+					{
+						if (ImGui::MenuItem("Run Lua Script"))
+						{
+							luaVM->ExecuteSource(gcnew String(codeEditor->GetText().c_str()));
+						}
+						if (ImGui::MenuItem("Compile And Save Lua Script"))
+						{
+							fileExplorer->SetWindowName(new std::string("Save Lua Compiled File"));
+							fileExplorer->setExplorerMode(Engine::Editor::Gui::explorerMode::Save);
+							fileExplorer->Open();
+
+							luaVM->ExecuteSource(gcnew String(("function dumpMe()\n" + codeEditor->GetText() + "\nend\n return string.dump(dumpMe);").c_str()));
+
+							fileExplorer->OnCompleted(gcnew Action<String^>(luaVM, &Engine::Lua::VM::LuaVM::DumpBytecode));
+						}
+
+						ImGui::EndMenu();
 					}
 					ImGui::Separator();
 					if (ImGui::MenuItem("Exit"))
@@ -442,6 +470,7 @@ namespace UserScripts
 public:
 	EditorWindow()
 	{
+		luaVM = gcnew Engine::Lua::VM::LuaVM();
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
 		auto newAssembly = gcnew EngineAssembly();
@@ -1077,6 +1106,9 @@ public:
 			ImGui::OpenPopup("Save/Load Style");
 		}
 
+		fileExplorer->DrawExplorer();
+		fileExplorer->TryComplete();
+
 		if (reparentLock)
 		{
 			if (reparentObject != nullptr)
@@ -1548,11 +1580,15 @@ public:
 public ref class GameWindow : public Engine::Window
 {
 	Scene^ scene;
+	DataPack^ packedData;
+	Camera* defaultCamera;
+	LuaVM^ vm;
 
 public:
 	GameWindow()
 	{
 		OpenWindow(1280, 720, "GameWindow");
+		Preload();
 	}
 
 	virtual void Init() override
@@ -1562,22 +1598,59 @@ public:
 
 	virtual void Preload() override
 	{
+		vm = gcnew LuaVM();
 
+		vm->ExecuteSource("Logging:Log('Hello world!');");
+
+		scene = SceneManager::CreateScene("GoldEngineBoot");
+
+		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
+		scene->LoadScene();
+
+		while (!scene->sceneLoaded())
+		{
+			DataManager::HL_Wait(1.0f);
+		}
+
+		packedData = scene->getSceneDataPack();
+
+		DataManager::HL_CreateCamera(0, gcnew Engine::Internal::Components::Vector3(0, 0, 0), CameraType::C3D); // create 3d camera
+
+		defaultCamera = &DataPacks::singleton().GetCamera3D(0);
+
+		Init();
 	}
 
 	virtual void Draw() override
 	{
+		BeginDrawing();
 
+		BeginMode3D((Camera3D)*defaultCamera);
+
+		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+		{
+			if (sceneObject->GetReference()->viewSpace == ViewSpace::V3D)
+			{
+				sceneObject->GetReference()->Draw();
+			}
+		}
+
+		EndMode3D();
+
+		EndDrawing();
 	}
 
 	virtual void Update() override
 	{
-
+		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+		{
+			sceneObject->GetReference()->Update();
+		}
 	}
 
-	virtual void Draw() override
+	virtual void Exit() override
 	{
-
+		DataManager::HL_FreeAll();
 	}
 };
 

@@ -287,8 +287,6 @@ namespace Engine::Assets::Storage
 
 		Shader GetShader(unsigned int shaderId)
 		{
-			printf("Read inst from id %d\n", shaderId);
-
 			Shader shader;
 
 			bool hasShader = false;

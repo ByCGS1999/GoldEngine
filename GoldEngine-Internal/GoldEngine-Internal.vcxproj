@@ -155,9 +155,11 @@
     <ClInclude Include="GlIncludes.h" />
     <ClInclude Include="ImguiHook.h" />
     <ClInclude Include="imguistyleserializer.h" />
+    <ClInclude Include="imgui\FileExplorer\filedialog.h" />
     <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LoggingAPI.h" />
+    <ClInclude Include="LuaVM.h" />
     <ClInclude Include="native\json.hpp" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Macros.h" />
@@ -316,6 +318,9 @@
     <Library Include="Raylib\lib\raylibdll.lib" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="MoonSharp.Interpreter">
+      <HintPath>..\netasm\MoonSharp.Interpreter.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\netasm\json.dll</HintPath>
     </Reference>

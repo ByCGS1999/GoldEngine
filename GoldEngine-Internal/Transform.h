@@ -23,6 +23,13 @@ namespace Engine::Internal::Components
 		Daemon = 11
 	};
 
+	public enum class ViewSpace
+	{
+		V2D,
+		V3D,
+		VNone
+	};
+
 	public ref class Vector2
 	{
 	public:
@@ -277,6 +284,7 @@ namespace Engine::Internal::Components
 		String^ name;
 		ObjectType type;
 		Transform^ transform;
+		ViewSpace viewSpace;
 
 		[[JsonConstructorAttribute]]
 		Object(System::String^ n, Transform^ transform, ObjectType t)
@@ -284,6 +292,8 @@ namespace Engine::Internal::Components
 			this->name = n;
 			this->transform = transform;
 			this->type = t;
+
+			this->viewSpace = ViewSpace::V3D;
 		}
 
 	private:
