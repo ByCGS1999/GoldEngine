@@ -48,6 +48,85 @@ namespace Engine::Internal::Components
 		}
 	};
 
+	public ref class Layer
+	{
+	public:
+		int layerMask; // this int represents the priority on rendering (higher number = higher priority);
+		String^ layerName;
+
+	public:
+		Layer(int mask, String^ name)
+		{
+			this->layerMask = mask;
+			this->layerName = name;
+		}
+	};
+
+	public ref class LayerManager
+	{
+	private:
+		static System::Collections::Generic::List<Engine::Internal::Components::Layer^>^ layers;
+
+	public:
+		static void RegisterDefaultLayers()
+		{
+			layers = gcnew System::Collections::Generic::List<Layer^>();
+
+			AddLayer(gcnew Engine::Internal::Components::Layer(0, "Geometry"));
+			AddLayer(gcnew Engine::Internal::Components::Layer(1, "Transparent"));
+			AddLayer(gcnew Engine::Internal::Components::Layer(2, "PostFX"));
+		}
+
+	public:
+		static std::vector<std::string> getLayerNames()
+		{
+			std::vector<std::string> slayers;
+
+			for (int x = 0; x < layers->Count; x++)
+			{
+				slayers.push_back(CastStringToNative(layers[x]->layerMask + " - " + layers[x]->layerName));
+			}
+
+			return slayers;
+		}
+		
+
+	public:
+		static Engine::Internal::Components::Layer^ GetLayerFromId(int id)
+		{
+			for each(Engine::Internal::Components::Layer^ l in layers)
+			{
+				if (l->layerMask == id)
+				{
+					return l;
+				}
+			}
+
+			return nullptr;
+		}
+
+	public:
+		static Engine::Internal::Components::Layer^ GetLayerFromName(String^ id)
+		{
+			for each (Engine::Internal::Components::Layer ^ l in layers)
+			{
+				if (l->layerName->Equals(id) || l->layerName->CompareTo(id) <= 0 || l->layerName == id)
+				{
+					return l;
+				}
+			}
+
+			return nullptr;
+		}
+
+
+	public:
+		static void AddLayer(Engine::Internal::Components::Layer^ layer)
+		{
+			layers->Add(layer);
+		}
+	};
+
 	public ref class Vector3
 	{
 	public:
@@ -285,6 +364,7 @@ namespace Engine::Internal::Components
 		ObjectType type;
 		Transform^ transform;
 		ViewSpace viewSpace;
+		Layer^ layerMask;
 
 		[[JsonConstructorAttribute]]
 		Object(System::String^ n, Transform^ transform, ObjectType t)
@@ -292,8 +372,8 @@ namespace Engine::Internal::Components
 			this->name = n;
 			this->transform = transform;
 			this->type = t;
-
 			this->viewSpace = ViewSpace::V3D;
+			layerMask = LayerManager::GetLayerFromId(0);
 		}
 
 	private:

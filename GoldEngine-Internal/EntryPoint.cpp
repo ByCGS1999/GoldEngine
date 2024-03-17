@@ -93,7 +93,7 @@ std::string styleFN;
 Texture modelTexture;
 std::string codeEditorFile;
 bool fileDialogOpen = false;
-
+int tmp1;
 
 bool ce1, ce2, ce3, ce4, ce5, ce6;
 
@@ -494,6 +494,8 @@ public:
 		OpenWindow(1280, 720, (const char*)"GoldEngine Editor editor-ver0.5d");
 		//renderer = new VoxelRenderer(4,4,4);
 
+		LayerManager::RegisterDefaultLayers();
+
 		Preload();
 
 		Loop();
@@ -667,7 +669,7 @@ public:
 			CodeEditor();
 		}
 
-		if (ImGui::Begin("Properties", &isOpen))
+		if (ImGui::Begin("Properties", &isOpen, ImGuiWindowFlags_MenuBar))
 		{
 			if (selectedObject == nullptr)
 			{
@@ -675,12 +677,93 @@ public:
 			}
 			else
 			{
-				ImGui::SeparatorText("Instance");
-
-				if (ImGui::Button("Destroy Object"))
+				if (ImGui::BeginMenuBar())
 				{
-					ObjectManager::singleton()->Destroy(selectedObject);
+					if (ImGui::BeginMenu("Instance"))
+					{
+						ImGui::SeparatorText("Actions");
+
+						if (ImGui::MenuItem("Destroy Object"))
+						{
+							ObjectManager::singleton()->Destroy(selectedObject);
+						}
+
+						ImGui::Separator();
+
+						if (ImGui::BeginMenu("Rendering"))
+						{
+							switch (selectedObject->viewSpace)
+							{
+							case ViewSpace::VNone:
+								tmp1 = 0;
+								break;
+							case ViewSpace::V2D:
+								tmp1 = 1;
+								break;
+							case ViewSpace::V3D:
+								tmp1 = 2;
+								break;
+							}
+
+							const char* types[]{ "None", "2D", "3D" };
+							if (ImGui::Combo("###CURR_MODE", &tmp1, types, IM_ARRAYSIZE(types)))
+							{
+								switch (tmp1)
+								{
+								case 0:
+									selectedObject->viewSpace = ViewSpace::VNone;
+									break;
+								case 1:
+									selectedObject->viewSpace = ViewSpace::V2D;
+									break;
+								case 2:
+									selectedObject->viewSpace = ViewSpace::V3D;
+									break;
+								}
+							}
+							std::string layer;
+
+							if(selectedObject->layerMask != nullptr)
+								layer = CastStringToNative(LayerManager::GetLayerFromId(selectedObject->layerMask->layerMask)->layerName);
+							else
+								layer = "Select Layer";
+
+							std::vector<std::string> layers = LayerManager::getLayerNames();
+
+							if (ImGui::BeginCombo("###CURR_LAYER", layer.c_str()))
+							{
+								for (std::string tmp : layers)
+								{
+									if (ImGui::Selectable(tmp.c_str()))
+									{
+										auto string = gcnew String(tmp.c_str());
+										auto w = gcnew String(" - ");
+										
+										selectedObject->layerMask = LayerManager::GetLayerFromId(int::Parse(string->Split(w->ToCharArray())[0]));
+									}
+								}
+
+								ImGui::EndCombo();
+							}
+
+							ImGui::EndMenu();
+						}
+
+						ImGui::SeparatorText("Instance Properties");
+
+						if (ImGui::MenuItem("Change Parent"))
+						{
+							if (!readonlyLock)
+								reparentLock = true;
+						}
+
+
+						ImGui::EndMenu();
+					}
+
+					ImGui::EndMenuBar();
 				}
+
 
 				ImGui::SeparatorText("Object Properties");
 				char* objectName = new char[128];
@@ -694,65 +777,51 @@ public:
 
 				ImGui::SeparatorText("Transform");
 
-				// position
-				float pos[3] = {
-					selectedObject->GetTransform()->position->x,
-					selectedObject->GetTransform()->position->y,
-					selectedObject->GetTransform()->position->z
-				};
-
-				if (ImGui::DragFloat3("Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 				{
-					selectedObject->GetTransform()->position = gcnew Engine::Internal::Components::Vector3(pos[0], pos[1], pos[2]);
-				}
+					// position
+					float pos[3] = {
+						selectedObject->GetTransform()->position->x,
+						selectedObject->GetTransform()->position->y,
+						selectedObject->GetTransform()->position->z
+					};
 
-				// rotation
-				float rot[3] = {
-					selectedObject->GetTransform()->rotation->x,
-					selectedObject->GetTransform()->rotation->y,
-					selectedObject->GetTransform()->rotation->z
-				};
+					if (ImGui::DragFloat3("Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+					{
+						selectedObject->GetTransform()->position = gcnew Engine::Internal::Components::Vector3(pos[0], pos[1], pos[2]);
+					}
 
-				if (ImGui::DragFloat3("Rotation", rot, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
-				{
-					selectedObject->GetTransform()->rotation = gcnew Engine::Internal::Components::Vector3(rot[0], rot[1], rot[2]);
-				}
+					// rotation
+					float rot[3] = {
+						selectedObject->GetTransform()->rotation->x,
+						selectedObject->GetTransform()->rotation->y,
+						selectedObject->GetTransform()->rotation->z
+					};
 
-				float rot_angle = selectedObject->GetTransform()->rotationValue;
+					if (ImGui::DragFloat3("Rotation", rot, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+					{
+						selectedObject->GetTransform()->rotation = gcnew Engine::Internal::Components::Vector3(rot[0], rot[1], rot[2]);
+					}
 
-				if (ImGui::DragFloat("Rotation Value", &rot_angle, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
-				{
-					selectedObject->GetTransform()->rotationValue = rot_angle;
-				}
+					float rot_angle = selectedObject->GetTransform()->rotationValue;
 
-				// scale
+					if (ImGui::DragFloat("Rotation Value", &rot_angle, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+					{
+						selectedObject->GetTransform()->rotationValue = rot_angle;
+					}
 
-				float scale[3] = {
-					selectedObject->GetTransform()->scale->x,
-					selectedObject->GetTransform()->scale->y,
-					selectedObject->GetTransform()->scale->z
-				};
+					// scale
 
-				if (ImGui::DragFloat3("Scale", scale, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
-				{
-					selectedObject->GetTransform()->scale = gcnew Engine::Internal::Components::Vector3(scale[0], scale[1], scale[2]);
-				}
+					float scale[3] = {
+						selectedObject->GetTransform()->scale->x,
+						selectedObject->GetTransform()->scale->y,
+						selectedObject->GetTransform()->scale->z
+					};
 
-				ImGui::SeparatorText("Parent");
-				if (selectedObject->GetTransform()->parent == nullptr)
-				{
-					ImGui::Text(CastToNative("None"));
-				}
-				else
-				{
-					ImGui::Text(CastStringToNative(ObjectManager::singleton()->GetGameObjectByUid(selectedObject->GetTransform()->GetParent()->uid)->name).c_str());
-				}
-
-				if (ImGui::Button("Change Parent"))
-				{
-					if (!readonlyLock)
-						reparentLock = true;
-				}
+					if (ImGui::DragFloat3("Scale", scale, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+					{
+						selectedObject->GetTransform()->scale = gcnew Engine::Internal::Components::Vector3(scale[0], scale[1], scale[2]);
+					}
+				} // Transform
 
 				SpecializedPropertyEditor(selectedObject);
 			}
