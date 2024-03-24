@@ -66,7 +66,7 @@ namespace Engine::Managers
 							deserializedData
 						);
 
-						renderQueue->Add(
+						loadedScene->PushToRenderQueue(
 							sceneObject
 						);
 					}
@@ -79,7 +79,7 @@ namespace Engine::Managers
 							deserializedData
 						);
 
-						renderQueue->Add(
+						loadedScene->PushToRenderQueue(
 							sceneObject
 						);
 
@@ -100,7 +100,7 @@ namespace Engine::Managers
 							deserializedData
 						);
 
-						renderQueue->Add(
+						loadedScene->PushToRenderQueue(
 							sceneObject
 						);
 
@@ -122,14 +122,15 @@ namespace Engine::Managers
 						{
 							if (assembly->hasType(script->assemblyReference))
 							{
-								sceneObject->SetReference((Engine::Internal::Components::Object^)assembly->CastToType(sceneObject, script->assemblyReference));
-								//sceneObject->SetReference((Engine::Internal::Components::Object^)assembly->CastToType(script, script->assemblyReference));
+								auto obj = (Engine::Internal::Components::Object^)assembly->CastToType(sceneObject, script->assemblyReference);
+
+								obj->Init(script);
+
+								sceneObject->SetReference(obj);
 							}
 						}
 
-						renderQueue->Add(
-							sceneObject
-						);
+						loadedScene->PushToRenderQueue(sceneObject);
 					}
 					break;
 
@@ -141,7 +142,7 @@ namespace Engine::Managers
 							deserializedData
 						);
 
-						renderQueue->Add(
+						loadedScene->PushToRenderQueue(
 							sceneObject
 						);
 
@@ -158,8 +159,8 @@ namespace Engine::Managers
 							deserializedData
 						);
 
-						renderQueue->Add(sceneObj);
-
+						loadedScene->PushToRenderQueue(sceneObj);
+						
 						auto pbrRenderer = sceneObj->GetValue<Engine::EngineObjects::PBRModelRenderer^>();
 						pbrRenderer->Init(pbrRenderer->model_id, pbrRenderer->shader_id, pbrRenderer->texture_id, pbrRenderer->color_hex);
 					}
@@ -173,7 +174,7 @@ namespace Engine::Managers
 							deserializedData
 						);
 
-						renderQueue->Add(sceneObj);
+						loadedScene->PushToRenderQueue(sceneObj);
 
 						auto lightSource = sceneObj->GetValue<Engine::EngineObjects::LightSource^>();
 						lightSource->Init(lightSource->lightColor, lightSource->intensity, lightSource->target, lightSource->lightType, lightSource->shaderId);
@@ -188,9 +189,7 @@ namespace Engine::Managers
 							deserializedData
 						);
 
-						renderQueue->Add(
-							sceneObject
-						);
+						loadedScene->PushToRenderQueue(sceneObject);
 
 						auto gridRenderer = sceneObject->GetValue<Engine::EngineObjects::GridRenderer^>();
 						gridRenderer->Init(gridRenderer->lines, gridRenderer->spacing);
@@ -206,9 +205,7 @@ namespace Engine::Managers
 							deserializedData
 						);
 
-						renderQueue->Add(
-							sceneObject
-						);
+						loadedScene->PushToRenderQueue(sceneObject);
 
 						auto boundingBox = sceneObject->GetValue<Engine::EngineObjects::BoundingBoxRenderer^>();
 						boundingBox->Init(boundingBox->color);

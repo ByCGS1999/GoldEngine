@@ -27,7 +27,7 @@ namespace EditorScripts
 	public:
 		void Update() override
 		{
-			Engine::Internal::Components::Object^ object = ObjectManager::singleton()->GetFirstObjectByTag("Default"); // Obtain the first object with the name 'Cube'
+			Engine::Internal::Components::Object^ object = ObjectManager::singleton()->GetFirstObjectByTag("Cube"); // Obtain the first object with the name 'Cube'
 
 			if (object != nullptr)
 			{

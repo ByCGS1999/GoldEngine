@@ -16,7 +16,7 @@ namespace Engine::Management
 	{
 		// Privates
 	private:
-		System::Collections::ArrayList^ drawQueue; // Unlike Java, in C#/C++ CLR arraylists don't need to be from an specified type (This is what we're using for game rendering & updating.)
+		System::Collections::ArrayList^ drawQueue;
 		System::Collections::Generic::List<EngineAssembly^>^ assemblies; // loaded assemblies -> passcall from scene_assemblies -> get assemblies for preloading -> tbh idk what more.
 		DataPack^ sceneDatapack;
 		bool sceneFinishedLoading;
@@ -185,9 +185,24 @@ namespace Engine::Management
 					object->type,
 					object,
 					""));
+
+				object->Start(); // call start method (otherwise by serialization it won't be called.)
 			}
 			l->release();
 		}
+
+
+		void PushToRenderQueue(Engine::Management::MiddleLevel::SceneObject^ object)
+		{
+			msclr::lock^ l = gcnew msclr::lock(drawQueue);
+			{
+				drawQueue->Add(object);
+
+				object->GetReference()->Start(); // call start method (otherwise by serialization it won't be called.)
+			}
+			l->release();
+		}
+
 
 		Engine::Internal::Components::Object^ GetObjectByNameFromDrawQueue(System::String^ name)
 		{

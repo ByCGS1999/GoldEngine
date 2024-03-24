@@ -175,6 +175,9 @@
     <Filter Include="imgui\FileExplorer">
       <UniqueIdentifier>{4b25e3d2-b7f0-47a1-a619-5d87a8925f4d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Script\LuaSources">
+      <UniqueIdentifier>{059e83ad-2a03-4f33-b3f2-554298bc48e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">

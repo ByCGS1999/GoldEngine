@@ -985,13 +985,7 @@ public:
 					);
 					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
 					scene->AddObjectToScene(meshRenderer);
-					scene->GetRenderQueue()->Add(
-						gcnew Engine::Management::MiddleLevel::SceneObject(
-							meshRenderer->type,
-							meshRenderer,
-							""
-						)
-					);
+					scene->PushToRenderQueue(meshRenderer);
 				}
 
 				if (ImGui::Button("Point Light"))
@@ -1035,13 +1029,7 @@ public:
 					);
 					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
 					scene->AddObjectToScene(meshRenderer);
-					scene->GetRenderQueue()->Add(
-						gcnew Engine::Management::MiddleLevel::SceneObject(
-							meshRenderer->type,
-							meshRenderer,
-							""
-						)
-					);
+					scene->PushToRenderQueue(meshRenderer);
 				}
 
 				if (ImGui::Button("Skybox"))
@@ -1061,13 +1049,7 @@ public:
 					);
 					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
 					scene->AddObjectToScene(skyBox);
-					scene->GetRenderQueue()->Add(
-						gcnew Engine::Management::MiddleLevel::SceneObject(
-							skyBox->type,
-							skyBox,
-							""
-						)
-					);
+					scene->PushToRenderQueue(skyBox);
 				}
 
 				if (ImGui::Button("Cube Renderer"))
@@ -1085,13 +1067,7 @@ public:
 					);
 					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
 					scene->AddObjectToScene(skyBox);
-					scene->GetRenderQueue()->Add(
-						gcnew Engine::Management::MiddleLevel::SceneObject(
-							skyBox->type,
-							skyBox,
-							""
-						)
-					);
+					scene->PushToRenderQueue(skyBox);
 				}
 
 				if (ImGui::Button("BoundingBox Renderer"))
@@ -1109,13 +1085,7 @@ public:
 					);
 					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
 					scene->AddObjectToScene(skyBox);
-					scene->GetRenderQueue()->Add(
-						gcnew Engine::Management::MiddleLevel::SceneObject(
-							skyBox->type,
-							skyBox,
-							""
-						)
-					);
+					scene->PushToRenderQueue(skyBox);
 				}
 
 				if (ImGui::Button("Grid Renderer"))
@@ -1149,8 +1119,8 @@ public:
 							scene->GetDatamodelMember("workspace")->GetTransform()
 						)
 					);
-					scene->PushToRenderQueue(luaScript);
 					scene->AddObjectToScene(luaScript);
+					scene->PushToRenderQueue(luaScript);
 				}
 
 				ImGui::EndListBox();

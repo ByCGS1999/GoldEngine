@@ -392,8 +392,16 @@ namespace Engine::Internal::Components
 
 	public:
 		// vmethods
+		// init functions (used by reflector & scene loader).
+
 		virtual void Init() {}
 		virtual void Init(const Object^ object) {}
+		virtual void Init(Object^ object) {}
+		virtual void Init(array<System::Object^>^ params) {}
+		virtual void Init(System::Object^ object) {}
+		virtual void Init(const System::Object^ object) {}
+
+		// object methods
 		virtual void Start() {}
 		virtual void PhysicsUpdate() {}
 		virtual void Update() {}
