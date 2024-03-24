@@ -117,12 +117,13 @@ namespace Engine::Managers
 						);
 						
 						Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)sceneObject->GetReference();
-
+						
 						for each (auto assembly in assemblyManager)
 						{
 							if (assembly->hasType(script->assemblyReference))
 							{
-								sceneObject->SetReference((Engine::Internal::Components::Object^)assembly->CastToType(script, script->assemblyReference));
+								sceneObject->SetReference((Engine::Internal::Components::Object^)assembly->CastToType(sceneObject, script->assemblyReference));
+								//sceneObject->SetReference((Engine::Internal::Components::Object^)assembly->CastToType(script, script->assemblyReference));
 							}
 						}
 

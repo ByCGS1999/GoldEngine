@@ -1,6 +1,7 @@
 #pragma once
 #include "Includes.h"
 #include "GlIncludes.h"
+#include "Cast.h"
 #include "Transform.h"
 
 using namespace System;
@@ -365,15 +366,21 @@ namespace Engine::Internal::Components
 		Transform^ transform;
 		ViewSpace viewSpace;
 		Layer^ layerMask;
+		String^ tag;
 
 		[[JsonConstructorAttribute]]
-		Object(System::String^ n, Transform^ transform, ObjectType t)
+		Object(System::String^ n, Transform^ transform, ObjectType t, String^ tag)
 		{
 			this->name = n;
 			this->transform = transform;
 			this->type = t;
 			this->viewSpace = ViewSpace::V3D;
 			layerMask = LayerManager::GetLayerFromId(0);
+
+			if (tag == nullptr)
+				tag = "";
+			
+			this->tag = tag;
 		}
 
 	private:
@@ -384,6 +391,7 @@ namespace Engine::Internal::Components
 		}
 
 	public:
+		// vmethods
 		virtual void Init() {}
 		virtual void Init(const Object^ object) {}
 		virtual void Start() {}
@@ -392,15 +400,122 @@ namespace Engine::Internal::Components
 		virtual void Draw() {}
 		virtual void DrawGizmo() {}
 		virtual void DrawImGUI() {}
+		// defined
+
+		String^ GetTag() { return tag; }
+
+		void SetTag(String^ tag) { this->tag = tag; }
+
 		Transform^ GetTransform() { return transform; }
+
 		void SetParent(Object^ object)
 		{
 			transform->SetParent(object->transform);
+		}
+
+		generic <class T>
+		T ToObjectType()
+		{
+			return Cast::Dynamic<T>(this);
 		}
 
 		virtual void Destroy()
 		{
 			delete this;
 		}
+
+		/*
+
+#pragma region IConvertible_Implementation
+
+		virtual System::TypeCode GetTypeCode()
+		{
+			return System::TypeCode();
+		}
+
+		virtual bool ToBoolean(System::IFormatProvider^ provider)
+		{
+			return false;
+		}
+
+		virtual wchar_t ToChar(System::IFormatProvider^ provider)
+		{
+			return L'\0';
+		}
+
+		virtual signed char ToSByte(System::IFormatProvider^ provider)
+		{
+			return 0;
+		}
+
+		virtual unsigned char ToByte(System::IFormatProvider^ provider)
+		{
+			return 0;
+		}
+
+		virtual short ToInt16(System::IFormatProvider^ provider)
+		{
+			return 0;
+		}
+
+		virtual unsigned short ToUInt16(System::IFormatProvider^ provider)
+		{
+			return 0;
+		}
+
+		virtual int ToInt32(System::IFormatProvider^ provider)
+		{
+			return 0;
+		}
+
+		virtual unsigned int ToUInt32(System::IFormatProvider^ provider)
+		{
+			return 0;
+		}
+
+		virtual long long ToInt64(System::IFormatProvider^ provider)
+		{
+			return 0;
+		}
+
+		virtual unsigned long long ToUInt64(System::IFormatProvider^ provider)
+		{
+			return 0;
+		}
+
+		virtual float ToSingle(System::IFormatProvider^ provider)
+		{
+			return 0.0f;
+		}
+
+		virtual double ToDouble(System::IFormatProvider^ provider)
+		{
+			return 0.0;
+		}
+
+		virtual System::Decimal ToDecimal(System::IFormatProvider^ provider)
+		{
+			return System::Decimal();
+		}
+
+		virtual System::DateTime ToDateTime(System::IFormatProvider^ provider)
+		{
+			return System::DateTime();
+		}
+
+		virtual System::String^ ToString(System::IFormatProvider^ provider)
+		{
+			return "Script";
+		}
+
+		virtual System::Object^ ToType(System::Type^ conversionType, System::IFormatProvider^ provider)
+		{
+			return System::Convert::ChangeType(this, conversionType);
+		}
+
+#pragma endregion
+
+*/
+
 	};
 }

@@ -110,10 +110,12 @@ namespace Engine::Management
 
 		void AddObjectToScene(Engine::Internal::Components::Object^ object)
 		{
-			auto tmp = gcnew Engine::Management::MiddleLevel::SceneObject(
+			auto tmp = gcnew Engine::Management::MiddleLevel::SceneObject
+			(
 				object->type,
 				object,
-				"");
+				""
+			);
 
 			sceneObjects->Add(tmp);
 		}
@@ -177,10 +179,14 @@ namespace Engine::Management
 
 		void PushToRenderQueue(Engine::Internal::Components::Object^ object)
 		{
-			drawQueue->Add(gcnew Engine::Management::MiddleLevel::SceneObject(
-				object->type,
-				object,
-				""));
+			msclr::lock^ l = gcnew msclr::lock(drawQueue);
+			{
+				drawQueue->Add(gcnew Engine::Management::MiddleLevel::SceneObject(
+					object->type,
+					object,
+					""));
+			}
+			l->release();
 		}
 
 		Engine::Internal::Components::Object^ GetObjectByNameFromDrawQueue(System::String^ name)
@@ -210,7 +216,7 @@ namespace Engine::Management
 					gcnew Engine::Internal::Components::Vector3(1, 1, 1),
 					nullptr
 				),
-				Engine::Internal::Components::ObjectType::Datamodel);
+				Engine::Internal::Components::ObjectType::Datamodel, "");
 		}
 
 		// VMethods
@@ -239,8 +245,7 @@ namespace Engine::Management
 		{
 			for each (auto t in scene_assemblies)
 			{
-				auto newAssembly = gcnew EngineAssembly();
-				newAssembly->LoadAssemblyFromFile(t);
+				auto newAssembly = gcnew EngineAssembly(t);
 				assemblies->Add(newAssembly);
 			}
 

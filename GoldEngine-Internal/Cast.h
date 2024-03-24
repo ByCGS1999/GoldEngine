@@ -10,7 +10,7 @@ public:
 		{
 			return safe_cast<T>(value);
 		}
-		catch (System::InvalidCastException^)
+		catch (System::InvalidCastException^ ex)
 		{
 			return T();
 		}

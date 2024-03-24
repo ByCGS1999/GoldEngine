@@ -117,6 +117,21 @@ namespace Engine::Scripting
 			return loadedScene;
 		}
 
+		List<Engine::Internal::Components::Object^>^ GetGameObjectsByTag(System::String^ tag)
+		{
+			auto objects = gcnew List<Engine::Internal::Components::Object^>();
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->GetReference()->GetTag() == tag)
+				{
+					objects->Add(t->GetReference());
+				}
+			}
+
+			return objects;
+		}
+
 		List<Engine::Internal::Components::Object^>^ GetGameObjectsByName(System::String^ name)
 		{
 			auto objects = gcnew List<Engine::Internal::Components::Object^>();
@@ -147,6 +162,18 @@ namespace Engine::Scripting
 			return objects;
 		}
 
+		Engine::Internal::Components::Object^ GetFirstObjectByTag(System::String^ tag)
+		{
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->GetReference()->GetTag() == tag)
+				{
+					return t->GetReference();
+				}
+			}
+
+			return nullptr;
+		}
 		Engine::Internal::Components::Object^ GetFirstObjectOfName(System::String^ name)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
@@ -189,9 +216,9 @@ namespace Engine::Scripting
 			for each (Engine::Management::MiddleLevel::SceneObject^ object in sceneObjects)
 			{
 				auto v = GetObjectFromScene(object);
-				if (v->transform->parent != nullptr)
+				if (v->GetTransform()->parent != nullptr)
 				{
-					if (v->transform->GetParent()->uid == parent->transform->uid)
+					if (v->GetTransform()->GetParent()->uid == parent->GetTransform()->uid)
 					{
 						newList->Add(v);
 					}
@@ -247,7 +274,7 @@ namespace Engine::Scripting
 
 						for each (auto obj in objectList)
 						{
-							obj->transform->SetParent(nullptr);
+							obj->GetTransform()->SetParent(nullptr);
 						}
 
 						// PURGE THE OBJECT FROM THE SCENE

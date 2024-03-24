@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoldEngine-Internal", "GoldEngine-Internal\GoldEngine-Internal.vcxproj", "{564D6646-9C1F-4294-A506-05FF2ADF9A18}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoldEngine_Editor", "GoldEngine_Editor\GoldEngine_Editor.vcxproj", "{3A472ACB-64A6-43AE-A778-191102E152DB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoldEngine_ScriptAssembly", "GoldEngine_Editor\GoldEngine_Editor.vcxproj", "{3A472ACB-64A6-43AE-A778-191102E152DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

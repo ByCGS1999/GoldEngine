@@ -381,6 +381,9 @@
     <ClInclude Include="imgui\FileExplorer\filedialog.h">
       <Filter>imgui\FileExplorer</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\LuaScript.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">

@@ -8,7 +8,7 @@ namespace Engine::EngineObjects
 		System::String^ assemblyReference;
 
 	public:
-		Daemon(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Daemon)
+		Daemon(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Daemon, this->tag)
 		{
 			assemblyReference = GetType()->FullName->ToString();
 		}

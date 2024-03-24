@@ -8,9 +8,10 @@ namespace Engine::EngineObjects
 		System::String^ assemblyReference;
 
 	public:
-		Script(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Script)
+		Script(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Script, this->tag)
 		{
 			assemblyReference = GetType()->FullName->ToString();
 		}
+
 	};
 }

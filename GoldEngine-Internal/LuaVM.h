@@ -13,13 +13,9 @@ namespace Engine::Lua::VM
 		DynValue^ value;
 
 	public:
-		static LuaVM^ singleton;
-
-	public:
 		LuaVM()
 		{
 			scriptState = gcnew MoonSharp::Interpreter::Script();
-			singleton = this;
 
 			RegisterGlobalFunctions();
 		}
@@ -67,6 +63,37 @@ namespace Engine::Lua::VM
 		void RegisterGlobalFunction(String^ functionName, Action<T>^ method)
 		{
 			scriptState->Globals[functionName] = method;
+		}
+
+	public:
+		void RegisterScript(String^ source)
+		{
+			ExecuteSource(source);
+		}
+
+	private:
+		bool hasFunction(String^ data)
+		{
+			return scriptState->Globals[data] != nullptr;
+		}
+
+	public:
+		void InvokeFunction(String^ functionName)
+		{
+			if(hasFunction(functionName))
+				scriptState->Call(scriptState->Globals[functionName]);
+		}
+
+		void InvokeFunction(String^ functionName, array<System::Object^>^ args)
+		{
+			if (hasFunction(functionName))
+				scriptState->Call(scriptState->Globals[functionName], args);
+		}
+
+		void InvokeFunction(String^ functionName, List<System::Object^>^ args)
+		{
+			if (hasFunction(functionName))
+				scriptState->Call(scriptState->Globals[functionName], args);
 		}
 
 	public:

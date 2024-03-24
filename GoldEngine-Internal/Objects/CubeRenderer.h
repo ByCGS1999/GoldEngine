@@ -8,7 +8,7 @@ namespace Engine::EngineObjects
 		unsigned int color;
 
 	public:
-		CubeRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::CubeRenderer)
+		CubeRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::CubeRenderer, this->tag)
 		{
 			this->color = tint;
 		}

@@ -8,7 +8,7 @@ namespace Engine::EngineObjects
 		unsigned long color;
 
 	public:
-		BoundingBoxRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned long tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::BoundingBoxRenderer)
+		BoundingBoxRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned long tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::BoundingBoxRenderer, this->tag)
 		{
 			this->color = tint;
 		}

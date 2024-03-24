@@ -13,7 +13,7 @@ namespace Engine::EngineObjects
 		unsigned int texture;
 		unsigned int tint;
 		// methods & constructor
-		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int material, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer)
+		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int material, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag)
 		{
 			this->model = model;
 			this->material = material;

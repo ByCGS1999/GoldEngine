@@ -9,6 +9,8 @@
 #include <fstream>
 #include <bit>
 #include <map>
+#include <msclr/gcroot.h>
+#include <msclr/lock.h>
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/TextEditor/TextEditor.h"

@@ -13,7 +13,6 @@
 #include "Raylib/include/rlImGui.h"
 #include "DataPacks.h"
 #include "DataPack.h"
-#include <msclr/gcroot.h>
 #include "FileManager.h"
 #include "imgui/FileExplorer/filedialog.h"
 
@@ -48,7 +47,8 @@
 
 // lua virtual machine
 #include "LuaVM.h"
-
+// lua script object
+#include "Objects/LuaScript.h"
 
 using namespace Engine;
 using namespace Engine::EngineObjects;
@@ -410,9 +410,12 @@ namespace UserScripts
 			if (parent->Equals(_reference))
 				continue;
 
-			if (_reference->transform->parent != nullptr)
+			if (_reference->GetTransform() == nullptr)
+				continue;
+
+			if (_reference->GetTransform()->parent != nullptr)
 			{
-				if (_reference->transform->parent->uid == parent->GetTransform()->uid)
+				if (_reference->GetTransform()->parent->uid == parent->GetTransform()->uid)
 				{
 					String^ refName = "";
 					for (int x = 0; x < depth; x++)
@@ -424,7 +427,7 @@ namespace UserScripts
 
 					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager)
 					{
-						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->transform->uid).c_str()))
+						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->GetTransform()->uid).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -437,7 +440,7 @@ namespace UserScripts
 					}
 					else
 					{
-						if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->transform->uid).c_str()))
+						if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->GetTransform()->uid).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -473,10 +476,11 @@ public:
 		luaVM = gcnew Engine::Lua::VM::LuaVM();
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
-		auto newAssembly = gcnew EngineAssembly();
-		newAssembly->LoadAssemblyFromFile("Data/Asm/GoldEngine_ScriptAssembly.dll");
 
-		assemblies->Add(newAssembly);
+		assemblies->Add(gcnew EngineAssembly("Data/Asm/GoldEngine_ScriptAssembly.dll"));
+		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
+
+		SceneManager::SetAssemblyManager(assemblies);
 
 		for each (EngineAssembly ^ assembly in assemblies)
 		{
@@ -545,6 +549,11 @@ public:
 				if (ImGui::MenuItem("AssetPack Editor"))
 				{
 					b4 = true;
+				}
+				ImGui::SeparatorText("Engine");
+				if (ImGui::MenuItem("Layer Editor"))
+				{
+					b8 = true;
 				}
 				ImGui::EndMenu();
 			}
@@ -629,7 +638,7 @@ public:
 				{
 					if (type == ObjectType::Datamodel || type == ObjectType::LightManager)
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)" + "###" + reference->transform->uid)))
+						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)" + "###" + reference->GetTransform()->uid)))
 						{
 							if (reparentLock)
 								reparentObject = reference;
@@ -644,7 +653,7 @@ public:
 					}
 					else if (reference->GetTransform()->parent == nullptr)
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (UNPARENTED)" + "###" + reference->transform->uid)))
+						if (ImGui::Selectable(CastToNative(reference->name + " (UNPARENTED)" + "###" + reference->GetTransform()->uid)))
 						{
 							if (reparentLock)
 								reparentObject = reference;
@@ -757,6 +766,21 @@ public:
 								reparentLock = true;
 						}
 
+						if (ImGui::BeginMenu("Tagging"))
+						{
+							const char* c = CastToNative(selectedObject->GetTag());
+
+							char* objectName = new char[sizeof(c)+8];
+
+							strcpy(objectName, c);
+
+							if (ImGui::InputText("Tag", objectName, selectedObject->GetTag()->Length + 8))
+							{
+								selectedObject->SetTag(gcnew String(objectName));
+							}
+
+							ImGui::EndMenu();
+						}
 
 						ImGui::EndMenu();
 					}
@@ -1110,13 +1134,23 @@ public:
 					);
 					skyBox->SetParent(scene->GetDatamodelMember("editor only"));
 					scene->AddObjectToScene(skyBox);
-					scene->GetRenderQueue()->Add(
-						gcnew Engine::Management::MiddleLevel::SceneObject(
-							skyBox->type,
-							skyBox,
-							""
+					scene->PushToRenderQueue(skyBox);
+				}
+
+				if (ImGui::Button("Lua Script"))
+				{
+					auto luaScript = gcnew Engine::EngineObjects::LuaScript(
+						"LuaScript",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							0.0f,
+							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							scene->GetDatamodelMember("workspace")->GetTransform()
 						)
 					);
+					scene->PushToRenderQueue(luaScript);
+					scene->AddObjectToScene(luaScript);
 				}
 
 				ImGui::EndListBox();
@@ -1174,6 +1208,10 @@ public:
 		{
 			ImGui::OpenPopup("Save/Load Style");
 		}
+		else if (b8)
+		{
+			ImGui::OpenPopup("Layer Editor");
+		}
 
 		fileExplorer->DrawExplorer();
 		fileExplorer->TryComplete();
@@ -1192,6 +1230,12 @@ public:
 		}
 
 		// popups
+
+		if (ImGui::BeginPopupModal("Layer Editor", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
+		{
+
+			ImGui::EndPopup();
+		}
 
 		if (ImGui::BeginPopupModal("Save/Load Style", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
 		{
@@ -1402,9 +1446,12 @@ public:
 
 			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 			{
-				if (obj->GetReference() != nullptr)
+				if (obj != nullptr)
 				{
-					obj->GetReference()->DrawImGUI();
+					if (obj->GetReference() != nullptr)
+					{
+						obj->GetReference()->DrawImGUI();
+					}
 				}
 			}
 
@@ -1417,8 +1464,6 @@ public:
 
 	void Init() override
 	{
-		SceneManager::SetAssemblyManager(assemblies);
-
 		DataPack::SetSingletonReference(packedData);
 
 		modelTexture = packedData->AddTextures2D(256, "./Data/EditorAssets/Model.png");

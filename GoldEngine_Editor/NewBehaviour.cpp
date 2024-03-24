@@ -27,7 +27,7 @@ namespace EditorScripts
 	public:
 		void Update() override
 		{
-			Engine::Internal::Components::Object^ object = ObjectManager::singleton()->GetFirstObjectOfName("Cube"); // Obtain the first object with the name 'Cube'
+			Engine::Internal::Components::Object^ object = ObjectManager::singleton()->GetFirstObjectByTag("Default"); // Obtain the first object with the name 'Cube'
 
 			if (object != nullptr)
 			{
@@ -76,7 +76,7 @@ namespace EditorScripts
 	ref class CustomRenderer : public Engine::Internal::Components::Object
 	{
 	public:
-		CustomRenderer(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Script)
+		CustomRenderer(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Script, "")
 		{
 
 		}

@@ -6,9 +6,31 @@ private:
 	System::Reflection::Assembly^ loadedAssembly;
 
 public:
+	EngineAssembly(System::String^ fN)
+	{
+		LoadAssemblyFromFile(fN);
+	}
+
+	EngineAssembly(System::Reflection::Assembly^ assm)
+	{
+		LoadAssemblyFromRawAssembly(assm);
+	}
+
+private:
 	void LoadAssemblyFromFile(System::String^ fileName)
 	{
 		loadedAssembly = loadedAssembly->LoadFrom(fileName);
+	}
+	
+	void LoadAssemblyFromRawAssembly(System::Reflection::Assembly^ assembly)
+	{
+		loadedAssembly = assembly;
+	}
+
+public:
+	System::Reflection::Assembly^ getLoadedAssembly()
+	{
+		return loadedAssembly;
 	}
 
 public:
@@ -95,6 +117,48 @@ public:
 		return false;
 	}
 
+	Type^ GetTypeFromString(String^ asmType)
+	{
+		Type^ storedType = nullptr;
+
+		for each (Type ^ type in loadedAssembly->GetTypes())
+		{
+			if (type->FullName->Equals(asmType))
+			{
+				storedType = type;
+			}
+		}
+
+		return storedType;
+	}
+
+	auto CastToType(Engine::Management::MiddleLevel::SceneObject^ sceneObject, String^ asmType)
+	{
+		if (loadedAssembly != nullptr)
+		{
+			Type^ storedType = nullptr;
+
+			for each (Type ^ type in loadedAssembly->GetTypes())
+			{
+				if (type->FullName->Equals(asmType))
+				{
+					storedType = type;
+				}
+			}
+
+			if (storedType != nullptr)
+			{
+				System::Reflection::MethodInfo^ baseInfo = sceneObject->GetType()->GetMethod("serializeAs");
+				System::Reflection::MethodInfo^ mInfo = baseInfo->MakeGenericMethod(storedType);
+
+				return (System::Object^)mInfo->Invoke(sceneObject, nullptr);
+			}
+
+		}
+
+		return (System::Object^)sceneObject;
+	}
+
 	auto CastToType(Engine::Internal::Components::Object^ object, String^ asmType)
 	{
 		if (loadedAssembly != nullptr)
@@ -109,7 +173,15 @@ public:
 				}
 			}
 
-			return System::Convert::ChangeType(object, storedType);
+			if (storedType != nullptr)
+			{
+				System::Reflection::MethodInfo^ baseInfo = object->GetType()->GetMethod("ToObjectType");
+				System::Reflection::MethodInfo^ mInfo = baseInfo->MakeGenericMethod(storedType);
+
+				return (System::Object^)mInfo->Invoke(object, nullptr);
+			}
+
+			//return (System::Object^)Convert::ChangeType((System::Object^)object, storedType);
 		}
 
 		return (System::Object^)object;
@@ -170,13 +242,10 @@ public:
 				nullptr
 			);
 
-			auto params = gcnew System::Collections::Generic::List<System::Object^>();
-
-			params->Add(storedType->Name + " - Reflected");
-			params->Add(transform);
+			array<System::Object^>^ params = { storedType->Name + " - Reflected", transform };
 
 			if (storedType != nullptr)
-				return (T)System::Activator::CreateInstance(storedType, params->ToArray());
+				return (T)System::Activator::CreateInstance(storedType, params);
 		}
 	}
 };

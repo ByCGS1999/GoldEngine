@@ -43,6 +43,13 @@ namespace Engine::Management::MiddleLevel
 		}
 
 	public:
+		generic <class T>
+		T serializeAs()
+		{
+			return Newtonsoft::Json::JsonConvert::DeserializeObject<T>(deserializedData);
+		}
+
+	public:
 		void serialize()
 		{
 			switch ((Engine::Internal::Components::ObjectType)objectType)
@@ -116,6 +123,12 @@ namespace Engine::Management::MiddleLevel
 			case Engine::Internal::Components::ObjectType::Daemon:
 			{
 				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Daemon^>(deserializedData);
+				break;
+			}
+
+			default:
+			{
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Script^>(deserializedData);
 				break;
 			}
 			}

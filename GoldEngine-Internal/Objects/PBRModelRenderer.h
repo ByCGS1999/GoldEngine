@@ -30,7 +30,7 @@ namespace Engine::EngineObjects
 		unsigned int texture_id;
 		unsigned int color_hex;
 
-		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer)
+		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer, this->tag)
 		{
 			rPBR::PBRModel pbrModel = rPBR::PBRModelLoad(&DataPacks::singleton().GetModel(model));
 			model_id = model;
