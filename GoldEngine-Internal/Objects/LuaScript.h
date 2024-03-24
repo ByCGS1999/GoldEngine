@@ -20,7 +20,7 @@ namespace Engine::EngineObjects
 		void initVM()
 		{
 			virtualMachine = gcnew Engine::Lua::VM::LuaVM();
-			virtualMachine->RegisterGlobal("script", this->GetType());
+			virtualMachine->RegisterGlobal("script", this);
 			virtualMachine->RegisterScript(luaSource);
 		}
 
@@ -51,7 +51,7 @@ namespace Engine::EngineObjects
 				}
 				else
 				{
-					print("luasrc is not a valid instance");
+					print("luasrc is not a valid instance\n");
 				}
 
 				if (virtualMachine != nullptr)

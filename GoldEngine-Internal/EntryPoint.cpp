@@ -60,8 +60,6 @@ using namespace Engine::Management::MiddleLevel;
 using namespace Engine::Managers;
 using namespace Engine::Scripting;
 
-unsigned int passwd = 0;
-
 #if PRODUCTION_BUILD == false
 
 #pragma region EDITOR ENGINE
@@ -255,21 +253,26 @@ private:
 						codeEditorChunk = codeEditor->GetText();
 					}
 					ImGui::Separator();
-					if (ImGui::BeginMenu("Compiler"))
+					if (ImGui::BeginMenu("Lua Compiler"))
 					{
-						if (ImGui::MenuItem("Run Lua Script"))
-						{
-							luaVM->ExecuteSource(gcnew String(codeEditor->GetText().c_str()));
-						}
-						if (ImGui::MenuItem("Compile And Save Lua Script"))
+						if (ImGui::MenuItem("Save Lua Bytecode"))
 						{
 							fileExplorer->SetWindowName(new std::string("Save Lua Compiled File"));
 							fileExplorer->setExplorerMode(Engine::Editor::Gui::explorerMode::Save);
 							fileExplorer->Open();
 
-							luaVM->ExecuteSource(gcnew String(("function dumpMe()\n" + codeEditor->GetText() + "\nend\n return string.dump(dumpMe);").c_str()));
+							luaVM->ExecuteSource(gcnew String((codeEditor->GetText()).c_str()));
 
-							fileExplorer->OnCompleted(gcnew Action<String^>(luaVM, &Engine::Lua::VM::LuaVM::DumpBytecode));
+							fileExplorer->OnCompleted(gcnew Action<String^>(luaVM, &Engine::Lua::VM::LuaVM::WriteLuaCodeToFile));
+						}
+						if (ImGui::MenuItem("Load Lua Bytecode"))
+						{
+							String^ buff = luaVM->LoadLuaCodeFromFile("Data/src.bin");
+
+							if (buff != nullptr && buff != "")
+							{
+								codeEditor->SetText(CastStringToNative(buff));
+							}
 						}
 
 						ImGui::EndMenu();
@@ -305,6 +308,7 @@ private:
 				{
 					if (ImGui::MenuItem("C++ Script Template"))
 					{
+						language = TextEditor::LanguageDefinition::CPlusPlus();
 						codeEditor->SetText(std::string(R"(#include <cstdio>
 #include <Windows.h>
 #include "Typedefs.h"
@@ -353,9 +357,39 @@ namespace UserScripts
 					{
 						language = TextEditor::LanguageDefinition::GLSL();
 					}
-					if (ImGui::MenuItem("Lua"))
+					if (ImGui::MenuItem("Lua Script Template"))
 					{
 						language = TextEditor::LanguageDefinition::Lua();
+						codeEditor->SetText(std::string(R"(-- Called when the object gets instantiated
+function Start()
+
+end
+
+-- Called each time the physics engine does a tick (1/2 of the normal framerate by default).
+function PhysicsUpdate()
+
+end
+
+-- Called every frame (after draw).
+function Update()
+
+end
+
+-- Called every frame (before update).
+function Draw()
+
+end
+
+-- Called when the ImGUI execution cycle is began (allows for using the imgui hook)
+function DrawImGUI()
+
+end
+
+-- Called every frame (Renders only on editor (not client)).
+function DrawGizmos()
+
+end
+)"));
 					}
 
 					ImGui::EndMenu();
@@ -495,7 +529,7 @@ public:
 	{
 		//WinAPI::FreeCons();
 		SetWindowFlags(4096 | 4 | FLAG_MSAA_4X_HINT);
-		OpenWindow(1280, 720, (const char*)"GoldEngine Editor editor-ver0.5d");
+		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
 		//renderer = new VoxelRenderer(4,4,4);
 
 		LayerManager::RegisterDefaultLayers();
@@ -732,7 +766,7 @@ public:
 							}
 							std::string layer;
 
-							if(selectedObject->layerMask != nullptr)
+							if (selectedObject->layerMask != nullptr)
 								layer = CastStringToNative(LayerManager::GetLayerFromId(selectedObject->layerMask->layerMask)->layerName);
 							else
 								layer = "Select Layer";
@@ -747,7 +781,7 @@ public:
 									{
 										auto string = gcnew String(tmp.c_str());
 										auto w = gcnew String(" - ");
-										
+
 										selectedObject->layerMask = LayerManager::GetLayerFromId(int::Parse(string->Split(w->ToCharArray())[0]));
 									}
 								}
@@ -770,7 +804,7 @@ public:
 						{
 							const char* c = CastToNative(selectedObject->GetTag());
 
-							char* objectName = new char[sizeof(c)+8];
+							char* objectName = new char[sizeof(c) + 8];
 
 							strcpy(objectName, c);
 
@@ -1410,7 +1444,7 @@ public:
 			{
 				ImGui::SetWindowSize(ImVec2(285, 20), 0);
 				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight() - 25), 0);
-				ImGui::TextColored(ImVec4(255, 255, 255, 255), "Gold Engine Ver: editor-0.5d");
+				ImGui::TextColored(ImVec4(255, 255, 255, 255), ENGINE_VERSION);
 				ImGui::End();
 			}
 

@@ -1,5 +1,6 @@
-
+﻿
 #include "../imgui.h"
+#include "../Fonts/IconsFontAwesome4.h"
 
 namespace Engine::Editor::Gui
 {
@@ -13,7 +14,6 @@ namespace Engine::Editor::Gui
 	{
 	private:
 		std::string* title;
-		List<String^>^ extensions = gcnew List<String^>(0);
 		bool* open;
 		
 		List<String^>^ files;
@@ -21,22 +21,21 @@ namespace Engine::Editor::Gui
 		String^ selectedFile;
 		explorerMode mode;
 		String^ dialogResult;
+		String^ current_filter;
 		Action<String^>^ bind;
 
+		bool registeredFont = false;
+		
 	public:
-		fileExplorer(std::string* title) : fileExplorer(title, gcnew List<String^>())
-		{
-
-		}
-
-		fileExplorer(std::string* title, List<String^>^ ext)
+		fileExplorer(std::string* title)
 		{
 			this->title = title;
-			this->extensions = ext;
 			open = false;
 			files = gcnew List<String^>();
 			currentRoute = Directory::GetCurrentDirectory() + "/Data";
 			dialogResult = "";
+			current_filter = "";
+			registeredFont = false;
 		}
 
 	public:
@@ -79,18 +78,15 @@ namespace Engine::Editor::Gui
 
 			for each (String ^ s in Directory::GetFileSystemEntries(route))
 			{
-				if (extensions->Count <= 0)
+				if (current_filter->Length <= 0)
 				{
-					files->Add(s);
+					files->Add(s->Replace("\\", "/"));
 				}
 				else
 				{
-					for each (String^ extension in extensions)
+					if (s->Contains(current_filter))
 					{
-						if (s->Contains(extension))
-						{
-							files->Add(s);
-						}
+						files->Add(s->Replace("\\", "/"));
 					}
 				}
 			}
@@ -135,6 +131,25 @@ namespace Engine::Editor::Gui
 			if (!open)
 				return;
 
+			currentRoute->Replace("\\", "/");
+
+			if (!registeredFont)
+			{
+				ImGuiIO& io = ImGui::GetIO();
+				float baseFontSize = 13.0f;
+				float iconFontSize = baseFontSize * 2.0f / 3.0f;
+
+				static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+				ImFontConfig icons_config;
+				icons_config.MergeMode = true;
+				icons_config.PixelSnapH = true;
+				icons_config.GlyphMinAdvanceX = iconFontSize;
+
+				io.Fonts->AddFontFromFileTTF(FONT_ICON_FILE_NAME_FA, iconFontSize, &icons_config, icons_ranges);
+
+				registeredFont = true;
+			}
+
 			ImGui::OpenPopup(title->c_str());
 			bool isFile = !isDirectory(selectedFile);
 			ImGui::BeginPopupModal(title->c_str(), NULL, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize);
@@ -157,19 +172,37 @@ namespace Engine::Editor::Gui
 						0, currentRoute->LastIndexOf("/"));
 				}
 			}
+
+			ImGui::SameLine();
+
 			ImGui::SameLine();
 			ImGui::Text("Path: ");
 			ImGui::SameLine();
-			if (ImGui::InputText("###PATH", route, currentRoute->Length+8, ImGuiInputTextFlags_None | ImGuiInputTextFlags_CallbackCompletion))
+			if (ImGui::InputText("###PATH", route, currentRoute->Length+8, ImGuiInputTextFlags_None))
 			{
 				currentRoute = gcnew String(route);
 			}
 
 			ImGui::SameLine();
 
+			if (ImGui::Button(ICON_FA_FOLDER_O))
+			{
+				if(current_filter != "")
+					Directory::CreateDirectory(currentRoute + "/" + current_filter);
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button(ICON_FA_FILE_O))
+			{
+				if (current_filter != "")
+					File::Create(currentRoute + "/" + current_filter)->Close();
+			}
+
+
 			ImGui::BeginListBox("###FILES", {
 				ImGui::GetWindowSize().x-25,
-				ImGui::GetWindowSize().y-82
+				ImGui::GetWindowSize().y-104
 				});
 
 			fetchFiles(currentRoute);
@@ -177,21 +210,45 @@ namespace Engine::Editor::Gui
 			for each (String^ fileName in files)
 			{
 				if (isDirectory(fileName)) {
-					if (ImGui::Selectable(CastStringToNative("[D] " + fileName).c_str()))
+					if (ImGui::Selectable(std::string(ICON_FA_FOLDER_O + CastStringToNative(" " + fileName)).c_str()))
 					{
-						selectedFile = fileName;
+						selectedFile = fileName->Replace("\\", "/");
 					}
 				}
 				else
 				{
-					if (ImGui::Selectable(CastStringToNative("[F] " + fileName).c_str()))
+					if (ImGui::Selectable(std::string(ICON_FA_FILE_O + CastStringToNative(" " + fileName)).c_str()))
 					{
-						selectedFile = fileName;
+						selectedFile = fileName->Replace("\\", "/");
 					}
 				}
 			}
 
 			ImGui::EndListBox();
+			
+			{
+				// Filter
+				{
+					char* data = new char[current_filter->Length+32];
+					const char* newData = CastToNative(current_filter);
+					strcpy(data, newData);
+
+					ImGui::Text("Filter: ");
+					ImGui::SameLine();
+					if (ImGui::InputText("###FILTER", data, sizeof(data), ImGuiInputTextFlags_None))
+					{
+						current_filter = gcnew String(data);
+					}
+
+					ImGui::SameLine();
+
+					if (ImGui::Button("Reset"))
+					{
+						current_filter = "";
+					}
+
+				}
+			}
 
 			if (mode == explorerMode::Open || !isFile)
 			{

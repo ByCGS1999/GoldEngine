@@ -31,6 +31,7 @@ namespace Engine::Internal::Components
 		VNone
 	};
 
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Vector2
 	{
 	public:
@@ -49,6 +50,7 @@ namespace Engine::Internal::Components
 		}
 	};
 
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Layer
 	{
 	public:
@@ -63,6 +65,7 @@ namespace Engine::Internal::Components
 		}
 	};
 
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class LayerManager
 	{
 	private:
@@ -128,6 +131,7 @@ namespace Engine::Internal::Components
 		}
 	};
 
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Vector3
 	{
 	public:
@@ -256,6 +260,7 @@ namespace Engine::Internal::Components
 		}
 	};
 
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Quaternion
 	{
 	public:
@@ -277,6 +282,7 @@ namespace Engine::Internal::Components
 		}
 	};
 
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Transform
 	{
 	public:
@@ -358,6 +364,7 @@ namespace Engine::Internal::Components
 		}
 	};
 
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Object : IDisposable
 	{
 	public:

@@ -6,15 +6,20 @@ namespace Engine::Lua::VM
 {
 	public ref class LuaVM
 	{
-	private:
-		MoonSharp::Interpreter::Script^ scriptState;
+	public:
+		String^ BINARY_HEADER = "GoldVM";
+		int BYTECODE_VERSION = 0x72;
+		String^ tempBuffer;
 
 	private:
+		MoonSharp::Interpreter::Script^ scriptState;
+		String^ source;
 		DynValue^ value;
 
 	public:
 		LuaVM()
 		{
+			tempBuffer = "";
 			scriptState = gcnew MoonSharp::Interpreter::Script();
 
 			RegisterGlobalFunctions();
@@ -38,6 +43,77 @@ namespace Engine::Lua::VM
 			stream->Close();
 		}
 
+	public:
+		void WriteLuaCodeToFile(String^ src)
+		{
+			FileStream^ f = File::Open(src, FileMode::OpenOrCreate);
+			BinaryWriter^ bwriter = gcnew BinaryWriter(f);
+
+			bwriter->Write("GoldVM");
+			bwriter->Write(BYTECODE_VERSION);
+
+			bwriter->Write(System::Convert::ToBase64String(Encoding::UTF32->GetBytes(CypherLib::EncryptFileContents(source, ::passwd))));
+
+			bwriter->Close();
+		}
+
+		void ReadLuaCodeFromFile(String^ src)
+		{
+			FileStream^ f = File::Open(src, FileMode::OpenOrCreate);
+			BinaryReader^ breader = gcnew BinaryReader(f);
+
+			String^ header = breader->ReadString();
+			int version = breader->ReadInt32();
+
+			if (header->Equals(BINARY_HEADER))
+			{
+				if (version == BYTECODE_VERSION)
+				{
+					String^ base64 = breader->ReadString();
+
+					tempBuffer = CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
+				}
+				else
+				{
+					print("Lua version mismatch\n");
+				}
+			}
+			else
+			{
+				print("Lua header mismatch\n");
+			}
+		}
+
+		String^ LoadLuaCodeFromFile(String^ src)
+		{
+			String^ data = "";
+			FileStream^ f = File::Open(src, FileMode::OpenOrCreate);
+			BinaryReader^ breader = gcnew BinaryReader(f);
+
+			String^ header = breader->ReadString();
+			int version = breader->ReadInt32();
+
+			if (header->Equals(BINARY_HEADER))
+			{
+				if (version == BYTECODE_VERSION)
+				{
+					String^ base64 = breader->ReadString();
+
+					data = CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
+				}
+				else
+				{
+					print("Lua version mismatch\n");
+				}
+			}
+			else
+			{
+				print("Lua header mismatch\n");
+			}
+
+			return data;
+		}
+
 	private:
 		void RegisterGlobalFunctions()
 		{
@@ -49,6 +125,12 @@ namespace Engine::Lua::VM
 
 	public:
 		void RegisterGlobal(String^ functionName, System::Type^ userData)
+		{
+			scriptState->Globals[functionName] = userData;
+		}
+
+
+		void RegisterGlobal(String^ functionName, System::Object^ userData)
 		{
 			scriptState->Globals[functionName] = userData;
 		}
@@ -99,21 +181,25 @@ namespace Engine::Lua::VM
 	public:
 		void ExecuteSource(String^ source)
 		{
+			this->source = source;
 			value = scriptState->DoString(source, scriptState->Globals, "GoldEngineLuaThread");
 		}
 
 		void ExecuteSource(String^ source, String^ friendlyName)
 		{
+			this->source = source;
 			value = scriptState->DoString(source, scriptState->Globals, friendlyName);
 		}
 
 		DynValue^ RunScript(String^ source)
 		{
+			this->source = source;
 			return scriptState->DoString(source, scriptState->Globals, "GoldEngineLuaThread");
 		}
 
 		DynValue^ RunScript(String^ source, String^ friendlyName)
 		{
+			this->source = source;
 			return scriptState->DoString(source, scriptState->Globals, friendlyName);
 		}
 	};
