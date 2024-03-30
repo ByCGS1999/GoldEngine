@@ -3129,13 +3129,49 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"pow", "frexp", "ldexp", "log10", "pi", "huge", "maxinteger", "mininteger", "loadlib", "searchpath", "seeall", "preload", "cpath", "path", "searchers", "loaded", "module", "require", "clock",
 			"date", "difftime", "execute", "exit", "getenv", "remove", "rename", "setlocale", "time", "tmpname", "byte", "char", "dump", "find", "format", "gmatch", "gsub", "len", "lower", "match", "rep",
 			"reverse", "sub", "upper", "pack", "packsize", "unpack", "concat", "maxn", "insert", "pack", "unpack", "remove", "move", "sort", "offset", "codepoint", "char", "len", "codes", "charpattern",
-			"coroutine", "table", "io", "os", "string", "utf8", "bit32", "math", "debug", "package",
-			"Logging"
+			"coroutine", "table", "io", "os", "string", "utf8", "bit32", "math", "debug", "package"
 		};
+
+		static const char* customClasses[] =
+		{
+			"Logging",
+			"Attribute",
+			"attributes",
+			"script"
+		};
+
+		static const char* customFunctions[] = // GOLD ENGINE FUNCTIONS
+		{
+			"Log", 
+			"LogError", 
+			"LogWarning",
+			"LogDebug",
+			"LogFatal",
+			"create",  
+			"New", 
+			"addAttribute",
+			"setAttribute",
+			"getAttribute"
+		};
+
 		for (auto& k : identifiers)
 		{
 			Identifier id;
 			id.mDeclaration = "Built-in function";
+			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
+		}
+
+		for (auto& k : customClasses)
+		{
+			Identifier id;
+			id.mDeclaration = "Gold Engine class";
+			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
+		}
+
+		for (auto& k : customFunctions)
+		{
+			Identifier id;
+			id.mDeclaration = "Gold Engine function";
 			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
 		}
 

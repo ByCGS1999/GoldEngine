@@ -26,6 +26,12 @@ namespace Engine::Lua::VM
 		}
 
 	public:
+		void LoadSource(String^ source)
+		{
+			this->source = source;
+		}
+
+	public:
 		void DumpBytecode(String^ fileName)
 		{
 			if (fileName == nullptr || value == nullptr)
@@ -72,6 +78,33 @@ namespace Engine::Lua::VM
 					String^ base64 = breader->ReadString();
 
 					tempBuffer = CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
+				}
+				else
+				{
+					printError("Lua version mismatch\n");
+				}
+			}
+			else
+			{
+				printError("Lua header mismatch\n");
+			}
+		}
+
+		String^ ReadFromFile(String^ src)
+		{
+			FileStream^ f = File::Open(src, FileMode::OpenOrCreate);
+			BinaryReader^ breader = gcnew BinaryReader(f);
+
+			String^ header = breader->ReadString();
+			int version = breader->ReadInt32();
+
+			if (header->Equals(BINARY_HEADER))
+			{
+				if (version == BYTECODE_VERSION)
+				{
+					String^ base64 = breader->ReadString();
+
+					return CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
 				}
 				else
 				{
@@ -162,20 +195,41 @@ namespace Engine::Lua::VM
 	public:
 		void InvokeFunction(String^ functionName)
 		{
-			if(hasFunction(functionName))
-				scriptState->Call(scriptState->Globals[functionName]);
+			try
+			{
+				if (hasFunction(functionName))
+					scriptState->Call(scriptState->Globals[functionName]);
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+			}
 		}
 
 		void InvokeFunction(String^ functionName, array<System::Object^>^ args)
 		{
-			if (hasFunction(functionName))
-				scriptState->Call(scriptState->Globals[functionName], args);
+			try
+			{
+				if (hasFunction(functionName))
+					scriptState->Call(scriptState->Globals[functionName], args);
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+			}
 		}
 
 		void InvokeFunction(String^ functionName, List<System::Object^>^ args)
 		{
-			if (hasFunction(functionName))
-				scriptState->Call(scriptState->Globals[functionName], args);
+			try
+			{
+				if (hasFunction(functionName))
+					scriptState->Call(scriptState->Globals[functionName], args);
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+			}
 		}
 
 	public:

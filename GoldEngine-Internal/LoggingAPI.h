@@ -1,12 +1,13 @@
 #pragma once
 
-#define printConsole Engine::Scripting::Logging::Log
-#define printError Engine::Scripting::Logging::LogError
-
 using namespace System;
 using namespace System::Collections;
 using namespace System::Collections::Generic;
-using namespace Engine::Scripting;
+
+#define printConsole Engine::Scripting::Logging::Log
+#define printError Engine::Scripting::Logging::LogError
+#define printWarning Engine::Scripting::Logging::LogWarning
+#define printDebug Engine::Scripting::Logging::LogDebug
 
 namespace Engine::Scripting
 {
@@ -34,6 +35,12 @@ namespace Engine::Scripting
 		{
 			TraceLog(LOG_INFO, CastStringToNative(message).c_str());
 			log->Add(gcnew Engine::Scripting::Log(LOG_INFO, "[INFO] " + message));
+		}
+
+		static void LogDebug(String^ message)
+		{
+			TraceLog(LOG_DEBUG, CastStringToNative(message).c_str());
+			log->Add(gcnew Engine::Scripting::Log(LOG_DEBUG, "[DEBUG] " + message));
 		}
 
 		static void LogWarning(String^ message)

@@ -38,6 +38,16 @@ namespace Engine::Scripting
 
 
 	public:
+		void addAttribute(Attribute^ attribute) 
+		{
+			setAttribute(attribute);
+		}
+
+		void addAttribute(String^ name, System::Object^ data)
+		{
+			setAttribute(name, data);
+		}
+
 		void setAttribute(String^ name, System::Object^ data)
 		{
 			if (!hasAttribute(name))

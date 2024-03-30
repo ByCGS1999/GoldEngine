@@ -7,8 +7,9 @@ namespace Engine::EngineObjects
 	{
 	private:
 		Engine::Lua::VM::LuaVM^ virtualMachine;
-	public:
 		String^ luaSource = "";
+	public:
+		String^ luaFilePath = "./";
 
 	public:
 		LuaScript(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::EngineObjects::Script(name, transform)
@@ -16,14 +17,27 @@ namespace Engine::EngineObjects
 			initVM();
 		}
 
+	public:
+		void Reset()
+		{
+			initVM();
+		}
+
 	private:
 		void initVM()
 		{
-			virtualMachine = gcnew Engine::Lua::VM::LuaVM();
-			virtualMachine->RegisterGlobal("script", this);
-			virtualMachine->RegisterGlobal("attributes", attributes);
-			virtualMachine->RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
-			virtualMachine->RegisterScript(luaSource);
+			if (File::Exists(luaFilePath))
+			{
+				virtualMachine = gcnew Engine::Lua::VM::LuaVM();
+
+				luaSource = virtualMachine->ReadFromFile(luaFilePath);
+
+				virtualMachine->RegisterGlobal("script", this);
+				virtualMachine->RegisterGlobal("attributes", attributes);
+				virtualMachine->RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
+
+				virtualMachine->RegisterScript(luaSource);
+			}
 		}
 
 	public:
@@ -74,7 +88,8 @@ namespace Engine::EngineObjects
 			if (virtualMachine == nullptr)
 				initVM();
 
-			virtualMachine->InvokeFunction("Start");
+			if (virtualMachine != nullptr)
+				virtualMachine->InvokeFunction("Start");
 		}
 
 		void Draw() override
@@ -82,7 +97,8 @@ namespace Engine::EngineObjects
 			if (virtualMachine == nullptr)
 				initVM();
 
-			virtualMachine->InvokeFunction("Draw");
+			if (virtualMachine != nullptr)
+				virtualMachine->InvokeFunction("Draw");
 		}
 
 		void Update() override
@@ -90,7 +106,8 @@ namespace Engine::EngineObjects
 			if (virtualMachine == nullptr)
 				initVM();
 
-			virtualMachine->InvokeFunction("Update");
+			if (virtualMachine != nullptr)
+				virtualMachine->InvokeFunction("Update");
 		}
 
 		void PhysicsUpdate() override 
@@ -98,7 +115,8 @@ namespace Engine::EngineObjects
 			if (virtualMachine == nullptr)
 				initVM();
 
-			virtualMachine->InvokeFunction("PhysicsUpdate");
+			if (virtualMachine != nullptr)
+				virtualMachine->InvokeFunction("PhysicsUpdate");
 		}
 
 		void DrawGizmo() override 
@@ -106,7 +124,8 @@ namespace Engine::EngineObjects
 			if (virtualMachine == nullptr)
 				initVM();
 
-			virtualMachine->InvokeFunction("DrawGizmo");
+			if (virtualMachine != nullptr)
+				virtualMachine->InvokeFunction("DrawGizmo");
 		}
 
 		void DrawImGUI() override
@@ -114,7 +133,8 @@ namespace Engine::EngineObjects
 			if (virtualMachine == nullptr)
 				initVM();
 
-			virtualMachine->InvokeFunction("DrawImGUI");
+			if (virtualMachine != nullptr)
+				virtualMachine->InvokeFunction("DrawImGUI");
 		}
 	};
 }

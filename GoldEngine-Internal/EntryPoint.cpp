@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "Includes.h"
 #include "GlIncludes.h"
+#include "LoggingAPI.h"
 #include "DataManager.h"
 #include "Cast.h"
 #include "Transform.h"
@@ -30,7 +31,6 @@
 #include "ImguiHook.h"
 #include "InputManager.h"
 #include "ObjectManager.h"
-#include "LoggingAPI.h"
 #include "ShaderManager.h"
 #include "AsmLoader.h"
 
@@ -111,7 +111,7 @@ ref class EditorWindow : Engine::Window
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scripting::ObjectManager^ objectManager;
 	Engine::Lua::VM::LuaVM^ luaVM;
-	Engine::Editor::Gui::fileExplorer^ fileExplorer = gcnew Engine::Editor::Gui::fileExplorer(new std::string("File Explorer"));
+	Engine::Editor::Gui::fileExplorer^ fileExplorer = gcnew Engine::Editor::Gui::fileExplorer(std::string("File Explorer"));
 
 private:
 	void SaveEditorCode()
@@ -194,16 +194,41 @@ private:
 			{
 				Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)object;
 
+				if (script->assemblyReference->Contains("LuaScript"))
+				{
+					auto scr = (Engine::EngineObjects::LuaScript^)script;
+
+					ImGui::SeparatorText("Linked Source");
+
+					ImGui::Text("Binary file path: ");
+					ImGui::SameLine();
+
+					std::string nativePath = CastStringToNative(scr->luaFilePath);
+
+					char* data = nativePath.data();
+
+					if (ImGui::InputText("###LUA_LINKEDSOURCE",
+						data, scr->luaFilePath->Length + 8, ImGuiInputTextFlags_CallbackCompletion))
+					{
+						scr->luaFilePath = gcnew String(data);
+					}
+
+					if (ImGui::Button("Reload lua source"))
+					{
+						scr->Reset();
+					}
+				}
+
 				ImGui::SeparatorText("Attributes");
 
 				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX"))
 				{
-					for each (Engine::Scripting::Attribute^ attrib in script->attributes->attributes)
+					for each (Engine::Scripting::Attribute ^ attrib in script->attributes->attributes)
 					{
-						if(attrib != nullptr)
+						if (attrib != nullptr)
 						{
 							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->type + ")").c_str());
-							if(attrib->type == "String")
+							if (attrib->type == "String")
 							{
 							}
 						}
@@ -211,7 +236,6 @@ private:
 
 					ImGui::EndListBox();
 				}
-
 			}
 			break;
 
@@ -241,6 +265,39 @@ private:
 		codeEditorChunk = fileContents.c_str();
 	}
 
+	void SetEditorCode(String^ fileName)
+	{
+		SaveEditorCode();
+
+		codeEditorFile = CastStringToNative(fileName);
+		String^ content = File::ReadAllText(fileName);
+
+		if (content->Equals(""))
+		{
+			codeEditor->SetText("");
+			codeEditorChunk = "";
+		}
+		else
+		{
+			codeEditor->SetText(CastStringToNative(content));
+			codeEditorChunk = CastStringToNative(content);
+		}
+	}
+
+	void SaveEditorContents(String^ path)
+	{
+		File::WriteAllText(path, gcnew String(codeEditorChunk.c_str()));
+	}
+
+	void OpenFileExplorer(std::string name, Engine::Editor::Gui::explorerMode mode, Action<String^>^ callback)
+	{
+		fileExplorer->SetWindowName(name);
+		fileExplorer->setExplorerMode(mode);
+		fileExplorer->Open();
+
+		fileExplorer->OnCompleted(callback);
+	}
+
 	void CodeEditor()
 	{
 		if (ImGui::Begin("Embedded Code Editor", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar))
@@ -249,56 +306,37 @@ private:
 			{
 				if (ImGui::BeginMenu("File"))
 				{
-					if (ImGui::MenuItem("New"))
-					{
-						if (codeEditor->GetText().c_str() != codeEditorChunk.c_str())
-						{
-							ce1 = true;
-						}
-					}
-					ImGui::Separator();
 					if (ImGui::MenuItem("Open"))
 					{
-						if (codeEditor->GetText() != codeEditorChunk)
+						String^ chunk = gcnew String(codeEditorChunk.c_str());
+						String^ currentChunk = gcnew String(codeEditor->GetText().c_str());
+
+						if (!currentChunk->Equals(chunk))
 						{
 							ce1 = true;
 						}
+						else
+						{
+							OpenFileExplorer("Open File", Engine::Editor::Gui::explorerMode::Open, (gcnew Action<String^>(this, &EditorWindow::SetEditorCode)));
+						}
+
+						delete chunk;
+						delete currentChunk;
 					}
 					if (ImGui::MenuItem("Save"))
 					{
-						std::ofstream stream(codeEditorFile.c_str());
-
-						if (stream.good())
-						{
-							stream.clear();
-							stream << codeEditor->GetText();
-						}
-
-						stream.close();
-
 						codeEditorChunk = codeEditor->GetText();
+
+						OpenFileExplorer("Save File", Engine::Editor::Gui::explorerMode::Save, (gcnew Action<String^>(this, &EditorWindow::SaveEditorContents)));
 					}
 					ImGui::Separator();
 					if (ImGui::BeginMenu("Lua Compiler"))
 					{
 						if (ImGui::MenuItem("Save Lua Bytecode"))
 						{
-							fileExplorer->SetWindowName(new std::string("Save Lua Compiled File"));
-							fileExplorer->setExplorerMode(Engine::Editor::Gui::explorerMode::Save);
-							fileExplorer->Open();
+							luaVM->LoadSource(gcnew String(codeEditor->GetText().c_str()));
 
-							luaVM->ExecuteSource(gcnew String((codeEditor->GetText()).c_str()));
-
-							fileExplorer->OnCompleted(gcnew Action<String^>(luaVM, &Engine::Lua::VM::LuaVM::WriteLuaCodeToFile));
-						}
-						if (ImGui::MenuItem("Load Lua Bytecode"))
-						{
-							String^ buff = luaVM->LoadLuaCodeFromFile("Data/src.bin");
-
-							if (buff != nullptr && buff != "")
-							{
-								codeEditor->SetText(CastStringToNative(buff));
-							}
+							OpenFileExplorer("Save Lua Compiled File", Engine::Editor::Gui::explorerMode::Save, (gcnew Action<String^>(luaVM, &Engine::Lua::VM::LuaVM::WriteLuaCodeToFile)));
 						}
 
 						ImGui::EndMenu();
@@ -437,20 +475,19 @@ end
 				{
 					ce1 = false;
 					SaveEditorCode();
-					SetEditorCode("Data/NewFile.txt", "");
+					codeEditorChunk = codeEditor->GetText();
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::SameLine();
 				if (ImGui::Button("No"))
 				{
 					ce1 = false;
-					SetEditorCode("Data/NewFile.txt", "");
+					codeEditorChunk = codeEditor->GetText();
 					ImGui::CloseCurrentPopup();
 				}
 
 				ImGui::EndPopup();
 			}
-
 
 			codeEditor->SetLanguageDefinition(language);
 
@@ -1217,26 +1254,26 @@ public:
 
 			const ImVec2 windowSize = ImGui::GetWindowSize();
 
-			if (ImGui::BeginListBox("###CONSOLE_OUTPUT", { windowSize.x-20, windowSize.y-60 }))
+			if (ImGui::BeginListBox("###CONSOLE_OUTPUT", { windowSize.x - 20, windowSize.y - 60 }))
 			{
 				for each (Engine::Scripting::Log ^ log in Engine::Scripting::Logging::log)
 				{
 					switch (log->logType)
 					{
 					case TraceLogLevel::LOG_INFO:
-						ImGui::TextColored({ 255,255,255,255 }, CastStringToNative(log->message).c_str());
+						ImGui::TextColored({ 1.0f,1.0f, 1.0f, 1.0f }, CastStringToNative(log->message).c_str());
 						break;
 					case TraceLogLevel::LOG_DEBUG:
-						ImGui::TextColored({ 0,0,255,255 }, CastStringToNative(log->message).c_str());
+						ImGui::TextColored({ 0.141f, 0.851f, 0.929f, 1.0f }, CastStringToNative(log->message).c_str());
 						break;
 					case TraceLogLevel::LOG_FATAL:
-						ImGui::TextColored({ 255,0,0,255 }, CastStringToNative(log->message).c_str());
+						ImGui::TextColored({ 0,0,0,1.0f }, CastStringToNative(log->message).c_str());
 						break;
 					case TraceLogLevel::LOG_ERROR:
-						ImGui::TextColored({ 255,0,0,255 }, CastStringToNative(log->message).c_str());
+						ImGui::TextColored({ 1.0f,0,0,1.0f }, CastStringToNative(log->message).c_str());
 						break;
 					case TraceLogLevel::LOG_WARNING:
-						ImGui::TextColored({ 249,180,45,255 }, CastStringToNative(log->message).c_str());
+						ImGui::TextColored({ 1.0f, 0.533f, 0.0f, 1.0f }, CastStringToNative(log->message).c_str());
 						break;
 					}
 				}
@@ -1834,8 +1871,6 @@ public:
 #pragma endregion
 
 #endif
-
-
 
 int main()
 {

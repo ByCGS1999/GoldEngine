@@ -18,6 +18,11 @@ namespace Engine::Scripting
 		}
 
 	public:
+		static Attribute^ create(String^ name, System::Object^ data)
+		{
+			return New(name, data);
+		}
+
 		static Attribute^ New(String^ name, System::Object^ data)
 		{
 			return gcnew Attribute(name, data, data->GetType()->Name);

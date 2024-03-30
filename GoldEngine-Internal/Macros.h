@@ -10,8 +10,6 @@
 #define DllImport __declspec(dllimport)
 #define Engine_GCObject Engine::Internal::Components::Object^
 #define PRODUCTION_BUILD false
-#define printConsole printf
-#define printError printf
 
 #define ENGINE_VERSION "GoldEngine Ver: 0.3c"
 #define EDITOR_VERSION "GoldEngine Editor Ver: 0.6a"
