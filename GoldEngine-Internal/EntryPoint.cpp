@@ -50,6 +50,7 @@
 // lua script object
 #include "Objects/LuaScript.h"
 
+
 using namespace Engine;
 using namespace Engine::EngineObjects;
 using namespace Engine::EngineObjects::Native;
@@ -186,6 +187,31 @@ private:
 						light->enabled = false;
 					}
 				}
+			}
+			break;
+
+			case ObjectType::Script:
+			{
+				Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)object;
+
+				ImGui::SeparatorText("Attributes");
+
+				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX"))
+				{
+					for each (Engine::Scripting::Attribute^ attrib in script->attributes->attributes)
+					{
+						if(attrib != nullptr)
+						{
+							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->type + ")").c_str());
+							if(attrib->type == "String")
+							{
+							}
+						}
+					}
+
+					ImGui::EndListBox();
+				}
+
 			}
 			break;
 
@@ -1184,6 +1210,39 @@ public:
 
 		if (ImGui::Begin("Console", &isOpen))
 		{
+			if (ImGui::Button("Clear"))
+			{
+				Engine::Scripting::Logging::log->Clear();
+			}
+
+			const ImVec2 windowSize = ImGui::GetWindowSize();
+
+			if (ImGui::BeginListBox("###CONSOLE_OUTPUT", { windowSize.x-20, windowSize.y-60 }))
+			{
+				for each (Engine::Scripting::Log ^ log in Engine::Scripting::Logging::log)
+				{
+					switch (log->logType)
+					{
+					case TraceLogLevel::LOG_INFO:
+						ImGui::TextColored({ 255,255,255,255 }, CastStringToNative(log->message).c_str());
+						break;
+					case TraceLogLevel::LOG_DEBUG:
+						ImGui::TextColored({ 0,0,255,255 }, CastStringToNative(log->message).c_str());
+						break;
+					case TraceLogLevel::LOG_FATAL:
+						ImGui::TextColored({ 255,0,0,255 }, CastStringToNative(log->message).c_str());
+						break;
+					case TraceLogLevel::LOG_ERROR:
+						ImGui::TextColored({ 255,0,0,255 }, CastStringToNative(log->message).c_str());
+						break;
+					case TraceLogLevel::LOG_WARNING:
+						ImGui::TextColored({ 249,180,45,255 }, CastStringToNative(log->message).c_str());
+						break;
+					}
+				}
+
+				ImGui::EndListBox();
+			}
 
 			ImGui::End();
 		}

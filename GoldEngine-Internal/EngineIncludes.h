@@ -18,6 +18,9 @@
 
 // last class to be imported, it must access to all the components included \\
 
+#include "Attribute.h"
+#include "AttributeManager.h"
+
 #include "Objects/Script.h"
 
 #include "Objects/Daemon.h"

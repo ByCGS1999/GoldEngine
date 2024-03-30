@@ -390,6 +390,12 @@
     <ClInclude Include="imgui\Fonts\IconsFontAwesome4.h">
       <Filter>imgui\Fonts</Filter>
     </ClInclude>
+    <ClInclude Include="Attribute.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeManager.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI\Lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">

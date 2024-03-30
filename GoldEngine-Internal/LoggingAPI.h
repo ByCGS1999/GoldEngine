@@ -1,33 +1,57 @@
 #pragma once
 
+#define printConsole Engine::Scripting::Logging::Log
+#define printError Engine::Scripting::Logging::LogError
+
 using namespace System;
 using namespace System::Collections;
 using namespace System::Collections::Generic;
+using namespace Engine::Scripting;
 
 namespace Engine::Scripting
 {
+	public ref class Log
+	{
+	public:
+		TraceLogLevel logType;
+		String^ message;
+
+		Log(TraceLogLevel level, String^ mesg)
+		{
+			logType = level;
+			message = mesg;
+		}
+	};
+
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Logging abstract
 	{
 	public:
+		static List<Log^>^ log = gcnew System::Collections::Generic::List<Engine::Scripting::Log^>();
+
+	public:
 		static void Log(String^ message)
 		{
 			TraceLog(LOG_INFO, CastStringToNative(message).c_str());
+			log->Add(gcnew Engine::Scripting::Log(LOG_INFO, "[INFO] " + message));
 		}
 
 		static void LogWarning(String^ message)
 		{
 			TraceLog(LOG_WARNING, CastStringToNative(message).c_str());
+			log->Add(gcnew Engine::Scripting::Log(LOG_WARNING, "[WARNING] " + message));
 		}
 
 		static void LogFatal(String^ message)
 		{
 			TraceLog(LOG_FATAL, CastStringToNative(message).c_str());
+			log->Add(gcnew Engine::Scripting::Log(LOG_FATAL, "[FATAL] " + message));
 		}
 
 		static void LogError(String^ message)
 		{
 			TraceLog(LOG_ERROR, CastStringToNative(message).c_str());
+			log->Add(gcnew Engine::Scripting::Log(LOG_ERROR, "[ERROR] " + message));
 		}
 	};
 }

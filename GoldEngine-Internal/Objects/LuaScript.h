@@ -21,6 +21,8 @@ namespace Engine::EngineObjects
 		{
 			virtualMachine = gcnew Engine::Lua::VM::LuaVM();
 			virtualMachine->RegisterGlobal("script", this);
+			virtualMachine->RegisterGlobal("attributes", attributes);
+			virtualMachine->RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
 			virtualMachine->RegisterScript(luaSource);
 		}
 
@@ -47,11 +49,11 @@ namespace Engine::EngineObjects
 					if (luaSrc->luaSource != nullptr)
 						this->luaSource = luaSrc->luaSource;
 					else
-						print("lua source is nullptr, wtf is going on\n");
+						printError("lua source is nullptr, wtf is going on\n");
 				}
 				else
 				{
-					print("luasrc is not a valid instance\n");
+					printError("luasrc is not a valid instance\n");
 				}
 
 				if (virtualMachine != nullptr)
@@ -63,7 +65,7 @@ namespace Engine::EngineObjects
 			}
 			catch (Exception^ ex)
 			{
-				print("Failed converting object to gc_luascript\n");
+				printError("Failed converting object to gc_luascript\n");
 			}
 		}
 

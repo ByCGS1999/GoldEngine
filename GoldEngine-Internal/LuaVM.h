@@ -75,12 +75,12 @@ namespace Engine::Lua::VM
 				}
 				else
 				{
-					print("Lua version mismatch\n");
+					printError("Lua version mismatch\n");
 				}
 			}
 			else
 			{
-				print("Lua header mismatch\n");
+				printError("Lua header mismatch\n");
 			}
 		}
 
@@ -103,12 +103,12 @@ namespace Engine::Lua::VM
 				}
 				else
 				{
-					print("Lua version mismatch\n");
+					printError("Lua version mismatch\n");
 				}
 			}
 			else
 			{
-				print("Lua header mismatch\n");
+				printError("Lua header mismatch\n");
 			}
 
 			return data;
@@ -182,25 +182,58 @@ namespace Engine::Lua::VM
 		void ExecuteSource(String^ source)
 		{
 			this->source = source;
-			value = scriptState->DoString(source, scriptState->Globals, "GoldEngineLuaThread");
+
+			try
+			{
+				value = scriptState->DoString(source, scriptState->Globals, "GoldEngineLuaThread");
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+			}
 		}
 
 		void ExecuteSource(String^ source, String^ friendlyName)
 		{
 			this->source = source;
-			value = scriptState->DoString(source, scriptState->Globals, friendlyName);
+			try
+			{
+				value = scriptState->DoString(source, scriptState->Globals, friendlyName);
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+			}
 		}
 
 		DynValue^ RunScript(String^ source)
 		{
 			this->source = source;
-			return scriptState->DoString(source, scriptState->Globals, "GoldEngineLuaThread");
+
+			try
+			{
+				return scriptState->DoString(source, scriptState->Globals, "GoldEngineLuaThread");
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+				return nullptr;
+			}
 		}
 
 		DynValue^ RunScript(String^ source, String^ friendlyName)
 		{
 			this->source = source;
-			return scriptState->DoString(source, scriptState->Globals, friendlyName);
+
+			try
+			{
+				return scriptState->DoString(source, scriptState->Globals, friendlyName);
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+				return nullptr;
+			}
 		}
 	};
 }

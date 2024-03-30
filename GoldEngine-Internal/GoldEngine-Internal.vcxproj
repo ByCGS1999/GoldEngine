@@ -142,6 +142,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsmLoader.h" />
+    <ClInclude Include="Attribute.h" />
+    <ClInclude Include="AttributeManager.h" />
     <ClInclude Include="CameraPack.h" />
     <ClInclude Include="Cast.h" />
     <ClInclude Include="CastToNative.h" />
