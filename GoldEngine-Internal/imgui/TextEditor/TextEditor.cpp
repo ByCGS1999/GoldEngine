@@ -2763,39 +2763,38 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::CPlusPlus(
 			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
 		}
 
-		langDef.mTokenize = [](const char * in_begin, const char * in_end, const char *& out_begin, const char *& out_end, PaletteIndex & paletteIndex) -> bool
-		{
-			paletteIndex = PaletteIndex::Max;
-
-			while (in_begin < in_end && isascii(*in_begin) && isblank(*in_begin))
-				in_begin++;
-
-			if (in_begin == in_end)
+		langDef.mTokenize = [](const char* in_begin, const char* in_end, const char*& out_begin, const char*& out_end, PaletteIndex& paletteIndex) -> bool
 			{
-				out_begin = in_end;
-				out_end = in_end;
-				paletteIndex = PaletteIndex::Default;
-			}
-			else if (TokenizeCStyleString(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::String;
-			else if (TokenizeCStyleCharacterLiteral(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::CharLiteral;
-			else if (TokenizeCStyleIdentifier(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Identifier;
-			else if (TokenizeCStyleNumber(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Number;
-			else if (TokenizeCStylePunctuation(in_begin, in_end, out_begin, out_end))
-				paletteIndex = PaletteIndex::Punctuation;
+				paletteIndex = PaletteIndex::Max;
 
-			return paletteIndex != PaletteIndex::Max;
-		};
+				while (in_begin < in_end && isascii(*in_begin) && isblank(*in_begin))
+					in_begin++;
+
+				if (in_begin == in_end)
+				{
+					out_begin = in_end;
+					out_end = in_end;
+					paletteIndex = PaletteIndex::Default;
+				}
+				else if (TokenizeCStyleString(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::String;
+				else if (TokenizeCStyleCharacterLiteral(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::CharLiteral;
+				else if (TokenizeCStyleIdentifier(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::Identifier;
+				else if (TokenizeCStyleNumber(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::Number;
+				else if (TokenizeCStylePunctuation(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::Punctuation;
+
+				return paletteIndex != PaletteIndex::Max;
+			};
 
 		langDef.mCommentStart = "/*";
 		langDef.mCommentEnd = "*/";
 		langDef.mSingleLineComment = "//";
 
 		langDef.mCaseSensitive = true;
-		langDef.mAutoIndentation = true;
 
 		langDef.mName = "C++";
 
@@ -2883,17 +2882,83 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::GLSL()
 	if (!inited)
 	{
 		static const char* const keywords[] = {
-			"auto", "break", "case", "char", "const", "continue", "default", "do", "double", "else", "enum", "extern", "float", "for", "goto", "if", "inline", "int", "long", "register", "restrict", "return", "short",
-			"signed", "sizeof", "static", "struct", "switch", "typedef", "union", "unsigned", "void", "volatile", "while", "_Alignas", "_Alignof", "_Atomic", "_Bool", "_Complex", "_Generic", "_Imaginary",
-			"_Noreturn", "_Static_assert", "_Thread_local"
+			"const", "uniform", "buffer", "shared", "attribute", "varying",
+			"coherent", "volatile", "restrict", "readonly", "writeonly",
+			"atomic_uint",
+			"layout",
+			"centroid", "flat", "smooth", "noperspective",
+			"patch", "sample",
+			"invariant", "precise",
+			"break", "continue", "do", "for", "while", "switch", "case", "default",
+			"if", "else",
+			"subroutine",
+			"in", "out", "inout",
+			"int", "void", "bool", "true", "false", "float", "double",
+			"discard", "return",
+			"vec2", "vec3", "vec4", "ivec2", "ivec3", "ivec4", "bvec2", "bvec3", "bvec4",
+			"uint", "uvec2", "uvec3", "uvec4",
+			"dvec2", "dvec3", "dvec4",
+			"mat2", "mat3", "mat4",
+			"mat2x2", "mat2x3", "mat2x4",
+			"mat3x2", "mat3x3", "mat3x4",
+			"mat4x2", "mat4x3", "mat4x4",
+			"dmat2", "dmat3", "dmat4",
+			"dmat2x2", "dmat2x3", "dmat2x4",
+			"dmat3x2", "dmat3x3", "dmat3x4",
+			"dmat4x2", "dmat4x3", "dmat4x4",
+			"lowp", "mediump", "highp", "precision",
+			"sampler1D", "sampler1DShadow", "sampler1DArray", "sampler1DArrayShadow",
+			"isampler1D", "isampler1DArray", "usampler1D usampler1DArray",
+			"sampler2D", "sampler2DShadow", "sampler2DArray", "sampler2DArrayShadow",
+			"isampler2D", "isampler2DArray", "usampler2D", "usampler2DArray",
+			"sampler2DRect", "sampler2DRectShadow", "isampler2DRect", "usampler2DRect",
+			"sampler2DMS", "isampler2DMS", "usampler2DMS",
+			"sampler2DMSArray", "isampler2DMSArray", "usampler2DMSArray",
+			"sampler3D", "isampler3D", "usampler3D",
+			"samplerCube", "samplerCubeShadow", "isamplerCube", "usamplerCube",
+			"samplerCubeArray", "samplerCubeArrayShadow",
+			"isamplerCubeArray", "usamplerCubeArray",
+			"samplerBuffer", "isamplerBuffer", "usamplerBuffer",
+			"image1D", "iimage1D", "uimage1D",
+			"image1DArray", "iimage1DArray", "uimage1DArray",
+			"image2D", "iimage2D", "uimage2D",
+			"image2DArray", "iimage2DArray", "uimage2DArray",
+			"image2DRect", "iimage2DRect", "uimage2DRect",
+			"image2DMS", "iimage2DMS", "uimage2DMS",
+			"image2DMSArray", "iimage2DMSArray", "uimage2DMSArray",
+			"image3D", "iimage3D", "uimage3D",
+			"imageCube", "iimageCube", "uimageCube",
+			"imageCubeArray", "iimageCubeArray", "uimageCubeArray",
+			"imageBuffer", "iimageBuffer", "uimageBuffer",
+			"struct"
 		};
 		for (auto& k : keywords)
 			langDef.mKeywords.insert(k);
 
 		static const char* const identifiers[] = {
-			"abort", "abs", "acos", "asin", "atan", "atexit", "atof", "atoi", "atol", "ceil", "clock", "cosh", "ctime", "div", "exit", "fabs", "floor", "fmod", "getchar", "getenv", "isalnum", "isalpha", "isdigit", "isgraph",
-			"ispunct", "isspace", "isupper", "kbhit", "log10", "log2", "log", "memcmp", "modf", "pow", "putchar", "putenv", "puts", "rand", "remove", "rename", "sinh", "sqrt", "srand", "strcat", "strcmp", "strerror", "time", "tolower", "toupper",
-			"vec4", "in", "out", "vec3", "vec2", "mat2", "mat3", "mat4"
+			"radians", "degrees", "sin", "cos", "tan", "asin", "acos", "atan", "sinh", "cosh", "tanh", "asinh", "acosh", "atanh",
+			"pow", "exp", "log", "exp2", "log2", "sqrt", "inversesqrt",
+			"abs", "sign", "floor", "trunc", "round", "roundEven", "ceil", "fract", "mod", "modf", "min", "max", "clamp", "mix", "step", "smoothstep", "isnan", "isinf", "floatBitsToInt", "floatBitsToUint", "intBitsToFloat", "uintBitsToFloat", "fma", "frexp", "ldexp",
+			"packUnorm2x16", "packSnorm2x16", "packUnorm4x8", "packSnorm4x8", "unpackUnorm2x16", "unpackSnorm2x16", "unpackUnorm4x8", "unpackSnorm4x8", "packHalf2x16", "unpackHalf2x16", "packDouble2x32", "unpackDouble2x32",
+			"length", "distance", "dot", "cross", "normalize", "ftransform", "faceforward", "reflect", "refract",
+			"matrixCompMult", "outerProduct", "transpose", "determinant", "inverse",
+			"lessThan", "lessThanEqual", "greaterThan", "greaterThanEqual", "equal", "notEqual", "any", "all", "not",
+			"uaddCarry", "usubBorrow", "umulExtended", "imulExtended", "bitfieldExtract", "bitfieldInsert", "bitfieldReverse", "bitCount", "findLSB", "findMSB",
+			"textureSize", "textureQueryLod", "textureQueryLevels", "textureSamples",
+			"texture", "textureProj", "textureLod", "textureOffset", "texelFetch", "texelFetchOffset", "textureProjOffset", "textureLodOffset", "textureProjLod", "textureProjLodOffset", "textureGrad", "textureGradOffset", "textureProjGrad", "textureProjGradOffset",
+			"textureGather", "textureGatherOffset", "textureGatherOffsets",
+			"texture1D", "texture1DProj", "texture1DLod", "texture1DProjLod", "texture2D", "texture2DProj", "texture2DLod", "texture2DProjLod", "texture3D", "texture3DProj", "texture3DLod", "texture3DProjLod", "textureCube", "textureCubeLod", "shadow1D", "shadow2D", "shadow1DProj", "shadow2DProj", "shadow1DLod", "shadow2DLod", "shadow1DProjLod", "shadow2DProjLod",
+			"atomicCounterIncrement", "atomicCounterDecrement", "atomicCounter", "atomicCounterAdd", "atomicCounterSubtract", "atomicCounterMin", "atomicCounterMax", "atomicCounterAnd", "atomicCounterOr", "atomicCounterXor", "atomicCounterExchange", "atomicCounterCompSwap",
+			"atomicAdd", "atomicMin", "atomicMax", "atomicAnd", "atomicOr", "atomicXor", "atomicExchange", "atomicCompSwap",
+			"imageSize", "imageSamples", "imageLoad", "imageStore", "imageAtomicAdd", "imageAtomicMin", "imageAtomicMax", "imageAtomicAnd", "imageAtomicOr", "imageAtomicXor", "imageAtomicExchange", "imageAtomicCompSwap",
+			"EmitStreamVertex", "EndStreamPrimitive", "EmitVertex", "EndPrimitive",
+			"dFdx", "dFdy", "dFdxFine", "dFdyFine", "dFdxCoarse", "dFdyCoarse", "fwidth", "fwidthFine", "fwidthCoarse",
+			"interpolateAtCentroid", "interpolateAtSample", "interpolateAtOffset",
+			"noise1", "noise2", "noise3", "noise4",
+			"barrier",
+			"memoryBarrier", "memoryBarrierAtomicCounter", "memoryBarrierBuffer", "memoryBarrierShared", "memoryBarrierImage", "groupMemoryBarrier",
+			"subpassLoad",
+			"anyInvocation", "allInvocations", "allInvocationsEqual"
 		};
 		for (auto& k : identifiers)
 		{
@@ -3106,6 +3171,177 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::AngelScrip
 	return langDef;
 }
 
+static bool TokenizeLuaStyleString(const char* in_begin, const char* in_end, const char*& out_begin, const char*& out_end)
+{
+	const char* p = in_begin;
+
+	bool is_single_quote = false;
+	bool is_double_quotes = false;
+	bool is_double_square_brackets = false;
+
+	switch (*p)
+	{
+	case '\'':
+		is_single_quote = true;
+		break;
+	case '"':
+		is_double_quotes = true;
+		break;
+	case '[':
+		p++;
+		if (p < in_end && *(p) == '[')
+			is_double_square_brackets = true;
+		break;
+	}
+
+	if (is_single_quote || is_double_quotes || is_double_square_brackets)
+	{
+		p++;
+
+		while (p < in_end)
+		{
+			// handle end of string
+			if ((is_single_quote && *p == '\'') || (is_double_quotes && *p == '"') || (is_double_square_brackets && *p == ']' && p + 1 < in_end && *(p + 1) == ']'))
+			{
+				out_begin = in_begin;
+
+				if (is_double_square_brackets)
+					out_end = p + 2;
+				else
+					out_end = p + 1;
+
+				return true;
+			}
+
+			// handle escape character for "
+			if (*p == '\\' && p + 1 < in_end && (is_single_quote || is_double_quotes))
+				p++;
+
+			p++;
+		}
+	}
+
+	return false;
+}
+
+static bool TokenizeLuaStyleIdentifier(const char* in_begin, const char* in_end, const char*& out_begin, const char*& out_end)
+{
+	const char* p = in_begin;
+
+	if ((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z') || *p == '_')
+	{
+		p++;
+
+		while ((p < in_end) && ((*p >= 'a' && *p <= 'z') || (*p >= 'A' && *p <= 'Z') || (*p >= '0' && *p <= '9') || *p == '_'))
+			p++;
+
+		out_begin = in_begin;
+		out_end = p;
+		return true;
+	}
+
+	return false;
+}
+
+static bool TokenizeLuaStyleNumber(const char* in_begin, const char* in_end, const char*& out_begin, const char*& out_end)
+{
+	const char* p = in_begin;
+
+	const bool startsWithNumber = *p >= '0' && *p <= '9';
+
+	if (*p != '+' && *p != '-' && !startsWithNumber)
+		return false;
+
+	p++;
+
+	bool hasNumber = startsWithNumber;
+
+	while (p < in_end && (*p >= '0' && *p <= '9'))
+	{
+		hasNumber = true;
+
+		p++;
+	}
+
+	if (hasNumber == false)
+		return false;
+
+	if (p < in_end)
+	{
+		if (*p == '.')
+		{
+			p++;
+
+			while (p < in_end && (*p >= '0' && *p <= '9'))
+				p++;
+		}
+
+		// floating point exponent
+		if (p < in_end && (*p == 'e' || *p == 'E'))
+		{
+			p++;
+
+			if (p < in_end && (*p == '+' || *p == '-'))
+				p++;
+
+			bool hasDigits = false;
+
+			while (p < in_end && (*p >= '0' && *p <= '9'))
+			{
+				hasDigits = true;
+
+				p++;
+			}
+
+			if (hasDigits == false)
+				return false;
+		}
+	}
+
+	out_begin = in_begin;
+	out_end = p;
+	return true;
+}
+
+static bool TokenizeLuaStylePunctuation(const char* in_begin, const char* in_end, const char*& out_begin, const char*& out_end)
+{
+	(void)in_end;
+
+	switch (*in_begin)
+	{
+	case '[':
+	case ']':
+	case '{':
+	case '}':
+	case '!':
+	case '%':
+	case '#':
+	case '^':
+	case '&':
+	case '*':
+	case '(':
+	case ')':
+	case '-':
+	case '+':
+	case '=':
+	case '~':
+	case '|':
+	case '<':
+	case '>':
+	case '?':
+	case ':':
+	case '/':
+	case ';':
+	case ',':
+	case '.':
+		out_begin = in_begin;
+		out_end = in_begin + 1;
+		return true;
+	}
+
+	return false;
+}
+
 const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 {
 	static bool inited = false;
@@ -3132,7 +3368,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"coroutine", "table", "io", "os", "string", "utf8", "bit32", "math", "debug", "package"
 		};
 
-		static const char* customClasses[] =
+		static const char* customClasses[] = // GOLD ENGINE CLASSES
 		{
 			"Logging",
 			"Attribute",
@@ -3151,7 +3387,13 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"New", 
 			"addAttribute",
 			"setAttribute",
-			"getAttribute"
+			"getAttribute",
+			"Start",
+			"Draw",
+			"DrawImGUI",
+			"DrawGizmos",
+			"Update",
+			"PhysicsUpdate"
 		};
 
 		for (auto& k : identifiers)
@@ -3174,23 +3416,80 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			id.mDeclaration = "Gold Engine function";
 			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
 		}
+		langDef.mTokenize = [](const char* in_begin, const char* in_end, const char*& out_begin, const char*& out_end, PaletteIndex& paletteIndex) -> bool
+			{
+				paletteIndex = PaletteIndex::Max;
 
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("\\\'[^\\\']*\\\'", PaletteIndex::String));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", PaletteIndex::Identifier));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", PaletteIndex::Punctuation));
+				while (in_begin < in_end && isascii(*in_begin) && isblank(*in_begin))
+					in_begin++;
+
+				if (in_begin == in_end)
+				{
+					out_begin = in_end;
+					out_end = in_end;
+					paletteIndex = PaletteIndex::Default;
+				}
+				else if (TokenizeLuaStyleString(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::String;
+				else if (TokenizeLuaStyleIdentifier(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::Identifier;
+				else if (TokenizeLuaStyleNumber(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::Number;
+				else if (TokenizeLuaStylePunctuation(in_begin, in_end, out_begin, out_end))
+					paletteIndex = PaletteIndex::Punctuation;
+
+				return paletteIndex != PaletteIndex::Max;
+			};
 
 		langDef.mCommentStart = "--[[";
 		langDef.mCommentEnd = "]]";
 		langDef.mSingleLineComment = "--";
 
 		langDef.mCaseSensitive = true;
-		langDef.mAutoIndentation = false;
 
 		langDef.mName = "Lua";
+
+		inited = true;
+	}
+	return langDef;
+}
+
+const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Cs()
+{
+	static bool inited = false;
+	static LanguageDefinition langDef;
+	if (!inited)
+	{
+		static const char* const keywords[] = {
+			"abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "in (generic modifier)", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "out (generic modifier)", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "using static", "void", "volatile", "while"
+		};
+		for (auto& k : keywords)
+			langDef.mKeywords.insert(k);
+
+		static const char* const identifiers[] = {
+			"add", "alias", "ascending", "async", "await", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "remove", "select", "set", "value", "var", "when", "where", "yield"
+		};
+		for (auto& k : identifiers)
+		{
+			Identifier id;
+			id.mDeclaration = "Built-in function";
+			langDef.mIdentifiers.insert(std::make_pair(std::string(k), id));
+		}
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>(R"##(($|@)?\"(\\.|[^\"])*\")##", PaletteIndex::String));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>(R"##([+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?)##", PaletteIndex::Number));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>(R"##([+-]?[0-9]+[Uu]?[lL]?[lL]?)##", PaletteIndex::Number));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>(R"##(0[0-7]+[Uu]?[lL]?[lL]?)##", PaletteIndex::Number));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>(R"##(0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?)##", PaletteIndex::Number));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>(R"##([a-zA-Z_][a-zA-Z0-9_]*)##", PaletteIndex::Identifier));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, PaletteIndex>(R"##([\[\]\{\}\!\%\^\&\*\(\)\-\+\=\~\|\<\>\?\/\;\,\.])##", PaletteIndex::Punctuation));
+
+		langDef.mCommentStart = "/*";
+		langDef.mCommentEnd = "*/";
+		langDef.mSingleLineComment = "//";
+
+		langDef.mCaseSensitive = true;
+
+		langDef.mName = "C#";
 
 		inited = true;
 	}

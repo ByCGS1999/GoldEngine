@@ -27,7 +27,7 @@ namespace Engine::Scripting
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Logging abstract
 	{
-	public:
+	private:
 		static List<Log^>^ log = gcnew System::Collections::Generic::List<Engine::Scripting::Log^>();
 
 	public:
@@ -59,6 +59,20 @@ namespace Engine::Scripting
 		{
 			TraceLog(LOG_ERROR, CastStringToNative(message).c_str());
 			log->Add(gcnew Engine::Scripting::Log(LOG_ERROR, "[ERROR] " + message));
+		}
+
+		static void clearLogs()
+		{
+#if PRODUCTION_BUILD
+			printWarning("Cannot use clearLogs on a production build (game).");
+#else
+			log->Clear();
+#endif
+		}
+
+		static auto getLogs() 
+		{
+			return log->ToArray();
 		}
 	};
 }

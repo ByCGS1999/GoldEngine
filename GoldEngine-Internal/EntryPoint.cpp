@@ -90,7 +90,7 @@ bool codeEditorOpen = false;
 VoxelRenderer* renderer;
 std::string styleFN;
 Texture modelTexture;
-std::string codeEditorFile;
+std::string codeEditorFile = "";
 bool fileDialogOpen = false;
 int tmp1;
 
@@ -308,20 +308,27 @@ private:
 				{
 					if (ImGui::MenuItem("Open"))
 					{
-						String^ chunk = gcnew String(codeEditorChunk.c_str());
-						String^ currentChunk = gcnew String(codeEditor->GetText().c_str());
-
-						if (!currentChunk->Equals(chunk))
+						if (codeEditorFile != "")
 						{
-							ce1 = true;
+							String^ chunk = gcnew String(codeEditorChunk.c_str());
+							String^ currentChunk = gcnew String(codeEditor->GetText().c_str());
+
+							if (!currentChunk->Equals(chunk))
+							{
+								ce1 = true;
+							}
+							else
+							{
+								OpenFileExplorer("Open File", Engine::Editor::Gui::explorerMode::Open, (gcnew Action<String^>(this, &EditorWindow::SetEditorCode)));
+							}
+
+							delete chunk;
+							delete currentChunk;
 						}
 						else
 						{
 							OpenFileExplorer("Open File", Engine::Editor::Gui::explorerMode::Open, (gcnew Action<String^>(this, &EditorWindow::SetEditorCode)));
 						}
-
-						delete chunk;
-						delete currentChunk;
 					}
 					if (ImGui::MenuItem("Save"))
 					{
@@ -1249,14 +1256,14 @@ public:
 		{
 			if (ImGui::Button("Clear"))
 			{
-				Engine::Scripting::Logging::log->Clear();
+				Engine::Scripting::Logging::clearLogs();
 			}
 
 			const ImVec2 windowSize = ImGui::GetWindowSize();
 
 			if (ImGui::BeginListBox("###CONSOLE_OUTPUT", { windowSize.x - 20, windowSize.y - 60 }))
 			{
-				for each (Engine::Scripting::Log ^ log in Engine::Scripting::Logging::log)
+				for each (Engine::Scripting::Log ^ log in Engine::Scripting::Logging::getLogs())
 				{
 					switch (log->logType)
 					{
