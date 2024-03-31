@@ -19,7 +19,7 @@ Features:</br>
   Object Based System [x]</br>
   Entity Component System [] - NOR PLANNED</br>
   64 Bit Support [x]</br>
-  32 Bit Support []</br>
+  32 Bit Support [x]</br>
   LuaVM [x] - Thanks To MoonSharp, it somehow works with C++/CLI<br>
 
 Requirements:</br>
