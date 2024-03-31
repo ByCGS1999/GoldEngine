@@ -585,7 +585,7 @@ public:
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
 
-		assemblies->Add(gcnew EngineAssembly("Data/Asm/GoldEngine_ScriptAssembly.dll"));
+		//assemblies->Add(gcnew EngineAssembly("Data/Asm/GoldEngine_ScriptAssembly.dll"));
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
 
 		SceneManager::SetAssemblyManager(assemblies);
@@ -1885,9 +1885,7 @@ public:
 
 int main()
 {
-	std::string password = std::string(ENCRYPTION_PASSWORD);
-
-	passwd = CypherLib::GetPasswordBytes(password.c_str());
+	passwd = CypherLib::GetPasswordBytes(gcnew String(ENCRYPTION_PASSWORD));
 
 #if PRODUCTION_BUILD
 	gcnew GameWindow();

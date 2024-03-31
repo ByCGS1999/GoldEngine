@@ -39,7 +39,11 @@ namespace rPBR
 
 using namespace rPBR;
 
-#include "raylib.h"
+#ifdef _WIN64
+#include "x64/raylib.h"
+#else
+#include "x86/raylib.h"
+#endif
 
 
 //----------------------------------------------------------------------------------

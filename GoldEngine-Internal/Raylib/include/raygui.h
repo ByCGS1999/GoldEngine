@@ -319,7 +319,13 @@
 #define RAYGUI_VERSION  "4.0"
 
 #if !defined(RAYGUI_STANDALONE)
-#include "raylib.h"
+
+#ifdef _WIN64
+#include "Raylib/include/x64/raylib.h"
+#else
+#include "Raylib/include/x86/raylib.h"
+#endif
+
 #endif
 
 // Function specifiers in case library is build/used as a shared library (Windows)

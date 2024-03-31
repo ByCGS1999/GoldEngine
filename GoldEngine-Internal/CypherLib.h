@@ -8,6 +8,18 @@ using namespace System::Security::Cryptography;
 ref class CypherLib
 {
 public:
+	static unsigned int GetPasswordBytes(System::String^ passwd)
+	{
+		unsigned int retn = 0;
+
+		for each (char c in passwd->ToCharArray())
+		{
+			retn += (unsigned int)c;
+		}
+
+		return retn;
+	}
+
 	static unsigned int GetPasswordBytes(const char* passwd)
 	{
 		unsigned int retn = 0;

@@ -128,7 +128,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,7 +142,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -185,6 +185,9 @@
     <ClInclude Include="Objects\Skybox.h" />
     <ClInclude Include="Packs.h" />
     <ClInclude Include="PreloadScript.h" />
+    <ClInclude Include="Raylib\include\x86\raylib.h" />
+    <ClInclude Include="Raylib\include\x86\raymath.h" />
+    <ClInclude Include="Raylib\include\x86\rlgl.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneObject.h" />
@@ -207,9 +210,9 @@
     <ClInclude Include="Raylib\include\IconsFontAwesome6.h" />
     <ClInclude Include="Raylib\include\imgui_impl_raylib.h" />
     <ClInclude Include="Raylib\include\raygui.h" />
-    <ClInclude Include="Raylib\include\raylib.h" />
-    <ClInclude Include="Raylib\include\raymath.h" />
-    <ClInclude Include="Raylib\include\rlgl.h" />
+    <ClInclude Include="Raylib\include\x64\raylib.h" />
+    <ClInclude Include="Raylib\include\x64\raymath.h" />
+    <ClInclude Include="Raylib\include\x64\rlgl.h" />
     <ClInclude Include="Raylib\include\rlights.h" />
     <ClInclude Include="Raylib\include\rlImGui.h" />
     <ClInclude Include="Raylib\include\rlImGuiColors.h" />
@@ -321,11 +324,22 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/bin/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/bin/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <None Include="Raylib\lib\raylib.dll" />
+    <CopyFileToFolders Include="Raylib\lib\x64\raylib.dll">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Raylib\lib\x86\raylib.dll">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Raylib\lib\raylib.lib" />
-    <Library Include="Raylib\lib\raylibdll.lib" />
+    <Library Include="Raylib\lib\x64\raylib.lib">
+      <FileType>Document</FileType>
+    </Library>
+    <Library Include="Raylib\lib\x64\raylibdll.lib">
+      <FileType>Document</FileType>
+    </Library>
+    <Library Include="Raylib\lib\x86\raylib.lib" />
+    <Library Include="Raylib\lib\x86\raylibdll.lib" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MoonSharp.Interpreter">

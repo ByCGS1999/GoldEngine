@@ -181,6 +181,18 @@
     <Filter Include="Archivos de origen\Engine\Utils">
       <UniqueIdentifier>{1394687c-b10e-48e6-8430-d5caf21711a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="raylib\lib\x64">
+      <UniqueIdentifier>{65fad7e6-8fdc-4113-8df9-55ad53bf4b95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\lib\x86">
+      <UniqueIdentifier>{246b9c9d-821b-4f37-9b35-17cf46159135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\x64">
+      <UniqueIdentifier>{213353d8-cff4-4605-afc8-7829ffb42860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\x86">
+      <UniqueIdentifier>{a839e89b-dadc-4c70-9bc2-35bd88260c49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -196,15 +208,6 @@
       <Filter>Archivos de origen\Engine\Object</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\raygui.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\raylib.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\raymath.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\rlgl.h">
       <Filter>raylib\include</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\rlImGuiColors.h">
@@ -402,6 +405,24 @@
     <ClInclude Include="LogFileReporter.h">
       <Filter>Archivos de origen\Engine\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Raylib\include\x64\raylib.h">
+      <Filter>raylib\include\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\x64\raymath.h">
+      <Filter>raylib\include\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\x64\rlgl.h">
+      <Filter>raylib\include\x64</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\x86\raylib.h">
+      <Filter>raylib\include\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\x86\raymath.h">
+      <Filter>raylib\include\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\x86\rlgl.h">
+      <Filter>raylib\include\x86</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -491,18 +512,25 @@
     <CopyFileToFolders Include="Data\EditorAssets\Stop.png">
       <Filter>Data\EditorAssets</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Raylib\lib\x64\raylib.dll">
+      <Filter>raylib\lib\x64</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Raylib\lib\x86\raylib.dll">
+      <Filter>raylib\lib\x86</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Raylib\lib\raylib.dll">
-      <Filter>raylib\lib</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="Raylib\lib\raylib.lib">
-      <Filter>raylib\lib</Filter>
+    <Library Include="Raylib\lib\x86\raylib.lib">
+      <Filter>raylib\lib\x86</Filter>
     </Library>
-    <Library Include="Raylib\lib\raylibdll.lib">
-      <Filter>raylib\lib</Filter>
+    <Library Include="Raylib\lib\x86\raylibdll.lib">
+      <Filter>raylib\lib\x86</Filter>
+    </Library>
+    <Library Include="Raylib\lib\x64\raylib.lib">
+      <Filter>raylib\lib\x64</Filter>
+    </Library>
+    <Library Include="Raylib\lib\x64\raylibdll.lib">
+      <Filter>raylib\lib\x64</Filter>
     </Library>
   </ItemGroup>
 </Project>

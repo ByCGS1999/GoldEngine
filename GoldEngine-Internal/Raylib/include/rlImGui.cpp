@@ -31,8 +31,14 @@
 
 #include "imgui_impl_raylib.h"
 
-#include "raylib.h"
-#include "rlgl.h"
+
+#ifdef _WIN64
+#include "x64/raylib.h"
+#include "x64/rlgl.h"
+#else
+#include "x86/raylib.h"
+#include "x86/rlgl.h"
+#endif
 
 #ifdef PLATFORM_DESKTOP
 #include <GLFW/glfw3.h>

@@ -30,7 +30,11 @@
 
 #pragma once
 
-#include "raylib.h"
+#ifdef _WIN64
+#include "x64/raylib.h"
+#else
+#include "x86/raylib.h"
+#endif
 
 #ifndef NO_FONT_AWESOME
 #include "IconsFontAwesome6.h"
