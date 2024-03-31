@@ -11,6 +11,7 @@ Solutions
 x64/
 Win32/
 Solutions/
+Release/
 **/Solutions
 **/x64
 **/Win32
