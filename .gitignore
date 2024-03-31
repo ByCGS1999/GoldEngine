@@ -9,11 +9,15 @@
 x64
 Solutions
 x64/
+Win32/
 Solutions/
 **/Solutions
 **/x64
+**/Win32
 ./GoldEngine-Internal/Data/**
 ./GoldEngine-Internal/Data/*
 ./GoldEngine-Internal/Binaries/*
 ./GoldEngine-Internal/x64/*
+./GoldEngine-Internal/Win32/*
 ./GoldEngine_Editor/x64/*
+./GoldEngine_Editor/Win32/*

@@ -178,6 +178,9 @@
     <Filter Include="imgui\Fonts">
       <UniqueIdentifier>{5b48b030-99b1-4bfd-b657-828ab59b7f87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\Utils">
+      <UniqueIdentifier>{1394687c-b10e-48e6-8430-d5caf21711a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -395,6 +398,9 @@
     </ClInclude>
     <ClInclude Include="AttributeManager.h">
       <Filter>Archivos de origen\Engine\ScriptingAPI\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="LogFileReporter.h">
+      <Filter>Archivos de origen\Engine\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

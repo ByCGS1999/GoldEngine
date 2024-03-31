@@ -32,6 +32,7 @@
 #include "InputManager.h"
 #include "ObjectManager.h"
 #include "ShaderManager.h"
+#include "LogFileReporter.h"
 #include "AsmLoader.h"
 
 // Daemons (Daemons are tasks that are ran mandatory by the engine, these cannot be displayed by the hierarchy)
@@ -577,6 +578,9 @@ end
 public:
 	EditorWindow()
 	{
+		Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine");
+		gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine/main.log");
+
 		luaVM = gcnew Engine::Lua::VM::LuaVM();
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();

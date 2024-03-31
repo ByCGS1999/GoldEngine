@@ -51,8 +51,8 @@ namespace Engine::Scripting
 
 		static void LogFatal(String^ message)
 		{
-			TraceLog(LOG_FATAL, CastStringToNative(message).c_str());
 			log->Add(gcnew Engine::Scripting::Log(LOG_FATAL, "[FATAL] " + message));
+			TraceLog(LOG_FATAL, CastStringToNative(message).c_str());
 		}
 
 		static void LogError(String^ message)
