@@ -21,3 +21,4 @@ Solutions/
 ./GoldEngine-Internal/Win32/*
 ./GoldEngine_Editor/x64/*
 ./GoldEngine_Editor/Win32/*
+./GoldEngine_Editor/Release/*
