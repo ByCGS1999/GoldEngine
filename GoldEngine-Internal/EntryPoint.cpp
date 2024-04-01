@@ -578,6 +578,16 @@ end
 public:
 	EditorWindow()
 	{
+		if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine"))
+		{
+			if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine/main.log"))
+			{
+				File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine/main.log");
+			}
+
+			Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine");
+		}
+
 		Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine");
 		gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine/main.log");
 
@@ -585,7 +595,7 @@ public:
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
 
-		//assemblies->Add(gcnew EngineAssembly("Data/Asm/GoldEngine_ScriptAssembly.dll"));
+		assemblies->Add(gcnew EngineAssembly("Data/Asm/GoldEngine_ScriptAssembly.dll"));
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
 
 		SceneManager::SetAssemblyManager(assemblies);
@@ -602,9 +612,28 @@ public:
 	void Start()
 	{
 		//WinAPI::FreeCons();
-		SetWindowFlags(4096 | 4 | FLAG_MSAA_4X_HINT);
+		SetWindowFlags(FLAG_MSAA_4X_HINT);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
 		//renderer = new VoxelRenderer(4,4,4);
+
+		if (Directory::Exists("Data/Keys/") && File::Exists("Data/Keys/privateKey.xml"))
+		{
+			CypherLib::beginRSA();
+
+			CypherLib::loadKey(File::ReadAllText("Data/Keys/privateKey.xml"));
+		}
+		else
+		{
+			Directory::CreateDirectory("Data/Keys/");
+
+			CypherLib::beginRSA();
+
+			String^ publicKey = CypherLib::getPublicKey();
+			String^ privateKey = CypherLib::getPrivateKey();
+
+			File::WriteAllText("Data/Keys/publicKey.xml", publicKey);
+			File::WriteAllText("Data/Keys/privateKey.xml", privateKey);
+		}
 
 		LayerManager::RegisterDefaultLayers();
 
@@ -629,24 +658,47 @@ public:
 
 		if (ImGui::BeginMainMenuBar())
 		{
-			if (ImGui::BeginMenu("Scene", true))
+			if (ImGui::BeginMenu("Engine", true))
 			{
-				if (ImGui::MenuItem("New", "", false, true))
+				ImGui::SeparatorText("Encryption");
+
+				if (ImGui::MenuItem("Password"))
 				{
-					b1 = true;
+
 				}
-				if (ImGui::MenuItem("Open", "", false, true))
+
+				ImGui::SeparatorText("Project");
+
+				if (ImGui::MenuItem("Generate .sln project"))
 				{
-					b3 = true;
+
 				}
-				if (ImGui::MenuItem("Save"))
-				{
-					SceneManager::SaveSceneToFile(scene, passwd);
-				}
+
 				ImGui::Separator();
+
 				if (ImGui::MenuItem("Exit"))
 				{
 					Exit();
+				}
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::BeginMenu("Scene", true))
+			{
+				if (ImGui::MenuItem("New Scene", "", false, true))
+				{
+					b1 = true;
+				}
+				if (ImGui::MenuItem("Open Scene", "", false, true))
+				{
+					b3 = true;
+				}
+				if (ImGui::MenuItem("Save Scene"))
+				{
+					SceneManager::SaveSceneToFile(scene, passwd);
 				}
 				ImGui::EndMenu();
 			}
@@ -666,7 +718,7 @@ public:
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("View", true))
+			if (ImGui::BeginMenu("Views", true))
 			{
 				if (ImGui::MenuItem("Editor View"))
 				{
@@ -679,6 +731,8 @@ public:
 				ImGui::EndMenu();
 			}
 
+			ImGui::Separator();
+
 			if (ImGui::BeginMenu("Scripts", true))
 			{
 				ImGui::SeparatorText("Scene");
@@ -690,7 +744,6 @@ public:
 				{
 
 				}
-				ImGui::SeparatorText("Shaders");
 				ImGui::SeparatorText("Tools");
 				if (ImGui::MenuItem("Script Editor"))
 				{
@@ -698,6 +751,8 @@ public:
 				}
 				ImGui::EndMenu();
 			}
+
+			ImGui::Separator();
 
 			if (ImGui::BeginMenu("Editor", true))
 			{
@@ -1438,6 +1493,8 @@ public:
 			if (ImGui::Button("Create Scene"))
 			{
 				scene = SceneManager::CreateScene(gcnew System::String(fileName));
+				scene->LoadScene();
+				create();
 				ImGui::CloseCurrentPopup();
 				b2 = false;
 			}
@@ -1461,6 +1518,7 @@ public:
 				SceneManager::UnloadScene(scene);
 				scene = SceneManager::LoadSceneFromFile(gcnew System::String(fileName), scene, passwd);
 				scene->LoadScene();
+				create();
 				ImGui::CloseCurrentPopup();
 				b3 = false;
 			}
@@ -1519,6 +1577,7 @@ public:
 
 	void Exit() override
 	{
+		Engine::Utils::LogReporter::singleton->CloseThread();
 		UnloadRenderTexture(viewportTexture);
 		dataPack.FreeAll();
 		exit(0);
@@ -1573,25 +1632,9 @@ public:
 		EndDrawing();
 	}
 
-	void Init() override
+private:
+	void create()
 	{
-		DataPack::SetSingletonReference(packedData);
-
-		modelTexture = packedData->AddTextures2D(256, "./Data/EditorAssets/Model.png");
-		DataManager::HL_LoadTexture2D(0xE1, "Data/EditorAssets/Run.png");
-		DataManager::HL_LoadTexture2D(0xE2, "Data/EditorAssets/Stop.png");
-		DataManager::HL_LoadShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
-
-		packedData->WriteToFile(packedData->getFile(), passwd);
-
-		/*
-		Shader lightShader = dataPack.GetShader(1);
-
-		lightShader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(lightShader, "viewPos");
-
-		dataPack.SetShader(1, lightShader);
-		*/
-
 		scene->GetDatamodelMember("workspace");
 
 		if (!scene->ExistsDatamodelMember("lighting"))
@@ -1634,6 +1677,29 @@ public:
 		lightdm->SetParent(daemonParent);
 		scene->PushToRenderQueue(lightdm);
 		scene->AddObjectToScene(lightdm);
+	}
+
+public:
+	void Init() override
+	{
+		DataPack::SetSingletonReference(packedData);
+
+		modelTexture = packedData->AddTextures2D(256, "./Data/EditorAssets/Model.png");
+		DataManager::HL_LoadTexture2D(0xE1, "Data/EditorAssets/Run.png");
+		DataManager::HL_LoadTexture2D(0xE2, "Data/EditorAssets/Stop.png");
+		DataManager::HL_LoadShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
+
+		packedData->WriteToFile(packedData->getFile(), passwd);
+
+		create();
+
+		/*
+		Shader lightShader = dataPack.GetShader(1);
+
+		lightShader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(lightShader, "viewPos");
+
+		dataPack.SetShader(1, lightShader);
+		*/
 
 		/*
 		auto workSpace = gcnew Components::Object(
@@ -1661,14 +1727,6 @@ public:
 		scene->AddObjectToScene(skyBox);
 		*/
 
-		/*
-		auto midLevSkybox = (Engine::Management::MiddleLevel::SceneObject^)scene->GetRenderQueue()[1];
-		auto skyBox = (Engine::EngineObjects::Skybox^)midLevSkybox->reference;
-		auto parent = (Engine::Management::MiddleLevel::SceneObject^)scene->GetRenderQueue()[0];
-
-		skyBox->Init(skyBox->materialId, skyBox->texPath);
-		skyBox->SetupSkyboxImage(0);
-		*/
 		//int numLights = 1;
 		//SetShaderValue(dataPack.GetShader(1), GetShaderLocation(dataPack.GetShader(1), "numOfLights"), &numLights, SHADER_UNIFORM_INT);
 		rPBR::PBRSetAmbient(dataPack.GetShader(1), { 0, 0, 0, 255 }, 0.0f);

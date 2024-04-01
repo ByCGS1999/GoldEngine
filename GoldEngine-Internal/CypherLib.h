@@ -7,6 +7,9 @@ using namespace System::Security::Cryptography;
 
 ref class CypherLib
 {
+private:
+	static RSACryptoServiceProvider^ serviceProvider;
+
 public:
 	static unsigned int GetPasswordBytes(System::String^ passwd)
 	{
@@ -92,5 +95,45 @@ public:
 		auto plainText = Convert::FromBase64CharArray(message->ToCharArray(), 0, message->Length);
 
 		return Encoding::UTF8->GetString(cryptoBro->TransformFinalBlock(plainText, 0, plainText->Length));
+	}
+
+	static void beginRSA()
+	{
+		serviceProvider = gcnew RSACryptoServiceProvider(2048);
+	}
+
+	static String^ getPublicKey()
+	{
+		return serviceProvider->ToXmlString(false);
+	}
+
+	static String^ getPrivateKey()
+	{
+		return serviceProvider->ToXmlString(true);
+	}
+
+	static void loadKey(String^ xmlKey)
+	{
+		serviceProvider->FromXmlString(xmlKey);
+	}
+
+	static String^ Decrypt(String^ tempData)
+	{
+		return Encoding::UTF8->GetString(serviceProvider->Decrypt(Encoding::UTF8->GetBytes(tempData), RSAEncryptionPadding::Pkcs1));
+	}
+
+	static String^ Decrypt(String^ tempData, RSAEncryptionPadding^ encryptionPadding)
+	{
+		return Encoding::UTF8->GetString(serviceProvider->Decrypt(Encoding::UTF8->GetBytes(tempData), encryptionPadding));
+	}
+
+	static String^ Encrypt(String^ tempData)
+	{
+		return Encoding::UTF8->GetString(serviceProvider->Encrypt(Encoding::UTF8->GetBytes(tempData), RSAEncryptionPadding::Pkcs1));
+	}
+
+	static String^ Encrypt(String^ tempData, RSAEncryptionPadding^ encryptionPadding)
+	{
+		return Encoding::UTF8->GetString(serviceProvider->Encrypt(Encoding::UTF8->GetBytes(tempData), encryptionPadding));
 	}
 };

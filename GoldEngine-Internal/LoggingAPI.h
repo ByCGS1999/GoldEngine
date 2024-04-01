@@ -70,7 +70,7 @@ namespace Engine::Scripting
 #endif
 		}
 
-		static auto getLogs() 
+		static array<Engine::Scripting::Log^>^ getLogs()
 		{
 			return log->ToArray();
 		}

@@ -25,6 +25,8 @@ namespace Engine::Utils
 			fileStream = File::CreateText(fileName);
 			lifetimeLogs = gcnew System::Collections::Generic::List<Log^>();
 
+			fileStream->Flush();
+
 			newThread = gcnew System::Threading::Thread(gcnew System::Threading::ThreadStart(this, &LogReporter::ThreadProcessing));
 			newThread->IsBackground = true;
 			newThread->Start();
@@ -41,12 +43,18 @@ namespace Engine::Utils
 		{
 			while (true)
 			{
-				for each (Log^ log in Logging::getLogs())
+				for each (Log ^ log in Logging::getLogs())
 				{
-					if (!lifetimeLogs->Contains(log))
+					if (log != nullptr)
 					{
-						WriteContentsToFile(log->message);
-						lifetimeLogs->Add(log);
+						if (!lifetimeLogs->Contains(log))
+						{
+							lifetimeLogs->Add(log);
+							if (log->message->Length > 0)
+							{
+								WriteContentsToFile(log->message);
+							}
+						}
 					}
 				}
 			}
@@ -57,6 +65,8 @@ namespace Engine::Utils
 		{
 			if (newThread != nullptr)
 				newThread->Abort();
+
+			fileStream->Close();
 		}
 
 	};
