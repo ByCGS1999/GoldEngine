@@ -157,6 +157,7 @@
     <ClInclude Include="DataPack.h" />
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="DataManager.h" />
+    <ClInclude Include="EngineConfig.h" />
     <ClInclude Include="EngineIncludes.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />

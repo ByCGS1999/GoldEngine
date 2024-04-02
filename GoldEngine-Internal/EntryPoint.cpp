@@ -6,6 +6,7 @@
 #include "LoggingAPI.h"
 #include "DataManager.h"
 #include "Cast.h"
+#include "EngineConfig.h"
 #include "Transform.h"
 #include "CypherLib.h"
 #include "SceneObject.h"
@@ -94,6 +95,7 @@ Texture modelTexture;
 std::string codeEditorFile = "";
 bool fileDialogOpen = false;
 int tmp1;
+char* password = new char[512];
 
 bool ce1, ce2, ce3, ce4, ce5, ce6;
 
@@ -578,18 +580,7 @@ end
 public:
 	EditorWindow()
 	{
-		if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine"))
-		{
-			if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine/main.log"))
-			{
-				File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine/main.log");
-			}
-
-			Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine");
-		}
-
-		Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine");
-		gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/GoldEngine/main.log");
+		strcpy(password, ENCRYPTION_PASSWORD);
 
 		luaVM = gcnew Engine::Lua::VM::LuaVM();
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
@@ -612,9 +603,8 @@ public:
 	void Start()
 	{
 		//WinAPI::FreeCons();
-		SetWindowFlags(FLAG_MSAA_4X_HINT);
+		SetWindowFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
-		//renderer = new VoxelRenderer(4,4,4);
 
 		if (Directory::Exists("Data/Keys/") && File::Exists("Data/Keys/privateKey.xml"))
 		{
@@ -634,6 +624,23 @@ public:
 			File::WriteAllText("Data/Keys/publicKey.xml", publicKey);
 			File::WriteAllText("Data/Keys/privateKey.xml", privateKey);
 		}
+
+		auto config = gcnew Engine::Config::EngineConfiguration(gcnew String(password), EDITOR_VERSION, gcnew Engine::Config::Resolution(0, 0, 1280, 720), "GoldEngine/main.log");
+		config->ExportConfig("./Data/appinfo.dat");
+
+
+		if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
+		{
+			if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
+			{
+				File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
+			}
+
+			Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/"+ config->logPath->Substring(0, config->logPath->IndexOf('/')));
+		}
+
+		Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+		gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
 
 		LayerManager::RegisterDefaultLayers();
 
@@ -662,14 +669,39 @@ public:
 			{
 				ImGui::SeparatorText("Encryption");
 
-				if (ImGui::MenuItem("Password"))
-				{
+				ImGui::SeparatorText("Asymmetric");
 
+				if (ImGui::MenuItem("Generate new KeyPair"))
+				{
+					CypherLib::beginRSA();
+
+					String^ publicKey = CypherLib::getPublicKey();
+					String^ privateKey = CypherLib::getPrivateKey();
+
+					File::WriteAllText("Data/Keys/publicKey.xml", publicKey);
+					File::WriteAllText("Data/Keys/privateKey.xml", privateKey);
+				}
+
+				ImGui::SeparatorText("Symmetric");
+
+				if (ImGui::BeginMenu("Set encryption password"))
+				{
+					if (ImGui::InputText("###PASSWORD_SETTER", password, 512))
+					{
+						passwd = CypherLib::GetPasswordBytes(gcnew String(password));
+					}
+
+					ImGui::EndMenu();
 				}
 
 				ImGui::SeparatorText("Project");
 
 				if (ImGui::MenuItem("Generate .sln project"))
+				{
+
+				}
+
+				if (ImGui::MenuItem("Build Settings"))
 				{
 
 				}

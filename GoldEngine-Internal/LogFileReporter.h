@@ -43,16 +43,24 @@ namespace Engine::Utils
 		{
 			while (true)
 			{
-				for each (Log ^ log in Logging::getLogs())
+				auto logs = Logging::getLogs();
+
+				if (logs != nullptr)
 				{
-					if (log != nullptr)
+					if (logs->Length > 0)
 					{
-						if (!lifetimeLogs->Contains(log))
+						for each (Log ^ log in logs)
 						{
-							lifetimeLogs->Add(log);
-							if (log->message->Length > 0)
+							if (log != nullptr)
 							{
-								WriteContentsToFile(log->message);
+								if (!lifetimeLogs->Contains(log))
+								{
+									lifetimeLogs->Add(log);
+									if (log->message->Length > 0)
+									{
+										WriteContentsToFile(log->message);
+									}
+								}
 							}
 						}
 					}

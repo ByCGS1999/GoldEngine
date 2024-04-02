@@ -193,6 +193,9 @@
     <Filter Include="raylib\include\x86">
       <UniqueIdentifier>{a839e89b-dadc-4c70-9bc2-35bd88260c49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\Configuration">
+      <UniqueIdentifier>{74ef52fb-c3dd-415f-90d8-5990dff4cd5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -422,6 +425,9 @@
     </ClInclude>
     <ClInclude Include="Raylib\include\x86\rlgl.h">
       <Filter>raylib\include\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineConfig.h">
+      <Filter>Archivos de origen\Engine\Configuration</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

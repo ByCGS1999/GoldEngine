@@ -63,11 +63,11 @@ namespace Engine::Scripting
 
 		static void clearLogs()
 		{
-#if PRODUCTION_BUILD
-			printWarning("Cannot use clearLogs on a production build (game).");
-#else
-			log->Clear();
-#endif
+			#if PRODUCTION_BUILD
+				printWarning("Cannot use clearLogs on a production build (game).");
+			#else
+				log->Clear();
+			#endif
 		}
 
 		static array<Engine::Scripting::Log^>^ getLogs()
