@@ -1,11 +1,13 @@
+#pragma once
+
+using namespace System;
+using namespace System::IO;
+using namespace System::Collections;
+using namespace System::Collections::Generic;
+using namespace Engine::Scripting;
+
 namespace Engine::Utils
 {
-	using namespace System;
-	using namespace System::IO;
-	using namespace System::Collections;
-	using namespace System::Collections::Generic;
-	using namespace Engine::Scripting;
-
 	ref class LogReporter
 	{
 	public:

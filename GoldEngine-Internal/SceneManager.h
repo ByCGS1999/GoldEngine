@@ -120,13 +120,16 @@ namespace Engine::Managers
 						
 						for each (auto assembly in assemblyManager)
 						{
-							if (assembly->hasType(script->assemblyReference))
+							if (assembly != nullptr)
 							{
-								auto obj = (Engine::Internal::Components::Object^)assembly->CastToType(sceneObject, script->assemblyReference);
+								if (assembly->hasType(script->assemblyReference))
+								{
+									auto obj = (Engine::Internal::Components::Object^)assembly->CastToType(sceneObject, script->assemblyReference);
 
-								obj->Init(script);
+									obj->Init(script);
 
-								sceneObject->SetReference(obj);
+									sceneObject->SetReference(obj);
+								}
 							}
 						}
 

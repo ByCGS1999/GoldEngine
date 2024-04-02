@@ -4,12 +4,13 @@ using namespace Newtonsoft::Json;
 
 namespace Engine::Config
 {
-	ref class Resolution
+	public ref class Resolution
 	{
 	public:
 		int x, y, w, h;
 
 	public:
+		[[JsonConstructorAttribute]]
 		Resolution(int x, int y, int w, int h)
 		{
 			this->x = x;
@@ -79,26 +80,29 @@ namespace Engine::Config
 
 	};
 
-	ref class EngineConfiguration
+	public ref class EngineConfiguration
 	{
 	public:
 		String^ windowName;
 		String^ logPath;
 		Resolution^ resolution;
+		unsigned int windowFlags;
 
 	private:
 		static EngineConfiguration^ self;
 
 	public:
-		initonly static EngineConfiguration^ defaultConfiguration = gcnew EngineConfiguration("Gold Engine Window", gcnew Resolution(0, 0, 1280, 720), "GoldEngine/main.log");
+		initonly static EngineConfiguration^ defaultConfiguration = gcnew EngineConfiguration("Gold Engine Window", gcnew Resolution(0, 0, 1280, 720), "GoldEngine/main.log", 0);
 
 	public:
-		EngineConfiguration(String^ windowName, Resolution^ resolution, String^ logPath)
+		[[JsonConstructorAttribute]]
+		EngineConfiguration(String^ windowName, Resolution^ resolution, String^ logPath, unsigned int flags)
 		{
 			self = this;
 			this->resolution = resolution;
 			this->windowName = windowName;
 			this->logPath = logPath;
+			this->windowFlags = flags;
 		}
 
 		std::string getWindowName()
@@ -109,7 +113,13 @@ namespace Engine::Config
 	public:
 		void ExportConfig(System::String^ fN)
 		{
-			File::WriteAllText(fN, Convert::ToBase64String(Encoding::UTF8->GetBytes(CypherLib::EncryptFileContents(JsonConvert::SerializeObject(this), passwd))));
+			File::WriteAllText(fN, Convert::ToBase64String(
+				Encoding::UTF8->GetBytes(
+					CypherLib::EncryptFileContents(
+						JsonConvert::SerializeObject(this), passwd
+					)
+				)
+			));
 		}
 
 	public:
@@ -124,12 +134,12 @@ namespace Engine::Config
 			if (File::Exists(fN))
 			{
 				String^ encodedData = File::ReadAllText(fN);
+
 				EngineConfiguration^ configuration = JsonConvert::DeserializeObject<EngineConfiguration^>(
-					CypherLib::EncryptFileContents(
+					CypherLib::DecryptFileContents(
 						Encoding::UTF8->GetString(
 							Convert::FromBase64String(encodedData)
-						)
-						,
+						),
 						passwd)
 				);
 				return configuration;

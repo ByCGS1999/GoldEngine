@@ -121,7 +121,15 @@ namespace Engine::Scripting
 			#if PRODUCTION_BUILD
 				printWarning("Cannot use clearLogs on a production build (game).");
 			#else
+			msclr::lock l(log);
+
+			if (l.try_acquire(1000))
 				log->Clear();
+			else
+				clearLogs();
+
+			l.release();
+
 			#endif
 		}
 

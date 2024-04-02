@@ -63,11 +63,12 @@ using namespace Engine::Management::MiddleLevel;
 using namespace Engine::Managers;
 using namespace Engine::Scripting;
 
+DataPacks dataPack;
+
 #if PRODUCTION_BUILD == false
 
 #pragma region EDITOR ENGINE
 
-DataPacks dataPack;
 Model mod;
 Camera3D c3d2;
 unsigned int ambient_color = 0x2B2B2BFF;
@@ -603,14 +604,14 @@ public:
 	void Start()
 	{
 		//WinAPI::FreeCons();
-		SetWindowFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE);
+		SetWindowFlags(FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
 
 		auto secrets = gcnew Engine::Config::EngineSecrets(ENCRYPTION_PASSWORD);
 
 		secrets->ExportSecrets("./Data/Keys/secrets.dat");
 
-		auto config = gcnew Engine::Config::EngineConfiguration(EDITOR_VERSION, gcnew Engine::Config::Resolution(0, 0, 1280, 720), "GoldEngine/main.log");
+		auto config = gcnew Engine::Config::EngineConfiguration("Gold Engine Window", gcnew Engine::Config::Resolution(0, 0, 1280, 720), "GoldEngine/main.log", FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
 		config->ExportConfig("./Data/appinfo.dat");
 
 
@@ -912,17 +913,38 @@ public:
 								layer = "Select Layer";
 
 							std::vector<std::string> layers = LayerManager::getLayerNames();
-
-							if (ImGui::BeginCombo("###CURR_LAYER", layer.c_str()))
+							
+							if (ImGui::BeginCombo("###CURR_LAYER", layer.c_str(), ImGuiComboFlags_None))
 							{
 								for (std::string tmp : layers)
 								{
-									if (ImGui::Selectable(tmp.c_str()))
-									{
-										auto string = gcnew String(tmp.c_str());
-										auto w = gcnew String(" - ");
+									bool isSelected = false;
 
-										selectedObject->layerMask = LayerManager::GetLayerFromId(int::Parse(string->Split(w->ToCharArray())[0]));
+									String^ managedType = gcnew String(layer.c_str());
+									String^ data = gcnew String(tmp.c_str());
+									
+									data = data->Substring(data->IndexOf("- ")+2);
+
+									if (data->CompareTo(managedType) == 0)
+									{
+										isSelected = true;
+									}
+
+									if (ImGui::Selectable(tmp.c_str(), isSelected))
+									{
+										data = gcnew String(tmp.c_str());
+										
+										Console::WriteLine(data);
+
+										String^ buffer = data->Substring(0, data->IndexOf(" - "));
+
+										Console::WriteLine(buffer);
+
+										Layer^ l = LayerManager::GetLayerFromId(int::Parse(buffer));
+
+										Console::WriteLine(l->layerName);
+
+										selectedObject->layerMask = l;
 									}
 								}
 
@@ -1594,6 +1616,37 @@ public:
 		exit(0);
 	}
 
+	void render(int currentLayer)
+	{
+		while (currentLayer != LayerManager::getHigherLayer())
+		{
+			Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+
+			if (cL == nullptr)
+				break;
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+			{
+				if (scene->sceneLoaded())
+				{
+					Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
+
+					if (reference->layerMask = cL)
+					{
+						reference->Draw();
+					}
+				}
+			}
+
+			Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+
+			if (nextLayer != nullptr)
+				currentLayer = nextLayer->layerMask;
+			else
+				break;
+		}
+	}
+
 	void Draw() override
 	{
 		BeginDrawing();
@@ -1604,10 +1657,8 @@ public:
 
 			BeginMode3D(c3d2);
 
-			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
-			{
-				ExecAsIdentifiedObject(obj->objectType, (System::Object^)obj->GetReference());
-			}
+			int currentLayer = 0;
+			render(currentLayer);
 
 			EndMode3D();
 
@@ -1873,6 +1924,7 @@ public:
 
 public ref class GameWindow : public Engine::Window
 {
+	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scene^ scene;
 	DataPack^ packedData;
 	Camera* defaultCamera;
@@ -1880,9 +1932,15 @@ public ref class GameWindow : public Engine::Window
 public:
 	GameWindow()
 	{
-		Start();
+		dataPack = DataPacks();
+		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 
-		Preload();
+		assemblies->Add(gcnew EngineAssembly("Data/Asm/GoldEngine_ScriptAssembly.dll"));
+		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
+
+		SceneManager::SetAssemblyManager(assemblies);
+
+		Start();
 	}
 
 	virtual void Start() override
@@ -1893,20 +1951,37 @@ public:
 
 		auto config = Engine::Config::EngineConfiguration::ImportConfig("./Data/appinfo.dat");
 
+		SetWindowFlags(config->windowFlags);
 		OpenWindow(config->resolution->w, config->resolution->h, config->getWindowName().c_str());
-		SetWindowPosition(config->resolution->x, config->resolution->y);
+		//SetWindowPosition(config->resolution->x, config->resolution->y);
+
+		if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
+		{
+			if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
+			{
+				File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
+			}
+
+			Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+		}
+
+		Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+		gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
+
+		LayerManager::RegisterDefaultLayers();
+
+		Preload();
+
+		Loop();
 	}
 
 	virtual void Init() override
 	{
-
+		DataPack::SetSingletonReference(packedData);
 	}
 
 	virtual void Preload() override
 	{
-
-
-
 		scene = SceneManager::CreateScene("GoldEngineBoot");
 
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
@@ -1922,25 +1997,65 @@ public:
 		DataManager::HL_CreateCamera(0, gcnew Engine::Internal::Components::Vector3(0, 0, 0), CameraType::C3D); // create 3d camera
 
 		defaultCamera = &DataPacks::singleton().GetCamera3D(0);
+		defaultCamera->projection = CAMERA_PERSPECTIVE;
+		defaultCamera->fovy = 60;
 
 		Init();
+	}
+
+	void render(int currentLayer)
+	{
+		while (currentLayer != LayerManager::getHigherLayer())
+		{
+			Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+
+			if (cL == nullptr)
+				break;
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+			{
+				if (scene->sceneLoaded())
+				{
+					Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
+
+					if (reference->layerMask = cL)
+					{
+						reference->Draw();
+					}
+				}
+			}
+
+			Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+
+			if (nextLayer != nullptr)
+				currentLayer = nextLayer->layerMask;
+			else
+				break;
+		}
 	}
 
 	virtual void Draw() override
 	{
 		BeginDrawing();
 
+		ClearBackground(BLACK);
+
 		BeginMode3D((Camera3D)*defaultCamera);
+
+		int currentLayer = 0;
+
+		render(currentLayer);
+
+		EndMode3D();
+
+		rlImGuiBegin();
 
 		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
 		{
-			if (sceneObject->GetReference()->viewSpace == ViewSpace::V3D)
-			{
-				sceneObject->GetReference()->Draw();
-			}
+			sceneObject->GetReference()->DrawImGUI();
 		}
 
-		EndMode3D();
+		rlImGuiEnd();
 
 		EndDrawing();
 	}
@@ -1956,6 +2071,7 @@ public:
 	virtual void Exit() override
 	{
 		DataManager::HL_FreeAll();
+		Engine::Utils::LogReporter::singleton->CloseThread();
 	}
 };
 
