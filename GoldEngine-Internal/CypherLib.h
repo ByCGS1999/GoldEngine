@@ -96,44 +96,4 @@ public:
 
 		return Encoding::UTF8->GetString(cryptoBro->TransformFinalBlock(plainText, 0, plainText->Length));
 	}
-
-	static void beginRSA()
-	{
-		serviceProvider = gcnew RSACryptoServiceProvider(2048);
-	}
-
-	static String^ getPublicKey()
-	{
-		return serviceProvider->ToXmlString(false);
-	}
-
-	static String^ getPrivateKey()
-	{
-		return serviceProvider->ToXmlString(true);
-	}
-
-	static void loadKey(String^ xmlKey)
-	{
-		serviceProvider->FromXmlString(xmlKey);
-	}
-
-	static String^ Decrypt(String^ tempData)
-	{
-		return Encoding::UTF8->GetString(serviceProvider->Decrypt(Encoding::UTF8->GetBytes(tempData), RSAEncryptionPadding::Pkcs1));
-	}
-
-	static String^ Decrypt(String^ tempData, RSAEncryptionPadding^ encryptionPadding)
-	{
-		return Encoding::UTF8->GetString(serviceProvider->Decrypt(Encoding::UTF8->GetBytes(tempData), encryptionPadding));
-	}
-
-	static String^ Encrypt(String^ tempData)
-	{
-		return Encoding::UTF8->GetString(serviceProvider->Encrypt(Encoding::UTF8->GetBytes(tempData), RSAEncryptionPadding::Pkcs1));
-	}
-
-	static String^ Encrypt(String^ tempData, RSAEncryptionPadding^ encryptionPadding)
-	{
-		return Encoding::UTF8->GetString(serviceProvider->Encrypt(Encoding::UTF8->GetBytes(tempData), encryptionPadding));
-	}
 };

@@ -9,7 +9,7 @@
 #define DllExport __declspec(dllexport)
 #define DllImport __declspec(dllimport)
 #define Engine_GCObject Engine::Internal::Components::Object^
-#define PRODUCTION_BUILD false
+#define PRODUCTION_BUILD false // if this is true the runtime will be compiled, otherwise, the editor will be compiled.
 
 #define ENGINE_VERSION "GoldEngine Ver: 0.3c"
 #define EDITOR_VERSION "GoldEngine Editor Ver: 0.6a"

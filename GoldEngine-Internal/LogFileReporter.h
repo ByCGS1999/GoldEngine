@@ -43,11 +43,13 @@ namespace Engine::Utils
 		{
 			while (true)
 			{
-				auto logs = Logging::getLogs();
+				List<Engine::Scripting::Log^>^ logs;
 
-				if (logs != nullptr)
+				msclr::lock l(logs = Logging::getLogs());
+				
+				if (l.try_acquire(1000)) 
 				{
-					if (logs->Length > 0)
+					if (logs != nullptr)
 					{
 						for each (Log ^ log in logs)
 						{
@@ -65,6 +67,9 @@ namespace Engine::Utils
 						}
 					}
 				}
+
+
+				l.release();
 			}
 		}
 

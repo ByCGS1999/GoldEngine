@@ -606,26 +606,11 @@ public:
 		SetWindowFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_RESIZABLE);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
 
-		if (Directory::Exists("Data/Keys/") && File::Exists("Data/Keys/privateKey.xml"))
-		{
-			CypherLib::beginRSA();
+		auto secrets = gcnew Engine::Config::EngineSecrets(ENCRYPTION_PASSWORD);
 
-			CypherLib::loadKey(File::ReadAllText("Data/Keys/privateKey.xml"));
-		}
-		else
-		{
-			Directory::CreateDirectory("Data/Keys/");
+		secrets->ExportSecrets("./Data/Keys/secrets.dat");
 
-			CypherLib::beginRSA();
-
-			String^ publicKey = CypherLib::getPublicKey();
-			String^ privateKey = CypherLib::getPrivateKey();
-
-			File::WriteAllText("Data/Keys/publicKey.xml", publicKey);
-			File::WriteAllText("Data/Keys/privateKey.xml", privateKey);
-		}
-
-		auto config = gcnew Engine::Config::EngineConfiguration(gcnew String(password), EDITOR_VERSION, gcnew Engine::Config::Resolution(0, 0, 1280, 720), "GoldEngine/main.log");
+		auto config = gcnew Engine::Config::EngineConfiguration(EDITOR_VERSION, gcnew Engine::Config::Resolution(0, 0, 1280, 720), "GoldEngine/main.log");
 		config->ExportConfig("./Data/appinfo.dat");
 
 
@@ -673,13 +658,7 @@ public:
 
 				if (ImGui::MenuItem("Generate new KeyPair"))
 				{
-					CypherLib::beginRSA();
-
-					String^ publicKey = CypherLib::getPublicKey();
-					String^ privateKey = CypherLib::getPrivateKey();
-
-					File::WriteAllText("Data/Keys/publicKey.xml", publicKey);
-					File::WriteAllText("Data/Keys/privateKey.xml", privateKey);
+					Engine::Config::EngineSecrets::singleton()->ExportSecrets("./Data/Keys/secrets.dat");
 				}
 
 				ImGui::SeparatorText("Symmetric");
@@ -1897,13 +1876,25 @@ public ref class GameWindow : public Engine::Window
 	Scene^ scene;
 	DataPack^ packedData;
 	Camera* defaultCamera;
-	LuaVM^ vm;
 
 public:
 	GameWindow()
 	{
-		OpenWindow(1280, 720, "GameWindow");
+		Start();
+
 		Preload();
+	}
+
+	virtual void Start() override
+	{
+		auto secrets = Engine::Config::EngineSecrets::ImportSecrets("./Data/Keys/secrets.dat");
+
+		passwd = CypherLib::GetPasswordBytes(secrets->encryptionPassword);
+
+		auto config = Engine::Config::EngineConfiguration::ImportConfig("./Data/appinfo.dat");
+
+		OpenWindow(config->resolution->w, config->resolution->h, config->getWindowName().c_str());
+		SetWindowPosition(config->resolution->x, config->resolution->y);
 	}
 
 	virtual void Init() override
@@ -1913,9 +1904,8 @@ public:
 
 	virtual void Preload() override
 	{
-		vm = gcnew LuaVM();
 
-		vm->ExecuteSource("Logging:Log('Hello world!');");
+
 
 		scene = SceneManager::CreateScene("GoldEngineBoot");
 

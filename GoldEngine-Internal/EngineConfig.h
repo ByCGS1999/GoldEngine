@@ -6,6 +6,7 @@ namespace Engine::Config
 {
 	ref class Resolution
 	{
+	public:
 		int x, y, w, h;
 
 	public:
@@ -18,28 +19,22 @@ namespace Engine::Config
 		}
 	};
 
-	ref class EngineConfiguration
+	ref class EngineSecrets
 	{
 	public:
-		String^ windowName;
 		String^ encryptionPassword;
-		String^ logPath;
-		Resolution^ resolution;
 
 	private:
-		static EngineConfiguration^ self;
+		static EngineSecrets^ self;
 
 	public:
-		initonly static EngineConfiguration^ defaultConfiguration = gcnew EngineConfiguration(ENCRYPTION_PASSWORD, "Gold Engine Window", gcnew Resolution(0, 0, 1280, 720), "GoldEngine/main.log");
+		initonly static EngineSecrets^ default = gcnew EngineSecrets(ENCRYPTION_PASSWORD);
 
 	public:
-		EngineConfiguration(String^ password, String^ windowName, Resolution^ resolution, String^ logPath)
+		EngineSecrets(String^ password)
 		{
 			self = this;
 			this->encryptionPassword = password;
-			this->resolution = resolution;
-			this->windowName = windowName;
-			this->logPath = logPath;
 		}
 
 	public:
@@ -48,10 +43,73 @@ namespace Engine::Config
 			return CastStringToNative(encryptionPassword);
 		}
 
+		static EngineSecrets^ singleton()
+		{
+			return self;
+		}
+
+		void ExportSecrets(System::String^ fN)
+		{
+			File::WriteAllText(fN, Convert::ToBase64String(
+				Encoding::UTF8->GetBytes
+					(
+						CypherLib::EncryptFileContents(encryptionPassword, int::Parse(File::ReadAllText("./Data/Keys/map.iv")))
+					)
+				)
+			);
+		}
+
+		static EngineSecrets^ ImportSecrets(System::String^ fN)
+		{
+			if (File::Exists(fN))
+			{
+				String^ encodedData = File::ReadAllText(fN);
+				String^ decodedData = Encoding::UTF8->GetString(Convert::FromBase64String(encodedData));
+
+				String^ password = CypherLib::DecryptFileContents(decodedData, 
+					int::Parse(File::ReadAllText("./Data/Keys/map.iv")
+					)
+				);
+
+				return gcnew EngineSecrets(password);
+			}
+
+			return EngineSecrets::default;
+		}
+
+	};
+
+	ref class EngineConfiguration
+	{
+	public:
+		String^ windowName;
+		String^ logPath;
+		Resolution^ resolution;
+
+	private:
+		static EngineConfiguration^ self;
+
+	public:
+		initonly static EngineConfiguration^ defaultConfiguration = gcnew EngineConfiguration("Gold Engine Window", gcnew Resolution(0, 0, 1280, 720), "GoldEngine/main.log");
+
+	public:
+		EngineConfiguration(String^ windowName, Resolution^ resolution, String^ logPath)
+		{
+			self = this;
+			this->resolution = resolution;
+			this->windowName = windowName;
+			this->logPath = logPath;
+		}
+
+		std::string getWindowName()
+		{
+			return CastStringToNative(windowName);
+		}
+
 	public:
 		void ExportConfig(System::String^ fN)
 		{
-			File::WriteAllText(fN, Convert::ToBase64String(Encoding::UTF8->GetBytes(CypherLib::Encrypt(JsonConvert::SerializeObject(this)))));
+			File::WriteAllText(fN, Convert::ToBase64String(Encoding::UTF8->GetBytes(CypherLib::EncryptFileContents(JsonConvert::SerializeObject(this), passwd))));
 		}
 
 	public:
@@ -66,7 +124,14 @@ namespace Engine::Config
 			if (File::Exists(fN))
 			{
 				String^ encodedData = File::ReadAllText(fN);
-				EngineConfiguration^ configuration = JsonConvert::DeserializeObject<EngineConfiguration^>(Encoding::UTF8->GetString(Convert::FromBase64String(encodedData)));
+				EngineConfiguration^ configuration = JsonConvert::DeserializeObject<EngineConfiguration^>(
+					CypherLib::EncryptFileContents(
+						Encoding::UTF8->GetString(
+							Convert::FromBase64String(encodedData)
+						)
+						,
+						passwd)
+				);
 				return configuration;
 			}
 
