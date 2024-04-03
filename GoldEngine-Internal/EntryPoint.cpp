@@ -74,7 +74,6 @@ Camera3D c3d2;
 unsigned int ambient_color = 0x2B2B2BFF;
 float cameraSpeed = 1.25f;
 bool controlCamera = true;
-rPBR::PBRLight lights[1] = { 0 };
 RenderTexture viewportTexture;
 bool isOpen = true;
 bool toggleControl = true;
@@ -139,20 +138,33 @@ private:
 			{
 				Engine::EngineObjects::ModelRenderer^ renderer = Cast::Dynamic<Engine::EngineObjects::ModelRenderer^>(object);
 				unsigned int modelId = renderer->model;
-				unsigned int materialId = renderer->material;
+				unsigned int materialId = renderer->shader;
 				unsigned int textureId = renderer->texture;
 				unsigned long tint = renderer->tint;
+
+				int mId = (int)modelId;
+				int matId = (int)materialId;
+				int texId = (int)textureId;
 
 				ImGui::SeparatorText("Model Renderer");
 				ImGui::Text("Model ID: ");
 				ImGui::SameLine();
-				ImGui::InputScalar("###MODELID_SETTER", ImGuiDataType_U32, &modelId, (const void*)1, (const void*)1);
-				ImGui::Text("Material ID: ");
+				if (ImGui::InputInt("###MODELID_SETTER", &mId, 1, 1))
+				{
+					renderer->model = (unsigned int)mId;
+				}
+				ImGui::Text("Shader ID: ");
 				ImGui::SameLine();
-				ImGui::InputScalar("###MATERIALID_SETTER", ImGuiDataType_U32, &materialId, (const void*)1, (const void*)1);
+				if (ImGui::InputInt("###SHADERID_SETTER", &matId, 1, 1))
+				{
+					renderer->shader = (unsigned int)matId;
+				}
 				ImGui::Text("Texture ID: ");
 				ImGui::SameLine();
-				ImGui::InputScalar("###TEXTUREID_SETTER", ImGuiDataType_U32, &textureId, (const void*)1, (const void*)1);
+				if(ImGui::InputInt("###TEXTUREID_SETTER", &texId, 1, 1))
+				{
+					renderer->texture = (unsigned int)texId;
+				}
 
 				auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(tint));
 
@@ -170,6 +182,7 @@ private:
 				{
 					renderer->SetColorTint(ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3])));
 				}
+
 			}
 			break;
 
@@ -190,6 +203,13 @@ private:
 					{
 						light->enabled = false;
 					}
+				}
+				float intensity = light->intensity;
+				ImGui::Text("Intensity:");
+				ImGui::SameLine();
+				if (ImGui::InputFloat("###LIGHT_INTENSITY", &intensity, 0.1f, 1.0f, "%.1f"))
+				{
+					light->intensity = intensity;
 				}
 			}
 			break;
@@ -1128,7 +1148,11 @@ public:
 
 		if (styleEditor)
 		{
-			ImGui::ShowStyleEditor(&ImGui::GetStyle());
+			ImGui::Begin("StyleEditor");
+			{
+				ImGui::ShowStyleEditor(&ImGui::GetStyle());
+				ImGui::End();
+			}
 		}
 
 		if (ImGui::Begin("Game Viewport", &isOpen))
@@ -1196,7 +1220,7 @@ public:
 							nullptr
 						),
 						0xFF0000FF,
-						rPBR::PBRLightType::LIGHT_POINT,
+						rPBR::LightType::LIGHT_POINT,
 						gcnew Engine::Internal::Components::Vector3(1.0f, 1.0f, 1.0f),
 						1.0f,
 						1
@@ -1217,11 +1241,7 @@ public:
 							0.0f,
 							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
 							nullptr
-						),
-						0,
-						0,
-						0,
-						0xFFFFFFFF
+						)
 					);
 					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
 					scene->AddObjectToScene(meshRenderer);
@@ -1634,6 +1654,7 @@ public:
 					if (reference->layerMask = cL)
 					{
 						reference->Draw();
+						reference->DrawGizmo();
 					}
 				}
 			}
@@ -1791,7 +1812,7 @@ public:
 
 		//int numLights = 1;
 		//SetShaderValue(dataPack.GetShader(1), GetShaderLocation(dataPack.GetShader(1), "numOfLights"), &numLights, SHADER_UNIFORM_INT);
-		rPBR::PBRSetAmbient(dataPack.GetShader(1), { 0, 0, 0, 255 }, 0.0f);
+		//rPBR::PBRSetAmbient(dataPack.GetShader(1), { 0, 0, 0, 255 }, 0.0f);
 		//lights[0] = rPBR::PBRLightCreate(rPBR::LIGHT_POINT, { -5,5,0 }, { .5f,-.5f,0 }, { 255,255,255, 255 }, 2.5f, dataPack.GetShader(1));
 
 		//FileManager::ReadCustomFileFormat("Data/assets1.gold", passwd);
@@ -1894,6 +1915,8 @@ public:
 		Shader lightShader = dataPack.GetShader(1);
 		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };
 		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
+
+		dataPack.SetShader(1, lightShader);
 
 		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 		{

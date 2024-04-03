@@ -85,7 +85,7 @@ namespace Engine::Managers
 
 						instancedModelRenderer = sceneObject->GetValue< Engine::EngineObjects::ModelRenderer^ >();
 						Model model = DataPacks::singleton().GetModel(instancedModelRenderer->model);
-						Material material = DataPacks::singleton().GetMaterial(instancedModelRenderer->material);
+						Shader shader = DataPacks::singleton().GetShader(instancedModelRenderer->shader);
 						Texture texture = DataPacks::singleton().GetTexture2D(instancedModelRenderer->texture);
 						unsigned int hex = instancedModelRenderer->tint;
 
@@ -165,7 +165,7 @@ namespace Engine::Managers
 						loadedScene->PushToRenderQueue(sceneObj);
 						
 						auto pbrRenderer = sceneObj->GetValue<Engine::EngineObjects::PBRModelRenderer^>();
-						pbrRenderer->Init(pbrRenderer->model_id, pbrRenderer->shader_id, pbrRenderer->texture_id, pbrRenderer->color_hex);
+						//pbrRenderer->Init(pbrRenderer->model_id, pbrRenderer->shader_id, pbrRenderer->texture_id, pbrRenderer->color_hex);
 					}
 					break;
 

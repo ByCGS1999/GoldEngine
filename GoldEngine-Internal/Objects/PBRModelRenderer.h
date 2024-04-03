@@ -1,6 +1,7 @@
 #pragma once
 namespace Engine::EngineObjects
 {
+	/*
 	namespace Native
 	{
 		class NativePBRModelRenderer
@@ -16,10 +17,17 @@ namespace Engine::EngineObjects
 			}
 		};
 	}
-
+	*/
 
 	public ref class PBRModelRenderer : public Engine::Internal::Components::Object
 	{
+	public:
+		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer, this->tag)
+		{
+
+		}
+
+		/*
 	private:
 		Native::NativePBRModelRenderer* nativeRenderer;
 		int emissiveCnt = 0;
@@ -89,7 +97,7 @@ namespace Engine::EngineObjects
 				color_hex >> 16,
 				color_hex >> 24
 			};
-			rPBR::PBRDrawModel(*nativeRenderer->model, t->position->toNative(), t->scale->x, c);
+			rPBR::PBRDrawModelEx(*nativeRenderer->model, t->position->toNative(), t->rotation->toNative(), t->rotationValue, t->scale->toNative(), c);
 		}
 
 		void Update() override
@@ -99,6 +107,6 @@ namespace Engine::EngineObjects
 				emissiveCnt = GetRandomValue(0, 20);
 				rPBR::PBRSetFloat(&nativeRenderer->material, rPBR::PBR_PARAM_EMISSIVE, (float)GetRandomValue(0, 100) / 100);
 			}
-		}
+		}*/
 	};
 }

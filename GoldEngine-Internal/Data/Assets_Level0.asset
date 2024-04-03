@@ -7,15 +7,17 @@
     "0": "./Data/Engine\\Models\\Skybox_sphere.glb",
     "1": "./Data/Game\\Models\\Spaceship.obj",
     "2": "./Data/Engine\\Models\\Skybox_cube.glb",
-    "3": "./Data/Engine\\Models\\Error.obj"
+    "3": "./Data/Engine\\Models\\Error.obj",
+    "4": "./Data/Models\\castle.obj"
   },
   "materials": {
     "0": 0,
     "1": 1
   },
   "textures2d": {
-    "256": "./Data/EditorAssets/Model.png",
+    "1": "./Data/EditorAssets/Model.png",
     "225": "Data/EditorAssets/Run.png",
-    "226": "Data/EditorAssets/Stop.png"
+    "226": "Data/EditorAssets/Stop.png",
+    "256": "./Data/EditorAssets/Model.png"
   }
 }

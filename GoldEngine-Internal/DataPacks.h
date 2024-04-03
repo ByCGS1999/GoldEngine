@@ -106,7 +106,10 @@ namespace Engine::Assets::Storage
 			{
 				auto sP = &nativePacks->models[x];
 
-				sP->freealloc();
+				if (sP->hasValue())
+				{
+					sP->freealloc();
+				}
 			}
 
 			nativePacks->models.clear();

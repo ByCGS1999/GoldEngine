@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-// TODO: fix the entire datapack system due many memory leaks and non performant allocation. SAKE.
-// TODO(pt2): Find out why datapacks are not accepting this new struct
-
 namespace Engine::Assets::Storage::Types
 {
 	public struct ShaderPack
@@ -26,7 +23,6 @@ namespace Engine::Assets::Storage::Types
 
 		void setResource(Shader s)
 		{
-			freealloc();
 			resource = std::make_unique<Shader>(s);
 		}
 
@@ -52,20 +48,27 @@ namespace Engine::Assets::Storage::Types
 		}
 
 	public:
+		bool hasValue() { return resource != nullptr; }
 		unsigned int getId() const { return id; }
 		Model getResource() const { return *resource; }
 
 		void setResource(Model s)
 		{
-			freealloc();
 			resource = std::make_unique<Model>(s);
 		}
 
 		void freealloc()
 		{
-			UnloadModel(*resource);
-			Model* resPtr = resource.release();
-			delete resPtr;
+			try 
+			{
+				Model* resPtr = resource.release();
+				delete resPtr;
+			}
+			catch (std::exception ex)
+			{
+				printf("Failed freeing resource.");
+				printf(ex.what());
+			}
 		}
 	};
 }

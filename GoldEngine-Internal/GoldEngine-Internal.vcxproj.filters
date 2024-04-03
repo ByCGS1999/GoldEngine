@@ -96,12 +96,6 @@
     <Filter Include="Archivos de origen\Engine\EngineObjects\PBR\PBRModelRenderer">
       <UniqueIdentifier>{1caeaa6b-8ee3-40e8-94d6-b081916f8d25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data\Engine\Shaders\Runtime">
-      <UniqueIdentifier>{e6ff9872-9743-4381-8891-60c16bdbfe62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data\Engine\Shaders\Runtime\Lighting">
-      <UniqueIdentifier>{bac28715-06e8-45d9-bb39-fab1a90bd275}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Engine\Management\MiddleLevel">
       <UniqueIdentifier>{539ae321-1426-4428-90f7-5bb797a2fb37}</UniqueIdentifier>
     </Filter>
