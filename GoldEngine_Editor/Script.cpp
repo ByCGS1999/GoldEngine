@@ -1,5 +1,6 @@
 
 #include "Typedefs.h"
+#include <Windows.h>
 
 using namespace Engine::EngineObjects;
 using namespace Engine::Management;
@@ -39,5 +40,15 @@ namespace EditorScripts
 			}
 		}
 
+	};
+
+
+	public ref class TestPreload : Engine::Preload::IPreloadScript
+	{
+	public:
+		static void Preload()
+		{
+			Engine::Internal::DataManager::HL_LoadModel(1, "./Data/Game/Models/Spaceship.obj"); // loading assets at runtime
+		}
 	};
 }

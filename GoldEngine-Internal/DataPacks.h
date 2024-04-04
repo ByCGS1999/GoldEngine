@@ -463,11 +463,6 @@ namespace Engine::Assets::Storage
 			}
 		}
 
-		void SetShader(unsigned int shaderId, Shader value)
-		{
-			nativePacks->shaders[shaderId].setResource(value);
-		}
-
 		static DataPacks singleton()
 		{
 			return *singleton_Ref;

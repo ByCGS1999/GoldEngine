@@ -281,7 +281,7 @@ namespace Engine::EngineObjects
 				}
 				else
 				{
-					DataPacks::singleton().SetShader(shaderId, s);
+					DataPacks::singleton().AddShader(shaderId, s);
 				}
 
 				return lightSources->IndexOf(light);

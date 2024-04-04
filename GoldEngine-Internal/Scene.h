@@ -266,6 +266,7 @@ namespace Engine::Management
 
 			sceneDatapack->ReadFromFile(sceneRequirements, password);
 
+			/*
 			for each (auto p in preload_scripts)
 			{
 				for each (auto a in assemblies)
@@ -277,6 +278,7 @@ namespace Engine::Management
 					}
 				}
 			}
+			*/
 
 			LoadScene();
 		}

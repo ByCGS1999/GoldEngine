@@ -14,7 +14,8 @@ namespace Engine::Internal
 	/// <summary>
 	/// Binding to the raylib abstraction layer
 	/// </summary>
-	public ref class DataManager
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
+	public ref class DataManager abstract
 	{
 	public:
 		// -- MASTER
@@ -122,8 +123,8 @@ namespace Engine::Internal
 
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialforward, Engine::Internal::Components::CameraType cameraType)
 		{
-			Vector3 rlib_position;
-			Vector3 rlib_forward;
+			::Vector3 rlib_position;
+			::Vector3 rlib_forward;
 			Camera3D camera;
 
 			rlib_position.x = initialPosition->x;
@@ -141,9 +142,9 @@ namespace Engine::Internal
 
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ forward, Engine::Internal::Components::Vector3^ up, Engine::Internal::Components::CameraType cameraType)
 		{
-			Vector3 rlib_position;
-			Vector3 rlib_forward;
-			Vector3 rlib_up;
+			::Vector3 rlib_position;
+			::Vector3 rlib_forward;
+			::Vector3 rlib_up;
 			Camera3D camera;
 
 			rlib_position.x = initialPosition->x;
@@ -166,7 +167,7 @@ namespace Engine::Internal
 
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector2^ position, Engine::Internal::Components::CameraType cameraType)
 		{
-			Vector2 rlib_position;
+			::Vector2 rlib_position;
 			Camera2D camera;
 			rlib_position.x = position->x;
 			rlib_position.y = position->y;
@@ -176,7 +177,7 @@ namespace Engine::Internal
 		}
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::CameraType cameraType)
 		{
-			Vector3 rlib_position;
+			::Vector3 rlib_position;
 			Camera3D camera;
 
 			rlib_position.x = initialPosition->x;

@@ -6,9 +6,9 @@
 /// </summary>
 namespace Engine::Preload
 {
-	public ref class PreloadScript
+	public interface class IPreloadScript
 	{
 	public:
-		virtual void Preload() {}
+		static void Preload() {}
 	};
 }

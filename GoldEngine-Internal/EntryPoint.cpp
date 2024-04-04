@@ -1854,6 +1854,23 @@ public:
 
 		packedData = scene->getSceneDataPack();
 
+
+		for each (EngineAssembly ^ assm in assemblies)
+		{
+			for each (Type ^ asmType in assm->getPreloadScripts())
+			{
+				try
+				{
+					asmType->GetMethod("Preload")->Invoke(nullptr, nullptr);
+				}
+				catch (Exception^ ex)
+				{
+					printError(ex->Message);
+					printError(ex->StackTrace);
+				}
+			}
+		}
+
 		// initialize editor assets
 
 		// end of editor assets
@@ -1916,7 +1933,7 @@ public:
 		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };
 		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
 
-		dataPack.SetShader(1, lightShader);
+		dataPack.AddShader(1, lightShader);
 
 		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 		{
@@ -2085,6 +2102,8 @@ public:
 
 	virtual void Update() override
 	{
+		UpdateCamera(defaultCamera, CAMERA_FREE);
+
 		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
 		{
 			sceneObject->GetReference()->Update();

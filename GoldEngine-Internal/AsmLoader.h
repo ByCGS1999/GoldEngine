@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PreloadScript.h"
+
 ref class EngineAssembly
 {
 private:
@@ -43,20 +45,18 @@ public:
 			{
 				if (!type->Namespace->IsNullOrEmpty(type->Namespace))
 				{
-					if (type->Namespace->Contains("UserScripts"))
+					if (type->IsSubclassOf(Engine::EngineObjects::Script::typeid) || type->IsSubclassOf(Engine::Internal::Components::Object::typeid))
 					{
 						Console::WriteLine("Type Found: " + type->FullName);
 					}
-					else if (type->Namespace->Contains("PreloadScripts"))
-					{
-						Console::WriteLine("Type Found: " + type->FullName);
-					}
+					/*
 #if !PRODUCTION_BUILD
-					else if (type->Namespace->Contains("EditorScripts"))
+					if (type->Namespace->Contains("EditorScripts"))
 					{
 						Console::WriteLine("Type Found: " + type->FullName);
 					}
 #endif
+*/
 				}
 			}
 		}
@@ -73,20 +73,10 @@ public:
 			{
 				if (!t->Namespace->IsNullOrEmpty(t->Namespace))
 				{
-					if (t->Namespace->Contains("UserScripts"))
+					if (t->IsSubclassOf(Engine::EngineObjects::Script::typeid) || t->IsSubclassOf(Engine::Internal::Components::Object::typeid))
 					{
 						types->Add(t);
 					}
-					else if (t->Namespace->Contains("PreloadScripts"))
-					{
-						types->Add(t);
-					}
-#if !PRODUCTION_BUILD
-					else if (t->Namespace->Contains("EditorScripts"))
-					{
-						types->Add(t);
-					}
-#endif
 				}
 			}
 		}
@@ -185,6 +175,24 @@ public:
 		}
 
 		return (System::Object^)object;
+	}
+
+	System::Collections::Generic::List<System::Type^>^ getPreloadScripts()
+	{
+		System::Collections::Generic::List<System::Type^>^ types = gcnew System::Collections::Generic::List<System::Type^>();
+
+		if (loadedAssembly != nullptr)
+		{
+			for each (Type ^ t in loadedAssembly->GetTypes())
+			{
+				if (t->IsClass && Engine::Preload::IPreloadScript::typeid->IsAssignableFrom(t))
+				{
+					types->Add(t);
+				}
+			}
+		}
+
+		return types;
 	}
 
 	auto Create(Type^ targetType, String^ str)

@@ -63,7 +63,7 @@ namespace Engine::EngineObjects
 			auto texInst = DataPacks::singleton().GetTexture2D(texture);
 
 			//m.materials[0].shader = DataPacks::singleton().GetShader(shader);
-			m.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = texInst;
+			m.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texInst;
 
 			/*
 			m.materials[0].shader = DataPacks::singleton().GetShader(shader);
