@@ -3,7 +3,7 @@
 namespace Engine::Internal::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-		public ref class Vector3
+	public ref class Vector3
 	{
 	public:
 		float x, y, z;
@@ -20,71 +20,25 @@ namespace Engine::Internal::Components
 
 		void Set(float* v);
 
-		::Vector3 toNative()
-		{
-			return { x,y,z };
-		}
+		::Vector3 toNative();
 
-		::Color toColor()
-		{
-			return GetColor(x + y + z);
-		}
+		::Color toColor();
 
-		void Add(float x, float y, float z)
-		{
-			this->x += x;
-			this->y += y;
-			this->z += z;
-		}
+		void Add(float x, float y, float z);
 
-		void Add(Vector3^ origin)
-		{
-			this->x += origin->x;
-			this->y += origin->y;
-			this->z += origin->z;
-		}
+		void Add(Vector3^ origin);
 
-		void Multiply(Vector3^ origin)
-		{
-			this->x *= origin->x;
-			this->y *= origin->y;
-			this->z *= origin->z;
-		}
+		void Multiply(Vector3^ origin);
 
-		void Multiply(float x, float y, float z)
-		{
-			this->x *= x;
-			this->y *= y;
-			this->z *= z;
-		}
+		void Multiply(float x, float y, float z);
 
-		void Divide(Vector3^ origin)
-		{
-			this->x /= origin->x;
-			this->y /= origin->y;
-			this->z /= origin->z;
-		}
+		void Divide(Vector3^ origin);
 
-		void Divide(float x, float y, float z)
-		{
-			this->x /= x;
-			this->y /= y;
-			this->z /= z;
-		}
+		void Divide(float x, float y, float z);
 
-		void Sub(float x, float y, float z)
-		{
-			this->x -= x;
-			this->y -= y;
-			this->z -= z;
-		}
+		void Sub(float x, float y, float z);
 
-		void Sub(Vector3^ origin)
-		{
-			this->x -= origin->x;
-			this->y -= origin->y;
-			this->z -= origin->z;
-		}
+		void Sub(Vector3^ origin);
 
 		static Vector3^ Lerp(Vector3^ origin, Vector3^ target, float interpolate)
 		{

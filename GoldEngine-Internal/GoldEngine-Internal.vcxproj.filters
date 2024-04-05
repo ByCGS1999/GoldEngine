@@ -190,6 +190,15 @@
     <Filter Include="Archivos de origen\Engine\Configuration">
       <UniqueIdentifier>{74ef52fb-c3dd-415f-90d8-5990dff4cd5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\Object\Enums">
+      <UniqueIdentifier>{a461a0a5-f22a-44ee-a4da-ce99eee107d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Object\Source">
+      <UniqueIdentifier>{122918f0-ebc8-49b2-8a46-ea7dc70140d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Engine\Object\Header">
+      <UniqueIdentifier>{962bd13e-e425-430b-b66a-de85ffb23b81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -423,20 +432,29 @@
     <ClInclude Include="Objects\MeshRenderer.h">
       <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Layer.h">
-      <Filter>Archivos de origen\Engine\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Object\ObjectType.h">
-      <Filter>Archivos de origen\Engine\Object</Filter>
+      <Filter>Archivos de origen\Engine\Object\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Layer.h">
+      <Filter>Archivos de origen\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Object\Transform.h">
-      <Filter>Archivos de origen\Engine\Object</Filter>
+      <Filter>Archivos de origen\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Object\Vector2.h">
-      <Filter>Archivos de origen\Engine\Object</Filter>
+      <Filter>Archivos de origen\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Object\Vector3.h">
-      <Filter>Archivos de origen\Engine\Object</Filter>
+      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ViewSpace.h">
+      <Filter>Archivos de origen\Engine\Object\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\LayerManager.h">
+      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Quaternion.h">
+      <Filter>Archivos de origen\Engine\Object\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -477,13 +495,16 @@
       <Filter>Archivos de origen\Engine\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Object\Layer.cpp">
-      <Filter>Archivos de origen\Engine\Object</Filter>
+      <Filter>Archivos de origen\Engine\Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Object\Vector2.cpp">
-      <Filter>Archivos de origen\Engine\Object</Filter>
+      <Filter>Archivos de origen\Engine\Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Object\Vector3.cpp">
-      <Filter>Archivos de origen\Engine\Object</Filter>
+      <Filter>Archivos de origen\Engine\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Quaternion.cpp">
+      <Filter>Archivos de origen\Engine\Object\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
