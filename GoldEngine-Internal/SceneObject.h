@@ -140,84 +140,84 @@ namespace Engine::Management::MiddleLevel
 			case Engine::Internal::Components::ObjectType::Skybox:
 			{
 				Engine::EngineObjects::Skybox^ skybox = (Engine::EngineObjects::Skybox^)reference;
-				deserializedData = ToJSON(skybox);
+				deserializedData = Serialize(skybox);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::Generic:
 			{
 				Engine::Internal::Components::Object^ genericType = (Engine::Internal::Components::Object^)reference;
-				deserializedData = ToJSON(genericType);
+				deserializedData = Serialize(genericType);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::ModelRenderer:
 			{
 				Engine::EngineObjects::ModelRenderer^ modelRenderer = (Engine::EngineObjects::ModelRenderer^)reference;
-				deserializedData = ToJSON(modelRenderer);
+				deserializedData = Serialize(modelRenderer);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::Datamodel:
 			{
 				Engine::Internal::Components::Object^ genericType = (Engine::Internal::Components::Object^)reference;
-				deserializedData = ToJSON(genericType);
+				deserializedData = Serialize(genericType);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::CubeRenderer:
 			{
 				Engine::EngineObjects::CubeRenderer^ modelRenderer = (Engine::EngineObjects::CubeRenderer^)reference;
-				deserializedData = ToJSON(modelRenderer);
+				deserializedData = Serialize(modelRenderer);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::GridRenderer:
 			{
 				Engine::EngineObjects::GridRenderer^ modelRenderer = (Engine::EngineObjects::GridRenderer^)reference;
-				deserializedData = ToJSON(modelRenderer);
+				deserializedData = Serialize(modelRenderer);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::PBR_ModelRenderer:
 			{
 				Engine::EngineObjects::PBRModelRenderer^ pbrModelRenderer = (Engine::EngineObjects::PBRModelRenderer^)reference;
-				deserializedData = ToJSON(pbrModelRenderer);
+				deserializedData = Serialize(pbrModelRenderer);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::LightManager:
 			{
 				Engine::EngineObjects::LightManager^ pbrModelRenderer = (Engine::EngineObjects::LightManager^)reference;
-				deserializedData = ToJSON(pbrModelRenderer);
+				deserializedData = Serialize(pbrModelRenderer);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::LightSource:
 			{
 				Engine::EngineObjects::LightSource^ pbrModelRenderer = (Engine::EngineObjects::LightSource^)reference;
-				deserializedData = ToJSON(pbrModelRenderer);
+				deserializedData = Serialize(pbrModelRenderer);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::BoundingBoxRenderer:
 			{
 				Engine::EngineObjects::BoundingBoxRenderer^ pbrModelRenderer = (Engine::EngineObjects::BoundingBoxRenderer^)reference;
-				deserializedData = ToJSON(pbrModelRenderer);
+				deserializedData = Serialize(pbrModelRenderer);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::Daemon:
 			{
 				Engine::EngineObjects::Daemon^ pbrModelRenderer = (Engine::EngineObjects::Daemon^)reference;
-				deserializedData = ToJSON(pbrModelRenderer);
+				deserializedData = Serialize(pbrModelRenderer);
 				break;
 			}
 
 			default:
 			{
 				Engine::EngineObjects::Script^ genericType = (Engine::EngineObjects::Script^)reference;
-				deserializedData = ToJSON(genericType);
+				deserializedData = Serialize(genericType);
 				break;
 			}
 			}

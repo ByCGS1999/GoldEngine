@@ -180,6 +180,7 @@
     <ClInclude Include="Objects\LightDm.h" />
     <ClInclude Include="Objects\LightManager.h" />
     <ClInclude Include="Objects\LuaScript.h" />
+    <ClInclude Include="Objects\MeshRenderer.h" />
     <ClInclude Include="Objects\ModelRenderer.h" />
     <ClInclude Include="Objects\PBRModelRenderer.h" />
     <ClInclude Include="Objects\Script.h" />

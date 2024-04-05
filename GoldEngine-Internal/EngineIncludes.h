@@ -22,5 +22,6 @@
 #include "AttributeManager.h"
 
 #include "Objects/Script.h"
+#include "Objects/MeshRenderer.h"
 
 #include "Objects/Daemon.h"

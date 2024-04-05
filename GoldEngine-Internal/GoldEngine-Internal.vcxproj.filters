@@ -423,6 +423,9 @@
     <ClInclude Include="EngineConfig.h">
       <Filter>Archivos de origen\Engine\Configuration</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\MeshRenderer.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">

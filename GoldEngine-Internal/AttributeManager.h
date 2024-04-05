@@ -62,6 +62,10 @@ namespace Engine::Scripting
 
 		void setAttribute(Attribute^ newAttrib)
 		{
+			if (newAttrib == nullptr)
+				return;
+
+
 			if (!hasAttribute(newAttrib->name))
 			{
 				attributes->Add(newAttrib);

@@ -254,7 +254,19 @@ private:
 							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->type + ")").c_str());
 							if (attrib->type == "String")
 							{
+
 							}
+							else if (attrib->type->Contains("Int"))
+							{
+								int value = (int)attrib->getValue<__int64>();
+
+								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
+								{
+									attrib->setValue((__int64)value, false);
+								}
+							}
+
+							ImGui::Separator();
 						}
 					}
 
@@ -1339,6 +1351,25 @@ public:
 					scene->PushToRenderQueue(luaScript);
 				}
 
+				if (ImGui::Button("Mesh Renderer"))
+				{
+					auto meshRenderer = gcnew Engine::EngineObjects::MeshRenderer(
+						"MeshRenderer",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							0.0f,
+							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							scene->GetDatamodelMember("workspace")->GetTransform()
+						),
+						0,
+						gcnew List<unsigned int>(),
+						0xFFFFFFFF
+					);
+					scene->AddObjectToScene(meshRenderer);
+					scene->PushToRenderQueue(meshRenderer);
+				}
+
 				ImGui::EndListBox();
 			}
 
@@ -1853,7 +1884,6 @@ public:
 		}
 
 		packedData = scene->getSceneDataPack();
-
 
 		for each (EngineAssembly ^ assm in assemblies)
 		{
