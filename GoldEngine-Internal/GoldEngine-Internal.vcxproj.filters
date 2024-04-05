@@ -201,9 +201,6 @@
     <ClInclude Include="CastToNative.h">
       <Filter>Archivos de origen\Engine\Marshaller</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>Archivos de origen\Engine\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Raylib\include\raygui.h">
       <Filter>raylib\include</Filter>
     </ClInclude>
@@ -426,16 +423,19 @@
     <ClInclude Include="Objects\MeshRenderer.h">
       <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
+    <ClInclude Include="Object\Layer.h">
       <Filter>Archivos de origen\Engine\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
+    <ClInclude Include="Object\ObjectType.h">
       <Filter>Archivos de origen\Engine\Object</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectType.h">
+    <ClInclude Include="Object\Transform.h">
       <Filter>Archivos de origen\Engine\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Layer.h">
+    <ClInclude Include="Object\Vector2.h">
+      <Filter>Archivos de origen\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Vector3.h">
       <Filter>Archivos de origen\Engine\Object</Filter>
     </ClInclude>
   </ItemGroup>
@@ -476,13 +476,13 @@
     <ClCompile Include="imguistyleserializer.cpp">
       <Filter>Archivos de origen\Engine\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp">
+    <ClCompile Include="Object\Layer.cpp">
       <Filter>Archivos de origen\Engine\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Vector2.cpp">
+    <ClCompile Include="Object\Vector2.cpp">
       <Filter>Archivos de origen\Engine\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Layer.cpp">
+    <ClCompile Include="Object\Vector3.cpp">
       <Filter>Archivos de origen\Engine\Object</Filter>
     </ClCompile>
   </ItemGroup>

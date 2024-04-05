@@ -1,9 +1,9 @@
 #pragma once
-#include "Includes.h"
-#include "GlIncludes.h"
-#include "CastToNative.h"
+#include "../Includes.h"
+#include "../GlIncludes.h"
+#include "../CastToNative.h"
 #include "ObjectType.h"
-#include "Cast.h"
+#include "../Cast.h"
 #include "Layer.h"
 #include "Transform.h"
 #include "Vector2.h"
