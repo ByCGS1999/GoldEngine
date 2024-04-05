@@ -426,6 +426,18 @@
     <ClInclude Include="Objects\MeshRenderer.h">
       <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
     </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Archivos de origen\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Archivos de origen\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectType.h">
+      <Filter>Archivos de origen\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Layer.h">
+      <Filter>Archivos de origen\Engine\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -463,6 +475,15 @@
     </ClCompile>
     <ClCompile Include="imguistyleserializer.cpp">
       <Filter>Archivos de origen\Engine\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Archivos de origen\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector2.cpp">
+      <Filter>Archivos de origen\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Layer.cpp">
+      <Filter>Archivos de origen\Engine\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

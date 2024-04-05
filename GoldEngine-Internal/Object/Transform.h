@@ -1,68 +1,25 @@
 #pragma once
 #include "Includes.h"
 #include "GlIncludes.h"
+#include "CastToNative.h"
+#include "ObjectType.h"
 #include "Cast.h"
+#include "Layer.h"
 #include "Transform.h"
+#include "Vector2.h"
+#include "Vector3.h"
 
 using namespace System;
 
 namespace Engine::Internal::Components
 {
-	public enum class ObjectType
-	{
-		Generic = 0,
-		Datamodel = 1,
-		Skybox = 2,
-		ModelRenderer = 3,
-		GridRenderer = 4,
-		CubeRenderer = 5,
-		LightManager = 6,
-		LightSource = 7,
-		PBR_ModelRenderer = 8,
-		Script = 9,
-		BoundingBoxRenderer = 10,
-		Daemon = 11
-	};
+	
 
 	public enum class ViewSpace
 	{
 		V2D,
 		V3D,
 		VNone
-	};
-
-	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class Vector2
-	{
-	public:
-		float x, y;
-
-	public:
-		Vector2(float x, float y)
-		{
-			this->x = x;
-			this->y = y;
-		}
-
-		::Vector2 toNative()
-		{
-			return { x, y };
-		}
-	};
-
-	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class Layer
-	{
-	public:
-		int layerMask; // this int represents the priority on rendering (higher number = higher priority);
-		String^ layerName;
-
-	public:
-		Layer(int mask, String^ name)
-		{
-			this->layerMask = mask;
-			this->layerName = name;
-		}
 	};
 
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
@@ -184,135 +141,6 @@ namespace Engine::Internal::Components
 			}
 
 			return layerLevel;
-		}
-	};
-
-	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class Vector3
-	{
-	public:
-		float x, y, z;
-
-	public:
-		Vector3(float x, float y, float z)
-		{
-			this->x = x;
-			this->y = y;
-			this->z = z;
-		}
-
-		Engine::Internal::Components::Vector2^ toVector2()
-		{
-			return gcnew Engine::Internal::Components::Vector2(x, y);
-		}
-		
-		void Set(float x, float y, float z)
-		{
-			this->x = x;
-			this->y = y;
-			this->z = z;
-		}
-
-		void Set(float* v)
-		{
-			this->x = v[0];
-			this->y = v[1];
-			this->z = v[2];
-		}
-
-		::Vector3 toNative()
-		{
-			return { x,y,z };
-		}
-
-		::Color toColor()
-		{
-			return GetColor(x + y + z);
-		}
-
-		void Add(float x, float y, float z)
-		{
-			this->x += x;
-			this->y += y;
-			this->z += z;
-		}
-
-		void Add(Vector3^ origin)
-		{
-			this->x += origin->x;
-			this->y += origin->y;
-			this->z += origin->z;
-		}
-
-		void Multiply(Vector3^ origin)
-		{
-			this->x *= origin->x;
-			this->y *= origin->y;
-			this->z *= origin->z;
-		}
-
-		void Multiply(float x, float y, float z)
-		{
-			this->x *= x;
-			this->y *= y;
-			this->z *= z;
-		}
-
-		void Divide(Vector3^ origin)
-		{
-			this->x /= origin->x;
-			this->y /= origin->y;
-			this->z /= origin->z;
-		}
-
-		void Divide(float x, float y, float z)
-		{
-			this->x /= x;
-			this->y /= y;
-			this->z /= z;
-		}
-
-		void Sub(float x, float y, float z)
-		{
-			this->x -= x;
-			this->y -= y;
-			this->z -= z;
-		}
-
-		void Sub(Vector3^ origin)
-		{
-			this->x -= origin->x;
-			this->y -= origin->y;
-			this->z -= origin->z;
-		}
-
-		static Vector3^ Lerp(Vector3^ origin, Vector3^ target, float interpolate)
-		{
-			auto newX = ::Lerp(origin->x, target->x, interpolate);
-			auto newY = ::Lerp(origin->y, target->y, interpolate);
-			auto newZ = ::Lerp(origin->z, target->z, interpolate);
-
-			return gcnew Vector3(newX, newY, newZ);
-		}
-
-		static Vector3^ Add(Vector3^ left, Vector3^ right)
-		{
-			return gcnew Vector3(left->x + right->x, left->y + right->y, left->z + right->z);
-		}
-
-		static Vector3^ Sub(Vector3^ left, Vector3^ right)
-		{
-			return gcnew Vector3(left->x - right->x, left->y - right->y, left->z - right->z);
-		}
-
-		static Vector3^ Multiply(Vector3^ left, Vector3^ right)
-		{
-			return gcnew Vector3(left->x * right->x, left->y * right->y, left->z * right->z);
-		}
-
-		static Vector3^ Divide(Vector3^ left, Vector3^ right)
-		{
-			return gcnew Vector3(left->x / right->x, left->y / right->y, left->z / right->z);
 		}
 	};
 

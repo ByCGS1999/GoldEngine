@@ -1,4 +1,8 @@
 ﻿#include "Macros.h"
+
+const int max_lights = 4;
+unsigned int passwd = 0;
+
 #include "WinAPI.h"
 #include "Window.h"
 #include "Includes.h"
@@ -7,7 +11,7 @@
 #include "DataManager.h"
 #include "Cast.h"
 #include "EngineConfig.h"
-#include "Transform.h"
+#include "Object/Transform.h"
 #include "CypherLib.h"
 #include "SceneObject.h"
 #include "Scene.h"

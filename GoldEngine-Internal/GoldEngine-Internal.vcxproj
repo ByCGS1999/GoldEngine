@@ -167,6 +167,7 @@
     <ClInclude Include="imgui\Fonts\IconsFontAwesome4.h" />
     <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Layer.h" />
     <ClInclude Include="LogFileReporter.h" />
     <ClInclude Include="LoggingAPI.h" />
     <ClInclude Include="LuaVM.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Objects\PBRModelRenderer.h" />
     <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\Skybox.h" />
+    <ClInclude Include="ObjectType.h" />
     <ClInclude Include="Packs.h" />
     <ClInclude Include="PreloadScript.h" />
     <ClInclude Include="Raylib\include\x86\raylib.h" />
@@ -194,6 +196,8 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector3.h" />
     <ClInclude Include="VoxelMatrix.h" />
     <ClInclude Include="VoxelTypedefs.h" />
     <ClInclude Include="Voxel.h" />
@@ -235,7 +239,10 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp" />
+    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
