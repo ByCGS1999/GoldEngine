@@ -1828,13 +1828,12 @@ public:
 	{
 		DataPack::SetSingletonReference(packedData);
 
-		DataManager::HL_LoadTexture2D(256, "./Data/EditorAssets/Icons/Model.png");
-		DataManager::HL_LoadTexture2D(257, "Data/EditorAssets/Icons/Run.png");
-		DataManager::HL_LoadTexture2D(258, "Data/EditorAssets/Icons/Stop.png");
-		DataManager::HL_LoadTexture2D(259, "Data/EditorAssets/Icons/Material.png");
-		DataManager::HL_LoadShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
+		modelTexture = DataPack::singleton()->AddTextures2D(256, "./Data/EditorAssets/Icons/Model.png");
+		DataPack::singleton()->AddTextures2D(257, "Data/EditorAssets/Icons/Run.png");
+		DataPack::singleton()->AddTextures2D(258, "Data/EditorAssets/Icons/Stop.png");
+		DataPack::singleton()->AddTextures2D(259, "Data/EditorAssets/Icons/Material.png");
+		DataPack::singleton()->AddShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
 
-		modelTexture = DataPacks::singleton().GetTexture2D(256);
 		materialTexture = DataPacks::singleton().GetTexture2D(259);
 
 		packedData->WriteToFile(packedData->getFile(), passwd);

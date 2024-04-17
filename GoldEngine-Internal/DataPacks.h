@@ -444,7 +444,6 @@ namespace Engine::Assets::Storage
 			}
 		}
 
-
 		void AddTexture2D(unsigned int textureId, Texture2D texture)
 		{
 			bool hasTexture2D = false;
@@ -469,6 +468,82 @@ namespace Engine::Assets::Storage
 			{
 				nativePacks->textures2d.push_back(Engine::Assets::Storage::Types::Texture2DPack(textureId, texture));
 			}
+		}
+
+		bool HasMaterial(unsigned int materialID)
+		{
+			bool hasMaterial = false;
+
+			for each (Engine::Assets::Storage::Types::MaterialPack  cPack in nativePacks->materials)
+			{
+				if (cPack.MaterialId == materialID)
+				{
+					hasMaterial = true;
+					break;
+				}
+			}
+
+			return hasMaterial;
+		}
+
+		bool HasTexture2D(unsigned int textureId)
+		{
+			bool hasTexture2D = false;
+
+			for (int x = 0; x < nativePacks->textures2d.size(); x++)
+			{
+				auto sP = &nativePacks->textures2d[x];
+
+				if (sP->getId() == textureId)
+				{
+					hasTexture2D = true;
+					break;
+				}
+				else
+				{
+					hasTexture2D = false;
+				}
+			}
+
+			return hasTexture2D;
+		}
+
+		bool HasShader(unsigned int shaderId)
+		{
+			bool hasShader = false;
+
+			for (int x = 0; x < nativePacks->shaders.size(); x++)
+			{
+				auto sP = &nativePacks->shaders[x];
+
+				if (sP->getId() == shaderId)
+				{
+					hasShader = true;
+					break;
+				}
+			}
+
+			return hasShader;
+		}
+
+		bool HasModel(unsigned int materialID)
+		{
+			bool hasMaterial = false;
+
+			for each (Engine::Assets::Storage::Types::MaterialPack  cPack in nativePacks->materials)
+			{
+				if (cPack.MaterialId == materialID)
+				{
+					hasMaterial = true;
+					break;
+				}
+				else
+				{
+					hasMaterial = false;
+				}
+			}
+
+			return hasMaterial;
 		}
 
 		static DataPacks singleton()

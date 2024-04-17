@@ -48,6 +48,9 @@ namespace Engine::EngineObjects::Daemons
 					}
 				}
 			}
+
+
+			lightM->Update();
 		}
 	};
 }

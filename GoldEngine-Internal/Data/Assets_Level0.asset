@@ -1,14 +1,14 @@
 {
   "shaders": {
-    "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs",
-    "1": "Data/Engine/Shaders/rPBR/pbr.vs:^:Data/Engine/Shaders/rPBR/pbr.fs"
+    "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs"
   },
   "models": {
     "0": "./Data/Engine\\Models\\Skybox_sphere.glb",
     "2": "./Data/Engine\\Models\\Skybox_cube.glb",
     "3": "./Data/Engine\\Models\\Error.obj",
     "5": "./Data/Models\\deer1.glb",
-    "6": "./Data/Models/deer1.glb"
+    "6": "./Data/Models/deer1.glb",
+    "7": "./Data/Engine/Models/Skybox_sphere.glb"
   },
   "materials": {
     "0": 0,
@@ -16,7 +16,7 @@
   },
   "textures2d": {
     "2": "./Data/Game/Models/Spaceship.png",
-    "256": "Data/EditorAssets/Icons/Model.png",
+    "256": "./Data/EditorAssets/Icons/Model.png",
     "257": "Data/EditorAssets/Icons/Run.png",
     "258": "Data/EditorAssets/Icons/Stop.png",
     "259": "Data/EditorAssets/Icons/Material.png"

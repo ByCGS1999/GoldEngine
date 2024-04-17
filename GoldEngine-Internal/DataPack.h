@@ -123,7 +123,21 @@ namespace Engine::Assets::Management
 			}
 			else
 			{
-				return DataPacks::singleton().GetShader(id);
+				if(DataPacks::singleton().HasShader(id))
+					return DataPacks::singleton().GetShader(id);
+				else
+				{
+					std::string vertexShader = "";
+					std::string fragmentShader = "";
+
+					vertexShader = CastStringToNative(vs);
+					fragmentShader = CastStringToNative(vs);
+
+					Shader s = LoadShader(vertexShader.c_str(), fragmentShader.c_str());
+					DataPacks::singleton().AddShader(id, s);
+
+					return s;
+				}
 			}
 		}
 
@@ -140,7 +154,16 @@ namespace Engine::Assets::Management
 			}
 			else
 			{
-				return DataPacks::singleton().GetModel(id);
+				if(DataPacks::singleton().HasModel(id))
+					return DataPacks::singleton().GetModel(id);
+				else
+				{
+					Model m = LoadModel(path);
+
+					DataPacks::singleton().AddModel(id, m);
+
+					return m;
+				}
 			}
 		}
 
@@ -171,7 +194,20 @@ namespace Engine::Assets::Management
 			}
 			else
 			{
-				return DataPacks::singleton().GetTexture2D(id);
+				if(DataPacks::singleton().HasTexture2D(id))
+					return DataPacks::singleton().GetTexture2D(id);
+				else
+				{
+					std::string text = "";
+
+					text = CastStringToNative(tex);
+
+					Texture2D tex = LoadTexture(text.c_str());
+
+					DataPacks::singleton().AddTexture2D(id, tex);
+
+					return tex;
+				}
 			}
 		}
 
