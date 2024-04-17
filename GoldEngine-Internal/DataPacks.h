@@ -7,7 +7,6 @@
 #include "Packs.h"
 #include "CameraPack.h"
 #include "MaterialPack.h"
-#include "Texture2DPack.h"
 
 /*
 	DATAPACKS
@@ -225,14 +224,21 @@ namespace Engine::Assets::Storage
 
 			bool hasTexture2D = false;
 
-			for each (Engine::Assets::Storage::Types::Texture2DPack  sP in nativePacks->textures2d)
+			for (int x = 0; x < nativePacks->textures2d.size(); x++)
 			{
-				if (sP.textureId == textureId)
+				auto mP = &nativePacks->textures2d[x];
+
+				if (mP->getId() == textureId)
 				{
-					texture = sP.textureReference;
+					texture = mP->getResource();
 					hasTexture2D = true;
 					break;
 				}
+			}
+
+			if (!hasTexture2D)
+			{
+				texture = LoadTexture("./Data/Engine/Textures/NotFound.png");
 			}
 
 			return texture;
@@ -443,11 +449,13 @@ namespace Engine::Assets::Storage
 		{
 			bool hasTexture2D = false;
 
-			for each (Engine::Assets::Storage::Types::Texture2DPack  cPack in nativePacks->textures2d)
+			for (int x = 0; x < nativePacks->textures2d.size(); x++)
 			{
-				if (cPack.textureId == textureId)
+				auto sP = &nativePacks->textures2d[x];
+
+				if (sP->getId() == textureId)
 				{
-					cPack.textureReference = texture;
+					sP->setResource(texture); // overwrite shader reference
 					hasTexture2D = true;
 					break;
 				}

@@ -96,6 +96,7 @@ bool codeEditorOpen = false;
 VoxelRenderer* renderer;
 std::string styleFN;
 Texture modelTexture;
+Texture materialTexture;
 std::string codeEditorFile = "";
 bool fileDialogOpen = false;
 int tmp1;
@@ -126,6 +127,75 @@ private:
 		if (codeEditorFile != "")
 		{
 			File::WriteAllText(gcnew String(codeEditorFile.c_str()), gcnew String(codeEditor->GetText().c_str()));
+		}
+	}
+
+	void createAssetEntries(String^ path)
+	{
+		for each (String ^ f in Directory::GetFiles(path))
+		{
+			f = f->Replace(R"(\)", "/");
+			array<String^>^ tmp = f->Split('/');
+			auto t = tmp[tmp->Length - 1] + "\n";
+
+			if (f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".fbx") || f->Contains(".vox")) // model types
+			{
+				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
+				{
+					unsigned int assetId = 0;
+					auto res = packedData->hasAsset(Engine::Assets::Management::assetType::_Model, f);
+					if (!std::get<0>(res))
+					{
+						assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Model);
+
+						packedData->AddModel(assetId, CastStringToNative(f).c_str());
+
+						packedData->WriteToFile(packedData->getFile(), passwd);
+					}
+					else
+					{
+						assetId = std::get<1>(res);
+					}
+
+					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
+						"ModelRenderer",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							0.0f,
+							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							nullptr
+						),
+						assetId,
+						1,
+						0,
+						0xFFFFFFFF
+					);
+					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
+					scene->AddObjectToScene(meshRenderer);
+					scene->GetRenderQueue()->Add(
+						gcnew Engine::Management::MiddleLevel::SceneObject(
+							meshRenderer->type,
+							meshRenderer,
+							""
+						)
+					);
+				}
+				ImGui::SameLine();
+				ImGui::Text(CastStringToNative(t).c_str());
+			}
+			else if (f->Contains(".mat"))
+			{
+				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
+				{
+
+				}
+			}
+		}
+
+		for each (String^ dir in Directory::GetDirectories(path))
+		{
+			createAssetEntries(dir);
 		}
 	}
 
@@ -1106,57 +1176,13 @@ public:
 				ImGui::EndMenuBar();
 			}
 
-			for each (String ^ f in Directory::GetFiles("./Data/", "*", SearchOption::AllDirectories))
-			{
-				if (f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".fbx") || f->Contains(".vox")) // model types
-				{
-					array<String^>^ tmp = f->Split('/');
-					auto t = tmp[tmp->Length - 1] + "\n";
-					if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
-					{
-						unsigned int assetId = 0;
-						auto res = packedData->hasAsset(Engine::Assets::Management::assetType::_Model, f);
-						if (!std::get<0>(res))
-						{
-							assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Model);
+			ImVec2 size = ImGui::GetWindowSize();
 
-							packedData->AddModel(assetId, CastStringToNative(f).c_str());
+			ImGui::BeginListBox("###ASSETS", { size.x - 20, size.y - 55 });
 
-							packedData->WriteToFile(packedData->getFile(), passwd);
-						}
-						else
-						{
-							assetId = std::get<1>(res);
-						}
+			createAssetEntries("./Data/");
 
-						auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
-							"ModelRenderer",
-							gcnew Engine::Internal::Components::Transform(
-								gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-								gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-								0.0f,
-								gcnew Engine::Internal::Components::Vector3(1, 1, 1),
-								nullptr
-							),
-							assetId,
-							1,
-							0,
-							0xFFFFFFFF
-						);
-						meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
-						scene->AddObjectToScene(meshRenderer);
-						scene->GetRenderQueue()->Add(
-							gcnew Engine::Management::MiddleLevel::SceneObject(
-								meshRenderer->type,
-								meshRenderer,
-								""
-							)
-						);
-					}
-					ImGui::SameLine();
-					ImGui::Text(CastStringToNative(t).c_str());
-				}
-			}
+			ImGui::EndListBox();
 
 
 			ImGui::End();
@@ -1802,10 +1828,14 @@ public:
 	{
 		DataPack::SetSingletonReference(packedData);
 
-		modelTexture = packedData->AddTextures2D(256, "./Data/EditorAssets/Model.png");
-		DataManager::HL_LoadTexture2D(0xE1, "Data/EditorAssets/Run.png");
-		DataManager::HL_LoadTexture2D(0xE2, "Data/EditorAssets/Stop.png");
+		DataManager::HL_LoadTexture2D(256, "./Data/EditorAssets/Icons/Model.png");
+		DataManager::HL_LoadTexture2D(257, "Data/EditorAssets/Icons/Run.png");
+		DataManager::HL_LoadTexture2D(258, "Data/EditorAssets/Icons/Stop.png");
+		DataManager::HL_LoadTexture2D(259, "Data/EditorAssets/Icons/Material.png");
 		DataManager::HL_LoadShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
+
+		modelTexture = DataPacks::singleton().GetTexture2D(256);
+		materialTexture = DataPacks::singleton().GetTexture2D(259);
 
 		packedData->WriteToFile(packedData->getFile(), passwd);
 

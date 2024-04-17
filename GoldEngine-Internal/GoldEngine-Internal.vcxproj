@@ -228,7 +228,6 @@
     <ClInclude Include="Raylib\include\rlImGuiColors.h" />
     <ClInclude Include="Raylib\include\rPBR.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Texture2DPack.h" />
     <ClInclude Include="WinAPI.h" />
   </ItemGroup>
   <ItemGroup>
@@ -246,6 +245,7 @@
     <ClCompile Include="Object\Quaternion.cpp" />
     <ClCompile Include="Object\Vector2.cpp" />
     <ClCompile Include="Object\Vector3.cpp" />
+    <ClCompile Include="Packs.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>
@@ -258,23 +258,17 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Model.png">
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+    <CopyFileToFolders Include="Data\EditorAssets\Icons\Material.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Run.png">
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+    <CopyFileToFolders Include="Data\EditorAssets\Icons\Model.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Stop.png">
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/%(Filename)%(Extension)</DestinationFileName>
+    <CopyFileToFolders Include="Data\EditorAssets\Icons\Run.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Icons\Stop.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -368,6 +362,12 @@
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Data\EditorAssets\Fonts\fontawesome-webfont.ttf">
+      <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

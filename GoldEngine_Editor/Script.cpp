@@ -42,7 +42,6 @@ namespace EditorScripts
 
 	};
 
-
 	public ref class TestPreload : Engine::Preload::IPreloadScript
 	{
 	public:

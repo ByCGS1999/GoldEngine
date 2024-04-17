@@ -11,27 +11,15 @@ namespace Engine::Assets::Storage::Types
 		std::unique_ptr<Shader> resource;
 
 	public:
-		ShaderPack(unsigned int id, Shader res)
-		{
-			this->id = id;
-			this->resource = std::make_unique<Shader>(res);
-		}
+		ShaderPack(unsigned int id, Shader res);
 
 	public:
-		unsigned int getId() const { return id; }
-		Shader getResource() const { return *resource; }
+		unsigned int getId() const;
+		Shader getResource() const;
 
-		void setResource(Shader s)
-		{
-			resource = std::make_unique<Shader>(s);
-		}
+		void setResource(Shader s);
 
-		void freealloc()
-		{
-			UnloadShader(*resource);
-			Shader* resPtr = resource.release();
-			delete resPtr;
-		}
+		void freealloc();
 	};
 	
 	public struct ModelPack
@@ -41,34 +29,35 @@ namespace Engine::Assets::Storage::Types
 		std::unique_ptr<Model> resource;
 
 	public:
-		ModelPack(unsigned int id, Model res)
-		{
-			this->id = id;
-			this->resource = std::make_unique<Model>(res);
-		}
+		ModelPack(unsigned int id, Model res);
 
 	public:
-		bool hasValue() { return resource != nullptr; }
-		unsigned int getId() const { return id; }
-		Model getResource() const { return *resource; }
+		bool hasValue();
+		unsigned int getId() const;
+		Model getResource() const;
 
-		void setResource(Model s)
-		{
-			resource = std::make_unique<Model>(s);
-		}
+		void setResource(Model s);
 
-		void freealloc()
-		{
-			try 
-			{
-				Model* resPtr = resource.release();
-				delete resPtr;
-			}
-			catch (std::exception ex)
-			{
-				printf("Failed freeing resource.");
-				printf(ex.what());
-			}
-		}
+		void freealloc();
+	};
+
+
+	public struct Texture2DPack
+	{
+	private:
+		unsigned int id;
+		std::unique_ptr<Texture> resource;
+
+	public:
+		Texture2DPack(unsigned int id, Texture2D ref);
+
+	public:
+		bool hasValue();
+		unsigned int getId() const;
+		Texture getResource() const;
+
+		void setResource(Texture s);
+
+		void freealloc();
 	};
 }

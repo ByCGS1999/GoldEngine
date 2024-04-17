@@ -7,17 +7,18 @@
     "0": "./Data/Engine\\Models\\Skybox_sphere.glb",
     "2": "./Data/Engine\\Models\\Skybox_cube.glb",
     "3": "./Data/Engine\\Models\\Error.obj",
-    "5": "./Data/Models\\deer1.glb"
+    "5": "./Data/Models\\deer1.glb",
+    "6": "./Data/Models/deer1.glb"
   },
   "materials": {
     "0": 0,
     "1": 1
   },
   "textures2d": {
-    "1": "./Data/EditorAssets/Model.png",
     "2": "./Data/Game/Models/Spaceship.png",
-    "225": "Data/EditorAssets/Run.png",
-    "226": "Data/EditorAssets/Stop.png",
-    "256": "./Data/EditorAssets/Model.png"
+    "256": "Data/EditorAssets/Icons/Model.png",
+    "257": "Data/EditorAssets/Icons/Run.png",
+    "258": "Data/EditorAssets/Icons/Stop.png",
+    "259": "Data/EditorAssets/Icons/Material.png"
   }
 }

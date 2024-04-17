@@ -20,8 +20,7 @@ namespace Engine::Internal::Components
 	public ref class Transform
 	{
 	public:
-		System::String^ uid;
-		String^ name;
+		initonly System::String^ uid;
 		Transform^ parent;
 		// worldspace
 		Vector3^ position;
@@ -36,7 +35,7 @@ namespace Engine::Internal::Components
 		const Engine::Internal::Components::Vector3^ top = gcnew Vector3(0, 1, 0);
 		const Engine::Internal::Components::Vector3^ right = gcnew Vector3(1, 0, 0);
 		const Engine::Internal::Components::Vector3^ backward = gcnew Vector3(0, 0, -1);
-		const Engine::Internal::Components::Vector3^ down = gcnew Vector3(0, -1, 0);
+		const Engine::Internal::Components::Vector3^ bottom = gcnew Vector3(0, -1, 0);
 		const Engine::Internal::Components::Vector3^ left = gcnew Vector3(-1, 0, 0);
 
 	private:
@@ -46,7 +45,6 @@ namespace Engine::Internal::Components
 		Transform(Vector3^ position, Vector3^ rotation, float rotationValue, Vector3^ scale, Transform^ parent)
 		{
 			this->uid = System::Guid::NewGuid().ToString();
-			this->name = "";
 			this->localPosition = position;
 			this->localRotation = rotation;
 			this->scale = scale;
@@ -76,11 +74,6 @@ namespace Engine::Internal::Components
 			this->gameObject = gameObject;
 		}
 
-		void SetName(String^ name)
-		{
-			this->name = name;
-		}
-
 		void SetParent(Transform^ newTransform)
 		{
 			this->parent = newTransform;
@@ -103,7 +96,7 @@ namespace Engine::Internal::Components
 	{
 	public:
 		String^ name;
-		ObjectType type;
+		initonly ObjectType type;
 		Transform^ transform;
 		ViewSpace viewSpace;
 		Layer^ layerMask;

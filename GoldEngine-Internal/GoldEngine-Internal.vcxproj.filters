@@ -33,9 +33,6 @@
     <Filter Include="Archivos de origen\Engine\HLAPI">
       <UniqueIdentifier>{9b437e7d-5295-4f14-bd28-6d61f0a38f22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\ObjectManagement\Textures">
-      <UniqueIdentifier>{127c9671-fc47-48c5-8fbc-99454c23ba6d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data">
       <UniqueIdentifier>{e7126ab7-7b3f-4014-b94d-ded0fd000284}</UniqueIdentifier>
     </Filter>
@@ -56,9 +53,6 @@
     </Filter>
     <Filter Include="Archivos de origen\Engine\ObjectManagement\Materials">
       <UniqueIdentifier>{badbfa6e-2c37-4397-86b4-e6ba2a95b259}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\ObjectManagement\Textures\2D">
-      <UniqueIdentifier>{49531ce8-1248-4637-a302-29223662af9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Archivos de origen\Engine\Object">
       <UniqueIdentifier>{f2217650-8e69-4976-9732-9887b5cf1e03}</UniqueIdentifier>
@@ -199,6 +193,12 @@
     <Filter Include="Archivos de origen\Engine\Object\Header">
       <UniqueIdentifier>{962bd13e-e425-430b-b66a-de85ffb23b81}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\EditorAssets\Icons">
+      <UniqueIdentifier>{0133aeaf-9e76-4e5b-b09e-d933b0b9e6c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\EditorAssets\Fonts">
+      <UniqueIdentifier>{a14989d7-3f94-4d63-9bab-965872423dcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -266,9 +266,6 @@
     </ClInclude>
     <ClInclude Include="MaterialPack.h">
       <Filter>Archivos de origen\Engine\ObjectManagement\Materials</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture2DPack.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement\Textures\2D</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Archivos de origen\Engine</Filter>
@@ -506,6 +503,9 @@
     <ClCompile Include="Object\Quaternion.cpp">
       <Filter>Archivos de origen\Engine\Object\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Packs.cpp">
+      <Filter>Archivos de origen\Engine\ObjectManagement\Types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -548,20 +548,26 @@
     <CopyFileToFolders Include="Binaries\FBX2glTF.exe">
       <Filter>Binaries\fbx2gltf</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Model.png">
-      <Filter>Data\EditorAssets</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Run.png">
-      <Filter>Data\EditorAssets</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Stop.png">
-      <Filter>Data\EditorAssets</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Raylib\lib\x64\raylib.dll">
       <Filter>raylib\lib\x64</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Raylib\lib\x86\raylib.dll">
       <Filter>raylib\lib\x86</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Icons\Material.png">
+      <Filter>Data\EditorAssets\Icons</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Icons\Model.png">
+      <Filter>Data\EditorAssets\Icons</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Icons\Run.png">
+      <Filter>Data\EditorAssets\Icons</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Icons\Stop.png">
+      <Filter>Data\EditorAssets\Icons</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\EditorAssets\Fonts\fontawesome-webfont.ttf">
+      <Filter>Data\EditorAssets\Fonts</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

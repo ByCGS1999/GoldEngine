@@ -164,7 +164,6 @@ namespace Engine::Assets::Management
 				text = CastStringToNative(tex);
 
 				Texture2D tex = LoadTexture(text.c_str());
-				DataPacks::singleton().AddTexture2D(id, tex);
 
 				DataPacks::singleton().AddTexture2D(id, tex);
 

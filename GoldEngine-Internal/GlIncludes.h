@@ -16,7 +16,4 @@
 #ifndef GLIMPL
 #define GLIMPL
 #include "Raylib/include/rPBR.h"
-#else
-#define rPBR_IMPL true
-#include "Raylib/include/rPBR.h"
 #endif
