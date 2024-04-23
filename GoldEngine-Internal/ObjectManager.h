@@ -111,10 +111,39 @@ namespace Engine::Scripting
 			return sceneObject->GetReference();
 		}
 
+	private:
+		bool topReferenceIsDatamodel(Engine::Internal::Components::Object^ object, String^ dataModelName)
+		{
+			if (object->transform->parent != nullptr)
+				return topReferenceIsDatamodel((Engine::Internal::Components::Object^)object->transform->parent->getGameObject(), dataModelName);
+			else
+			{
+				if (object->name == dataModelName)
+					return true;
+				else
+					return false;
+			}
+		}
+
 	public:
 		Engine::Management::Scene^ GetLoadedScene()
 		{
 			return loadedScene;
+		}
+
+		List<Engine::Internal::Components::Object^>^ GetGameObjectsFromDatamodel(System::String^ datamodel)
+		{
+			auto objects = gcnew List<Engine::Internal::Components::Object^>();
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (topReferenceIsDatamodel(t->GetReference(), datamodel))
+				{
+					objects->Add(t->GetReference());
+				}
+			}
+
+			return objects;
 		}
 
 		List<Engine::Internal::Components::Object^>^ GetGameObjectsByTag(System::String^ tag)
@@ -218,7 +247,7 @@ namespace Engine::Scripting
 				auto v = GetObjectFromScene(object);
 				if (v->GetTransform()->parent != nullptr)
 				{
-					if (v->GetTransform()->GetParent()->uid == parent->GetTransform()->uid)
+					if (v->GetTransform()->GetParent()->GetUID() == parent->GetTransform()->GetUID())
 					{
 						newList->Add(v);
 					}
@@ -232,7 +261,7 @@ namespace Engine::Scripting
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
-				if (t->GetReference()->GetTransform()->uid == uid)
+				if (t->GetReference()->GetTransform()->GetUID() == uid)
 				{
 					return t->GetReference();
 				}

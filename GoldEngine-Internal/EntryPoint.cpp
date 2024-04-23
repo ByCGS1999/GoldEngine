@@ -74,7 +74,7 @@ DataPacks dataPack;
 #pragma region EDITOR ENGINE
 
 Model mod;
-Camera3D c3d2;
+::Camera3D c3d2;
 unsigned int ambient_color = 0x2B2B2BFF;
 float cameraSpeed = 1.25f;
 bool controlCamera = true;
@@ -629,7 +629,7 @@ end
 
 			if (_reference->GetTransform()->parent != nullptr)
 			{
-				if (_reference->GetTransform()->parent->uid == parent->GetTransform()->uid)
+				if (_reference->GetTransform()->parent->GetUID() == parent->GetTransform()->GetUID())
 				{
 					String^ refName = "";
 					for (int x = 0; x < depth; x++)
@@ -641,7 +641,7 @@ end
 
 					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager)
 					{
-						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->GetTransform()->uid).c_str()))
+						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->GetTransform()->GetUID()).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -654,7 +654,7 @@ end
 					}
 					else
 					{
-						if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->GetTransform()->uid).c_str()))
+						if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->GetTransform()->GetUID()).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -919,7 +919,7 @@ public:
 				{
 					if (type == ObjectType::Datamodel || type == ObjectType::LightManager)
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)" + "###" + reference->GetTransform()->uid)))
+						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)" + "###" + reference->GetTransform()->GetUID())))
 						{
 							if (reparentLock)
 								reparentObject = reference;
@@ -934,7 +934,7 @@ public:
 					}
 					else if (reference->GetTransform()->parent == nullptr)
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (UNPARENTED)" + "###" + reference->GetTransform()->uid)))
+						if (ImGui::Selectable(CastToNative(reference->name + " (UNPARENTED)" + "###" + reference->GetTransform()->GetUID())))
 						{
 							if (reparentLock)
 								reparentObject = reference;

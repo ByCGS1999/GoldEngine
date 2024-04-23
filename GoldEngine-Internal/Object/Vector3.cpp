@@ -10,6 +10,13 @@ Components::Vector3::Vector3(float x, float y, float z)
 	this->z = z;
 }
 
+Components::Vector3::Vector3(::Vector3 nativeVector)
+{
+	this->x = nativeVector.x;
+	this->y = nativeVector.y;
+	this->z = nativeVector.z;
+}
+
 void Components::Vector3::Set(float x, float y, float z)
 {
 	this->x = x;
@@ -35,58 +42,65 @@ Color Components::Vector3::toColor()
 }
 
 
-void Components::Vector3::Add(float x, float y, float z)
+void Components::Vector3::add(float x, float y, float z)
 {
 	this->x += x;
 	this->y += y;
 	this->z += z;
 }
 
-void Components::Vector3::Add(Vector3^ origin)
+void Components::Vector3::add(Vector3^ origin)
 {
 	this->x += origin->x;
 	this->y += origin->y;
 	this->z += origin->z;
 }
 
-void Components::Vector3::Multiply(Vector3^ origin)
+void Components::Vector3::multiply(Vector3^ origin)
 {
 	this->x *= origin->x;
 	this->y *= origin->y;
 	this->z *= origin->z;
 }
 
-void Components::Vector3::Multiply(float x, float y, float z)
+void Components::Vector3::multiply(float x, float y, float z)
 {
 	this->x *= x;
 	this->y *= y;
 	this->z *= z;
 }
 
-void Components::Vector3::Divide(Vector3^ origin)
+void Components::Vector3::divide(Vector3^ origin)
 {
 	this->x /= origin->x;
 	this->y /= origin->y;
 	this->z /= origin->z;
 }
 
-void Components::Vector3::Divide(float x, float y, float z)
+void Components::Vector3::divide(float x, float y, float z)
 {
 	this->x /= x;
 	this->y /= y;
 	this->z /= z;
 }
 
-void Components::Vector3::Sub(float x, float y, float z)
+void Components::Vector3::sub(float x, float y, float z)
 {
 	this->x -= x;
 	this->y -= y;
 	this->z -= z;
 }
 
-void Components::Vector3::Sub(Vector3^ origin)
+void Components::Vector3::sub(Vector3^ origin)
 {
 	this->x -= origin->x;
 	this->y -= origin->y;
 	this->z -= origin->z;
+}
+
+void Components::Vector3::copy(const Vector3^ origin)
+{
+	this->x = origin->x;
+	this->y = origin->y;
+	this->z = origin->z;
 }

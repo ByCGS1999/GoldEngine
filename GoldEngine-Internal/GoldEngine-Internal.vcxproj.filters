@@ -199,6 +199,9 @@
     <Filter Include="Data\EditorAssets\Fonts">
       <UniqueIdentifier>{a14989d7-3f94-4d63-9bab-965872423dcc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Camera">
+      <UniqueIdentifier>{391a5c0d-ce77-41cc-a18f-35618cbdd95c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -452,6 +455,9 @@
     </ClInclude>
     <ClInclude Include="Object\Quaternion.h">
       <Filter>Archivos de origen\Engine\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Camera3D.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

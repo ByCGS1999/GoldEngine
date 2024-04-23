@@ -313,19 +313,19 @@ typedef struct Font {
 
 // Camera, defines position/orientation in 3d space
 typedef struct Camera3D {
-    Vector3 position;       // Camera position
-    Vector3 target;         // Camera target it looks-at
-    Vector3 up;             // Camera up vector (rotation over its axis)
+    ::Vector3 position;       // Camera position
+    ::Vector3 target;         // Camera target it looks-at
+    ::Vector3 up;             // Camera up vector (rotation over its axis)
     float fovy;             // Camera field-of-view aperture in Y (degrees) in perspective, used as near plane width in orthographic
     int projection;         // Camera projection: CAMERA_PERSPECTIVE or CAMERA_ORTHOGRAPHIC
 } Camera3D;
 
-typedef Camera3D Camera;    // Camera type fallback, defaults to Camera3D
+typedef ::Camera3D Camera;    // Camera type fallback, defaults to Camera3D
 
 // Camera2D, defines position/orientation in 2d space
 typedef struct Camera2D {
-    Vector2 offset;         // Camera offset (displacement from target)
-    Vector2 target;         // Camera target (rotation and zoom origin)
+    ::Vector2 offset;         // Camera offset (displacement from target)
+    ::Vector2 target;         // Camera target (rotation and zoom origin)
     float rotation;         // Camera rotation in degrees
     float zoom;             // Camera zoom (scaling), should be 1.0f by default
 } Camera2D;
@@ -377,9 +377,9 @@ typedef struct Material {
 
 // Transform, vertex transformation data
 typedef struct Transform {
-    Vector3 translation;    // Translation
-    Quaternion rotation;    // Rotation
-    Vector3 scale;          // Scale
+    ::Vector3 translation;    // Translation
+    ::Quaternion rotation;    // Rotation
+    ::Vector3 scale;          // Scale
 } Transform;
 
 // Bone, skeletal animation bone
@@ -401,7 +401,7 @@ typedef struct Model {
     // Animation data
     int boneCount;          // Number of bones
     BoneInfo *bones;        // Bones information (skeleton)
-    Transform *bindPose;    // Bones base transformation (pose)
+    ::Transform *bindPose;    // Bones base transformation (pose)
 } Model;
 
 // ModelAnimation
@@ -409,28 +409,28 @@ typedef struct ModelAnimation {
     int boneCount;          // Number of bones
     int frameCount;         // Number of animation frames
     BoneInfo *bones;        // Bones information (skeleton)
-    Transform **framePoses; // Poses array by frame
+    ::Transform **framePoses; // Poses array by frame
     char name[32];          // Animation name
 } ModelAnimation;
 
 // Ray, ray for raycasting
 typedef struct Ray {
-    Vector3 position;       // Ray position (origin)
-    Vector3 direction;      // Ray direction
+    ::Vector3 position;       // Ray position (origin)
+    ::Vector3 direction;      // Ray direction
 } Ray;
 
 // RayCollision, ray hit information
 typedef struct RayCollision {
     bool hit;               // Did the ray hit something?
     float distance;         // Distance to the nearest hit
-    Vector3 point;          // Point of the nearest hit
-    Vector3 normal;         // Surface normal of hit
+    ::Vector3 point;          // Point of the nearest hit
+    ::Vector3 normal;         // Surface normal of hit
 } RayCollision;
 
 // BoundingBox
 typedef struct BoundingBox {
-    Vector3 min;            // Minimum vertex box-corner
-    Vector3 max;            // Maximum vertex box-corner
+    ::Vector3 min;            // Minimum vertex box-corner
+    ::Vector3 max;            // Maximum vertex box-corner
 } BoundingBox;
 
 // Wave, audio wave data

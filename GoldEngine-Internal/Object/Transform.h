@@ -16,11 +16,14 @@ using namespace System;
 
 namespace Engine::Internal::Components
 {
+
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Transform
 	{
+	private:
+		[Newtonsoft::Json::JsonPropertyAttribute]
+		System::String^ uid;
 	public:
-		initonly System::String^ uid;
 		Transform^ parent;
 		// worldspace
 		Vector3^ position;
@@ -73,6 +76,8 @@ namespace Engine::Internal::Components
 		{
 			this->gameObject = gameObject;
 		}
+
+		String^ GetUID() { return uid; }
 
 		void SetParent(Transform^ newTransform)
 		{

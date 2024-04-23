@@ -15,9 +15,10 @@ namespace Engine::Internal::Components
 		{
 			layers = gcnew System::Collections::Generic::List<Layer^>();
 
-			AddLayer(gcnew Engine::Internal::Components::Layer(0, "Geometry"));
-			AddLayer(gcnew Engine::Internal::Components::Layer(1, "PostFX"));
-			AddLayer(gcnew Engine::Internal::Components::Layer(2, "Transparent"));
+			AddLayer(gcnew Engine::Internal::Components::Layer(0, "EngineRoot"));
+			AddLayer(gcnew Engine::Internal::Components::Layer(1, "Geometry"));
+			AddLayer(gcnew Engine::Internal::Components::Layer(2, "PostFX"));
+			AddLayer(gcnew Engine::Internal::Components::Layer(3, "Transparent"));
 		}
 
 	public:

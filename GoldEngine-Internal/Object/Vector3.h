@@ -10,6 +10,7 @@ namespace Engine::Internal::Components
 
 	public:
 		Vector3(float x, float y, float z);
+		Vector3(::Vector3 nativeVector);
 
 		Engine::Internal::Components::Vector2^ toVector2()
 		{
@@ -24,23 +25,25 @@ namespace Engine::Internal::Components
 
 		::Color toColor();
 
-		void Add(float x, float y, float z);
+		void add(float x, float y, float z);
 
-		void Add(Vector3^ origin);
+		void add(Vector3^ origin);
 
-		void Multiply(Vector3^ origin);
+		void multiply(Vector3^ origin);
 
-		void Multiply(float x, float y, float z);
+		void multiply(float x, float y, float z);
 
-		void Divide(Vector3^ origin);
+		void divide(Vector3^ origin);
 
-		void Divide(float x, float y, float z);
+		void divide(float x, float y, float z);
 
-		void Sub(float x, float y, float z);
+		void sub(float x, float y, float z);
 
-		void Sub(Vector3^ origin);
+		void sub(Vector3^ origin);
 
-		static Vector3^ Lerp(Vector3^ origin, Vector3^ target, float interpolate)
+		void copy(const Vector3^ inVec);
+
+		static Vector3^ lerp(Vector3^ origin, Vector3^ target, float interpolate)
 		{
 			auto newX = ::Lerp(origin->x, target->x, interpolate);
 			auto newY = ::Lerp(origin->y, target->y, interpolate);
@@ -49,22 +52,22 @@ namespace Engine::Internal::Components
 			return gcnew Vector3(newX, newY, newZ);
 		}
 
-		static Vector3^ Add(Vector3^ left, Vector3^ right)
+		static Vector3^ add(Vector3^ left, Vector3^ right)
 		{
 			return gcnew Vector3(left->x + right->x, left->y + right->y, left->z + right->z);
 		}
 
-		static Vector3^ Sub(Vector3^ left, Vector3^ right)
+		static Vector3^ sub(Vector3^ left, Vector3^ right)
 		{
 			return gcnew Vector3(left->x - right->x, left->y - right->y, left->z - right->z);
 		}
 
-		static Vector3^ Multiply(Vector3^ left, Vector3^ right)
+		static Vector3^ multiply(Vector3^ left, Vector3^ right)
 		{
 			return gcnew Vector3(left->x * right->x, left->y * right->y, left->z * right->z);
 		}
 
-		static Vector3^ Divide(Vector3^ left, Vector3^ right)
+		static Vector3^ divide(Vector3^ left, Vector3^ right)
 		{
 			return gcnew Vector3(left->x / right->x, left->y / right->y, left->z / right->z);
 		}
