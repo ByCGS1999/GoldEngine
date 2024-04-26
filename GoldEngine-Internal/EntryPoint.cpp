@@ -74,7 +74,6 @@ DataPacks dataPack;
 #pragma region EDITOR ENGINE
 
 Model mod;
-::Camera3D c3d2;
 unsigned int ambient_color = 0x2B2B2BFF;
 float cameraSpeed = 1.25f;
 bool controlCamera = true;
@@ -193,7 +192,7 @@ private:
 			}
 		}
 
-		for each (String^ dir in Directory::GetDirectories(path))
+		for each (String ^ dir in Directory::GetDirectories(path))
 		{
 			createAssetEntries(dir);
 		}
@@ -235,7 +234,7 @@ private:
 				}
 				ImGui::Text("Texture ID: ");
 				ImGui::SameLine();
-				if(ImGui::InputInt("###TEXTUREID_SETTER", &texId, 1, 1))
+				if (ImGui::InputInt("###TEXTUREID_SETTER", &texId, 1, 1))
 				{
 					renderer->texture = (unsigned int)texId;
 				}
@@ -728,7 +727,7 @@ public:
 				File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
 			}
 
-			Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/"+ config->logPath->Substring(0, config->logPath->IndexOf('/')));
+			Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 		}
 
 		Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
@@ -845,6 +844,34 @@ public:
 				if (ImGui::MenuItem("Game View"))
 				{
 
+				}
+				ImGui::EndMenu();
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::BeginMenu("Object", true))
+			{
+				if (ImGui::BeginMenu("Cameras"))
+				{
+					if (ImGui::MenuItem("Camera3D"))
+					{
+						Engine::EngineObjects::Camera^ newCamera = gcnew Engine::EngineObjects::Camera3D("Camera",
+							gcnew Engine::Internal::Components::Transform(
+								Components::Vector3::create({ 0,0,0 }),
+								Components::Vector3::create({ 0,0,0 }),
+								0.0f,
+								Components::Vector3::create({ 1,1,1 }),
+								nullptr
+							));
+
+						scene->AddObjectToScene(newCamera);
+						scene->PushToRenderQueue(newCamera);
+					}
+					if (ImGui::MenuItem("Camera2D"))
+					{
+
+					}
 				}
 				ImGui::EndMenu();
 			}
@@ -1019,7 +1046,7 @@ public:
 								layer = "Select Layer";
 
 							std::vector<std::string> layers = LayerManager::getLayerNames();
-							
+
 							if (ImGui::BeginCombo("###CURR_LAYER", layer.c_str(), ImGuiComboFlags_None))
 							{
 								for (std::string tmp : layers)
@@ -1028,8 +1055,8 @@ public:
 
 									String^ managedType = gcnew String(layer.c_str());
 									String^ data = gcnew String(tmp.c_str());
-									
-									data = data->Substring(data->IndexOf("- ")+2);
+
+									data = data->Substring(data->IndexOf("- ") + 2);
 
 									if (data->CompareTo(managedType) == 0)
 									{
@@ -1039,7 +1066,7 @@ public:
 									if (ImGui::Selectable(tmp.c_str(), isSelected))
 									{
 										data = gcnew String(tmp.c_str());
-										
+
 										Console::WriteLine(data);
 
 										String^ buffer = data->Substring(0, data->IndexOf(" - "));
@@ -1737,7 +1764,9 @@ public:
 
 			ClearBackground(GetColor(scene->skyColor));
 
-			BeginMode3D(c3d2);
+			Engine::EngineObjects::Camera^ camera = (Engine::EngineObjects::Camera^)ObjectManager::singleton()->GetFirstObjectOfType(Engine::EngineObjects::Camera::typeid);
+
+			BeginMode3D((::Camera3D)*camera->getCamera());
 
 			int currentLayer = 0;
 			render(currentLayer);
@@ -1821,6 +1850,20 @@ private:
 		lightdm->SetParent(daemonParent);
 		scene->PushToRenderQueue(lightdm);
 		scene->AddObjectToScene(lightdm);
+
+
+		auto camera3D = gcnew Engine::EngineObjects::Camera3D("Camera",
+			gcnew Engine::Internal::Components::Transform(
+				Engine::Internal::Components::Vector3::create({ 0,0,0 }),
+				Engine::Internal::Components::Vector3::create({ 0,0,0 }),
+				0.0f,
+				Engine::Internal::Components::Vector3::create({ 1,1,1 }),
+				nullptr
+			)
+		);
+
+		scene->PushToRenderQueue(camera3D);
+		scene->AddObjectToScene(camera3D);
 	}
 
 public:
@@ -1885,11 +1928,6 @@ public:
 		//Directory::Delete("Data/tmp/", true);
 		//SceneManager::SaveSceneToFile(scene, passwd);
 		//packedData->WriteToFile("Assets1", passwd);
-		DataManager::HL_CreateCamera(0, cameraPosition, gcnew Engine::Internal::Components::Vector3(0, 0, 1), gcnew Engine::Internal::Components::Vector3(0, 1, 0), Engine::Internal::Components::C3D);
-
-		c3d2 = dataPack.GetCamera3D(0);
-		c3d2.projection = CAMERA_PERSPECTIVE;
-		c3d2.fovy = 60;
 
 		objectManager = gcnew Scripting::ObjectManager(scene);
 	}
@@ -1980,8 +2018,10 @@ public:
 
 	void Update() override
 	{
+		Engine::EngineObjects::Camera^ camera = (Engine::EngineObjects::Camera^)ObjectManager::singleton()->GetFirstObjectOfType(Engine::EngineObjects::Camera::typeid);
+
 		if (showCursor)
-			UpdateCamera(&c3d2, CAMERA_FREE);
+			UpdateCamera(camera->getCamera(), CAMERA_FREE);
 
 		if (fpsCap)
 		{
@@ -1993,7 +2033,7 @@ public:
 		}
 
 		Shader lightShader = dataPack.GetShader(1);
-		float cameraPos[3] = { c3d2.position.x, c3d2.position.y, c3d2.position.z };
+		float cameraPos[3] = { camera->transform->position->x, camera->transform->position->y, camera->transform->position->z };
 		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
 
 		dataPack.AddShader(1, lightShader);

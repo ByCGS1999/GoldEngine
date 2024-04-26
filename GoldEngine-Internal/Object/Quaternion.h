@@ -9,6 +9,7 @@ namespace Engine::Internal::Components
 		float x, y, z, w;
 
 	public:
+		[[JsonConstructorAttribute]]
 		Quaternion(float x, float y, float z, float w)
 		{
 			this->x = x;

@@ -227,6 +227,17 @@ namespace Engine::Scripting
 			}
 		}
 
+		Engine::Internal::Components::Object^ GetFirstObjectOfType(System::Type^ type)
+		{
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->GetValue<Engine::Internal::Components::Object^>()->GetType()->Equals(type))
+				{
+					return t->GetReference();
+				}
+			}
+		}
+
 		Engine::Internal::Components::Object^ GetFirstObjectOfType(Engine::Internal::Components::ObjectType type)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)

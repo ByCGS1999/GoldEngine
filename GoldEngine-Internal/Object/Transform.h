@@ -57,8 +57,8 @@ namespace Engine::Internal::Components
 			if (parent != nullptr)
 			{
 				this->parent = parent;
-				this->position = Vector3::Add(parent->position, this->localPosition);
-				this->rotation = Vector3::Add(parent->rotation, this->localRotation);
+				this->position = Vector3::add(parent->position, this->localPosition);
+				this->rotation = Vector3::add(parent->rotation, this->localRotation);
 			}
 			else
 			{

@@ -25,4 +25,5 @@
 #include "Objects/MeshRenderer.h"
 
 #include "Objects/Daemon.h"
+#include "Objects/Camera.h"
 #include "Objects/Camera3D.h"

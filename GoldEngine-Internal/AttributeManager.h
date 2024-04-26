@@ -14,9 +14,9 @@ namespace Engine::Scripting
 		}
 
 	private:
-		bool hasAttribute(String^ attribute) 
+		bool hasAttribute(String^ attribute)
 		{
-			for each (Attribute^ attrib in attributes)
+			for each (Attribute ^ attrib in attributes)
 			{
 				if (attrib->name == attribute)
 					return true;
@@ -38,6 +38,7 @@ namespace Engine::Scripting
 
 
 	public:
+
 		void addAttribute(Attribute^ attribute) 
 		{
 			setAttribute(attribute);

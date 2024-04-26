@@ -48,6 +48,9 @@ namespace Engine::EngineObjects
 		{
 			auto t = GetTransform();
 
+			if (!attributes->getAttribute("tint") || !attributes->getAttribute("model") || !attributes->getAttribute("material"))
+				return;
+
 			__int64 tint = attributes->getAttribute("tint")->getValue<__int64>();
 
 			Color c =

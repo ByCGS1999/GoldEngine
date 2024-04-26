@@ -459,6 +459,9 @@
     <ClInclude Include="Objects\Camera3D.h">
       <Filter>Archivos de origen\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Camera.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">

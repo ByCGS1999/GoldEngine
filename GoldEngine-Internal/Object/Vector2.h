@@ -9,6 +9,7 @@ namespace Engine::Internal::Components
 		float x, y;
 
 	public:
+		[[JsonConstructorAttribute]]
 		Vector2(float x, float y);
 
 		::Vector2 toNative();

@@ -2,19 +2,14 @@
 #include "Vector3.h"
 
 using namespace Engine::Internal;
+using namespace Newtonsoft::Json;
 
+[[JsonConstructorAttribute]]
 Components::Vector3::Vector3(float x, float y, float z)
 {
 	this->x = x;
 	this->y = y;
 	this->z = z;
-}
-
-Components::Vector3::Vector3(::Vector3 nativeVector)
-{
-	this->x = nativeVector.x;
-	this->y = nativeVector.y;
-	this->z = nativeVector.z;
 }
 
 void Components::Vector3::Set(float x, float y, float z)

@@ -9,8 +9,8 @@ namespace Engine::Internal::Components
 		float x, y, z;
 
 	public:
+		[[JsonConstructorAttribute]]
 		Vector3(float x, float y, float z);
-		Vector3(::Vector3 nativeVector);
 
 		Engine::Internal::Components::Vector2^ toVector2()
 		{
@@ -70,6 +70,11 @@ namespace Engine::Internal::Components
 		static Vector3^ divide(Vector3^ left, Vector3^ right)
 		{
 			return gcnew Vector3(left->x / right->x, left->y / right->y, left->z / right->z);
+		}
+
+		static Vector3^ create(::Vector3 vec)
+		{
+			return gcnew Vector3(vec.x, vec.y, vec.z);
 		}
 	};
 }
