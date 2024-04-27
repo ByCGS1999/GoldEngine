@@ -16,6 +16,9 @@
     <Filter Include="Internal">
       <UniqueIdentifier>{3e14fe80-ad9b-4678-b3aa-6e2d40275cc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{62bd4d0c-9351-438e-bae5-7076dcccc7cd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Typedefs.h">
@@ -23,8 +26,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Script.cpp">
+    <ClCompile Include="SampleBehaviour.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GoldEngine_SDK\GoldEngine.exe">
+      <Filter>SDK</Filter>
+    </None>
   </ItemGroup>
 </Project>

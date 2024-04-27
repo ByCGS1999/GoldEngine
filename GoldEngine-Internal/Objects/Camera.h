@@ -1,4 +1,5 @@
 #include "../Object/LayerManager.h"
+#include <memory>
 
 using namespace Engine::Internal::Components;
 
@@ -9,38 +10,44 @@ namespace Engine::EngineObjects
 		public class NativeCamera
 		{
 		private:
-			::Camera camera;
+			::Camera* camera;
+
+		public:
+			::Camera* getCameraPtr()
+			{
+				return this->camera;
+			}
+
+			::Camera get()
+			{
+				return *this->camera;
+			}
 
 		public:
 			NativeCamera(CameraProjection projection)
 			{
-				printf("Creating camera");
-				this->camera = {};
-				//this->camera.projection = projection;
+				printf("Creating camera\n");
+				this->camera = new ::Camera();
+				this->camera->projection = projection;
+				this->camera->fovy = 90;
+				this->camera->position = { 0,0,0 };
+				this->camera->target = { 0, 0, 1 };
+				this->camera->up = { 0, 1, 0 };
 			}
 
 		public:
 			void setCameraPosition(::Vector3 nativeVector)
 			{
-				camera.position = nativeVector;
+				camera->position = nativeVector;
 			}
 
-		public:
-			::Camera* getCameraPtr()
-			{
-				return &this->camera;
-			}
-
-			::Camera getCamera()
-			{
-				return this->camera;
-			}
 		};
 	}
 
 	public ref class Camera : public Engine::EngineObjects::Script
 	{
 	public:
+		[Newtonsoft::Json::JsonIgnoreAttribute]
 		Native::NativeCamera* nativeCamera;
 		CameraProjection cameraProjection;
 
@@ -49,14 +56,13 @@ namespace Engine::EngineObjects
 		{
 			this->layerMask = LayerManager::GetLayerFromId(0);
 			cameraProjection = projection;
-			//nativeCamera = new Native::NativeCamera(cameraProjection);
-			
+
+			nativeCamera = new Native::NativeCamera(cameraProjection);
 		}
 
 		void Update() override
 		{
-			nativeCamera->getCameraPtr()->position = transform->position->toNative();
-			UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
+			//UpdateCamera(nativeCamera->getCameraPtr(), CAMERA_FREE);
 		}
 
 		void DrawGizmo() override
@@ -66,8 +72,7 @@ namespace Engine::EngineObjects
 			DrawLine3D(transform->position->toNative(), fwd->toNative(), RED);
 		}
 
-	public:
-		::Camera* getCamera()
+		::Camera* get()
 		{
 			return nativeCamera->getCameraPtr();
 		}

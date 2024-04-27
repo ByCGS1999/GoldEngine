@@ -3,19 +3,10 @@
     "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs"
   },
   "models": {
-    "0": "./Data/Engine\\Models\\Skybox_sphere.glb",
-    "2": "./Data/Engine\\Models\\Skybox_cube.glb",
-    "3": "./Data/Engine\\Models\\Error.obj",
-    "5": "./Data/Models\\deer1.glb",
-    "6": "./Data/Models/deer1.glb",
-    "7": "./Data/Engine/Models/Skybox_sphere.glb"
+    "0": "./Data/Engine/Models/Skybox_cube.glb"
   },
-  "materials": {
-    "0": 0,
-    "1": 1
-  },
+  "materials": {},
   "textures2d": {
-    "2": "./Data/Game/Models/Spaceship.png",
     "256": "./Data/EditorAssets/Icons/Model.png",
     "257": "Data/EditorAssets/Icons/Run.png",
     "258": "Data/EditorAssets/Icons/Stop.png",

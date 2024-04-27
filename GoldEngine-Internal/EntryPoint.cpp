@@ -872,6 +872,8 @@ public:
 					{
 
 					}
+
+					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
 			}
@@ -1764,11 +1766,14 @@ public:
 
 			ClearBackground(GetColor(scene->skyColor));
 
-			Engine::EngineObjects::Camera^ camera = (Engine::EngineObjects::Camera^)ObjectManager::singleton()->GetFirstObjectOfType(Engine::EngineObjects::Camera::typeid);
+			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
 
-			BeginMode3D((::Camera3D)*camera->getCamera());
+			if (camera == nullptr)
+				return;
 
-			int currentLayer = 0;
+			BeginMode3D((::Camera3D)*camera->get());
+
+			int currentLayer = 1;
 			render(currentLayer);
 
 			EndMode3D();
@@ -1852,14 +1857,15 @@ private:
 		scene->AddObjectToScene(lightdm);
 
 
-		auto camera3D = gcnew Engine::EngineObjects::Camera3D("Camera",
+		auto camera3D = gcnew Engine::EngineObjects::Camera("EditorCamera",
 			gcnew Engine::Internal::Components::Transform(
 				Engine::Internal::Components::Vector3::create({ 0,0,0 }),
 				Engine::Internal::Components::Vector3::create({ 0,0,0 }),
 				0.0f,
 				Engine::Internal::Components::Vector3::create({ 1,1,1 }),
 				nullptr
-			)
+			),
+			CAMERA_PERSPECTIVE
 		);
 
 		scene->PushToRenderQueue(camera3D);
@@ -2018,10 +2024,13 @@ public:
 
 	void Update() override
 	{
-		Engine::EngineObjects::Camera^ camera = (Engine::EngineObjects::Camera^)ObjectManager::singleton()->GetFirstObjectOfType(Engine::EngineObjects::Camera::typeid);
+		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
+
+		if (camera == nullptr)
+			return;
 
 		if (showCursor)
-			UpdateCamera(camera->getCamera(), CAMERA_FREE);
+			UpdateCamera(camera->get(), CAMERA_FREE);
 
 		if (fpsCap)
 		{

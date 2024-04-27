@@ -122,12 +122,15 @@
     <ClInclude Include="Typedefs.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GoldEngine-Internal\GoldEngine-Internal.vcxproj">
-      <Project>{564d6646-9c1f-4294-a506-05ff2adf9a18}</Project>
-    </ProjectReference>
+    <ClCompile Include="SampleBehaviour.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Script.cpp" />
+    <None Include="GoldEngine_SDK\GoldEngine.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="GoldEngine-Internal">
+      <HintPath>GoldEngine_SDK\GoldEngine.exe</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

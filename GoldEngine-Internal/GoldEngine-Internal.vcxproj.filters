@@ -9,20 +9,11 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="raylib">
-      <UniqueIdentifier>{92919462-bb7f-4617-8aea-0ec992ea0d3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Engine">
       <UniqueIdentifier>{567555c0-9e92-49a1-994e-c8bdb8b75e4a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="raylib\lib">
-      <UniqueIdentifier>{89a90619-1f33-47f4-9e8a-be9ed836378f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Engine\Marshaller">
       <UniqueIdentifier>{84639636-2dd0-4fda-95a1-d80dc406fbbe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include">
-      <UniqueIdentifier>{a58c4469-bad3-4eed-aee2-c8b1af098c30}</UniqueIdentifier>
     </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{e2134739-ab52-4e6d-8f9a-b334b34c6107}</UniqueIdentifier>
@@ -169,18 +160,6 @@
     <Filter Include="Archivos de origen\Engine\Utils">
       <UniqueIdentifier>{1394687c-b10e-48e6-8430-d5caf21711a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="raylib\lib\x64">
-      <UniqueIdentifier>{65fad7e6-8fdc-4113-8df9-55ad53bf4b95}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\lib\x86">
-      <UniqueIdentifier>{246b9c9d-821b-4f37-9b35-17cf46159135}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\x64">
-      <UniqueIdentifier>{213353d8-cff4-4605-afc8-7829ffb42860}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\x86">
-      <UniqueIdentifier>{a839e89b-dadc-4c70-9bc2-35bd88260c49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Archivos de origen\Engine\Configuration">
       <UniqueIdentifier>{74ef52fb-c3dd-415f-90d8-5990dff4cd5f}</UniqueIdentifier>
     </Filter>
@@ -201,6 +180,30 @@
     </Filter>
     <Filter Include="Archivos de origen\Engine\EngineObjects\Camera">
       <UniqueIdentifier>{391a5c0d-ce77-41cc-a18f-35618cbdd95c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib">
+      <UniqueIdentifier>{92919462-bb7f-4617-8aea-0ec992ea0d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\lib">
+      <UniqueIdentifier>{89a90619-1f33-47f4-9e8a-be9ed836378f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\lib\x64">
+      <UniqueIdentifier>{65fad7e6-8fdc-4113-8df9-55ad53bf4b95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\lib\x86">
+      <UniqueIdentifier>{246b9c9d-821b-4f37-9b35-17cf46159135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include">
+      <UniqueIdentifier>{a58c4469-bad3-4eed-aee2-c8b1af098c30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\x64">
+      <UniqueIdentifier>{213353d8-cff4-4605-afc8-7829ffb42860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\x86">
+      <UniqueIdentifier>{a839e89b-dadc-4c70-9bc2-35bd88260c49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\EditorAssets\Templates">
+      <UniqueIdentifier>{784d2fb2-8d10-45fe-a804-30d43454375e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

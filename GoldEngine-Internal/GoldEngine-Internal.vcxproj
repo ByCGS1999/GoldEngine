@@ -365,9 +365,15 @@
   <ItemGroup>
     <Reference Include="MoonSharp.Interpreter">
       <HintPath>..\netasm\MoonSharp.Interpreter.dll</HintPath>
+      <Private>true</Private>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\netasm\json.dll</HintPath>
+      <HintPath>..\netasm\Newtonsoft.Json.dll</HintPath>
+      <Private>true</Private>
+      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -384,6 +390,5 @@
     </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

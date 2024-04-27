@@ -224,7 +224,7 @@ namespace Engine::Management::MiddleLevel
 		}
 
 	public:
-		template <class type>
+		generic <class type>
 		type GetValue()
 		{
 			return (type)reference;

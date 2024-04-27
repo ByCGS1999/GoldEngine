@@ -36,6 +36,8 @@ namespace Engine::EngineObjects
 				virtualMachine->RegisterGlobal("attributes", attributes);
 				virtualMachine->RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
 				virtualMachine->RegisterGlobal("DataManager", Engine::Internal::DataManager::typeid);
+				virtualMachine->RegisterGlobal("ObjectManager", Engine::Scripting::ObjectManager::singleton());
+				virtualMachine->RegisterGlobal("Input", Engine::Scripting::InputManager::typeid);
 
 				virtualMachine->RegisterScript(luaSource);
 			}

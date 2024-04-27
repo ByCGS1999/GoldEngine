@@ -17,6 +17,7 @@ namespace Engine::Scripting
 	/// Middle level class, allows for finding objects into the scene, and doing operations with them.
 	/// Getting parents, etc.
 	/// </summary>
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class ObjectManager
 	{
 		// singleton
@@ -227,11 +228,29 @@ namespace Engine::Scripting
 			}
 		}
 
+		generic <class T>
+		T GetFirstObjectOfType()
+		{
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t == nullptr)
+					continue;
+
+				if (t->GetReference()->GetType()->Equals(T::typeid) || t->GetReference()->GetType()->Equals(T::typeid->BaseType))
+				{
+					return t->GetReference()->ToObjectType<T>();
+				}
+			}
+		}
+
 		Engine::Internal::Components::Object^ GetFirstObjectOfType(System::Type^ type)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
-				if (t->GetValue<Engine::Internal::Components::Object^>()->GetType()->Equals(type))
+				if (t == nullptr)
+					continue;
+
+				if (t->GetReference()->GetType()->Equals(type) || t->GetReference()->GetType()->Equals(type->BaseType))
 				{
 					return t->GetReference();
 				}
@@ -242,6 +261,9 @@ namespace Engine::Scripting
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
+				if (t == nullptr)
+					continue;
+
 				if (t->objectType == type)
 				{
 					return t->GetReference();

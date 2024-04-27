@@ -1,0 +1,48 @@
+{
+  "sceneName": "Level0",
+  "assetPacks": [
+    "Data/engineassets.gold"
+  ],
+  "sceneRequirements": "Assets_Level0",
+  "skyColor": 255,
+  "scene_assemblies": [],
+  "preload_scripts": [],
+  "sceneObjects": [
+    {
+      "objectType": 1,
+      "deserializedData": "{\"name\":\"workspace\",\"type\":0,\"transform\":{\"uid\":\"7177aba1-1ff2-42f3-93ac-8406ff6aaf9f\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    },
+    {
+      "objectType": 1,
+      "deserializedData": "{\"name\":\"editor only\",\"type\":0,\"transform\":{\"uid\":\"d2824c54-a7c1-4d14-a8b2-b40f3cab0a96\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    },
+    {
+      "objectType": 1,
+      "deserializedData": "{\"name\":\"gui\",\"type\":0,\"transform\":{\"uid\":\"e66ac8f6-f6bc-4a43-a69f-cc08b25d5879\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    },
+    {
+      "objectType": 1,
+      "deserializedData": "{\"name\":\"daemons\",\"type\":0,\"transform\":{\"uid\":\"8a549bd0-ecfa-4609-b340-98addb6a255c\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    },
+    {
+      "objectType": 3,
+      "deserializedData": "{\"model\":0,\"shader\":1,\"texture\":0,\"tint\":4294967295,\"name\":\"Skybox\",\"type\":3,\"transform\":{\"uid\":\"2272cc96-afe3-4ec3-b67f-be565b43c070\",\"parent\":{\"uid\":\"7177aba1-1ff2-42f3-93ac-8406ff6aaf9f\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":-15.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":5.0,\"y\":5.0,\"z\":5.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    },
+    {
+      "objectType": 9,
+      "deserializedData": "{\"cameraProjection\":0,\"assemblyReference\":\"Engine.EngineObjects.Camera\",\"attributes\":{\"attributes\":[]},\"name\":\"EditorCamera\",\"type\":9,\"transform\":{\"uid\":\"524d3355-619c-4126-af70-d43040e84ad1\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    },
+    {
+      "objectType": 9,
+      "deserializedData": "{\"luaFilePath\":\"./Data/Lua/bin/src.bin\",\"assemblyReference\":\"Engine.EngineObjects.LuaScript\",\"attributes\":{\"attributes\":[]},\"name\":\"LuaScript\",\"type\":9,\"transform\":{\"uid\":\"19a4c585-ccf9-47b0-9ffe-8866e900d27d\",\"parent\":{\"uid\":\"7177aba1-1ff2-42f3-93ac-8406ff6aaf9f\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    },
+    {
+      "objectType": 6,
+      "deserializedData": "{\"vs_path\":\"Data/Engine/Shaders/rPBR/pbr.vert\",\"fs_path\":\"Data/Engine/Shaders/rPBR/pbr.frag\",\"ambientColor\":0,\"name\":\"lighting\",\"type\":6,\"transform\":{\"uid\":\"ee675cf2-8f35-4aa1-b0f1-8e38b05c0f0f\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    },
+    {
+      "objectType": 11,
+      "deserializedData": "{\"assemblyReference\":\"Engine.EngineObjects.Daemons.LightDaemon\",\"name\":\"lightdm\",\"type\":11,\"transform\":{\"uid\":\"64298ace-1e71-47e3-bfc7-974b6fa5500e\",\"parent\":{\"uid\":\"8a549bd0-ecfa-4609-b340-98addb6a255c\",\"parent\":null,\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotationValue\":0.0,\"scale\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"localRotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"forward\":{\"x\":0.0,\"y\":0.0,\"z\":1.0},\"top\":{\"x\":0.0,\"y\":1.0,\"z\":0.0},\"right\":{\"x\":1.0,\"y\":0.0,\"z\":0.0},\"backward\":{\"x\":0.0,\"y\":0.0,\"z\":-1.0},\"bottom\":{\"x\":0.0,\"y\":-1.0,\"z\":0.0},\"left\":{\"x\":-1.0,\"y\":0.0,\"z\":0.0}},\"viewSpace\":1,\"layerMask\":{\"layerMask\":2,\"layerName\":\"PostFX\"},\"tag\":\"\"}"
+    }
+  ]
+}
