@@ -13,6 +13,10 @@ function Update()
 		return;
 	end
 
+	if (skybox == nil) then
+		return;
+	end
+
 	if(skybox ~= nil) then
 		if(Input.IsKeyDown(65)) then
 			skybox.transform.position.x = skybox.transform.position.x + 5;
@@ -27,3 +31,4 @@ function Update()
 		end
 	end
 end
+

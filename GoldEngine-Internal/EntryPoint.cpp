@@ -781,7 +781,7 @@ public:
 
 				ImGui::SeparatorText("Project");
 
-				if (ImGui::MenuItem("Generate .sln project"))
+				if (ImGui::MenuItem("Generate project"))
 				{
 
 				}

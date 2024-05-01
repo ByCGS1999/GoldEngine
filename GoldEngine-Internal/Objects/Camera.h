@@ -62,7 +62,9 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
-			//UpdateCamera(nativeCamera->getCameraPtr(), CAMERA_FREE);
+			#if (PRODUCTION_BUILD)
+				UpdateCamera(nativeCamera->getCameraPtr(), CAMERA_FREE);
+			#endif
 		}
 
 		void DrawGizmo() override
