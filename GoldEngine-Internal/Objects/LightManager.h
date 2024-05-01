@@ -1,5 +1,7 @@
 #pragma once
 #include <list>
+#include "../Object/Vector3.h"
+#include "../Object/Transform.h"
 
 namespace Engine::EngineObjects
 {
@@ -42,11 +44,11 @@ namespace Engine::EngineObjects
 		unsigned int lightColor;
 		float intensity;
 		unsigned int shaderId;
-		Engine::Internal::Components::Vector3^ target;
+		Engine::Components::Vector3^ target;
 		rPBR::LightType lightType;
 		bool enabled;
 
-		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned int lightColor, int lightType, Engine::Internal::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource, this->tag)
+		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned int lightColor, int lightType, Engine::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource, this->tag)
 		{
 			nativeLightSource = new Native::NativeLightSource();
 			this->lightType = (rPBR::LightType)lightType;
@@ -68,7 +70,7 @@ namespace Engine::EngineObjects
 			enabled = true;
 		}
 
-		void Init(unsigned int lightColor, float intensity, Engine::Internal::Components::Vector3^ target, int lightType, unsigned int shaderId) override
+		void Init(unsigned int lightColor, float intensity, Engine::Components::Vector3^ target, int lightType, unsigned int shaderId) override
 		{
 			nativeLightSource = new Native::NativeLightSource();
 			this->lightColor = lightColor;
@@ -76,7 +78,7 @@ namespace Engine::EngineObjects
 			this->target = target;
 			this->intensity = intensity;
 			nativeLightSource->SetShader(DataPacks::singleton().GetShader(shaderId));
-			Color c =
+			::Color c =
 			{
 				lightColor >> 0,
 				lightColor >> 8,
@@ -119,7 +121,7 @@ namespace Engine::EngineObjects
 
 		void DrawGizmo() override
 		{
-			Color c =
+			::Color c =
 			{
 				lightColor >> 0,
 				lightColor >> 8,
@@ -221,7 +223,7 @@ namespace Engine::EngineObjects
 			shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
 
 			float ambientIntensity = 0.02f;
-			Color color = { 
+			::Color color = { 
 				ambientColor >> 0,
 				ambientColor >> 8, 
 				ambientColor >> 16,

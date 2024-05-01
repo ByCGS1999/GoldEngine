@@ -121,7 +121,7 @@ namespace Engine::Internal
 
 		}
 
-		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ initialforward, Engine::Internal::Components::CameraType cameraType)
+		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector3^ initialPosition, Engine::Components::Vector3^ initialforward, Engine::Internal::Components::CameraType cameraType)
 		{
 			::Vector3 rlib_position;
 			::Vector3 rlib_forward;
@@ -140,7 +140,7 @@ namespace Engine::Internal
 			DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
 		}
 
-		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::Vector3^ forward, Engine::Internal::Components::Vector3^ up, Engine::Internal::Components::CameraType cameraType)
+		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector3^ initialPosition, Engine::Components::Vector3^ forward, Engine::Components::Vector3^ up, Engine::Internal::Components::CameraType cameraType)
 		{
 			::Vector3 rlib_position;
 			::Vector3 rlib_forward;
@@ -165,7 +165,7 @@ namespace Engine::Internal
 			DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
 		}
 
-		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector2^ position, Engine::Internal::Components::CameraType cameraType)
+		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector2^ position, Engine::Internal::Components::CameraType cameraType)
 		{
 			::Vector2 rlib_position;
 			Camera2D camera;
@@ -175,7 +175,7 @@ namespace Engine::Internal
 
 			DataPacks::singleton().AddCamera(cameraId, camera, cameraType);
 		}
-		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Internal::Components::Vector3^ initialPosition, Engine::Internal::Components::CameraType cameraType)
+		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector3^ initialPosition, Engine::Internal::Components::CameraType cameraType)
 		{
 			::Vector3 rlib_position;
 			Camera3D camera;
@@ -199,7 +199,7 @@ namespace Engine::Internal
 			DrawGrid(slices, spaces);
 		}
 
-		inline static void HL_DrawCube(Engine::Internal::Components::Vector3^ position, Engine::Internal::Components::Vector3^ scale, unsigned int color) {
+		inline static void HL_DrawCube(Engine::Components::Vector3^ position, Engine::Components::Vector3^ scale, unsigned int color) {
 			::Vector3 rlib_v3;
 			rlib_v3.x = position->x;
 			rlib_v3.y = position->y;
@@ -208,7 +208,7 @@ namespace Engine::Internal
 			DrawCube(rlib_v3, scale->x, scale->y, scale->z, GetColor(color));
 		}
 
-		inline static void HL_DrawModel(unsigned int modelId, Engine::Internal::Components::Vector3^ position, float scale, unsigned int tint)
+		inline static void HL_DrawModel(unsigned int modelId, Engine::Components::Vector3^ position, float scale, unsigned int tint)
 		{
 			Model m = DataPacks::singleton().GetModel(modelId);
 			::Vector3 convertedVector;

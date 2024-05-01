@@ -5,95 +5,95 @@ using namespace Engine::Internal;
 using namespace Newtonsoft::Json;
 
 [[JsonConstructorAttribute]]
-Components::Vector3::Vector3(float x, float y, float z)
+Engine::Components::Vector3::Vector3(float x, float y, float z)
 {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 }
 
-void Components::Vector3::Set(float x, float y, float z)
+void Engine::Components::Vector3::Set(float x, float y, float z)
 {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 }
 
-void Components::Vector3::Set(float* v)
+void Engine::Components::Vector3::Set(float* v)
 {
 	this->x = v[0];
 	this->y = v[1];
 	this->z = v[2];
 }
 
-Color Components::Vector3::toColor()
+Color Engine::Components::Vector3::toColor()
 {
 	return GetColor(x + y + z);
 }
 
-::Vector3 Components::Vector3::toNative()
+::Vector3 Engine::Components::Vector3::toNative()
 {
 	return { x,y,z };
 }
 
 
-void Components::Vector3::add(float x, float y, float z)
+void Engine::Components::Vector3::add(float x, float y, float z)
 {
 	this->x += x;
 	this->y += y;
 	this->z += z;
 }
 
-void Components::Vector3::add(Vector3^ origin)
+void Engine::Components::Vector3::add(Vector3^ origin)
 {
 	this->x += origin->x;
 	this->y += origin->y;
 	this->z += origin->z;
 }
 
-void Components::Vector3::multiply(Vector3^ origin)
+void Engine::Components::Vector3::multiply(Vector3^ origin)
 {
 	this->x *= origin->x;
 	this->y *= origin->y;
 	this->z *= origin->z;
 }
 
-void Components::Vector3::multiply(float x, float y, float z)
+void Engine::Components::Vector3::multiply(float x, float y, float z)
 {
 	this->x *= x;
 	this->y *= y;
 	this->z *= z;
 }
 
-void Components::Vector3::divide(Vector3^ origin)
+void Engine::Components::Vector3::divide(Vector3^ origin)
 {
 	this->x /= origin->x;
 	this->y /= origin->y;
 	this->z /= origin->z;
 }
 
-void Components::Vector3::divide(float x, float y, float z)
+void Engine::Components::Vector3::divide(float x, float y, float z)
 {
 	this->x /= x;
 	this->y /= y;
 	this->z /= z;
 }
 
-void Components::Vector3::sub(float x, float y, float z)
+void Engine::Components::Vector3::sub(float x, float y, float z)
 {
 	this->x -= x;
 	this->y -= y;
 	this->z -= z;
 }
 
-void Components::Vector3::sub(Vector3^ origin)
+void Engine::Components::Vector3::sub(Vector3^ origin)
 {
 	this->x -= origin->x;
 	this->y -= origin->y;
 	this->z -= origin->z;
 }
 
-void Components::Vector3::copy(const Vector3^ origin)
+void Engine::Components::Vector3::copy(const Vector3^ origin)
 {
 	this->x = origin->x;
 	this->y = origin->y;

@@ -5,6 +5,10 @@
 
 #include "VoxelRenderer.h"
 
+// Structures \\
+
+#include "Object/Color.h"
+
 // INCLUDE ENGINE CLASSES \\
 
 #include "SceneFormat.h"

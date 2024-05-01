@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Engine::Internal::Components
+namespace Engine::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Quaternion
@@ -19,6 +19,6 @@ namespace Engine::Internal::Components
 		}
 
 	public:
-		Engine::Internal::Components::Vector3^ toEuler();
+		Engine::Components::Vector3^ toEuler();
 	};
 }

@@ -1,24 +1,25 @@
 #pragma once
 
 using namespace System;
+using namespace Engine::Components;
 
-namespace Engine::Internal::Components
+namespace Engine::Scripting
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 		public ref class LayerManager abstract
 	{
 	private:
-		static System::Collections::Generic::List<Engine::Internal::Components::Layer^>^ layers;
+		static System::Collections::Generic::List<Layer^>^ layers;
 
 	public:
 		static void RegisterDefaultLayers()
 		{
 			layers = gcnew System::Collections::Generic::List<Layer^>();
 
-			AddLayer(gcnew Engine::Internal::Components::Layer(0, "EngineRoot"));
-			AddLayer(gcnew Engine::Internal::Components::Layer(1, "Geometry"));
-			AddLayer(gcnew Engine::Internal::Components::Layer(2, "PostFX"));
-			AddLayer(gcnew Engine::Internal::Components::Layer(3, "Transparent"));
+			AddLayer(gcnew Layer(0, "EngineRoot"));
+			AddLayer(gcnew Layer(1, "Geometry"));
+			AddLayer(gcnew Layer(2, "PostFX"));
+			AddLayer(gcnew Layer(3, "Transparent"));
 		}
 
 	public:
@@ -47,9 +48,9 @@ namespace Engine::Internal::Components
 		}
 
 	public:
-		static Engine::Internal::Components::Layer^ GetLayerFromId(int id)
+		static Layer^ GetLayerFromId(int id)
 		{
-			for each (Engine::Internal::Components::Layer ^ l in layers)
+			for each (Layer ^ l in layers)
 			{
 				if (l->layerMask == id)
 				{
@@ -61,9 +62,9 @@ namespace Engine::Internal::Components
 		}
 
 	public:
-		static Engine::Internal::Components::Layer^ GetLayerFromName(String^ id)
+		static Layer^ GetLayerFromName(String^ id)
 		{
-			for each (Engine::Internal::Components::Layer ^ l in layers)
+			for each (Layer ^ l in layers)
 			{
 				if (l->layerName->Equals(id) || l->layerName->CompareTo(id) <= 0 || l->layerName == id)
 				{
@@ -76,7 +77,7 @@ namespace Engine::Internal::Components
 
 
 	public:
-		static void AddLayer(Engine::Internal::Components::Layer^ layer)
+		static void AddLayer(Layer^ layer)
 		{
 			layers->Add(layer);
 		}

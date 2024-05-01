@@ -8,6 +8,7 @@ using namespace System::Collections::Generic;
 #define printError Engine::Scripting::Logging::LogError
 #define printWarning Engine::Scripting::Logging::LogWarning
 #define printDebug Engine::Scripting::Logging::LogDebug
+#define print Engine::Scripting::Logging::LogCustom
 
 namespace Engine::Scripting
 {
@@ -39,6 +40,23 @@ namespace Engine::Scripting
 			{
 				TraceLog(LOG_INFO, CastStringToNative(message).c_str());
 				log->Add(gcnew Engine::Scripting::Log(LOG_INFO, "[INFO] " + message));
+			}
+			else
+			{
+				Log(message); // recurse call
+			}
+
+			l.release();
+		}
+
+		static void LogCustom(String^ header, String^ message)
+		{
+			msclr::lock l(log);
+
+			if (l.try_acquire(1000))
+			{
+				TraceLog(LOG_INFO, CastStringToNative(message).c_str());
+				log->Add(gcnew Engine::Scripting::Log(LOG_INFO, header + " " + message));
 			}
 			else
 			{

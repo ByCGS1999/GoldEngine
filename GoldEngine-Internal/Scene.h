@@ -225,10 +225,10 @@ namespace Engine::Management
 		{
 			return gcnew Engine::Internal::Components::Object(datamodel,
 				gcnew Engine::Internal::Components::Transform(
-					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
 					0.0f,
-					gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+					gcnew Engine::Components::Vector3(1, 1, 1),
 					nullptr
 				),
 				Engine::Internal::Components::ObjectType::Datamodel, "");

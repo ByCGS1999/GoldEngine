@@ -8,13 +8,37 @@ namespace Engine::Scripting
 		String^ name;
 		System::Object^ userData;
 		System::String^ type;
+		System::Type^ userDataType;
 
 	public:
 		Attribute(String^ str, System::Object^ data, String^ dataType)
 		{
+			if (data == nullptr)
+			{
+				printError("Attribute: " + str + " Value is a null pointer.");
+				delete this; // clean memory, fuck off
+				return;
+			}
+
 			this->name = str;
 			userData = data;
 			type = dataType;
+			userDataType = data->GetType();
+		}
+		[Newtonsoft::Json::JsonConstructorAttribute]
+		Attribute(String^ str, System::Object^ data, String^ dataType, System::Type^ dT)
+		{
+			if (data == nullptr)
+			{
+				printError("Attribute: " + str + " Value is a null pointer.");
+				delete this; // clean memory, fuck off
+				return;
+			}
+
+			this->name = str;
+			userData = data;
+			type = dataType;
+			userDataType = dT;
 		}
 
 	public:
@@ -51,6 +75,29 @@ namespace Engine::Scripting
 			return Convert::ChangeType(userData, targetType);
 		}
 
+		System::Type^ getValueType()
+		{
+			return this->userDataType;
+		}
+
+	public:
+		System::Object^ DeserializeAttribute()
+		{
+			try
+			{
+				Newtonsoft::Json::Linq::JObject^ sonObject = (Newtonsoft::Json::Linq::JObject^)userData;
+
+				return sonObject->ToObject(userDataType);
+			}
+			catch (Exception^ ex)
+			{
+				print("[ENGINE EXCEPTION]", ex->Message);
+
+				return userData;
+			}
+		}
+
+
 
 	public:
 		static Attribute^ create(String^ name, System::Object^ data, Type^ type)
@@ -68,7 +115,7 @@ namespace Engine::Scripting
 			if (data == nullptr)
 				return nullptr;
 
-			return gcnew Attribute(name, data, data->GetType()->Name);
+			return gcnew Attribute(name, data, data->GetType()->Name, data->GetType());
 		}
 
 		static Attribute^ New(String^ name, System::Object^ data, Type^ type)
@@ -76,7 +123,7 @@ namespace Engine::Scripting
 			if (data == nullptr)
 				return nullptr;
 
-			return gcnew Attribute(name, data, type->Name);
+			return gcnew Attribute(name, data, type->Name, type);
 		}
 	};
 }

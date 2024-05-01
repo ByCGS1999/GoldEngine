@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Engine::Internal::Components
+namespace Engine::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Vector3
@@ -12,9 +12,9 @@ namespace Engine::Internal::Components
 		[[JsonConstructorAttribute]]
 		Vector3(float x, float y, float z);
 
-		Engine::Internal::Components::Vector2^ toVector2()
+		Engine::Components::Vector2^ toVector2()
 		{
-			return gcnew Engine::Internal::Components::Vector2(x, y);
+			return gcnew Engine::Components::Vector2(x, y);
 		}
 
 		void Set(float x, float y, float z);

@@ -51,7 +51,7 @@ namespace Engine::EngineObjects
 		{
 			auto t = GetTransform();
 
-			Color c =
+			::Color c =
 			{
 				tint >> 0,
 				tint >> 8,

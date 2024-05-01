@@ -3,7 +3,8 @@
     "0": "Data/Engine/Shaders/base.vs:^:Data/Engine/Shaders/base.fs"
   },
   "models": {
-    "0": "./Data/Engine/Models/Skybox_cube.glb"
+    "0": "./Data/Engine/Models/Skybox_cube.glb",
+    "1": "./Data/Models/deer1.glb"
   },
   "materials": {},
   "textures2d": {

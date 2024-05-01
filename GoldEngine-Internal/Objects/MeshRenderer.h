@@ -7,19 +7,18 @@ namespace Engine::EngineObjects
 	public ref class MeshRenderer : public Engine::EngineObjects::Script
 	{
 	public:
-
 		MeshRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, List<unsigned int>^ mats, unsigned int tint) : Script(name, trans)
 		{
-			attributes->addAttribute(Engine::Scripting::Attribute::New("model", model, __int64::typeid));
-			attributes->addAttribute(Engine::Scripting::Attribute::New("materials", mats, List<__int64>::typeid));
-			attributes->addAttribute(Engine::Scripting::Attribute::New("tint", tint, __int64::typeid));
+			attributes->addAttribute(Engine::Scripting::Attribute::New("model", model, UInt32::typeid));
+			attributes->addAttribute(Engine::Scripting::Attribute::New("materials", mats, List<UInt32>::typeid));
+			attributes->addAttribute(Engine::Scripting::Attribute::New("tint", gcnew Engine::Components::Color(tint), Engine::Components::Color::typeid));
 		}
 
 		void Init(unsigned int model, List<unsigned int>^ mats, unsigned int tint)
 		{
-			attributes->getAttribute("model")->setValue(model);
-			attributes->getAttribute("materials")->setValue(model);
-			attributes->getAttribute("tint")->setValue(model);
+			attributes->getAttribute("model")->setValue(model, false);
+			attributes->getAttribute("materials")->setValue(mats, false);
+			attributes->getAttribute("tint")->setValue(gcnew Engine::Components::Color(tint), false);
 
 			auto modelInst = Engine::Assets::Storage::DataPacks::singleton().GetModel(model);
 
@@ -51,17 +50,8 @@ namespace Engine::EngineObjects
 			if (!attributes->getAttribute("tint") || !attributes->getAttribute("model") || !attributes->getAttribute("material"))
 				return;
 
-			__int64 tint = attributes->getAttribute("tint")->getValue<__int64>();
 
-			Color c =
-			{
-				tint >> 0,
-				tint >> 8,
-				tint >> 16,
-				tint >> 24
-			};
-
-			auto m = DataPacks::singleton().GetModel(attributes->getAttribute("model")->getValue<__int64>());
+			auto m = DataPacks::singleton().GetModel(attributes->getAttribute("model")->getValue<UInt32>());
 			auto jarray = attributes->getAttribute("materials")->getValue<Newtonsoft::Json::Linq::JArray^>();
 			auto materials = jarray->ToObject<List<unsigned int>^>();
 			
@@ -79,6 +69,14 @@ namespace Engine::EngineObjects
 				m.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
 				*/
 			}
+
+			::Color c =
+			{
+				255,
+				0,
+				0,
+				255
+			};
 
 			DrawModelEx(
 				m,

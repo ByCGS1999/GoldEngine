@@ -4,13 +4,13 @@
 
 using namespace Engine::Internal;
 
-Components::Vector2::Vector2(float x, float y)
+Engine::Components::Vector2::Vector2(float x, float y)
 {
 	this->x = x;
 	this->y = y;
 }
 
-Vector2 Components::Vector2::toNative()
+::Vector2 Engine::Components::Vector2::toNative()
 {
 	return { x, y };
 }

@@ -26,9 +26,9 @@ namespace Engine::Scripting
 			return ::IsKeyPressedRepeat(key_id);
 		}
 
-		static Engine::Internal::Components::Vector2^ GetMousePosition()
+		static Engine::Components::Vector2^ GetMousePosition()
 		{
-			return gcnew Engine::Internal::Components::Vector2(GetMousePosition()->x, GetMousePosition()->y);
+			return gcnew Engine::Components::Vector2(GetMousePosition()->x, GetMousePosition()->y);
 		}
 
 		static bool MouseButton1Up()

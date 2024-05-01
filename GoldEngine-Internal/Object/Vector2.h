@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Engine::Internal::Components
+namespace Engine::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 		public ref class Vector2

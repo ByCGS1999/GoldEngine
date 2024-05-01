@@ -112,7 +112,7 @@ ref class EditorWindow : Engine::Window
 	DataPack^ packedData;
 	Scene^ scene;
 	Engine::EngineObjects::LightManager^ lightManager;
-	Engine::Internal::Components::Vector3^ cameraPosition;
+	Engine::Components::Vector3^ cameraPosition;
 	Engine::Internal::Components::Object^ selectedObject;
 	Engine::Internal::Components::Object^ reparentObject;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
@@ -159,10 +159,10 @@ private:
 					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
 						"ModelRenderer",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
 						assetId,
@@ -325,17 +325,58 @@ private:
 						if (attrib != nullptr)
 						{
 							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->type + ")").c_str());
-							if (attrib->type == "String")
+							if (attrib->userData->GetType()->Equals(String::typeid))
 							{
 
 							}
-							else if (attrib->type->Contains("Int"))
+							else if (attrib->userData->GetType()->Equals(UInt32::typeid))
 							{
-								int value = (int)attrib->getValue<__int64>();
+								int value = (unsigned int)attrib->userData;
 
 								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
 								{
-									attrib->setValue((__int64)value, false);
+									attrib->setValue(gcnew UInt32(value), true);
+								}
+							}
+							else if (attrib->userData->GetType()->Equals(Int64::typeid))
+							{
+								long long tmp = (Int64)attrib->userData;
+
+								int value = (int)tmp;
+
+								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
+								{
+									attrib->setValue(gcnew Int64(value), true);
+								}
+							}
+							else if (attrib->getValueType()->Equals(Engine::Components::Color::typeid))
+							{
+								Engine::Components::Color^ value = nullptr;
+
+								if (attrib->getValue()->GetType() == Newtonsoft::Json::Linq::JObject::typeid)
+								{
+									auto v = (Newtonsoft::Json::Linq::JObject^)attrib->getValue();
+									value = v->ToObject<Engine::Components::Color^>();
+								}
+								else
+								{
+									value = (Engine::Components::Color^)attrib->getValue();
+								}
+
+
+								auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(value->toHex()));
+
+								float rawData[4] =
+								{
+									float4.x,
+									float4.y,
+									float4.z,
+									float4.w
+								};
+
+								if (ImGui::ColorEdit4(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), rawData))
+								{
+									attrib->setValue(gcnew Engine::Components::Color(ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3]))), false);
 								}
 							}
 
@@ -858,10 +899,10 @@ public:
 					{
 						Engine::EngineObjects::Camera^ newCamera = gcnew Engine::EngineObjects::Camera3D("Camera",
 							gcnew Engine::Internal::Components::Transform(
-								Components::Vector3::create({ 0,0,0 }),
-								Components::Vector3::create({ 0,0,0 }),
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								Engine::Components::Vector3::create({ 0,0,0 }),
 								0.0f,
-								Components::Vector3::create({ 1,1,1 }),
+								Engine::Components::Vector3::create({ 1,1,1 }),
 								nullptr
 							));
 
@@ -1142,7 +1183,7 @@ public:
 
 					if (ImGui::DragFloat3("Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 					{
-						selectedObject->GetTransform()->position = gcnew Engine::Internal::Components::Vector3(pos[0], pos[1], pos[2]);
+						selectedObject->GetTransform()->position = gcnew Engine::Components::Vector3(pos[0], pos[1], pos[2]);
 					}
 
 					// rotation
@@ -1154,7 +1195,7 @@ public:
 
 					if (ImGui::DragFloat3("Rotation", rot, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 					{
-						selectedObject->GetTransform()->rotation = gcnew Engine::Internal::Components::Vector3(rot[0], rot[1], rot[2]);
+						selectedObject->GetTransform()->rotation = gcnew Engine::Components::Vector3(rot[0], rot[1], rot[2]);
 					}
 
 					float rot_angle = selectedObject->GetTransform()->rotationValue;
@@ -1174,7 +1215,7 @@ public:
 
 					if (ImGui::DragFloat3("Scale", scale, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 					{
-						selectedObject->GetTransform()->scale = gcnew Engine::Internal::Components::Vector3(scale[0], scale[1], scale[2]);
+						selectedObject->GetTransform()->scale = gcnew Engine::Components::Vector3(scale[0], scale[1], scale[2]);
 					}
 				} // Transform
 
@@ -1263,10 +1304,10 @@ public:
 					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
 						"ModelRenderer",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
 						0,
@@ -1284,15 +1325,15 @@ public:
 					auto meshRenderer = gcnew Engine::EngineObjects::LightSource(
 						"Point Light",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
 						0xFF0000FF,
 						rPBR::LightType::LIGHT_POINT,
-						gcnew Engine::Internal::Components::Vector3(1.0f, 1.0f, 1.0f),
+						gcnew Engine::Components::Vector3(1.0f, 1.0f, 1.0f),
 						1.0f,
 						1
 					);
@@ -1307,10 +1348,10 @@ public:
 					auto meshRenderer = gcnew Engine::EngineObjects::PBRModelRenderer(
 						"PBRModelRenderer",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						)
 					);
@@ -1324,10 +1365,10 @@ public:
 					auto skyBox = gcnew Engine::EngineObjects::Skybox(
 						"Skybox",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
 						2,
@@ -1344,10 +1385,10 @@ public:
 					auto skyBox = gcnew Engine::EngineObjects::CubeRenderer(
 						"Cube",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
 						0xFFFFFFFF
@@ -1362,10 +1403,10 @@ public:
 					auto skyBox = gcnew Engine::EngineObjects::BoundingBoxRenderer(
 						"BoundingBox",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
 						0xFFFFFFFF
@@ -1380,10 +1421,10 @@ public:
 					auto skyBox = gcnew Engine::EngineObjects::GridRenderer(
 						"Grid",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
 						8,
@@ -1399,10 +1440,10 @@ public:
 					auto luaScript = gcnew Engine::EngineObjects::LuaScript(
 						"LuaScript",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							scene->GetDatamodelMember("workspace")->GetTransform()
 						)
 					);
@@ -1415,10 +1456,10 @@ public:
 					auto meshRenderer = gcnew Engine::EngineObjects::MeshRenderer(
 						"MeshRenderer",
 						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-							gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
 							0.0f,
-							gcnew Engine::Internal::Components::Vector3(1, 1, 1),
+							gcnew Engine::Components::Vector3(1, 1, 1),
 							scene->GetDatamodelMember("workspace")->GetTransform()
 						),
 						0,
@@ -1819,10 +1860,10 @@ private:
 		{
 			lightManager = gcnew LightManager("lighting",
 				gcnew Engine::Internal::Components::Transform(
-					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
 					0.0f,
-					gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
 					nullptr
 				),
 				"Data/Engine/Shaders/rPBR/pbr.vert",
@@ -1844,10 +1885,10 @@ private:
 
 		auto lightdm = gcnew Engine::EngineObjects::Daemons::LightDaemon("lightdm",
 			gcnew Engine::Internal::Components::Transform(
-				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
-				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+				gcnew Engine::Components::Vector3(0, 0, 0),
+				gcnew Engine::Components::Vector3(0, 0, 0),
 				0.0f,
-				gcnew Engine::Internal::Components::Vector3(0, 0, 0),
+				gcnew Engine::Components::Vector3(0, 0, 0),
 				nullptr
 			),
 			lightManager
@@ -1856,20 +1897,23 @@ private:
 		scene->PushToRenderQueue(lightdm);
 		scene->AddObjectToScene(lightdm);
 
+		if(!ObjectManager::singleton()->GetGameObjectsByName("EditorCamera")[0])
+		{
 
-		auto camera3D = gcnew Engine::EngineObjects::Camera("EditorCamera",
-			gcnew Engine::Internal::Components::Transform(
-				Engine::Internal::Components::Vector3::create({ 0,0,0 }),
-				Engine::Internal::Components::Vector3::create({ 0,0,0 }),
-				0.0f,
-				Engine::Internal::Components::Vector3::create({ 1,1,1 }),
-				nullptr
-			),
-			CAMERA_PERSPECTIVE
-		);
+			auto camera3D = gcnew Engine::EngineObjects::Camera("EditorCamera",
+				gcnew Engine::Internal::Components::Transform(
+					Engine::Components::Vector3::create({ 0,0,0 }),
+					Engine::Components::Vector3::create({ 0,0,0 }),
+					0.0f,
+					Engine::Components::Vector3::create({ 1,1,1 }),
+					nullptr
+				),
+				CAMERA_PERSPECTIVE
+			);
 
-		scene->PushToRenderQueue(camera3D);
-		scene->AddObjectToScene(camera3D);
+			scene->PushToRenderQueue(camera3D);
+			scene->PushToRenderQueue(camera3D);
+		}
 	}
 
 public:
@@ -1886,8 +1930,6 @@ public:
 		materialTexture = DataPacks::singleton().GetTexture2D(259);
 
 		packedData->WriteToFile(packedData->getFile(), passwd);
-
-		create();
 
 		/*
 		Shader lightShader = dataPack.GetShader(1);
@@ -1930,12 +1972,14 @@ public:
 
 		//FileManager::ReadCustomFileFormat("Data/assets1.gold", passwd);
 
-		cameraPosition = gcnew Engine::Internal::Components::Vector3(0, 0, 0);
+		cameraPosition = gcnew Engine::Components::Vector3(0, 0, 0);
 		//Directory::Delete("Data/tmp/", true);
 		//SceneManager::SaveSceneToFile(scene, passwd);
 		//packedData->WriteToFile("Assets1", passwd);
 
 		objectManager = gcnew Scripting::ObjectManager(scene);
+
+		create();
 	}
 
 	void Preload() override
@@ -2030,7 +2074,7 @@ public:
 			return;
 
 		if (showCursor)
-			UpdateCamera(camera->get(), CAMERA_FREE);
+			//UpdateCamera(camera->get(), CAMERA_FREE);
 
 		if (fpsCap)
 		{
@@ -2146,7 +2190,7 @@ public:
 
 		packedData = scene->getSceneDataPack();
 
-		DataManager::HL_CreateCamera(0, gcnew Engine::Internal::Components::Vector3(0, 0, 0), CameraType::C3D); // create 3d camera
+		DataManager::HL_CreateCamera(0, gcnew Engine::Components::Vector3(0, 0, 0), CameraType::C3D); // create 3d camera
 
 		defaultCamera = &DataPacks::singleton().GetCamera3D(0);
 		defaultCamera->projection = CAMERA_PERSPECTIVE;

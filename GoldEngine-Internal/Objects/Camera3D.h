@@ -18,9 +18,9 @@ namespace Engine::EngineObjects
 
 		void DrawGizmo() override
 		{
-			Engine::Internal::Components::Vector3^ fwd = gcnew Engine::Internal::Components::Vector3(0,0,0);
+			Engine::Components::Vector3^ fwd = gcnew Engine::Components::Vector3(0,0,0);
 			fwd->copy(transform->forward);
-			DrawLine3D(transform->position->toNative(), fwd->toNative(), RED);
+			DrawLine3D(transform->position->toNative(), fwd->toNative(), GetColor(0xFF0000FF));
 		}
 
 	};

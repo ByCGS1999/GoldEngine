@@ -54,7 +54,6 @@ namespace Engine::EngineObjects
 	public:
 		Camera(String^ name, Engine::Internal::Components::Transform^ trans, CameraProjection projection) : Engine::EngineObjects::Script(name, trans)
 		{
-			this->layerMask = LayerManager::GetLayerFromId(0);
 			cameraProjection = projection;
 
 			nativeCamera = new Native::NativeCamera(cameraProjection);
@@ -62,16 +61,14 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
-			#if (PRODUCTION_BUILD)
-				UpdateCamera(nativeCamera->getCameraPtr(), CAMERA_FREE);
-			#endif
+			UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
 		}
 
 		void DrawGizmo() override
 		{
-			Engine::Internal::Components::Vector3^ fwd = gcnew Engine::Internal::Components::Vector3(0,0,0);
+			Engine::Components::Vector3^ fwd = gcnew Engine::Components::Vector3(0,0,0);
 			fwd->copy(transform->forward);
-			DrawLine3D(transform->position->toNative(), fwd->toNative(), RED);
+			DrawLine3D(transform->position->toNative(), fwd->toNative(), GetColor(0xFF0000FF));
 		}
 
 		::Camera* get()

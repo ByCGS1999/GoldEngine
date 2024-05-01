@@ -1,9 +1,12 @@
 #include "Layer.h"
 
-using namespace Engine::Internal::Components;
+using namespace Engine::Components;
 
-Layer::Layer(int mask, System::String^ name)
+namespace Engine::Components 
 {
-	this->layerMask = mask;
-	this->layerName = name;
+	Layer::Layer(int mask, System::String^ name)
+	{
+		this->layerMask = mask;
+		this->layerName = name;
+	}
 }

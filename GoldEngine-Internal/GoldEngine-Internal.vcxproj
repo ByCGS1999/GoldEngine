@@ -187,6 +187,7 @@
     <ClInclude Include="Objects\PBRModelRenderer.h" />
     <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\Skybox.h" />
+    <ClInclude Include="Object\Color.h" />
     <ClInclude Include="Object\Layer.h" />
     <ClInclude Include="Object\LayerManager.h" />
     <ClInclude Include="Object\ObjectType.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp" />
+    <ClCompile Include="Object\Color.cpp" />
     <ClCompile Include="Object\Layer.cpp" />
     <ClCompile Include="Object\Quaternion.cpp" />
     <ClCompile Include="Object\Vector2.cpp" />

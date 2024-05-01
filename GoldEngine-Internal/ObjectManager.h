@@ -166,6 +166,9 @@ namespace Engine::Scripting
 		{
 			auto objects = gcnew List<Engine::Internal::Components::Object^>();
 
+			if (sceneObjects == nullptr)
+				return nullptr;
+
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
 				if (t->GetReference()->name == name)

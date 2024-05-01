@@ -16,7 +16,6 @@ using namespace System;
 
 namespace Engine::Internal::Components
 {
-
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Transform
 	{
@@ -26,26 +25,26 @@ namespace Engine::Internal::Components
 	public:
 		Transform^ parent;
 		// worldspace
-		Vector3^ position;
-		Vector3^ rotation;
+		Engine::Components::Vector3^ position;
+		Engine::Components::Vector3^ rotation;
 		float rotationValue;
-		Vector3^ scale;
+		Engine::Components::Vector3^ scale;
 		// localspace
-		Vector3^ localPosition;
-		Vector3^ localRotation;
+		Engine::Components::Vector3^ localPosition;
+		Engine::Components::Vector3^ localRotation;
 		// CONSTANT VECTORS
-		const Engine::Internal::Components::Vector3^ forward = gcnew Vector3(0, 0, 1);
-		const Engine::Internal::Components::Vector3^ top = gcnew Vector3(0, 1, 0);
-		const Engine::Internal::Components::Vector3^ right = gcnew Vector3(1, 0, 0);
-		const Engine::Internal::Components::Vector3^ backward = gcnew Vector3(0, 0, -1);
-		const Engine::Internal::Components::Vector3^ bottom = gcnew Vector3(0, -1, 0);
-		const Engine::Internal::Components::Vector3^ left = gcnew Vector3(-1, 0, 0);
+		const Engine::Components::Vector3^ forward = gcnew Engine::Components::Vector3(0, 0, 1);
+		const Engine::Components::Vector3^ top = gcnew Engine::Components::Vector3(0, 1, 0);
+		const Engine::Components::Vector3^ right = gcnew Engine::Components::Vector3(1, 0, 0);
+		const Engine::Components::Vector3^ backward = gcnew Engine::Components::Vector3(0, 0, -1);
+		const Engine::Components::Vector3^ bottom = gcnew Engine::Components::Vector3(0, -1, 0);
+		const Engine::Components::Vector3^ left = gcnew Engine::Components::Vector3(-1, 0, 0);
 
 	private:
 		Object^ gameObject;
 
 	public:
-		Transform(Vector3^ position, Vector3^ rotation, float rotationValue, Vector3^ scale, Transform^ parent)
+		Transform(Engine::Components::Vector3^ position, Engine::Components::Vector3^ rotation, float rotationValue, Engine::Components::Vector3^ scale, Transform^ parent)
 		{
 			this->uid = System::Guid::NewGuid().ToString();
 			this->localPosition = position;
@@ -57,8 +56,8 @@ namespace Engine::Internal::Components
 			if (parent != nullptr)
 			{
 				this->parent = parent;
-				this->position = Vector3::add(parent->position, this->localPosition);
-				this->rotation = Vector3::add(parent->rotation, this->localRotation);
+				this->position = Engine::Components::Vector3::add(parent->position, this->localPosition);
+				this->rotation = Engine::Components::Vector3::add(parent->rotation, this->localRotation);
 			}
 			else
 			{
@@ -114,7 +113,7 @@ namespace Engine::Internal::Components
 			this->transform = transform;
 			this->type = t;
 			this->viewSpace = ViewSpace::V3D;
-			layerMask = LayerManager::GetLayerFromId(0);
+			layerMask = Engine::Scripting::LayerManager::GetLayerFromId(1);
 
 			if (tag == nullptr)
 				tag = "";
@@ -127,6 +126,8 @@ namespace Engine::Internal::Components
 		{
 			delete name;
 			delete transform;
+			delete layerMask;
+			delete tag;
 		}
 
 	public:

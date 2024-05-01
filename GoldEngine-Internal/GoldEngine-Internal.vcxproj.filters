@@ -453,17 +453,20 @@
     <ClInclude Include="Object\ViewSpace.h">
       <Filter>Archivos de origen\Engine\Object\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="Object\LayerManager.h">
-      <Filter>Archivos de origen\Engine\Object\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Object\Quaternion.h">
       <Filter>Archivos de origen\Engine\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Camera.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Camera3D.h">
       <Filter>Archivos de origen\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Camera.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Camera</Filter>
+    <ClInclude Include="Object\Color.h">
+      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\LayerManager.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -517,6 +520,9 @@
     </ClCompile>
     <ClCompile Include="Packs.cpp">
       <Filter>Archivos de origen\Engine\ObjectManagement\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Color.cpp">
+      <Filter>Archivos de origen\Engine\Object\Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

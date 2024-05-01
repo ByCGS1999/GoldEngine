@@ -4,7 +4,7 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 
-Engine::Internal::Components::Vector3^ Engine::Internal::Components::Quaternion::toEuler()
+Engine::Components::Vector3^ Engine::Components::Quaternion::toEuler()
 {
-	return gcnew Engine::Internal::Components::Vector3(x, y, z);
+	return gcnew Engine::Components::Vector3(x, y, z);
 }
