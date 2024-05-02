@@ -6,6 +6,8 @@ namespace Engine::EngineObjects
 	{
 	public:
 		System::String^ assemblyReference;
+		Engine::Scripting::AttributeManager^ attributes;
+
 
 	public:
 		Daemon(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Daemon, this->tag)

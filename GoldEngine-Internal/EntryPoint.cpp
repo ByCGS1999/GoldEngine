@@ -287,34 +287,9 @@ private:
 			}
 			break;
 
-			case ObjectType::Script:
+			case ObjectType::Daemon:
 			{
-				Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)object;
-
-				if (script->assemblyReference->Contains("LuaScript"))
-				{
-					auto scr = (Engine::EngineObjects::LuaScript^)script;
-
-					ImGui::SeparatorText("Linked Source");
-
-					ImGui::Text("Binary file path: ");
-					ImGui::SameLine();
-
-					std::string nativePath = CastStringToNative(scr->luaFilePath);
-
-					char* data = nativePath.data();
-
-					if (ImGui::InputText("###LUA_LINKEDSOURCE",
-						data, scr->luaFilePath->Length + 8, ImGuiInputTextFlags_CallbackCompletion))
-					{
-						scr->luaFilePath = gcnew String(data);
-					}
-
-					if (ImGui::Button("Reload lua source"))
-					{
-						scr->Reset();
-					}
-				}
+				Engine::EngineObjects::Daemon^ script = (Engine::EngineObjects::Daemon^)object;
 
 				ImGui::SeparatorText("Attributes");
 
@@ -336,6 +311,15 @@ private:
 								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
 								{
 									attrib->setValue(gcnew UInt32(value), true);
+								}
+							}
+							else if (attrib->userData->GetType()->Equals(Int32::typeid))
+							{
+								int value = (int)attrib->userData;
+
+								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
+								{
+									attrib->setValue(gcnew Int32(value), true);
 								}
 							}
 							else if (attrib->userData->GetType()->Equals(Int64::typeid))
@@ -387,6 +371,118 @@ private:
 					ImGui::EndListBox();
 				}
 			}
+			break;
+
+			case ObjectType::Script: 
+			{
+				Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)object;
+
+				if (script->assemblyReference->Contains("LuaScript"))
+				{
+					auto scr = (Engine::EngineObjects::LuaScript^)script;
+
+					ImGui::SeparatorText("Linked Source");
+
+					ImGui::Text("Binary file path: ");
+					ImGui::SameLine();
+
+					std::string nativePath = CastStringToNative(scr->luaFilePath);
+
+					char* data = nativePath.data();
+
+					if (ImGui::InputText("###LUA_LINKEDSOURCE",
+						data, scr->luaFilePath->Length + 8, ImGuiInputTextFlags_CallbackCompletion))
+					{
+						scr->luaFilePath = gcnew String(data);
+					}
+
+					if (ImGui::Button("Reload lua source"))
+					{
+						scr->Reset();
+					}
+				}
+
+				ImGui::SeparatorText("Attributes");
+
+				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX"))
+				{
+					for each (Engine::Scripting::Attribute ^ attrib in script->attributes->attributes)
+					{
+						if (attrib != nullptr)
+						{
+							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->type + ")").c_str());
+							if (attrib->userData->GetType()->Equals(String::typeid))
+							{
+
+							}
+							else if (attrib->userData->GetType()->Equals(UInt32::typeid))
+							{
+								int value = (unsigned int)attrib->userData;
+
+								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
+								{
+									attrib->setValue(gcnew UInt32(value), true);
+								}
+							}
+							else if (attrib->userData->GetType()->Equals(Int32::typeid))
+							{
+								int value = (int)attrib->userData;
+
+								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
+								{
+									attrib->setValue(gcnew Int32(value), true);
+								}
+							}
+							else if (attrib->userData->GetType()->Equals(Int64::typeid))
+							{
+								long long tmp = (Int64)attrib->userData;
+
+								int value = (int)tmp;
+
+								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
+								{
+									attrib->setValue(gcnew Int64(value), true);
+								}
+							}
+							else if (attrib->getValueType()->Equals(Engine::Components::Color::typeid))
+							{
+								Engine::Components::Color^ value = nullptr;
+
+								if (attrib->getValue()->GetType() == Newtonsoft::Json::Linq::JObject::typeid)
+								{
+									auto v = (Newtonsoft::Json::Linq::JObject^)attrib->getValue();
+									value = v->ToObject<Engine::Components::Color^>();
+								}
+								else
+								{
+									value = (Engine::Components::Color^)attrib->getValue();
+								}
+
+
+								auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(value->toHex()));
+
+								float rawData[4] =
+								{
+									float4.x,
+									float4.y,
+									float4.z,
+									float4.w
+								};
+
+								if (ImGui::ColorEdit4(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), rawData))
+								{
+									attrib->setValue(gcnew Engine::Components::Color(ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3]))), false);
+								}
+							}
+
+							ImGui::Separator();
+						}
+					}
+
+					ImGui::EndListBox();
+				}
+			}
+
 			break;
 
 			}

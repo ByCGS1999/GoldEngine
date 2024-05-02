@@ -1,3 +1,4 @@
+#pragma once
 
 namespace Engine::Scripting
 {
@@ -11,6 +12,20 @@ namespace Engine::Scripting
 		System::Type^ userDataType;
 
 	public:
+		Attribute(String^ str, System::Object^ data)
+		{
+			if (data == nullptr)
+			{
+				printError("Attribute: " + str + " Value is a null pointer.");
+				delete this; // clean memory, fuck off
+				return;
+			}
+
+			this->name = str;
+			userData = data;
+			type = data->GetType()->Name;
+			userDataType = data->GetType();
+		}
 		Attribute(String^ str, System::Object^ data, String^ dataType)
 		{
 			if (data == nullptr)

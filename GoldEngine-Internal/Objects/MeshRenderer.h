@@ -51,25 +51,10 @@ namespace Engine::EngineObjects
 				return;
 
 
-			auto m = DataPacks::singleton().GetModel(attributes->getAttribute("model")->getValue<UInt32>());
+			Model m = DataPacks::singleton().GetModel(attributes->getAttribute("model")->getValue<UInt32>());
 			auto jarray = attributes->getAttribute("materials")->getValue<Newtonsoft::Json::Linq::JArray^>();
 			auto materials = jarray->ToObject<List<unsigned int>^>();
 			
-
-			for (int x = 0; x < materials->Count; x++)
-			{
-				m.materials[x] = DataPacks::singleton().GetMaterial(materials[x]);
-
-				/*
-				m.materials[0].shader = DataPacks::singleton().GetShader(shader);
-				m.materials[0].maps[MATERIAL_MAP_METALNESS].value = 0.0f;
-				m.materials[0].maps[MATERIAL_MAP_ROUGHNESS].value = 0.0f;
-				m.materials[0].maps[MATERIAL_MAP_OCCLUSION].value = 1.0f;
-				m.materials[0].maps[MATERIAL_MAP_EMISSION].color = WHITE;
-				m.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
-				*/
-			}
-
 			::Color c =
 			{
 				255,

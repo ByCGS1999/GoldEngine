@@ -249,6 +249,43 @@ namespace Engine::EngineObjects
 		}
 
 	public:
+		void ShaderUpdate(unsigned int shaderId)
+		{
+			String^ vs_net = File::ReadAllText(vs_path);
+			String^ fs_net = File::ReadAllText(fs_path);
+
+			fs_net = fs_net->Replace("%numlights%", lightSources->Count.ToString());
+
+			Shader s = LoadShaderFromMemory(CastStringToNative(vs_net).c_str(), CastStringToNative(fs_net).c_str());
+
+			s = CreateLocs(s, lightSources->Count);
+
+			std::vector<rPBR::Light> _light;
+
+			for (int x = 0; x < lightSources->Count; x++)
+			{
+				_light.push_back(lightSources[x]->GetLight());
+			}
+
+			int lightCountLoc = GetShaderLocation(s, "numOfLights");
+			int maxLightCount = _light.size();
+			SetShaderValue(s, lightCountLoc, &maxLightCount, SHADER_UNIFORM_INT);
+
+			TraceLog(LOG_INFO, "Lights %d", _light.size());
+
+			if (&DataPacks::singleton().GetShader(shaderId) == nullptr)
+			{
+				DataPacks::singleton().AddShader(shaderId, s);
+			}
+			else
+			{
+				UnloadShader(DataPacks::singleton().GetShader(shaderId));
+
+				DataPacks::singleton().AddShader(shaderId, s);
+			}
+		}
+
+	public:
 		int AddLight(Engine::EngineObjects::LightSource^ light, unsigned int shaderId)
 		{
 			if (!lightSources->Contains(light))

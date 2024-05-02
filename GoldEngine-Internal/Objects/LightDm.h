@@ -1,6 +1,8 @@
 #pragma once
 #include "EngineIncludes.h"
 
+using namespace System;
+
 namespace Engine::EngineObjects::Daemons
 {
 	public ref class LightDaemon : Engine::EngineObjects::Daemon
@@ -12,6 +14,9 @@ namespace Engine::EngineObjects::Daemons
 		LightDaemon(System::String^ name, Engine::Internal::Components::Transform^ transform, LightManager^ lightManager) : EngineObjects::Daemon(name, transform)
 		{
 			lightM = lightManager;
+			attributes = gcnew Engine::Scripting::AttributeManager();
+
+			attributes->setAttribute(gcnew Engine::Scripting::Attribute("shaderId", gcnew System::UInt32(0)));
 		}
 
 		void Update() override
@@ -49,7 +54,7 @@ namespace Engine::EngineObjects::Daemons
 				}
 			}
 
-
+			lightM->ShaderUpdate((unsigned int)attributes->getAttribute("shaderId")->getValue());
 			lightM->Update();
 		}
 	};
