@@ -846,30 +846,54 @@ public:
 	void Start()
 	{
 		//WinAPI::FreeCons();
+		
 		SetWindowFlags(FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
 
-		auto secrets = gcnew Engine::Config::EngineSecrets(ENCRYPTION_PASSWORD);
-
-		secrets->ExportSecrets("./Data/Keys/secrets.dat");
-
-		auto config = gcnew Engine::Config::EngineConfiguration("Gold Engine Window", gcnew Engine::Config::Resolution(0, 0, 1280, 720), "GoldEngine/main.log", FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
-		config->ExportConfig("./Data/appinfo.dat");
-
-
-		if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
+		if (File::Exists("./Data/Keys/secrets.dat"))
 		{
-			if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
+			auto secrets = Engine::Config::EngineSecrets::ImportSecrets("./Data/Keys/secrets.dat");
+
+			passwd = CypherLib::GetPasswordBytes(secrets->encryptionPassword);
+
+			auto config = Engine::Config::EngineConfiguration::ImportConfig("./Data/appinfo.dat");
+
+			if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
 			{
-				File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
+				if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
+				{
+					File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
+				}
+
+				Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 			}
 
-			Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+			Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+			gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
 		}
+		else
+		{
+			auto secrets = gcnew Engine::Config::EngineSecrets(ENCRYPTION_PASSWORD);
 
-		Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
-		gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
+			secrets->ExportSecrets("./Data/Keys/secrets.dat");
 
+			auto config = gcnew Engine::Config::EngineConfiguration("Gold Engine Window", gcnew Engine::Config::Resolution(0, 0, 1280, 720), "GoldEngine/main.log", FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
+			config->ExportConfig("./Data/appinfo.dat");
+
+
+			if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
+			{
+				if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
+				{
+					File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
+				}
+
+				Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+			}
+
+			Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+			gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
+		}
 		LayerManager::RegisterDefaultLayers();
 
 		Preload();
@@ -897,15 +921,6 @@ public:
 			{
 				ImGui::SeparatorText("Encryption");
 
-				ImGui::SeparatorText("Asymmetric");
-
-				if (ImGui::MenuItem("Generate new KeyPair"))
-				{
-					Engine::Config::EngineSecrets::singleton()->ExportSecrets("./Data/Keys/secrets.dat");
-				}
-
-				ImGui::SeparatorText("Symmetric");
-
 				if (ImGui::BeginMenu("Set encryption password"))
 				{
 					if (ImGui::InputText("###PASSWORD_SETTER", password, 512))
@@ -914,6 +929,35 @@ public:
 					}
 
 					ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("Export Secrets"))
+				{
+					Engine::Config::EngineSecrets::singleton()->ExportSecrets("./Data/Keys/secrets.dat");
+				}
+
+				ImGui::SeparatorText("Project Startup Settings");
+
+				if (ImGui::BeginMenu("Engine Config"))
+				{
+					if (ImGui::MenuItem("Edit Engine Configuration"))
+					{
+
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::MenuItem("Export"))
+					{
+						Engine::Config::EngineConfiguration::singleton()->ExportConfig("./Data/appinfo.dat");
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Engine Configuration"))
+				{
+
 				}
 
 				ImGui::SeparatorText("Project");
@@ -1979,19 +2023,22 @@ private:
 		scene->GetDatamodelMember("gui");
 		auto daemonParent = scene->GetDatamodelMember("daemons");
 
-		auto lightdm = gcnew Engine::EngineObjects::Daemons::LightDaemon("lightdm",
-			gcnew Engine::Internal::Components::Transform(
-				gcnew Engine::Components::Vector3(0, 0, 0),
-				gcnew Engine::Components::Vector3(0, 0, 0),
-				0.0f,
-				gcnew Engine::Components::Vector3(0, 0, 0),
-				nullptr
-			),
-			lightManager
-		);
-		lightdm->SetParent(daemonParent);
-		scene->PushToRenderQueue(lightdm);
-		scene->AddObjectToScene(lightdm);
+		if (ObjectManager::singleton()->GetChildrenOf(daemonParent)->Count <= 0)
+		{
+			auto lightdm = gcnew Engine::EngineObjects::Daemons::LightDaemon("lightdm",
+				gcnew Engine::Internal::Components::Transform(
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					0.0f,
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					nullptr
+				),
+				lightManager
+			);
+			lightdm->SetParent(daemonParent);
+			scene->PushToRenderQueue(lightdm);
+			scene->AddObjectToScene(lightdm);
+		}
 
 		if(!ObjectManager::singleton()->GetGameObjectsByName("EditorCamera")[0])
 		{

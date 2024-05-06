@@ -14,9 +14,18 @@ namespace Engine::EngineObjects::Daemons
 		LightDaemon(System::String^ name, Engine::Internal::Components::Transform^ transform, LightManager^ lightManager) : EngineObjects::Daemon(name, transform)
 		{
 			lightM = lightManager;
-			attributes = gcnew Engine::Scripting::AttributeManager();
 
-			attributes->setAttribute(gcnew Engine::Scripting::Attribute("shaderId", gcnew System::UInt32(0)));
+			if(attributes == nullptr)
+				attributes = gcnew Engine::Scripting::AttributeManager();
+
+			if (attributes->getAttribute("shaderId") == nullptr)
+			{
+				attributes->setAttribute(gcnew Engine::Scripting::Attribute("shaderId", gcnew System::UInt32(1)));
+			}
+			else
+			{
+				printConsole("shaderId: " + attributes->getAttribute("shaderId")->getValue<System::UInt32>());
+			}
 		}
 
 		void Update() override
@@ -40,7 +49,7 @@ namespace Engine::EngineObjects::Daemons
 					}
 					catch (Exception^ ex)
 					{
-						TraceLog(LOG_FATAL, "Failed to cast <unknown-type> to LightSource^");
+						printError("Failed to cast <unknown-type> to GC_LightSource");
 						throw ex;
 					}
 
