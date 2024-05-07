@@ -5,7 +5,7 @@ Gold Engine is a Game Engine written with C++ under the MSCLR/CLI.
 Features:</br>
   Editor [x]</br>
   Editor Customizable Style [x]</br>
-  Playback Engine []</br>
+  Playback Engine [~] - For now boots and loads the scene, needs more testing</br>
   Lighting [x]</br>
   Dynamic Lighting []</br>
   Global Illumination (GI) []</br>
