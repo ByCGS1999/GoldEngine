@@ -5,7 +5,9 @@
   },
   "models": {
     "0": "./Data/Engine/Models/Skybox_cube.glb",
-    "1": "./Data/Models/deer1.glb"
+    "1": "./Data/Models/deer1.glb",
+    "2": "./Data/Game/Models/Spaceship.obj",
+    "3": "./Data/Engine/Models/Skybox_sphere.glb"
   },
   "materials": {},
   "textures2d": {

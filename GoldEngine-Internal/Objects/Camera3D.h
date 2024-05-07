@@ -12,8 +12,11 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
-			nativeCamera->getCameraPtr()->position = transform->position->toNative();
-			UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
+			if (PRODUCTION_BUILD)
+			{
+				nativeCamera->getCameraPtr()->position = transform->position->toNative();
+				UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
+			}
 		}
 
 		void DrawGizmo() override

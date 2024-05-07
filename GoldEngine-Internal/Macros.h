@@ -15,3 +15,6 @@
 #define ENGINE_VERSION "GoldEngine Ver: 0.3c"
 #define EDITOR_VERSION "GoldEngine Editor Ver: 0.6a"
 #define RUNTIME_VERSION "GoldEngine Runtime Prev-Ver: 0.1a"
+
+
+#define JSON_SERIALIZE Newtonsoft::Json::JsonPropertyAttribute

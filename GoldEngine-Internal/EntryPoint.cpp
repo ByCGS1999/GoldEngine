@@ -287,92 +287,6 @@ private:
 			}
 			break;
 
-			case ObjectType::Daemon:
-			{
-				Engine::EngineObjects::Daemon^ script = (Engine::EngineObjects::Daemon^)object;
-
-				ImGui::SeparatorText("Attributes");
-
-				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX"))
-				{
-					for each (Engine::Scripting::Attribute ^ attrib in script->attributes->attributes)
-					{
-						if (attrib != nullptr)
-						{
-							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->type + ")").c_str());
-							if (attrib->userData->GetType()->Equals(String::typeid))
-							{
-
-							}
-							else if (attrib->userData->GetType()->Equals(UInt32::typeid))
-							{
-								int value = (unsigned int)attrib->userData;
-
-								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
-								{
-									attrib->setValue(gcnew UInt32(value), true);
-								}
-							}
-							else if (attrib->userData->GetType()->Equals(Int32::typeid))
-							{
-								int value = (int)attrib->userData;
-
-								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
-								{
-									attrib->setValue(gcnew Int32(value), true);
-								}
-							}
-							else if (attrib->userData->GetType()->Equals(Int64::typeid))
-							{
-								long long tmp = (Int64)attrib->userData;
-
-								int value = (int)tmp;
-
-								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
-								{
-									attrib->setValue(gcnew Int64(value), true);
-								}
-							}
-							else if (attrib->getValueType()->Equals(Engine::Components::Color::typeid))
-							{
-								Engine::Components::Color^ value = nullptr;
-
-								if (attrib->getValue()->GetType() == Newtonsoft::Json::Linq::JObject::typeid)
-								{
-									auto v = (Newtonsoft::Json::Linq::JObject^)attrib->getValue();
-									value = v->ToObject<Engine::Components::Color^>();
-								}
-								else
-								{
-									value = (Engine::Components::Color^)attrib->getValue();
-								}
-
-
-								auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(value->toHex()));
-
-								float rawData[4] =
-								{
-									float4.x,
-									float4.y,
-									float4.z,
-									float4.w
-								};
-
-								if (ImGui::ColorEdit4(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), rawData))
-								{
-									attrib->setValue(gcnew Engine::Components::Color(ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3]))), false);
-								}
-							}
-
-							ImGui::Separator();
-						}
-					}
-
-					ImGui::EndListBox();
-				}
-			}
-			break;
-
 			case ObjectType::Script: 
 			{
 				Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)object;
@@ -800,9 +714,9 @@ end
 								selectedObject = _reference;
 							}
 						}
-
-						DrawHierarchyInherits(scene, _reference, depth + 1);
 					}
+
+					DrawHierarchyInherits(scene, _reference, depth + 1);
 				}
 
 			}
@@ -900,20 +814,10 @@ public:
 		Loop();
 	}
 
-	void DrawImGui() override
+	#pragma region EditorGUI
+
+	void DrawMainMenuBar()
 	{
-		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
-
-		if (!initSettings)
-		{
-			ImGui::LoadIniSettingsFromDisk("imgui.ini");
-			WaitTime(2.5);
-			initSettings = true;
-		}
-
-		auto viewPort = ImGui::GetMainViewport();
-		ImGui::DockSpaceOverViewport(viewPort, ImGuiDockNodeFlags_None);
-
 		if (ImGui::BeginMainMenuBar())
 		{
 			if (ImGui::BeginMenu("Engine", true))
@@ -1050,6 +954,36 @@ public:
 
 					ImGui::EndMenu();
 				}
+
+				ImGui::Separator();
+
+				if (ImGui::BeginMenu("Models"))
+				{
+					if (ImGui::MenuItem("ModelRenderer"))
+					{
+
+					}
+
+					if (ImGui::MenuItem("MeshRenderer"))
+					{
+
+					}
+
+					ImGui::EndMenu();
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::BeginMenu("Lighting"))
+				{
+					if (ImGui::MenuItem("LightSource"))
+					{
+
+					}
+
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenu();
 			}
 
@@ -1107,7 +1041,10 @@ public:
 
 			ImGui::EndMainMenuBar();
 		}
+	}
 
+	void DrawHierarchy()
+	{
 		if (ImGui::Begin("Hierarchy", &isOpen))
 		{
 			ImGui::Text("Scene Objects: %d", scene->GetRenderQueue()->Count);
@@ -1133,8 +1070,6 @@ public:
 								selectedObject = reference;
 							}
 						}
-
-						DrawHierarchyInherits(scene, reference, 1);
 					}
 					else if (reference->GetTransform()->parent == nullptr)
 					{
@@ -1148,21 +1083,19 @@ public:
 								selectedObject = reference;
 							}
 						}
-
-						DrawHierarchyInherits(scene, reference, 1);
 					}
+
+					DrawHierarchyInherits(scene, reference, 1);
 				}
 			}
 
 
 			ImGui::End();
 		}
+	}
 
-		if (codeEditorOpen)
-		{
-			CodeEditor();
-		}
-
+	void DrawProperties()
+	{
 		if (ImGui::Begin("Properties", &isOpen, ImGuiWindowFlags_MenuBar))
 		{
 			if (selectedObject == nullptr)
@@ -1175,11 +1108,19 @@ public:
 				{
 					if (ImGui::BeginMenu("Instance"))
 					{
+
 						ImGui::SeparatorText("Actions");
 
 						if (ImGui::MenuItem("Destroy Object"))
 						{
 							ObjectManager::singleton()->Destroy(selectedObject);
+							selectedObject = nullptr;
+
+							ImGui::EndMenu();
+
+							ImGui::End();
+
+							return;
 						}
 
 						ImGui::Separator();
@@ -1357,6 +1298,32 @@ public:
 			}
 
 			ImGui::End();
+		}
+	}
+
+	#pragma endregion
+
+	void DrawImGui() override
+	{
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+
+		if (!initSettings)
+		{
+			ImGui::LoadIniSettingsFromDisk("imgui.ini");
+			WaitTime(2.5);
+			initSettings = true;
+		}
+
+		auto viewPort = ImGui::GetMainViewport();
+		ImGui::DockSpaceOverViewport(viewPort, ImGuiDockNodeFlags_None);
+
+		DrawMainMenuBar();
+
+		DrawHierarchy();
+
+		if (codeEditorOpen)
+		{
+			CodeEditor();
 		}
 
 		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_MenuBar))
@@ -1667,6 +1634,8 @@ public:
 
 			ImGui::End();
 		}
+
+		DrawProperties();
 
 		if (b1)
 		{
@@ -2239,7 +2208,7 @@ public:
 			return;
 
 		if (showCursor)
-			//UpdateCamera(camera->get(), CAMERA_FREE);
+			UpdateCamera(camera->get(), CAMERA_FREE);
 
 		if (fpsCap)
 		{

@@ -61,7 +61,7 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
-			UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
+
 		}
 
 		void DrawGizmo() override

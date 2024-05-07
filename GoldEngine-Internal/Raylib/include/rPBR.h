@@ -4,12 +4,6 @@ namespace rPBR
 {
     using namespace rPBR;
 
-#ifdef _WIN64
-#include "x64/raylib.h"
-#else
-#include "x86/raylib.h"
-#endif
-
     // Light type
     typedef enum {
         LIGHT_DIRECTIONAL = 0,
@@ -46,10 +40,10 @@ namespace rPBR
     // Create a light and get shader locations
 
     static void UpdateLight(Shader shader, Light light);
-    static Light CreateLight(int type, ::Vector3 position, ::Vector3 target, Color color, float intensity, Shader shader);
+    static Light CreateLight(int type, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader shader);
 
 
-    static Light CreateLight(int type, ::Vector3 position, ::Vector3 target, Color color, float intensity, Shader shader)
+    static Light CreateLight(int type, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader shader)
     {
         Light light = { 0 };
 

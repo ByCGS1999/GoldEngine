@@ -205,6 +205,24 @@
     <Filter Include="Data\EditorAssets\Templates">
       <UniqueIdentifier>{784d2fb2-8d10-45fe-a804-30d43454375e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="raylib\include\ext">
+      <UniqueIdentifier>{8db3416d-adf6-4ff6-8979-05b4a1037bb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\impls">
+      <UniqueIdentifier>{46dc3b57-f7f9-40d8-8d9f-bebe36e21434}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\deps">
+      <UniqueIdentifier>{b8190d54-6dca-4ab6-97d0-bec90bd19e1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\impls\imgui">
+      <UniqueIdentifier>{47b26e79-2933-4e1b-b087-4644eae7d0d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\impls\raygui">
+      <UniqueIdentifier>{45923578-8f25-472a-9bb0-c32e347a3ff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\impls\other">
+      <UniqueIdentifier>{1560900a-6699-48c2-9657-54dcde1a812a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -215,18 +233,6 @@
     </ClInclude>
     <ClInclude Include="CastToNative.h">
       <Filter>Archivos de origen\Engine\Marshaller</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\raygui.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\rlImGuiColors.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\imgui_impl_raylib.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\rlImGui.h">
-      <Filter>raylib\include</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui.h">
       <Filter>imgui</Filter>
@@ -246,12 +252,6 @@
     <ClInclude Include="imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Raylib\include\IconsFontAwesome6.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
     <ClInclude Include="DataManager.h">
       <Filter>Archivos de origen\Engine\HLAPI</Filter>
     </ClInclude>
@@ -260,15 +260,6 @@
     </ClInclude>
     <ClInclude Include="CameraPack.h">
       <Filter>Archivos de origen\Engine\ObjectManagement\Cameras</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\glad.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\rlights.h">
-      <Filter>raylib\include</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\rPBR.h">
-      <Filter>raylib\include</Filter>
     </ClInclude>
     <ClInclude Include="MaterialPack.h">
       <Filter>Archivos de origen\Engine\ObjectManagement\Materials</Filter>
@@ -468,6 +459,33 @@
     <ClInclude Include="Object\LayerManager.h">
       <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
     </ClInclude>
+    <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h">
+      <Filter>raylib\include\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\IconsFontAwesome6.h">
+      <Filter>raylib\include\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\imgui_impl_raylib.h">
+      <Filter>raylib\include\ext</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\glad.h">
+      <Filter>raylib\include\deps</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\rlImGui.h">
+      <Filter>raylib\include\impls\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\rlImGuiColors.h">
+      <Filter>raylib\include\impls\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\raygui.h">
+      <Filter>raylib\include\impls\raygui</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\rPBR.h">
+      <Filter>raylib\include\impls\other</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\rlights.h">
+      <Filter>raylib\include\impls\other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -475,9 +493,6 @@
     </ClCompile>
     <ClCompile Include="CastToNative.cpp">
       <Filter>Archivos de origen\Engine\Marshaller</Filter>
-    </ClCompile>
-    <ClCompile Include="Raylib\include\rlImGui.cpp">
-      <Filter>raylib\include</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>imgui</Filter>
@@ -523,6 +538,9 @@
     </ClCompile>
     <ClCompile Include="Object\Color.cpp">
       <Filter>Archivos de origen\Engine\Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Raylib\include\rlImGui.cpp">
+      <Filter>raylib\include\impls\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

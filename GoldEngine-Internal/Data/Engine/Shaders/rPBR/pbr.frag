@@ -1,4 +1,5 @@
 #version 330
+
 //%numlights%
 
 #define MAX_LIGHTS              4

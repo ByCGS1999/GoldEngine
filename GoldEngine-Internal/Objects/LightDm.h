@@ -9,23 +9,31 @@ namespace Engine::EngineObjects::Daemons
 	{
 	private:
 		LightManager^ lightM;
+		[JSON_SERIALIZE]
+		unsigned int shaderId;
 
 	public:
 		LightDaemon(System::String^ name, Engine::Internal::Components::Transform^ transform, LightManager^ lightManager) : EngineObjects::Daemon(name, transform)
 		{
 			lightM = lightManager;
+		}
 
-			if(attributes == nullptr)
-				attributes = gcnew Engine::Scripting::AttributeManager();
+		void Draw() override
+		{
+			if (lightM == nullptr)
+			{
+				printf("Lightmanager not set to an instance. Daemon won't work!");
+				return;
+			}
 
-			if (attributes->getAttribute("shaderId") == nullptr)
-			{
-				attributes->setAttribute(gcnew Engine::Scripting::Attribute("shaderId", gcnew System::UInt32(1)));
-			}
-			else
-			{
-				printConsole("shaderId: " + attributes->getAttribute("shaderId")->getValue<System::UInt32>());
-			}
+			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
+
+			if (camera == nullptr)
+				return;
+
+			float cameraPos[3] = { camera->GetTransform()->position->x, camera->GetTransform()->position->y, camera->GetTransform()->position->z };
+			Shader s = DataPacks::singleton().GetShader(shaderId);
+			SetShaderValue(s, s.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
 		}
 
 		void Update() override
@@ -63,7 +71,7 @@ namespace Engine::EngineObjects::Daemons
 				}
 			}
 
-			lightM->ShaderUpdate((unsigned int)attributes->getAttribute("shaderId")->getValue());
+			lightM->ShaderUpdate(shaderId);
 			lightM->Update();
 		}
 	};

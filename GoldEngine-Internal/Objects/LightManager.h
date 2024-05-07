@@ -14,7 +14,10 @@ namespace Engine::EngineObjects
 			Shader shader;
 
 		public:
-			NativeLightSource() {}
+			NativeLightSource(int lightType, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader s) 
+			{
+				light = rPBR::CreateLight(lightType, position, target, color, intensity, shader);
+			}
 
 		public:
 			rPBR::Light getLight() { return light; }
@@ -50,14 +53,12 @@ namespace Engine::EngineObjects
 
 		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned int lightColor, int lightType, Engine::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource, this->tag)
 		{
-			nativeLightSource = new Native::NativeLightSource();
 			this->lightType = (rPBR::LightType)lightType;
 			this->lightColor = lightColor;
 			this->target = target;
 			this->shaderId = shader;
 			this->intensity = intensity;
-			nativeLightSource->SetShader(DataPacks::singleton().GetShader(shader));
-			auto light = rPBR::CreateLight(
+			nativeLightSource = new Native::NativeLightSource(
 				this->lightType,
 				GetTransform()->position->toNative(),
 				this->target->toNative(),
@@ -65,19 +66,16 @@ namespace Engine::EngineObjects
 				this->intensity,
 				DataPacks::singleton().GetShader(this->shaderId)
 			);
-			nativeLightSource->SetLight(light);
 			nativeLightSource->SetLightEnabled(true);
 			enabled = true;
 		}
 
 		void Init(unsigned int lightColor, float intensity, Engine::Components::Vector3^ target, int lightType, unsigned int shaderId) override
 		{
-			nativeLightSource = new Native::NativeLightSource();
 			this->lightColor = lightColor;
 			this->lightType = (rPBR::LightType)lightType;
 			this->target = target;
 			this->intensity = intensity;
-			nativeLightSource->SetShader(DataPacks::singleton().GetShader(shaderId));
 			::Color c =
 			{
 				lightColor >> 0,
@@ -86,7 +84,7 @@ namespace Engine::EngineObjects
 				lightColor >> 24
 			};
 
-			auto light = rPBR::CreateLight(
+			nativeLightSource = new Native::NativeLightSource(
 				this->lightType,
 				GetTransform()->position->toNative(),
 				this->target->toNative(),
@@ -94,7 +92,6 @@ namespace Engine::EngineObjects
 				this->intensity,
 				DataPacks::singleton().GetShader(this->shaderId)
 			);
-			nativeLightSource->SetLight(light);
 			nativeLightSource->SetLightEnabled(true);
 			enabled = true;
 		}
