@@ -877,9 +877,8 @@ public:
 
 			secrets->ExportSecrets("./Data/Keys/secrets.dat");
 
-			auto config = gcnew Engine::Config::EngineConfiguration("Gold Engine Window", gcnew Engine::Config::Resolution(0, 0, 1280, 720), "GoldEngine/main.log", FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
+			auto config = gcnew Engine::Config::EngineConfiguration();
 			config->ExportConfig("./Data/appinfo.dat");
-
 
 			if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
 			{
@@ -938,11 +937,11 @@ public:
 
 				ImGui::SeparatorText("Project Startup Settings");
 
-				if (ImGui::BeginMenu("Engine Config"))
+				if (ImGui::BeginMenu("Engine Configuration"))
 				{
 					if (ImGui::MenuItem("Edit Engine Configuration"))
 					{
-
+						b9 = true;
 					}
 
 					ImGui::Separator();
@@ -953,11 +952,6 @@ public:
 					}
 
 					ImGui::EndMenu();
-				}
-
-				if (ImGui::BeginMenu("Engine Configuration"))
-				{
-
 				}
 
 				ImGui::SeparatorText("Project");
@@ -1702,6 +1696,10 @@ public:
 		{
 			ImGui::OpenPopup("Layer Editor");
 		}
+		else if (b9)
+		{
+			ImGui::OpenPopup("Engine Configuration");
+		}
 
 		fileExplorer->DrawExplorer();
 		fileExplorer->TryComplete();
@@ -1720,6 +1718,30 @@ public:
 		}
 
 		// popups
+
+		if (ImGui::BeginPopupModal("Engine Configuration", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
+		{
+			char* buff = new char[8*512];
+
+			auto config = Engine::Config::EngineConfiguration::singleton();
+
+			strcpy(buff, CastStringToNative(config->windowName).c_str());
+
+			ImGui::Text("Window Name: ");
+			ImGui::SameLine();
+			if (ImGui::InputText("##WINDOW_NAME", buff, config->windowName->Length + 512))
+			{
+				Engine::Config::EngineConfiguration::singleton()->windowName = gcnew String(buff);
+			}
+
+			if (ImGui::Button("Close"))
+			{
+				b9 = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
 
 		if (ImGui::BeginPopupModal("Layer Editor", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
 		{
@@ -2266,15 +2288,16 @@ public ref class GameWindow : public Engine::Window
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scene^ scene;
 	DataPack^ packedData;
-	Camera* defaultCamera;
 
 public:
 	GameWindow()
 	{
+		WinAPI::FreeCons();
+
 		dataPack = DataPacks();
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 
-		assemblies->Add(gcnew EngineAssembly("Data/Asm/GoldEngine_ScriptAssembly.dll"));
+		assemblies->Add(gcnew EngineAssembly("Bin/Asm/GoldEngine_ScriptAssembly.dll"));
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
 
 		SceneManager::SetAssemblyManager(assemblies);
@@ -2333,11 +2356,7 @@ public:
 
 		packedData = scene->getSceneDataPack();
 
-		DataManager::HL_CreateCamera(0, gcnew Engine::Components::Vector3(0, 0, 0), CameraType::C3D); // create 3d camera
-
-		defaultCamera = &DataPacks::singleton().GetCamera3D(0);
-		defaultCamera->projection = CAMERA_PERSPECTIVE;
-		defaultCamera->fovy = 60;
+		gcnew Scripting::ObjectManager(scene);
 
 		Init();
 	}
@@ -2377,9 +2396,14 @@ public:
 	{
 		BeginDrawing();
 
-		ClearBackground(BLACK);
+		ClearBackground(::BLACK);
 
-		BeginMode3D((Camera3D)*defaultCamera);
+		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
+
+		if (camera == nullptr)
+			return;
+
+		BeginMode3D((::Camera3D)*camera->get());
 
 		int currentLayer = 0;
 
@@ -2401,8 +2425,6 @@ public:
 
 	virtual void Update() override
 	{
-		UpdateCamera(defaultCamera, CAMERA_FREE);
-
 		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
 		{
 			sceneObject->GetReference()->Update();

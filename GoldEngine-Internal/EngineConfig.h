@@ -105,6 +105,15 @@ namespace Engine::Config
 			this->windowFlags = flags;
 		}
 
+		EngineConfiguration()
+		{
+			self = this;
+			this->logPath = defaultConfiguration->logPath;
+			this->windowName = defaultConfiguration->windowName;
+			this->resolution = defaultConfiguration->resolution;
+			this->windowFlags = defaultConfiguration->windowFlags;
+		}
+
 		std::string getWindowName()
 		{
 			return CastStringToNative(windowName);
@@ -128,6 +137,12 @@ namespace Engine::Config
 			return self;
 		}
 
+	private:
+		static void setSingleton(EngineConfiguration^ inst)
+		{
+			self = inst;
+		}
+
 	public:
 		static EngineConfiguration^ ImportConfig(System::String^ fN)
 		{
@@ -142,6 +157,9 @@ namespace Engine::Config
 						),
 						passwd)
 				);
+
+				setSingleton(configuration);
+
 				return configuration;
 			}
 
