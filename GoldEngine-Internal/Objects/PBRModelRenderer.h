@@ -22,7 +22,7 @@ namespace Engine::EngineObjects
 	public ref class PBRModelRenderer : public Engine::Internal::Components::Object
 	{
 	public:
-		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer, this->tag)
+		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 
 		}

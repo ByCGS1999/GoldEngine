@@ -41,6 +41,10 @@ namespace Engine::EngineObjects
 
 				virtualMachine->RegisterScript(luaSource);
 			}
+			else
+			{
+				printError("Lua binary: " + luaFilePath + " file does not exist");
+			}
 		}
 
 	public:

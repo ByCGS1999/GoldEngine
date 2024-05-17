@@ -10,7 +10,7 @@ namespace Engine::EngineObjects
 
 
 	public:
-		Daemon(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Daemon, this->tag)
+		Daemon(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Daemon, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			assemblyReference = GetType()->FullName->ToString();
 		}

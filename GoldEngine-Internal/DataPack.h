@@ -23,13 +23,9 @@ namespace Engine::Assets::Management
 		{
 			for each (unsigned int shader_id in shaders->Keys)
 			{
-				System::String^ filePath = shaders[shader_id];
-				auto splitted = filePath->Replace(":^:", ":")->Split(':');
+				auto filePath = shaders[shader_id];
 
-				auto vs = splitted[0];
-				auto fs = splitted[1];
-
-				Shader s = LoadShader(CastStringToNative(vs).c_str(), CastStringToNative(fs).c_str());
+				Shader s = LoadShader(CastStringToNative(filePath[0]).c_str(), CastStringToNative(filePath[1]).c_str());
 				DataPacks::singleton().AddShader(shader_id, s);
 			}
 
@@ -66,7 +62,7 @@ namespace Engine::Assets::Management
 
 		void CloneDataPack(DataPack^ newPack)
 		{
-			shaders = gcnew Dictionary<unsigned int, String^>(newPack->shaders);
+			shaders = gcnew Dictionary<unsigned int, array<String^>^>(newPack->shaders);
 			models = gcnew Dictionary<unsigned int, String^>(newPack->models);
 			textures2d = gcnew Dictionary<unsigned int, String^>(newPack->textures2d);
 			materials = gcnew Dictionary<unsigned int, unsigned int>(newPack->materials);
@@ -76,14 +72,14 @@ namespace Engine::Assets::Management
 
 		void Create()
 		{
-			shaders = gcnew Dictionary<unsigned int, String^>();
+			shaders = gcnew Dictionary<unsigned int, array<String^>^>();
 			models = gcnew Dictionary<unsigned int, String^>();
 			materials = gcnew Dictionary<unsigned int, unsigned int>();
 			textures2d = gcnew Dictionary<unsigned int, String^>();
 		}
 
 	public:
-		System::Collections::Generic::Dictionary<unsigned int, String^>^ shaders;
+		System::Collections::Generic::Dictionary<unsigned int, array<String^>^>^ shaders;
 		System::Collections::Generic::Dictionary<unsigned int, String^>^ models;
 		System::Collections::Generic::Dictionary<unsigned int, unsigned int>^ materials;
 		System::Collections::Generic::Dictionary<unsigned int, String^>^ textures2d;
@@ -91,7 +87,7 @@ namespace Engine::Assets::Management
 	public:
 		DataPack(String^ fileName)
 		{
-			shaders = gcnew Dictionary<unsigned int, String^>();
+			shaders = gcnew Dictionary<unsigned int, array<String^>^>();
 			models = gcnew Dictionary<unsigned int, String^>();
 			materials = gcnew Dictionary<unsigned int, unsigned int>();
 			textures2d = gcnew Dictionary<unsigned int, String^>();
@@ -108,13 +104,18 @@ namespace Engine::Assets::Management
 		{
 			if (!shaders->ContainsKey(id))
 			{
-				shaders->Add(id, vs + ":^:" + fs);
+				auto sstring = gcnew array<String^>(2);
+
+				sstring[0] = (vs);
+				sstring[1] = (fs);
+
+				shaders->Add(id, sstring);
 
 				std::string vertexShader = "";
 				std::string fragmentShader = "";
 
 				vertexShader = CastStringToNative(vs);
-				fragmentShader = CastStringToNative(vs);
+				fragmentShader = CastStringToNative(fs);
 
 				Shader s = LoadShader(vertexShader.c_str(), fragmentShader.c_str());
 				DataPacks::singleton().AddShader(id, s);
@@ -265,7 +266,7 @@ namespace Engine::Assets::Management
 			case _Shader:
 				for each (auto T in shaders)
 				{
-					if (T.Value == value)
+					if (T.Value[0] == value || T.Value[1] == value)
 					{
 						return std::tuple<bool, int>(true, T.Key);
 					}

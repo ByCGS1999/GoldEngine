@@ -7,7 +7,7 @@ namespace Engine::EngineObjects
 {
 	namespace Native
 	{
-		public class NativeCamera
+		private class NativeCamera
 		{
 		private:
 			::Camera* camera;

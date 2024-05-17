@@ -163,7 +163,7 @@ namespace Engine::Editor::Gui
 			{
 				ImGui::SetWindowSize({ 899,462 });
 
-				char* route = new char[currentRoute->Length + 8];
+				char* route = new char[currentRoute->Length + (8*32)];
 				strcpy(route, CastStringToNative(currentRoute).c_str());
 
 				if (ImGui::Button("<"))
@@ -185,7 +185,7 @@ namespace Engine::Editor::Gui
 				ImGui::SameLine();
 				ImGui::Text("Path: ");
 				ImGui::SameLine();
-				if (ImGui::InputText("###PATH", route, currentRoute->Length + 8, ImGuiInputTextFlags_None))
+				if (ImGui::InputText("###PATH", route, currentRoute->Length + (8 * 32), ImGuiInputTextFlags_None))
 				{
 					currentRoute = gcnew String(route);
 				}
@@ -236,13 +236,13 @@ namespace Engine::Editor::Gui
 				{
 					// Filter
 					{
-						char* data = new char[current_filter->Length + 32];
+						char* data = new char[current_filter->Length + (8*32)];
 						const char* newData = CastToNative(current_filter);
 						strcpy(data, newData);
 
 						ImGui::Text("Filter: ");
 						ImGui::SameLine();
-						if (ImGui::InputText("###FILTER", data, sizeof(data), ImGuiInputTextFlags_None))
+						if (ImGui::InputText("###FILTER", data, sizeof(data) + (8*32), ImGuiInputTextFlags_None))
 						{
 							current_filter = gcnew String(data);
 						}

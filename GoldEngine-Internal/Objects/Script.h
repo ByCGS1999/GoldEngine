@@ -10,7 +10,7 @@ namespace Engine::EngineObjects
 		Engine::Scripting::AttributeManager^ attributes;
 
 	public:
-		Script(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Script, this->tag)
+		Script(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Script, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			attributes = gcnew Engine::Scripting::AttributeManager();
 			assemblyReference = GetType()->FullName->ToString();

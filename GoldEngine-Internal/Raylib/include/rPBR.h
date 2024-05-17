@@ -41,36 +41,31 @@ namespace rPBR
 
     static void UpdateLight(Shader shader, Light light);
     static Light CreateLight(int type, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader shader);
-
+    static void SetAmbientColor(Shader shader, ::Color color, float intensity);
 
     static Light CreateLight(int type, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader shader)
     {
         Light light = { 0 };
 
-        if (lightCount < MAX_LIGHTS)
-        {
-            light.enabled = 1;
-            light.type = type;
-            light.position = position;
-            light.target = target;
-            light.color[0] = (float)color.r / 255.0f;
-            light.color[1] = (float)color.g / 255.0f;
-            light.color[2] = (float)color.b / 255.0f;
-            light.color[3] = (float)color.a / 255.0f;
-            light.intensity = intensity;
+        light.enabled = 1;
+        light.type = type;
+        light.position = position;
+        light.target = target;
+        light.color[0] = (float)color.r / 255.0f;
+        light.color[1] = (float)color.g / 255.0f;
+        light.color[2] = (float)color.b / 255.0f;
+        light.color[3] = (float)color.a / 255.0f;
+        light.intensity = intensity;
 
-            // NOTE: Shader parameters names for lights must match the requested ones
-            light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", lightCount));
-            light.typeLoc = GetShaderLocation(shader, TextFormat("lights[%i].type", lightCount));
-            light.positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", lightCount));
-            light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightCount));
-            light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightCount));
-            light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightCount));
+        // NOTE: Shader parameters names for lights must match the requested ones
+        light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", lightCount));
+        light.typeLoc = GetShaderLocation(shader, TextFormat("lights[%i].type", lightCount));
+        light.positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", lightCount));
+        light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightCount));
+        light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightCount));
+        light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightCount));
 
-            rPBR::UpdateLight(shader, light);
-
-            lightCount++;
-        }
+        rPBR::UpdateLight(shader, light);
 
         return light;
     }
@@ -91,5 +86,14 @@ namespace rPBR
         SetShaderValue(shader, light.targetLoc, target, SHADER_UNIFORM_VEC3);
         SetShaderValue(shader, light.colorLoc, light.color, SHADER_UNIFORM_VEC4);
         SetShaderValue(shader, light.intensityLoc, &light.intensity, SHADER_UNIFORM_FLOAT);
+    }
+
+    static void SetAmbientColor(Shader shader, ::Color color, float intensity)
+    {
+        float col[3] = { color.r / 255,color.g / 255,color.b / 255 };
+        SetShaderValue(shader, GetShaderLocation(shader, "ambientColor"), col, SHADER_UNIFORM_VEC3);
+        SetShaderValue(shader, GetShaderLocation(shader, "ambient"), &intensity, SHADER_UNIFORM_FLOAT);
+
+        
     }
 }

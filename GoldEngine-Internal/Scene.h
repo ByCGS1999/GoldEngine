@@ -231,7 +231,7 @@ namespace Engine::Management
 					gcnew Engine::Components::Vector3(1, 1, 1),
 					nullptr
 				),
-				Engine::Internal::Components::ObjectType::Datamodel, "");
+				Engine::Internal::Components::ObjectType::Datamodel, "", Engine::Scripting::LayerManager::GetLayerFromId(1));
 		}
 
 		// VMethods

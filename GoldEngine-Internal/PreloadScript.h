@@ -1,8 +1,8 @@
 #pragma once
 
 /// <summary>
-/// Architecturally is identical to the EngineObjects.
-/// Just that the scripts that inherit from this class will be ran before the game completly loads (Before boot or on scene change)
+/// Interface for scripts that will be ran on the 'preload' of a scene.
+/// Usually these are invoked after scene assets loaded, but before the scene completly loaded
 /// </summary>
 namespace Engine::Preload
 {

@@ -7,16 +7,18 @@ namespace Engine::EngineObjects
 {
 	namespace Native
 	{
-		class NativeLightSource
+		private class NativeLightSource
 		{
 		private:
 			rPBR::Light light;
 			Shader shader;
 
 		public:
-			NativeLightSource(int lightType, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader s) 
+			NativeLightSource(int lightType, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader& s) 
 			{
 				light = rPBR::CreateLight(lightType, position, target, color, intensity, shader);
+				shader = s;
+
 			}
 
 		public:
@@ -51,7 +53,11 @@ namespace Engine::EngineObjects
 		rPBR::LightType lightType;
 		bool enabled;
 
-		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned int lightColor, int lightType, Engine::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource, this->tag)
+	private:
+		unsigned int oldShaderId;
+
+	public:
+		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned int lightColor, int lightType, Engine::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->lightType = (rPBR::LightType)lightType;
 			this->lightColor = lightColor;
@@ -61,11 +67,12 @@ namespace Engine::EngineObjects
 			nativeLightSource = new Native::NativeLightSource(
 				this->lightType,
 				GetTransform()->position->toNative(),
-				this->target->toNative(),
+				{0,0,0},
 				GetColor(this->lightColor),
 				this->intensity,
 				DataPacks::singleton().GetShader(this->shaderId)
 			);
+			oldShaderId = shaderId;
 			nativeLightSource->SetLightEnabled(true);
 			enabled = true;
 		}
@@ -105,15 +112,22 @@ namespace Engine::EngineObjects
 			nativeLightSource->SetIntensity(intensity);
 			nativeLightSource->SetPosition(GetTransform()->position->toNative());
 			nativeLightSource->SetTarget(target->toNative());
-
+			
 			float v[4] = {
 				lightColor >> 0,
 				lightColor >> 8,
 				lightColor >> 16,
 				lightColor >> 24
 			};
-
 			nativeLightSource->SetColor(v);
+
+			if (shaderId != oldShaderId)
+			{
+				oldShaderId = shaderId;
+				nativeLightSource->SetShader(DataPacks::singleton().GetShader(this->shaderId));
+			}
+
+			nativeLightSource->UpdateLighting();
 		}
 
 		void DrawGizmo() override
@@ -173,26 +187,35 @@ namespace Engine::EngineObjects
 	private:
 		System::Collections::Generic::List<Engine::EngineObjects::LightSource^>^ lightSources;
 		static LightManager^ lightdm;
+		float* cameraPosition;
+
 	public:
 		String^ vs_path;
 		String^ fs_path;
 
 		unsigned int ambientColor;
+		float ambientIntensity;
 
 	public:
-		LightManager(String^ name, Engine::Internal::Components::Transform^ t, String^ vs, String^ fs) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::ObjectType::LightManager, this->tag)
+		LightManager(String^ name, Engine::Internal::Components::Transform^ t, String^ vs, String^ fs) : Engine::Internal::Components::Object(name, t, Engine::Internal::Components::ObjectType::LightManager, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			lightdm = this;
 			lightSources = gcnew System::Collections::Generic::List<Engine::EngineObjects::LightSource^>();
 			vs_path = vs;
 			fs_path = fs;
-
+			ambientColor = 0xFFFFFFFF;
+			ambientIntensity = 0.5f;
 		}
 
 	public:
 		static LightManager^ singleton()
 		{
 			return lightdm;
+		}
+
+		void UpdateCameraPosition(float* value)
+		{
+			this->cameraPosition = value;
 		}
 
 	public:
@@ -211,26 +234,31 @@ namespace Engine::EngineObjects
 	private:
 		Shader CreateLocs(Shader shader, int maxLights)
 		{
-			shader.locs[SHADER_LOC_MAP_ALBEDO] = GetShaderLocation(shader, "albedoMap");
-			shader.locs[SHADER_LOC_MAP_METALNESS] = GetShaderLocation(shader, "mraMap");
-			shader.locs[SHADER_LOC_MAP_NORMAL] = GetShaderLocation(shader, "normalMap");
-			shader.locs[SHADER_LOC_MAP_EMISSION] = GetShaderLocation(shader, "emissiveMap");
-			shader.locs[SHADER_LOC_COLOR_DIFFUSE] = GetShaderLocation(shader, "albedoColor");
-			shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
+			shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
 			shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
 
-			float ambientIntensity = 0.02f;
+			shader.locs[SHADER_LOC_MAP_ALBEDO] = GetShaderLocation(shader, "albedoMap");
+			shader.locs[SHADER_LOC_MAP_NORMAL] = GetShaderLocation(shader, "normalMap");
+			shader.locs[SHADER_LOC_MAP_METALNESS] = GetShaderLocation(shader, "metalnessMap");
+			shader.locs[SHADER_LOC_MAP_ROUGHNESS] = GetShaderLocation(shader, "roughnessMap");
+			shader.locs[SHADER_LOC_MAP_OCCLUSION] = GetShaderLocation(shader, "aoMap");
+
+
+			float b = ambientIntensity;
 			::Color color = { 
-				ambientColor >> 0,
-				ambientColor >> 8, 
-				ambientColor >> 16,
-				ambientColor >> 24 
+				((ambientColor >> 0) & 0xFF),
+				((ambientColor >> 8) & 0xFF), 
+				((ambientColor >> 16) & 0xFF),
+				((ambientColor >> 24) & 0xFF) 
 			};
 
 			::Vector3 ambientColorNormalized = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f };
 
+			if(cameraPosition != nullptr)
+				SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], cameraPosition, SHADER_UNIFORM_VEC3);
+
 			SetShaderValue(shader, GetShaderLocation(shader, "ambientColor"), &ambientColorNormalized, SHADER_UNIFORM_VEC3);
-			SetShaderValue(shader, GetShaderLocation(shader, "ambient"), &ambientIntensity, SHADER_UNIFORM_FLOAT);
+			SetShaderValue(shader, GetShaderLocation(shader, "ambient"), &b, SHADER_UNIFORM_FLOAT);
 
 			int emissiveIntensityLoc = GetShaderLocation(shader, "emissivePower");
 			int emissiveColorLoc = GetShaderLocation(shader, "emissiveColor");
@@ -356,9 +384,15 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
+		}
+
+		void LightUpdate(unsigned int shaderId)
+		{
+			max_lights = lightSources->Count;
+
 			for each (auto light in lightSources)
 			{
-				rPBR::UpdateLight(light->GetShader(), light->GetLight());
+				light->Update();
 			}
 		}
 	};

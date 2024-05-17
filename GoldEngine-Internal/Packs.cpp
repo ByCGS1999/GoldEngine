@@ -63,8 +63,8 @@ void ModelPack::freealloc()
 
 Texture2DPack::Texture2DPack(unsigned int id, Texture2D ref)
 {
-	id = id;
-	resource = std::make_unique<Texture>(ref);
+	this->id = id;
+	this->resource = std::make_unique<Texture>(ref);
 }
 
 bool Texture2DPack::hasValue() { return resource != nullptr; }

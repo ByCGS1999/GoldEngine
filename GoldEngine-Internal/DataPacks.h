@@ -7,6 +7,7 @@
 #include "Packs.h"
 #include "CameraPack.h"
 #include "MaterialPack.h"
+#include "LoggingAPI.h"
 
 /*
 	DATAPACKS
@@ -186,9 +187,9 @@ namespace Engine::Assets::Storage
 			return shader;
 		}
 
-		Camera3D GetCamera3D(unsigned int cameraId)
+		::Camera3D GetCamera3D(unsigned int cameraId)
 		{
-			Camera3D camera = { };
+			::Camera3D camera = { };
 
 			for each (Engine::Assets::Storage::Types::CameraPack  cP in nativePacks->cameras)
 			{
@@ -220,28 +221,19 @@ namespace Engine::Assets::Storage
 
 		Texture2D GetTexture2D(unsigned int textureId)
 		{
-			Texture2D texture = { };
-
-			bool hasTexture2D = false;
-
 			for (int x = 0; x < nativePacks->textures2d.size(); x++)
 			{
 				auto mP = &nativePacks->textures2d[x];
 
-				if (mP->getId() == textureId)
+				if (mP->getId() == textureId || mP->getId().Equals(textureId))
 				{
-					texture = mP->getResource();
-					hasTexture2D = true;
-					break;
+					return mP->getResource();
 				}
 			}
 
-			if (!hasTexture2D)
-			{
-				texture = LoadTexture("./Data/Engine/Textures/NotFound.png");
-			}
+			AddTexture2D(textureId, LoadTexture("./Data/Engine/Textures/NotFound.png"));
 
-			return texture;
+			return GetTexture2D(textureId);
 		}
 
 		Material GetMaterial(unsigned int materialId)
@@ -314,8 +306,9 @@ namespace Engine::Assets::Storage
 
 			if (!hasShader)
 			{
+				printError(String::Format("Shader {0} does not exist, falling back on default", shaderId));
 				shader = LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
-				AddShader(shaderId, shader);
+				//AddShader(shaderId, shader);
 			}
 
 			return shader;
@@ -395,7 +388,7 @@ namespace Engine::Assets::Storage
 			}
 		}
 
-		void AddCamera(unsigned int cameraId, Camera3D camera, Engine::Internal::Components::CameraType type)
+		void AddCamera(unsigned int cameraId, ::Camera3D camera, Engine::Internal::Components::CameraType type)
 		{
 			bool hasCamera = false;
 

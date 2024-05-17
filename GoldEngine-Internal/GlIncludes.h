@@ -12,6 +12,7 @@
 
 #include "Raylib/include/raygui.h"
 #include "Raylib/include/rlImGui.h"
+#include "Raylib/include/rlights.h"
 
 #ifndef GLIMPL
 #define GLIMPL

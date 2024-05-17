@@ -25,7 +25,7 @@ namespace Engine::EngineObjects
 		unsigned int material;
 		unsigned int texture;
 
-		Skybox(String^ s, Engine::Internal::Components::Transform^ t, unsigned int modelId, unsigned int matId, unsigned int texturePath) : Object(s, t, Engine::Internal::Components::ObjectType::Skybox, this->tag)
+		Skybox(String^ s, Engine::Internal::Components::Transform^ t, unsigned int modelId, unsigned int matId, unsigned int texturePath) : Object(s, t, Engine::Internal::Components::ObjectType::Skybox, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			material = matId;
 			texture = texturePath;

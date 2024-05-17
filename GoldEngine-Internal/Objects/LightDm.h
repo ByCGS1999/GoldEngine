@@ -16,6 +16,8 @@ namespace Engine::EngineObjects::Daemons
 		LightDaemon(System::String^ name, Engine::Internal::Components::Transform^ transform, LightManager^ lightManager) : EngineObjects::Daemon(name, transform)
 		{
 			lightM = lightManager;
+
+			rPBR::SetAmbientColor(DataPacks::singleton().GetShader(shaderId), { 255,255,255,255 }, 1.0f);
 		}
 
 		void Draw() override
@@ -32,8 +34,7 @@ namespace Engine::EngineObjects::Daemons
 				return;
 
 			float cameraPos[3] = { camera->GetTransform()->position->x, camera->GetTransform()->position->y, camera->GetTransform()->position->z };
-			Shader s = DataPacks::singleton().GetShader(shaderId);
-			SetShaderValue(s, s.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
+			lightM->UpdateCameraPosition(cameraPos);
 		}
 
 		void Update() override

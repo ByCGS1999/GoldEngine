@@ -58,6 +58,8 @@ namespace Engine::Internal::Components
 				this->parent = parent;
 				this->position = Engine::Components::Vector3::add(parent->position, this->localPosition);
 				this->rotation = Engine::Components::Vector3::add(parent->rotation, this->localRotation);
+
+				this->localPosition = Engine::Components::Vector3::sub(parent->position, this->position);
 			}
 			else
 			{
@@ -107,13 +109,13 @@ namespace Engine::Internal::Components
 		String^ tag;
 
 		[[JsonConstructorAttribute]]
-		Object(System::String^ n, Transform^ transform, ObjectType t, String^ tag)
+		Object(System::String^ n, Transform^ transform, ObjectType t, String^ tag, Layer^ layer)
 		{
 			this->name = n;
 			this->transform = transform;
 			this->type = t;
 			this->viewSpace = ViewSpace::V3D;
-			layerMask = Engine::Scripting::LayerManager::GetLayerFromId(1);
+			layerMask = layer;
 
 			if (tag == nullptr)
 				tag = "";

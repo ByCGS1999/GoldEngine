@@ -154,6 +154,7 @@ namespace Engine::Lua::VM
 
 			//scriptState->Globals["Logging"] = Engine::Scripting::Logging::typeid;
 			RegisterGlobal("Logging", Engine::Scripting::Logging::typeid);
+			RegisterGlobal("Input", Engine::Scripting::InputManager::typeid);
 		}
 
 	public:

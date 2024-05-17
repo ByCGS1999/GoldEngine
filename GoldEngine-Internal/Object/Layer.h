@@ -6,7 +6,7 @@ namespace Engine::Components
 	public ref class Layer
 	{
 	public:
-		int layerMask; // this int represents the priority on rendering (higher number = higher priority);
+		int layerMask; // this int represents the priority on rendering (lower number = higher priority);
 		System::String^ layerName;
 
 	public:

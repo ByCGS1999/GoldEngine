@@ -1,6 +1,6 @@
 ﻿#include "Macros.h"
 
-const int max_lights = 4;
+int max_lights = 4;
 unsigned int passwd = 0;
 
 #include "WinAPI.h"
@@ -284,6 +284,13 @@ private:
 				{
 					light->intensity = intensity;
 				}
+				int shaderId = light->shaderId;
+				ImGui::Text("Shader Id:");
+				ImGui::SameLine();
+				if (ImGui::InputInt("###SHADER_ID", &shaderId, 1, 1))
+				{
+					light->shaderId = shaderId;
+				}
 			}
 			break;
 
@@ -305,7 +312,7 @@ private:
 					char* data = nativePath.data();
 
 					if (ImGui::InputText("###LUA_LINKEDSOURCE",
-						data, scr->luaFilePath->Length + 8, ImGuiInputTextFlags_CallbackCompletion))
+						data, scr->luaFilePath->Length + (8*32), ImGuiInputTextFlags_None))
 					{
 						scr->luaFilePath = gcnew String(data);
 					}
@@ -1127,79 +1134,86 @@ public:
 
 						if (ImGui::BeginMenu("Rendering"))
 						{
-							switch (selectedObject->viewSpace)
 							{
-							case ViewSpace::VNone:
-								tmp1 = 0;
-								break;
-							case ViewSpace::V2D:
-								tmp1 = 1;
-								break;
-							case ViewSpace::V3D:
-								tmp1 = 2;
-								break;
-							}
-
-							const char* types[]{ "None", "2D", "3D" };
-							if (ImGui::Combo("###CURR_MODE", &tmp1, types, IM_ARRAYSIZE(types)))
-							{
-								switch (tmp1)
+								switch (selectedObject->viewSpace)
 								{
-								case 0:
-									selectedObject->viewSpace = ViewSpace::VNone;
+								case ViewSpace::VNone:
+									tmp1 = 0;
 									break;
-								case 1:
-									selectedObject->viewSpace = ViewSpace::V2D;
+								case ViewSpace::V2D:
+									tmp1 = 1;
 									break;
-								case 2:
-									selectedObject->viewSpace = ViewSpace::V3D;
+								case ViewSpace::V3D:
+									tmp1 = 2;
 									break;
 								}
-							}
-							std::string layer;
 
-							if (selectedObject->layerMask != nullptr)
-								layer = CastStringToNative(LayerManager::GetLayerFromId(selectedObject->layerMask->layerMask)->layerName);
-							else
-								layer = "Select Layer";
-
-							std::vector<std::string> layers = LayerManager::getLayerNames();
-
-							if (ImGui::BeginCombo("###CURR_LAYER", layer.c_str(), ImGuiComboFlags_None))
-							{
-								for (std::string tmp : layers)
+								const char* types[]{ "None", "2D", "3D" };
+								if (ImGui::Combo("###CURR_MODE", &tmp1, types, IM_ARRAYSIZE(types)))
 								{
-									bool isSelected = false;
-
-									String^ managedType = gcnew String(layer.c_str());
-									String^ data = gcnew String(tmp.c_str());
-
-									data = data->Substring(data->IndexOf("- ") + 2);
-
-									if (data->CompareTo(managedType) == 0)
+									switch (tmp1)
 									{
-										isSelected = true;
-									}
-
-									if (ImGui::Selectable(tmp.c_str(), isSelected))
-									{
-										data = gcnew String(tmp.c_str());
-
-										Console::WriteLine(data);
-
-										String^ buffer = data->Substring(0, data->IndexOf(" - "));
-
-										Console::WriteLine(buffer);
-
-										Layer^ l = LayerManager::GetLayerFromId(int::Parse(buffer));
-
-										Console::WriteLine(l->layerName);
-
-										selectedObject->layerMask = l;
+									case 0:
+										selectedObject->viewSpace = ViewSpace::VNone;
+										break;
+									case 1:
+										selectedObject->viewSpace = ViewSpace::V2D;
+										break;
+									case 2:
+										selectedObject->viewSpace = ViewSpace::V3D;
+										break;
 									}
 								}
+							}
+							
+							{
+								std::string layer = "";
 
-								ImGui::EndCombo();
+								if (selectedObject->layerMask != nullptr)
+									layer = CastStringToNative(selectedObject->layerMask->layerName);
+								else
+									layer = "Select Layer";
+
+								std::vector<std::string> layers = LayerManager::getLayerNames();
+
+								if (ImGui::BeginCombo("###CURR_LAYER", layer.c_str(), ImGuiComboFlags_None))
+								{
+									for (std::string tmp : layers)
+									{
+										bool isSelected = false;
+
+										String^ managedType = gcnew String(layer.data());
+										String^ data = gcnew String(tmp.data());
+
+										data = data->Substring(data->IndexOf("-") + 2);
+
+										if (data->Equals(managedType))
+										{
+											isSelected = true;
+										}
+
+										if (ImGui::Selectable(tmp.c_str(), &isSelected))
+										{
+											data = gcnew String(tmp.c_str());
+
+											String^ buffer = data->Substring(0, data->IndexOf(" -"));
+
+											Layer^ l = LayerManager::GetLayerFromId(int::Parse(buffer));
+
+											if (l == nullptr)
+											{
+												printError("Failed getting layer (is null)");
+												return;
+											}
+
+											selectedObject->layerMask = l;
+
+											layer = CastStringToNative(selectedObject->layerMask->layerName);
+										}
+									}
+
+									ImGui::EndCombo();
+								}
 							}
 
 							ImGui::EndMenu();
@@ -2031,7 +2045,7 @@ private:
 			scene->AddObjectToScene(lightdm);
 		}
 
-		if(!ObjectManager::singleton()->GetGameObjectsByName("EditorCamera")[0])
+		if(ObjectManager::singleton()->GetGameObjectsByName("EditorCamera")->Count<=0)
 		{
 
 			auto camera3D = gcnew Engine::EngineObjects::Camera("EditorCamera",

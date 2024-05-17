@@ -1,11 +1,49 @@
 #pragma once
 
+#include <stdarg.h>
+
 using namespace Engine::Assets::Storage;
 
 namespace Engine::EngineObjects
 {
+	namespace Native
+	{
+		private class NativeModel
+		{
+		public:
+			Model model;
+
+		private:
+			Texture texture;
+			Shader shader;
+
+		public:
+			NativeModel(Model m, Texture tex, Shader s, unsigned int tint)
+			{
+				model = m;
+				texture = tex;
+				shader = s;
+
+				::Color c =
+				{
+					tint >> 0,
+					tint >> 8,
+					tint >> 16,
+					tint >> 24
+				};
+
+				model.materials[0].shader = shader;
+				model.materials[0].maps[MATERIAL_MAP_ALBEDO].color = c;
+				model.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = texture;
+			}
+		};
+	}
+
 	public ref class ModelRenderer : public Engine::Internal::Components::Object
 	{
+	private:
+		Native::NativeModel* modelManager;
+
 	public:
 		// datapack refs
 		unsigned int model;
@@ -13,12 +51,19 @@ namespace Engine::EngineObjects
 		unsigned int texture;
 		unsigned int tint;
 		// methods & constructor
-		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag)
+		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->model = model;
 			this->shader = shader;
 			this->tint = tint;
 			this->texture = texture;
+
+			modelManager = new Native::NativeModel(
+				DataPacks::singleton().GetModel(model), 
+				DataPacks::singleton().GetTexture2D(texture), 
+				DataPacks::singleton().GetShader(shader), 
+				tint
+			);
 		}
 
 		void Init(unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint)
@@ -28,10 +73,7 @@ namespace Engine::EngineObjects
 			this->tint = tint;
 			this->texture = texture;
 
-			auto modelInst = Engine::Assets::Storage::DataPacks::singleton().GetModel(model);
-			auto texInst = DataPacks::singleton().GetTexture2D(texture);
-
-			modelInst.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = texInst;
+			modelManager = new Native::NativeModel(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetTexture2D(texture), DataPacks::singleton().GetShader(shader), tint);
 
 			/*
 			modelInst.materials[0].shader = DataPacks::singleton().GetShader(shader);
@@ -41,6 +83,7 @@ namespace Engine::EngineObjects
 			modelInst.materials[0].maps[MATERIAL_MAP_EMISSION].color = WHITE;
 			modelInst.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
 			*/
+
 		}
 
 		void Update() override {}
@@ -59,11 +102,7 @@ namespace Engine::EngineObjects
 				tint >> 24
 			};
 
-			auto m = DataPacks::singleton().GetModel(model);
-			auto texInst = DataPacks::singleton().GetTexture2D(texture);
-
-			//m.materials[0].shader = DataPacks::singleton().GetShader(shader);
-			m.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texInst;
+			modelManager = new Native::NativeModel(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetTexture2D(texture), DataPacks::singleton().GetShader(shader), tint);
 
 			/*
 			m.materials[0].shader = DataPacks::singleton().GetShader(shader);
@@ -74,8 +113,11 @@ namespace Engine::EngineObjects
 			m.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
 			*/
 
+			if (modelManager == nullptr || &modelManager->model == nullptr)
+				return;
+
 			DrawModelEx(
-				m,
+				modelManager->model,
 				{ t->position->x,t->position->y, t->position->z },
 				t->rotation->toNative(),
 				t->rotationValue,
