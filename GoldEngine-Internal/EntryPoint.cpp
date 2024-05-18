@@ -308,7 +308,7 @@ private:
 					ImGui::SameLine();
 
 					std::string nativePath = CastStringToNative(scr->luaFilePath);
-
+					
 					char* data = nativePath.data();
 
 					if (ImGui::InputText("###LUA_LINKEDSOURCE",
@@ -686,7 +686,7 @@ end
 
 			if (_reference->GetTransform()->parent != nullptr)
 			{
-				if (_reference->GetTransform()->parent->GetUID() == parent->GetTransform()->GetUID())
+				if (_reference->GetTransform()->parent->GetUID()->Equals(parent->GetTransform()->GetUID()))
 				{
 					String^ refName = "";
 					for (int x = 0; x < depth; x++)
@@ -723,7 +723,8 @@ end
 						}
 					}
 
-					DrawHierarchyInherits(scene, _reference, depth + 1);
+					int nDepth = depth + 1;
+					DrawHierarchyInherits(scene, _reference, nDepth);
 				}
 
 			}
@@ -2015,6 +2016,7 @@ private:
 				"Data/Engine/Shaders/rPBR/pbr.frag"
 			);
 
+
 			scene->PushToRenderQueue(lightManager);
 			scene->AddObjectToScene(lightManager);
 		}
@@ -2127,6 +2129,9 @@ public:
 
 		objectManager = gcnew Scripting::ObjectManager(scene);
 
+		while (!scene->sceneLoaded())
+			WaitTime(1.0);
+
 		create();
 	}
 
@@ -2176,12 +2181,6 @@ public:
 
 		/*
 		auto files = gcnew List<String^>();
-		files->Add("Models/castle.obj");
-		files->Add("Models/castle_diffuse.png");
-		files->Add("Engine/Models/Error.obj");
-		files->Add("Engine/Models/Skybox_cube.glb");
-		files->Add("Engine/Textures/Error.png");
-		files->Add("Engine/Skybox/Daylight.png");
 
 		FileManager::WriteToCustomFile("Data/engineassets.gold", "ThreadcallNull", files->ToArray());*/
 		//FileManager::WriteCustomFileFormat("Data/assets1.gold", "ThereGoesThePasswordGyat", passwd);

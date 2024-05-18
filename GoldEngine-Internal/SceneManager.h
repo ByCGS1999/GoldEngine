@@ -199,7 +199,6 @@ namespace Engine::Managers
 					}
 					break;
 
-
 					case Engine::Internal::Components::ObjectType::BoundingBoxRenderer:
 					{
 						auto sceneObject = gcnew Engine::Management::MiddleLevel::SceneObject(

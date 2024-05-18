@@ -21,6 +21,7 @@ namespace Engine::Management
 		DataPack^ sceneDatapack;
 		bool sceneFinishedLoading;
 		unsigned int password;
+		static Scene^ singleton;
 
 		// Properties
 	public:
@@ -36,6 +37,8 @@ namespace Engine::Management
 	public:
 		Scene(String^ name, String^ sR, System::Collections::Generic::List<String^>^ assetP, System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneO, unsigned long skyTint, System::Collections::Generic::List<System::String^>^ assemblies, System::Collections::Generic::List<String^>^ preloadCode)
 		{
+			singleton = this;
+
 			this->sceneName = name;
 			this->assetPacks = assetP;
 			this->sceneRequirements = sR;
@@ -62,6 +65,11 @@ namespace Engine::Management
 		}
 
 		bool sceneLoaded() { return sceneFinishedLoading; }
+
+		static Scene^ getLoadedScene()
+		{
+			return singleton;
+		}
 
 		void LoadScene()
 		{
@@ -148,7 +156,7 @@ namespace Engine::Management
 				if (sceneObject->objectType == Engine::Internal::Components::ObjectType::Datamodel)
 				{
 					if (sceneObject->GetReference()->name == datamodel)
-						retn = sceneObject->GetReference();
+						return sceneObject->GetReference();
 				}
 			}
 

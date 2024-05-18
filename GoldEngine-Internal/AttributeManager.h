@@ -39,6 +39,21 @@ namespace Engine::Scripting
 
 
 	public:
+		void removeAttribute(Attribute^ attrib)
+		{
+			attributes->Remove(attrib);
+		}
+
+		void removeAttribute(String^ name)
+		{
+			if (hasAttribute(name))
+				attributes->Remove(GetAttribute(name));
+		}
+
+		void clearAttributes()
+		{
+			attributes->Clear();
+		}
 
 		void addAttribute(Attribute^ attribute) 
 		{

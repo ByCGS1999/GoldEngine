@@ -16,8 +16,6 @@ namespace Engine::EngineObjects::Daemons
 		LightDaemon(System::String^ name, Engine::Internal::Components::Transform^ transform, LightManager^ lightManager) : EngineObjects::Daemon(name, transform)
 		{
 			lightM = lightManager;
-
-			rPBR::SetAmbientColor(DataPacks::singleton().GetShader(shaderId), { 255,255,255,255 }, 1.0f);
 		}
 
 		void Draw() override

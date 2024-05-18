@@ -11,6 +11,7 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Quaternion.h"
+#include "../LoggingAPI.h"
 
 using namespace System;
 
@@ -157,13 +158,23 @@ namespace Engine::Internal::Components
 
 		void SetParent(Object^ object)
 		{
+			if (object == nullptr)
+				return;
+
 			transform->SetParent(object->transform);
 		}
 
 		generic <class T>
 		T ToObjectType()
 		{
-			return Cast::Dynamic<T>(this);
+			try
+			{
+				return Cast::Dynamic<T>(this);
+			}
+			catch(Exception^ ex)
+			{
+				printError(ex->Message);
+			}
 		}
 
 		virtual void Destroy()

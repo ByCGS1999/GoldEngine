@@ -32,30 +32,12 @@ namespace Engine::Lua::VM
 		}
 
 	public:
-		void DumpBytecode(String^ fileName)
-		{
-			if (fileName == nullptr || value == nullptr)
-				return;
-
-			File::WriteAllText(fileName, value->ToString());
-		}
-
-		void DumpBytecode(DynValue^ value, String^ fileName)
-		{
-			Stream^ stream = File::Open(fileName, System::IO::FileMode::OpenOrCreate);
-
-			scriptState->Dump(value, stream);
-
-			stream->Close();
-		}
-
-	public:
 		void WriteLuaCodeToFile(String^ src)
 		{
 			FileStream^ f = File::Open(src, FileMode::OpenOrCreate);
 			BinaryWriter^ bwriter = gcnew BinaryWriter(f);
 
-			bwriter->Write("GoldVM");
+			bwriter->Write(BINARY_HEADER);
 			bwriter->Write(BYTECODE_VERSION);
 
 			bwriter->Write(System::Convert::ToBase64String(Encoding::UTF32->GetBytes(CypherLib::EncryptFileContents(source, ::passwd))));
@@ -92,28 +74,35 @@ namespace Engine::Lua::VM
 
 		String^ ReadFromFile(String^ src)
 		{
-			FileStream^ f = File::Open(src, FileMode::OpenOrCreate);
-			BinaryReader^ breader = gcnew BinaryReader(f);
-
-			String^ header = breader->ReadString();
-			int version = breader->ReadInt32();
-
-			if (header->Equals(BINARY_HEADER))
+			try
 			{
-				if (version == BYTECODE_VERSION)
-				{
-					String^ base64 = breader->ReadString();
+				FileStream^ f = File::Open(src, FileMode::OpenOrCreate);
+				BinaryReader^ breader = gcnew BinaryReader(f);
 
-					return CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
+				String^ header = breader->ReadString();
+				int version = breader->ReadInt32();
+
+				if (header->Equals(BINARY_HEADER))
+				{
+					if (version == BYTECODE_VERSION)
+					{
+						String^ base64 = breader->ReadString();
+
+						return CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
+					}
+					else
+					{
+						printError("Lua version mismatch\n");
+					}
 				}
 				else
 				{
-					printError("Lua version mismatch\n");
+					printError("Lua header mismatch\n");
 				}
 			}
-			else
+			catch(Exception^ ex)
 			{
-				printError("Lua header mismatch\n");
+
 			}
 		}
 
@@ -152,9 +141,12 @@ namespace Engine::Lua::VM
 		{
 			UserData::RegisterAssembly(System::Reflection::Assembly::GetCallingAssembly(), true);
 
-			//scriptState->Globals["Logging"] = Engine::Scripting::Logging::typeid;
 			RegisterGlobal("Logging", Engine::Scripting::Logging::typeid);
+			RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
+			RegisterGlobal("DataManager", Engine::Internal::DataManager::typeid);
+			RegisterGlobal("ObjectManager", Engine::Scripting::ObjectManager::singleton());
 			RegisterGlobal("Input", Engine::Scripting::InputManager::typeid);
+			RegisterGlobal("KeyCode", Engine::Scripting::KeyCodes::typeid);
 		}
 
 	public:
@@ -194,46 +186,61 @@ namespace Engine::Lua::VM
 		}
 
 	public:
-		void InvokeFunction(String^ functionName)
+		bool InvokeFunction(String^ functionName)
 		{
 			try
 			{
 				if (hasFunction(functionName))
+				{
 					scriptState->Call(scriptState->Globals[functionName]);
+					return true;
+				}
 			}
 			catch (Exception^ ex)
 			{
 				printError(ex->Message);
 			}
+
+			return false;
 		}
 
-		void InvokeFunction(String^ functionName, array<System::Object^>^ args)
+		bool InvokeFunction(String^ functionName, array<System::Object^>^ args)
 		{
 			try
 			{
 				if (hasFunction(functionName))
+				{
 					scriptState->Call(scriptState->Globals[functionName], args);
+					return true;
+				}
 			}
 			catch (Exception^ ex)
 			{
 				printError(ex->Message);
 			}
+
+			return false;
 		}
 
-		void InvokeFunction(String^ functionName, List<System::Object^>^ args)
+		bool InvokeFunction(String^ functionName, List<System::Object^>^ args)
 		{
 			try
 			{
 				if (hasFunction(functionName))
+				{
 					scriptState->Call(scriptState->Globals[functionName], args);
+					return true;
+				}
 			}
 			catch (Exception^ ex)
 			{
 				printError(ex->Message);
 			}
+
+			return false;
 		}
 
-	public:
+	private:
 		void ExecuteSource(String^ source)
 		{
 			this->source = source;

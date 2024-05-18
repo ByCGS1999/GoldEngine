@@ -41,7 +41,7 @@ namespace rPBR
 
     static void UpdateLight(Shader shader, Light light);
     static Light CreateLight(int type, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader shader);
-    static void SetAmbientColor(Shader shader, ::Color color, float intensity);
+    static void SetAmbientColor(Shader shader, const void* color, const void* intensity);
 
     static Light CreateLight(int type, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader shader)
     {
@@ -88,12 +88,9 @@ namespace rPBR
         SetShaderValue(shader, light.intensityLoc, &light.intensity, SHADER_UNIFORM_FLOAT);
     }
 
-    static void SetAmbientColor(Shader shader, ::Color color, float intensity)
+    static void SetAmbientColor(Shader shader,  const void* col, const void* intensity)
     {
-        float col[3] = { color.r / 255,color.g / 255,color.b / 255 };
         SetShaderValue(shader, GetShaderLocation(shader, "ambientColor"), col, SHADER_UNIFORM_VEC3);
-        SetShaderValue(shader, GetShaderLocation(shader, "ambient"), &intensity, SHADER_UNIFORM_FLOAT);
-
-        
+        SetShaderValue(shader, GetShaderLocation(shader, "ambient"), intensity, SHADER_UNIFORM_FLOAT);
     }
 }

@@ -11,6 +11,9 @@ namespace Engine::EngineObjects
 	public:
 		String^ luaFilePath = "./";
 
+	private:
+		bool loadErrorCalledBack = false;
+
 	public:
 		LuaScript(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::EngineObjects::Script(name, transform)
 		{
@@ -28,22 +31,25 @@ namespace Engine::EngineObjects
 		{
 			if (File::Exists(luaFilePath))
 			{
+				printWarning("Loading Lua binary: " + luaFilePath);
 				virtualMachine = gcnew Engine::Lua::VM::LuaVM();
 
 				luaSource = virtualMachine->ReadFromFile(luaFilePath);
 
 				virtualMachine->RegisterGlobal("script", this);
 				virtualMachine->RegisterGlobal("attributes", attributes);
-				virtualMachine->RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
-				virtualMachine->RegisterGlobal("DataManager", Engine::Internal::DataManager::typeid);
-				virtualMachine->RegisterGlobal("ObjectManager", Engine::Scripting::ObjectManager::singleton());
-				virtualMachine->RegisterGlobal("Input", Engine::Scripting::InputManager::typeid);
 
 				virtualMachine->RegisterScript(luaSource);
+
+				Start();
 			}
 			else
 			{
-				printError("Lua binary: " + luaFilePath + " file does not exist");
+				if (!loadErrorCalledBack) 
+				{
+					print("[IO/EX]:", "Lua binary: " + luaFilePath + " file does not exist");
+					loadErrorCalledBack = true;
+				}
 			}
 		}
 
@@ -92,6 +98,9 @@ namespace Engine::EngineObjects
 
 		void Start() override
 		{
+			if (!Engine::Management::Scene::getLoadedScene()->sceneLoaded())
+				return;
+
 			if (virtualMachine == nullptr)
 				initVM();
 
@@ -101,6 +110,9 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
+			if (!Engine::Management::Scene::getLoadedScene()->sceneLoaded())
+				return;
+
 			if (virtualMachine == nullptr)
 				initVM();
 
@@ -110,6 +122,9 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
+			if (!Engine::Management::Scene::getLoadedScene()->sceneLoaded())
+				return;
+			
 			if (virtualMachine == nullptr)
 				initVM();
 
@@ -119,6 +134,9 @@ namespace Engine::EngineObjects
 
 		void PhysicsUpdate() override 
 		{
+			if (!Engine::Management::Scene::getLoadedScene()->sceneLoaded())
+				return;
+
 			if (virtualMachine == nullptr)
 				initVM();
 
@@ -128,6 +146,9 @@ namespace Engine::EngineObjects
 
 		void DrawGizmo() override 
 		{
+			if (!Engine::Management::Scene::getLoadedScene()->sceneLoaded())
+				return;
+
 			if (virtualMachine == nullptr)
 				initVM();
 
@@ -137,6 +158,9 @@ namespace Engine::EngineObjects
 
 		void DrawImGUI() override
 		{
+			if (!Engine::Management::Scene::getLoadedScene()->sceneLoaded())
+				return;
+
 			if (virtualMachine == nullptr)
 				initVM();
 

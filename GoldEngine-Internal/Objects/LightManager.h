@@ -207,6 +207,7 @@ namespace Engine::EngineObjects
 			ambientIntensity = 0.5f;
 		}
 
+
 	public:
 		static LightManager^ singleton()
 		{
