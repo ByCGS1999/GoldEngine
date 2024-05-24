@@ -15,7 +15,6 @@
 #include "Objects/BoundingBoxRenderer.h"
 #include "Objects/CubeRenderer.h"
 #include "Objects/GridRenderer.h"
-#include "Objects/LightManager.h"
 #include "Objects/ModelRenderer.h"
 #include "Objects/PBRModelRenderer.h"
 #include "Objects/Skybox.h"
@@ -26,6 +25,7 @@
 #include "AttributeManager.h"
 
 #include "Objects/Script.h"
+#include "Objects/LightManager.h"
 #include "Objects/MeshRenderer.h"
 
 #include "Objects/Daemon.h"

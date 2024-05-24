@@ -196,9 +196,20 @@ namespace Engine::Lua::VM
 					return true;
 				}
 			}
+			catch (MoonSharp::Interpreter::ScriptRuntimeException^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->DecoratedMessage);
+			}
+			catch (MoonSharp::Interpreter::InterpreterException^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->DecoratedMessage);
+			}
 			catch (Exception^ ex)
 			{
 				printError(ex->Message);
+				printError(ex->StackTrace);
 			}
 
 			return false;

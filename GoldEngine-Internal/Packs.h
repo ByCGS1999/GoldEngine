@@ -8,16 +8,17 @@ namespace Engine::Assets::Storage::Types
 	{
 	private:
 		unsigned int id;
-		std::unique_ptr<Shader> resource;
+		Shader resource;
 
 	public:
-		ShaderPack(unsigned int id, Shader res);
+		ShaderPack(unsigned int id, Shader& res);
 
 	public:
-		unsigned int getId() const;
-		Shader getResource() const;
+		unsigned int getId();
+		Shader& getResource();
+		Shader* getResourcePtr();
 
-		void setResource(Shader s);
+		void setResource(Shader& s);
 
 		void freealloc();
 	};
@@ -29,14 +30,14 @@ namespace Engine::Assets::Storage::Types
 		std::unique_ptr<Model> resource;
 
 	public:
-		ModelPack(unsigned int id, Model res);
+		ModelPack(unsigned int id, Model& res);
 
 	public:
 		bool hasValue();
 		unsigned int getId() const;
-		Model getResource() const;
+		Model& getResource() const;
 
-		void setResource(Model s);
+		void setResource(Model& s);
 
 		void freealloc();
 	};
@@ -49,14 +50,14 @@ namespace Engine::Assets::Storage::Types
 		std::unique_ptr<Texture> resource;
 
 	public:
-		Texture2DPack(unsigned int id, Texture2D ref);
+		Texture2DPack(unsigned int id, Texture2D& ref);
 
 	public:
 		bool hasValue();
 		unsigned int getId() const;
-		Texture getResource() const;
+		Texture& getResource() const;
 
-		void setResource(Texture s);
+		void setResource(Texture& s);
 
 		void freealloc();
 	};

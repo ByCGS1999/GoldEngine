@@ -67,6 +67,8 @@ namespace rPBR
 
         rPBR::UpdateLight(shader, light);
 
+        lightCount++;
+
         return light;
     }
 

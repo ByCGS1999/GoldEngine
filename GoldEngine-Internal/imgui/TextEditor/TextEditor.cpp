@@ -3370,6 +3370,8 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 
 		static const char* customClasses[] = // GOLD ENGINE CLASSES
 		{
+			"KeyCode",
+			"Input",
 			"Logging",
 			"Attribute",
 			"attributes",

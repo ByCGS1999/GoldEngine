@@ -146,6 +146,34 @@ namespace Engine::Management
 			return false;
 		}
 
+
+		bool ExistsMember(System::String^ datamodel)
+		{
+			for each (auto objects in drawQueue)
+			{
+				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
+
+				if (sceneObject->GetReference()->name == datamodel)
+					return true;
+			}
+
+			return false;
+		}
+
+		Engine::Internal::Components::Object^ GetMember(System::String^ datamodel)
+		{
+			Engine::Internal::Components::Object^ retn = nullptr;
+			for each (auto objects in drawQueue)
+			{
+				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
+
+				if (sceneObject->GetReference()->name == datamodel)
+					return sceneObject->GetReference();
+			}
+
+			return nullptr;
+		}
+
 		Engine::Internal::Components::Object^ GetDatamodelMember(System::String^ datamodel)
 		{
 			Engine::Internal::Components::Object^ retn = nullptr;
@@ -271,8 +299,6 @@ namespace Engine::Management
 				auto newAssembly = gcnew EngineAssembly(t);
 				assemblies->Add(newAssembly);
 			}
-
-			sceneDatapack->ReadFromFile(sceneRequirements, password);
 
 			/*
 			for each (auto p in preload_scripts)

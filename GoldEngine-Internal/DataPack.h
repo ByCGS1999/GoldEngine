@@ -21,28 +21,28 @@ namespace Engine::Assets::Management
 	private:
 		void ParseContentData()
 		{
+			DataPacks::singleton().FreeAll();
+			print("[DataPack]:", "Adding stored assets to the datapacks");
+
 			for each (unsigned int shader_id in shaders->Keys)
 			{
 				auto filePath = shaders[shader_id];
 
-				Shader s = LoadShader(CastStringToNative(filePath[0]).c_str(), CastStringToNative(filePath[1]).c_str());
-				DataPacks::singleton().AddShader(shader_id, s);
+				AddShader(shader_id, filePath[0], filePath[1]);
 			}
 
 			for each (unsigned int modelId in models->Keys)
 			{
 				System::String^ filePath = models[modelId];
 
-				Model s = LoadModel(CastStringToNative(filePath).c_str());
-				DataPacks::singleton().AddModel(modelId, s);
+				AddModel(modelId, filePath);
 			}
 
 			for each (unsigned int textureId in textures2d->Keys)
 			{
 				System::String^ filePath = textures2d[textureId];
 
-				Texture2D s = LoadTexture(CastStringToNative(filePath).c_str());
-				DataPacks::singleton().AddTexture2D(textureId, s);
+				AddTextures2D(textureId, filePath);
 			}
 
 			for each (unsigned int material_id in materials->Keys)
@@ -87,17 +87,14 @@ namespace Engine::Assets::Management
 	public:
 		DataPack(String^ fileName)
 		{
+			singletonRef = this;
+			
 			shaders = gcnew Dictionary<unsigned int, array<String^>^>();
 			models = gcnew Dictionary<unsigned int, String^>();
 			materials = gcnew Dictionary<unsigned int, unsigned int>();
 			textures2d = gcnew Dictionary<unsigned int, String^>();
 			singletonRef = this;
 			fileTarget = fileName;
-		}
-
-		static void SetSingletonReference(DataPack^ reference)
-		{
-			singletonRef = reference;
 		}
 
 		Shader AddShader(unsigned int id, String^ vs, String^ fs)
@@ -118,36 +115,49 @@ namespace Engine::Assets::Management
 				fragmentShader = CastStringToNative(fs);
 
 				Shader s = LoadShader(vertexShader.c_str(), fragmentShader.c_str());
+
+				printConsole("Compiling New Shader [" + id + "]");
+				printConsole("VertexShader: " + vs);
+				printConsole("FragmentShader: " + fs);
+
 				DataPacks::singleton().AddShader(id, s);
 
 				return s;
 			}
 			else
 			{
-				if(DataPacks::singleton().HasShader(id))
-					return DataPacks::singleton().GetShader(id);
-				else
-				{
-					std::string vertexShader = "";
-					std::string fragmentShader = "";
+				std::string vertexShader = "";
+				std::string fragmentShader = "";
 
-					vertexShader = CastStringToNative(vs);
-					fragmentShader = CastStringToNative(vs);
+				vertexShader = CastStringToNative(vs);
+				fragmentShader = CastStringToNative(fs);
 
-					Shader s = LoadShader(vertexShader.c_str(), fragmentShader.c_str());
-					DataPacks::singleton().AddShader(id, s);
+				Shader s = LoadShader(vertexShader.c_str(), fragmentShader.c_str());
 
-					return s;
-				}
+				print("[Resource Manager]:", "Compiling Stored Shader [" + id + "]");
+				print("[Resource Manager]:", "VertexShader: " + vs);
+				print("[Resource Manager]:", "FragmentShader: " + fs);
+
+				print("[Resource Manager]:", "Compiled Shader id -> " + s.id);
+
+				print("[Resource Manager]", "------------------------------------------");
+
+				DataPacks::singleton().AddShader(id, s);
+
+				return s;
 			}
 		}
 
-		Model AddModel(unsigned int id, const char* path)
+		Model AddModel(unsigned int id, String^ path)
 		{
 			if (!models->ContainsKey(id))
 			{
-				models->Add(id, gcnew String(path));
-				Model m = LoadModel(path);
+				models->Add(id, path);
+				std::string text = "";
+
+				text = CastStringToNative(path);
+
+				Model m = LoadModel(text.c_str());
 
 				DataPacks::singleton().AddModel(id, m);
 
@@ -155,16 +165,15 @@ namespace Engine::Assets::Management
 			}
 			else
 			{
-				if(DataPacks::singleton().HasModel(id))
-					return DataPacks::singleton().GetModel(id);
-				else
-				{
-					Model m = LoadModel(path);
+				std::string text = "";
 
-					DataPacks::singleton().AddModel(id, m);
+				text = CastStringToNative(path);
 
-					return m;
-				}
+				Model m = LoadModel(text.c_str());
+
+				DataPacks::singleton().AddModel(id, m);
+
+				return m;
 			}
 		}
 
@@ -187,6 +196,13 @@ namespace Engine::Assets::Management
 
 				text = CastStringToNative(tex);
 
+				print("[Resource Manager]:", "Loading Texture2D");
+
+				print("[Resource Manager]:", "Path -> " + tex);
+				print("[Resource Manager]:", "Id -> " + id);
+
+				print("[Resource Manager]", "------------------------------------------");
+
 				Texture2D tex = LoadTexture(text.c_str());
 
 				DataPacks::singleton().AddTexture2D(id, tex);
@@ -195,20 +211,22 @@ namespace Engine::Assets::Management
 			}
 			else
 			{
-				if(DataPacks::singleton().HasTexture2D(id))
-					return DataPacks::singleton().GetTexture2D(id);
-				else
-				{
-					std::string text = "";
+				std::string text = "";
 
-					text = CastStringToNative(tex);
+				text = CastStringToNative(tex);
 
-					Texture2D tex = LoadTexture(text.c_str());
+				Texture2D texture = LoadTexture(text.c_str());
 
-					DataPacks::singleton().AddTexture2D(id, tex);
+				print("[Resource Manager]:", "Loading Texture2D");
 
-					return tex;
-				}
+				print("[Resource Manager]:", "Path -> " + tex);
+				print("[Resource Manager]:", "Id -> " + id);
+
+				print("[Resource Manager]", "------------------------------------------");
+
+				DataPacks::singleton().AddTexture2D(id, texture);
+
+				return texture;
 			}
 		}
 

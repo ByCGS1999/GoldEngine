@@ -45,9 +45,15 @@ namespace Engine::Utils
 		{
 			while (true)
 			{
-				List<Engine::Scripting::Log^>^ logs;
+				if (Logging::getLogs() == nullptr)
+					continue;
 
-				msclr::lock l(logs = Logging::getLogs());
+				List<Engine::Scripting::Log^>^ logs = Logging::getLogs();
+
+				if (logs == nullptr)
+					continue;
+
+				msclr::lock l(logs);
 				
 				if (l.try_acquire(1000)) 
 				{

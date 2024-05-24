@@ -14,16 +14,23 @@ namespace Engine::EngineObjects
 			Model model;
 
 		private:
-			Texture texture;
 			Shader shader;
+			Texture texture;
+			unsigned int tint;
 
 		public:
 			NativeModel(Model m, Texture tex, Shader s, unsigned int tint)
 			{
-				model = m;
-				texture = tex;
-				shader = s;
+				this->model = m;
+				this->texture = tex;
+				this->shader = s;
+				this->tint = tint;
 
+				setup();
+			}
+
+			void setup()
+			{
 				::Color c =
 				{
 					tint >> 0,
@@ -34,7 +41,13 @@ namespace Engine::EngineObjects
 
 				model.materials[0].shader = shader;
 				model.materials[0].maps[MATERIAL_MAP_ALBEDO].color = c;
-				model.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = texture;
+				model.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = (Texture2D)texture;
+
+				model.materials[0].maps[MATERIAL_MAP_METALNESS].value = 0.0f;
+				model.materials[0].maps[MATERIAL_MAP_ROUGHNESS].value = 0.0f;
+				model.materials[0].maps[MATERIAL_MAP_OCCLUSION].value = 1.0f;
+				model.materials[0].maps[MATERIAL_MAP_EMISSION].color = WHITE;
+				model.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
 			}
 		};
 	}
@@ -102,15 +115,14 @@ namespace Engine::EngineObjects
 				tint >> 24
 			};
 
+			if (modelManager != nullptr)
+				free(modelManager);
+
 			modelManager = new Native::NativeModel(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetTexture2D(texture), DataPacks::singleton().GetShader(shader), tint);
+
 
 			/*
 			m.materials[0].shader = DataPacks::singleton().GetShader(shader);
-			m.materials[0].maps[MATERIAL_MAP_METALNESS].value = 0.0f;
-			m.materials[0].maps[MATERIAL_MAP_ROUGHNESS].value = 0.0f;
-			m.materials[0].maps[MATERIAL_MAP_OCCLUSION].value = 1.0f;
-			m.materials[0].maps[MATERIAL_MAP_EMISSION].color = WHITE;
-			m.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
 			*/
 
 			if (modelManager == nullptr || &modelManager->model == nullptr)

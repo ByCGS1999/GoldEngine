@@ -122,15 +122,15 @@ namespace Engine::Assets::Storage
 
 		void FreeTextures2D()
 		{
-			/*
 			for (int x = 0; x < nativePacks->textures2d.size(); x++)
 			{
-				if (&nativePacks->textures2d[x].textureReference != nullptr)
+				auto tP = &nativePacks->textures2d[x];
+
+				if (tP->hasValue())
 				{
-					UnloadTexture(nativePacks->textures2d[x].textureReference);
+					tP->freealloc();
 				}
 			}
-			*/
 
 			nativePacks->textures2d.clear();
 		}
@@ -203,7 +203,7 @@ namespace Engine::Assets::Storage
 			return camera;
 		}
 
-		Camera2D GetCamera2D(unsigned int cameraId)
+		::Camera2D GetCamera2D(unsigned int cameraId)
 		{
 			Camera2D camera = { };
 
@@ -225,7 +225,7 @@ namespace Engine::Assets::Storage
 			{
 				auto mP = &nativePacks->textures2d[x];
 
-				if (mP->getId() == textureId || mP->getId().Equals(textureId))
+				if (mP->getId() == textureId)
 				{
 					return mP->getResource();
 				}
@@ -263,7 +263,7 @@ namespace Engine::Assets::Storage
 
 		Model GetModel(unsigned int modelId)
 		{
-			Model retn;
+			Model retn = { };
 			bool hasModel = false;
 
 			for (int x = 0; x < nativePacks->models.size(); x++)
@@ -308,13 +308,41 @@ namespace Engine::Assets::Storage
 			{
 				printError(String::Format("Shader {0} does not exist, falling back on default", shaderId));
 				shader = LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
-				//AddShader(shaderId, shader);
+				AddShader(shaderId, shader);
 			}
 
 			return shader;
 		}
 
-		void AddShader(unsigned int shaderId, Shader shader)
+		Shader* GetShaderPtr(unsigned int shaderId)
+		{
+			Shader* shader;
+
+			bool hasShader = false;
+
+			for (int x = 0; x < nativePacks->shaders.size(); x++)
+			{
+				auto sP = &nativePacks->shaders[x];
+
+				if (sP->getId() == shaderId)
+				{
+					shader = sP->getResourcePtr();
+					hasShader = true;
+					break;
+				}
+			}
+
+			if (!hasShader)
+			{
+				printError(String::Format("Shader {0} does not exist, falling back on default", shaderId));
+				shader = &LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
+				AddShader(shaderId, *shader);
+			}
+
+			return shader;
+		}
+
+		void AddShader(unsigned int shaderId, Shader& shader)
 		{
 			bool hasShader = false;
 

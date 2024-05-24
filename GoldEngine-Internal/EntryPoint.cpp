@@ -147,7 +147,7 @@ private:
 					{
 						assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Model);
 
-						packedData->AddModel(assetId, CastStringToNative(f).c_str());
+						packedData->AddModel(assetId, f);
 
 						packedData->WriteToFile(packedData->getFile(), passwd);
 					}
@@ -530,6 +530,10 @@ private:
 					{
 						language = TextEditor::LanguageDefinition::CPlusPlus();
 					}
+					if (ImGui::MenuItem("C#"))
+					{
+						language = TextEditor::LanguageDefinition::Cs();
+					}
 					if (ImGui::MenuItem("GLSL"))
 					{
 						language = TextEditor::LanguageDefinition::GLSL();
@@ -696,7 +700,7 @@ end
 
 					refName += _reference->name;
 
-					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager)
+					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager || _reference->isProtected())
 					{
 						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->GetTransform()->GetUID()).c_str()))
 						{
@@ -1066,7 +1070,7 @@ public:
 
 				if (reference != nullptr)
 				{
-					if (type == ObjectType::Datamodel || type == ObjectType::LightManager)
+					if (type == ObjectType::Datamodel || type == ObjectType::LightManager || reference->isProtected())
 					{
 						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)" + "###" + reference->GetTransform()->GetUID())))
 						{
@@ -2002,7 +2006,7 @@ private:
 	{
 		scene->GetDatamodelMember("workspace");
 
-		if (!scene->ExistsDatamodelMember("lighting"))
+		if (!scene->ExistsMember("lighting"))
 		{
 			lightManager = gcnew LightManager("lighting",
 				gcnew Engine::Internal::Components::Transform(
@@ -2016,13 +2020,15 @@ private:
 				"Data/Engine/Shaders/rPBR/pbr.frag"
 			);
 
+			lightManager->protectMember();
 
 			scene->PushToRenderQueue(lightManager);
 			scene->AddObjectToScene(lightManager);
 		}
 		else
 		{
-			lightManager = (LightManager^)scene->GetDatamodelMember("lighting");
+			lightManager = scene->GetMember("lighting")->ToObjectType<LightManager^>();
+			lightManager->protectMember();
 		}
 
 
@@ -2069,17 +2075,18 @@ private:
 public:
 	void Init() override
 	{
-		DataPack::SetSingletonReference(packedData);
-
+		/*
 		modelTexture = DataPack::singleton()->AddTextures2D(256, "./Data/EditorAssets/Icons/Model.png");
 		DataPack::singleton()->AddTextures2D(257, "Data/EditorAssets/Icons/Run.png");
 		DataPack::singleton()->AddTextures2D(258, "Data/EditorAssets/Icons/Stop.png");
 		DataPack::singleton()->AddTextures2D(259, "Data/EditorAssets/Icons/Material.png");
 		DataPack::singleton()->AddShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
+		*/
 
+		modelTexture = DataPacks::singleton().GetTexture2D(256);
 		materialTexture = DataPacks::singleton().GetTexture2D(259);
 
-		packedData->WriteToFile(packedData->getFile(), passwd);
+		//packedData->WriteToFile(packedData->getFile(), passwd);
 
 		/*
 		Shader lightShader = dataPack.GetShader(1);
@@ -2150,7 +2157,6 @@ public:
 		scene = SceneManager::CreateScene("GoldEngineBoot");
 
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
-		scene->LoadScene();
 
 		while (!scene->sceneLoaded())
 		{

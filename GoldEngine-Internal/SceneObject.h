@@ -34,6 +34,9 @@ namespace Engine::Management::MiddleLevel
 
 		Engine::Internal::Components::Object^ GetReference()
 		{
+			if (reference == nullptr)
+				return nullptr;
+
 			return reference;
 		}
 

@@ -36,13 +36,13 @@ namespace Engine::Internal
 		// -- CAMERA
 		inline static void HL_SetCameraFov(unsigned int cameraId, float fov)
 		{
-			Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
+			::Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
 			c.fovy = fov;
 		}
 
 		inline static void HL_SetCameraProjection(unsigned int cameraId, int projection)
 		{
-			Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
+			::Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
 			c.projection = projection;
 		}
 
@@ -57,7 +57,7 @@ namespace Engine::Internal
 		// Load a model into the datapacks
 		inline static void HL_LoadModel(unsigned int modelId, System::String^ fileName)
 		{
-			Engine::Assets::Management::DataPack::singleton()->AddModel(modelId, CastStringToNative(fileName).c_str());
+			Engine::Assets::Management::DataPack::singleton()->AddModel(modelId, fileName);
 		}
 
 		// Load a texture into the datapacks

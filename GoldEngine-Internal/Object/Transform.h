@@ -109,9 +109,15 @@ namespace Engine::Internal::Components
 		Layer^ layerMask;
 		String^ tag;
 
+	private:
+		bool memberIsProtected;
+
+	public:
+
 		[[JsonConstructorAttribute]]
 		Object(System::String^ n, Transform^ transform, ObjectType t, String^ tag, Layer^ layer)
 		{
+			this->memberIsProtected = false;
 			this->name = n;
 			this->transform = transform;
 			this->type = t;
@@ -148,7 +154,23 @@ namespace Engine::Internal::Components
 		virtual void Draw() {}
 		virtual void DrawGizmo() {}
 		virtual void DrawImGUI() {}
+
 		// defined
+
+		bool isProtected()
+		{
+			return memberIsProtected;
+		}
+
+		void protectMember()
+		{
+			memberIsProtected = true;
+		}
+
+		void unprotectMember()
+		{
+			memberIsProtected = false;
+		}
 
 		String^ GetTag() { return tag; }
 
