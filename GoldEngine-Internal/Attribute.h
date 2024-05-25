@@ -8,68 +8,17 @@ namespace Engine::Scripting
 	public:
 		String^ name;
 		System::Object^ userData;
-		System::String^ type;
 		System::Type^ userDataType;
 
 	public:
-		Attribute(String^ str, System::Object^ data)
-		{
-			if (data == nullptr)
-			{
-				printError("Attribute: " + str + " Value is a null pointer.");
-				delete this; // clean memory, fuck off
-				return;
-			}
-
-			this->name = str;
-			userData = data;
-			type = data->GetType()->Name;
-			userDataType = data->GetType();
-		}
-		Attribute(String^ str, System::Object^ data, String^ dataType)
-		{
-			if (data == nullptr)
-			{
-				printError("Attribute: " + str + " Value is a null pointer.");
-				delete this; // clean memory, fuck off
-				return;
-			}
-
-			this->name = str;
-			userData = data;
-			type = dataType;
-			userDataType = data->GetType();
-		}
+		Attribute(String^ str, System::Object^ data);
 		[Newtonsoft::Json::JsonConstructorAttribute]
-		Attribute(String^ str, System::Object^ data, String^ dataType, System::Type^ dT)
-		{
-			if (data == nullptr)
-			{
-				printError("Attribute: " + str + " Value is a null pointer.");
-				delete this; // clean memory, fuck off
-				return;
-			}
-
-			this->name = str;
-			userData = data;
-			type = dataType;
-			userDataType = dT;
-		}
+		Attribute(String^ str, System::Object^ data, System::Type^ dT);
 
 	public:
-		void setValue(System::Object^ object)
-		{
-			userData = object;
-			type = object->GetType()->Name;
-		}
+		void setValue(System::Object^ object);
 
-		void setValue(System::Object^ object, bool overrideType)
-		{
-			userData = object;
-
-			if(overrideType)
-				type = object->GetType()->Name;
-		}
+		void setValue(System::Object^ object, bool overrideType);
 
 	public:
 		generic <class T>
@@ -85,9 +34,7 @@ namespace Engine::Scripting
 
 		auto getValueAuto()
 		{
-			Type^ targetType = System::Type::GetType(type);
-
-			return Convert::ChangeType(userData, targetType);
+			return Convert::ChangeType(userData, userDataType);
 		}
 
 		System::Type^ getValueType()
@@ -106,12 +53,34 @@ namespace Engine::Scripting
 			}
 			catch (Exception^ ex)
 			{
-				print("[ENGINE EXCEPTION]", ex->Message);
+			#ifdef LOGAPI_IMPL
+				printError(ex->Message);
+				printError(ex->StackTrace);
+			#endif
 
 				return userData;
 			}
 		}
 
+		void setType(System::Type^ type)
+		{
+			try 
+			{
+			#ifdef LOGAPI_IMPL
+				printConsole("Converting from " + userData->GetType()->Name + " To -> " + type->Name);
+			#endif
+				userDataType = type;
+
+				userData = System::Convert::ChangeType(userData, type);
+			}
+			catch (Exception^ ex)
+			{
+			#ifdef LOGAPI_IMPL
+				printError(ex->Message);
+				printError(ex->StackTrace);
+			#endif
+			}
+		}
 
 
 	public:
@@ -130,7 +99,7 @@ namespace Engine::Scripting
 			if (data == nullptr)
 				return nullptr;
 
-			return gcnew Attribute(name, data, data->GetType()->Name, data->GetType());
+			return gcnew Attribute(name, data, data->GetType());
 		}
 
 		static Attribute^ New(String^ name, System::Object^ data, Type^ type)
@@ -138,7 +107,7 @@ namespace Engine::Scripting
 			if (data == nullptr)
 				return nullptr;
 
-			return gcnew Attribute(name, data, type->Name, type);
+			return gcnew Attribute(name, data, type);
 		}
 	};
 }

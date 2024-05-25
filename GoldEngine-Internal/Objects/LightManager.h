@@ -198,21 +198,21 @@ namespace Engine::EngineObjects
 
 		unsigned int ambientColor;
 		float ambientIntensity;
+		unsigned int maxLights;
 
 	private:
 		int lightNum;
-		int shaderId;
 
 	public:
 		LightManager(String^ name, Engine::Internal::Components::Transform^ t, String^ vs, String^ fs) : Engine::EngineObjects::Script(name, t)
 		{
-			shaderId = -1;
 			lightdm = this;
 			lightSources = gcnew System::Collections::Generic::List<Engine::EngineObjects::LightSource^>();
 			vs_path = vs;
 			fs_path = fs;
 			ambientColor = 0xFFFFFFFF;
 			ambientIntensity = 0.5f;
+
 		}
 
 
@@ -329,36 +329,6 @@ namespace Engine::EngineObjects
 			{
 				lightSources->Add(light);
 
-				String^ vs_net = File::ReadAllText(vs_path);
-				String^ fs_net = File::ReadAllText(fs_path);
-
-				fs_net = fs_net->Replace("%numlights%", lightSources->Count.ToString());
-
-				Shader s = LoadShaderFromMemory(CastStringToNative(vs_net).c_str(), CastStringToNative(fs_net).c_str());
-				
-				CreateLocs(s, lightSources->Count);
-
-				std::vector<rPBR::Light> _light;
-
-				for (int x = 0; x < lightSources->Count; x++)
-				{
-					_light.push_back(lightSources[x]->GetLight());
-				}
-
-				int lightCountLoc = GetShaderLocation(s, "numOfLights");
-				int maxLightCount = _light.size();
-				SetShaderValue(s, lightCountLoc, &maxLightCount, SHADER_UNIFORM_INT);
-
-				TraceLog(LOG_INFO, "Lights %d", _light.size());
-
-				if (DataPacks::singleton().GetShaderPtr(shaderId) == nullptr)
-				{
-					DataPacks::singleton().AddShader(shaderId, s);
-				}
-				else
-				{
-					DataPacks::singleton().AddShader(shaderId, s);
-				}
 				return lightSources->IndexOf(light);
 			}
 			else
@@ -383,6 +353,62 @@ namespace Engine::EngineObjects
 			return lightSources->Contains(source);
 		}
 
+		void Start() override
+		{
+			try 
+			{
+				if (!attributes->getAttribute("shaderId"))
+				{
+					attributes->setAttribute(Engine::Scripting::Attribute::create("shaderId", 0, UInt32::typeid));
+				}
+				else
+				{
+					attributes->getAttribute("shaderId")->setType(attributes->getAttribute("shaderId")->userDataType);
+				}
+
+				unsigned int shaderId = (UInt32)attributes->getAttribute("shaderId")->getValue();
+
+				String^ vs_net = File::ReadAllText(vs_path);
+				String^ fs_net = File::ReadAllText(fs_path);
+
+				fs_net = fs_net->Replace("%numlights%", lightSources->Count.ToString());
+
+				Shader& s = LoadShaderFromMemory(CastStringToNative(vs_net).c_str(), CastStringToNative(fs_net).c_str());
+
+				CreateLocs(s, lightSources->Count);
+
+				std::vector<rPBR::Light> _light;
+
+				for (int x = 0; x < lightSources->Count; x++)
+				{
+					_light.push_back(lightSources[x]->GetLight());
+				}
+
+				int lightCountLoc = GetShaderLocation(s, "numOfLights");
+				int maxLightCount = _light.size();
+				SetShaderValue(s, lightCountLoc, &maxLightCount, SHADER_UNIFORM_INT);
+
+				TraceLog(LOG_INFO, "Lights %d", _light.size());
+
+				if (&DataPacks::singleton().GetShader(shaderId) == nullptr)
+				{
+					DataPacks::singleton().AddShader(shaderId, s);
+				}
+				else
+				{
+					UnloadShader(DataPacks::singleton().GetShader(shaderId));
+
+					DataPacks::singleton().AddShader(shaderId, s);
+				}
+
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->StackTrace);
+			}
+		}
+
 		void DrawGizmo() override
 		{
 
@@ -393,12 +419,15 @@ namespace Engine::EngineObjects
 
 		}
 
+	public:
 		void Update() override
-		{
+		{/*
 			if(shaderId != -1)
 				if (cameraPosition != nullptr)
 					SetShaderValue(DataPacks::singleton().GetShader(shaderId), (DataPacks::singleton().GetShader(shaderId)).locs[SHADER_LOC_VECTOR_VIEW], cameraPosition, SHADER_UNIFORM_VEC3);
-		
+		*/
+
+	
 		}
 
 		void LightUpdate(unsigned int shaderId)

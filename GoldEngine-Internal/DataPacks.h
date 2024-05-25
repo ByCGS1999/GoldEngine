@@ -286,7 +286,7 @@ namespace Engine::Assets::Storage
 			return retn;
 		}
 
-		Shader GetShader(unsigned int shaderId)
+		Shader& GetShader(unsigned int shaderId)
 		{
 			Shader shader;
 
@@ -298,9 +298,7 @@ namespace Engine::Assets::Storage
 
 				if (sP->getId() == shaderId)
 				{
-					shader = sP->getResource();
-					hasShader = true;
-					break;
+					return sP->getResource();
 				}
 			}
 

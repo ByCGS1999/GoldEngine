@@ -239,6 +239,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="CastToNative.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="imguistyleserializer.cpp" />

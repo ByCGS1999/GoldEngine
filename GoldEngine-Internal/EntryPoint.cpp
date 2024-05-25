@@ -331,7 +331,7 @@ private:
 					{
 						if (attrib != nullptr)
 						{
-							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->type + ")").c_str());
+							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->userDataType->Name + ")").c_str());
 							if (attrib->userData->GetType()->Equals(String::typeid))
 							{
 
@@ -342,7 +342,8 @@ private:
 
 								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
 								{
-									attrib->setValue(gcnew UInt32(value), true);
+									attrib->setValue(gcnew UInt32(value), false);
+									attrib->setType(UInt32::typeid);
 								}
 							}
 							else if (attrib->userData->GetType()->Equals(Int32::typeid))
@@ -351,7 +352,8 @@ private:
 
 								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
 								{
-									attrib->setValue(gcnew Int32(value), true);
+									attrib->setValue(gcnew Int32(value), false);
+									attrib->setType(Int32::typeid);
 								}
 							}
 							else if (attrib->userData->GetType()->Equals(Int64::typeid))
@@ -362,7 +364,8 @@ private:
 
 								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
 								{
-									attrib->setValue(gcnew Int64(value), true);
+									attrib->setValue(gcnew Int64(value), false);
+									attrib->setType(Int64::typeid);
 								}
 							}
 							else if (attrib->getValueType()->Equals(Engine::Components::Color::typeid))

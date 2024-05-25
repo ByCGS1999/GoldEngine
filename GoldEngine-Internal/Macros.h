@@ -3,6 +3,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define ENCRYPTION_PASSWORD "ChaosLanguage"
 
+#define LOGAPI_IMPL
 #define RLIGHTS_IMPLEMENTATION
 #define MAX_LIGHTS 4
 #define Serialize Newtonsoft::Json::JsonConvert::SerializeObject
