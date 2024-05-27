@@ -193,9 +193,6 @@ namespace Engine::EngineObjects
 		float* cameraPosition;
 
 	public:
-		String^ vs_path;
-		String^ fs_path;
-
 		unsigned int ambientColor;
 		float ambientIntensity;
 		unsigned int maxLights;
@@ -208,11 +205,11 @@ namespace Engine::EngineObjects
 		{
 			lightdm = this;
 			lightSources = gcnew System::Collections::Generic::List<Engine::EngineObjects::LightSource^>();
-			vs_path = vs;
-			fs_path = fs;
 			ambientColor = 0xFFFFFFFF;
 			ambientIntensity = 0.5f;
 
+			attributes->setAttribute(Engine::Scripting::Attribute::create("vertexShader", vs, String::typeid));
+			attributes->setAttribute(Engine::Scripting::Attribute::create("fragmentShader", fs, String::typeid));
 		}
 
 
@@ -285,8 +282,8 @@ namespace Engine::EngineObjects
 		{
 			if (lightNum != lightSources->Count)
 			{
-				String^ vs_net = File::ReadAllText(vs_path);
-				String^ fs_net = File::ReadAllText(fs_path);
+				String^ vs_net = File::ReadAllText((String^)attributes->getAttribute("vertexShader")->getValue());
+				String^ fs_net = File::ReadAllText((String^)attributes->getAttribute("fragmentShader")->getValue());
 
 				fs_net = fs_net->Replace("%numlights%", lightSources->Count.ToString());
 
@@ -368,8 +365,8 @@ namespace Engine::EngineObjects
 
 				unsigned int shaderId = (UInt32)attributes->getAttribute("shaderId")->getValue();
 
-				String^ vs_net = File::ReadAllText(vs_path);
-				String^ fs_net = File::ReadAllText(fs_path);
+				String^ vs_net = File::ReadAllText((String^)attributes->getAttribute("vertexShader")->getValue());
+				String^ fs_net = File::ReadAllText((String^)attributes->getAttribute("fragmentShader")->getValue());
 
 				fs_net = fs_net->Replace("%numlights%", lightSources->Count.ToString());
 

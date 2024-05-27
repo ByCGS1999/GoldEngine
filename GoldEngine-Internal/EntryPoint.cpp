@@ -325,7 +325,7 @@ private:
 
 				ImGui::SeparatorText("Attributes");
 
-				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX"))
+				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX", { ImGui::GetWindowWidth()-25, 300}))
 				{
 					for each (Engine::Scripting::Attribute ^ attrib in script->attributes->attributes)
 					{
@@ -334,7 +334,19 @@ private:
 							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->userDataType->Name + ")").c_str());
 							if (attrib->userData->GetType()->Equals(String::typeid))
 							{
+								String^ value = (String^)attrib->getValue();
+								int valueLen = value->Length;
+								char* data = new char[valueLen * 8];
 
+								strcpy(data, CastStringToNative(value).c_str());
+
+								ImGui::SetNextItemWidth(ImGui::GetWindowWidth()-25);
+								if (ImGui::InputText(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), data, valueLen * 8))
+								{
+									attrib->setValue(gcnew String(data));
+
+								}
+								free(data);
 							}
 							else if (attrib->userData->GetType()->Equals(UInt32::typeid))
 							{
