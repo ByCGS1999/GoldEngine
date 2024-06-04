@@ -19,7 +19,7 @@ namespace Engine::EngineObjects
 			unsigned int tint;
 
 		public:
-			NativeModel(Model m, Texture tex, Shader s, unsigned int tint)
+			NativeModel(Model& m, Texture& tex, Shader& s, unsigned int tint)
 			{
 				this->model = m;
 				this->texture = tex;
@@ -31,7 +31,7 @@ namespace Engine::EngineObjects
 
 			void setup()
 			{
-				::Color c =
+				RAYLIB::Color c =
 				{
 					tint >> 0,
 					tint >> 8,
@@ -40,13 +40,14 @@ namespace Engine::EngineObjects
 				};
 
 				model.materials[0].shader = shader;
+				
 				model.materials[0].maps[MATERIAL_MAP_ALBEDO].color = c;
 				model.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = (Texture2D)texture;
 
 				model.materials[0].maps[MATERIAL_MAP_METALNESS].value = 0.0f;
 				model.materials[0].maps[MATERIAL_MAP_ROUGHNESS].value = 0.0f;
 				model.materials[0].maps[MATERIAL_MAP_OCCLUSION].value = 1.0f;
-				model.materials[0].maps[MATERIAL_MAP_EMISSION].color = WHITE;
+				model.materials[0].maps[MATERIAL_MAP_EMISSION].color = RAYLIB::WHITE;
 				model.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
 			}
 		};
@@ -107,7 +108,7 @@ namespace Engine::EngineObjects
 		{
 			auto t = GetTransform();
 
-			::Color c =
+			RAYLIB::Color c =
 			{
 				tint >> 0,
 				tint >> 8,

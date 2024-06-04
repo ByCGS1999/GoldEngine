@@ -36,13 +36,13 @@ namespace Engine::Internal
 		// -- CAMERA
 		inline static void HL_SetCameraFov(unsigned int cameraId, float fov)
 		{
-			::Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
+			RAYLIB::Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
 			c.fovy = fov;
 		}
 
 		inline static void HL_SetCameraProjection(unsigned int cameraId, int projection)
 		{
-			::Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
+			RAYLIB::Camera3D c = DataPacks::singleton().GetCamera3D(cameraId);
 			c.projection = projection;
 		}
 
@@ -123,9 +123,9 @@ namespace Engine::Internal
 
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector3^ initialPosition, Engine::Components::Vector3^ initialforward, Engine::Internal::Components::CameraType cameraType)
 		{
-			::Vector3 rlib_position;
-			::Vector3 rlib_forward;
-			Camera3D camera;
+			RAYLIB::Vector3 rlib_position;
+			RAYLIB::Vector3 rlib_forward;
+			RAYLIB::Camera3D camera;
 
 			rlib_position.x = initialPosition->x;
 			rlib_position.y = initialPosition->y;
@@ -142,10 +142,10 @@ namespace Engine::Internal
 
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector3^ initialPosition, Engine::Components::Vector3^ forward, Engine::Components::Vector3^ up, Engine::Internal::Components::CameraType cameraType)
 		{
-			::Vector3 rlib_position;
-			::Vector3 rlib_forward;
-			::Vector3 rlib_up;
-			Camera3D camera;
+			RAYLIB::Vector3 rlib_position;
+			RAYLIB::Vector3 rlib_forward;
+			RAYLIB::Vector3 rlib_up;
+			RAYLIB::Camera3D camera;
 
 			rlib_position.x = initialPosition->x;
 			rlib_position.y = initialPosition->y;
@@ -167,7 +167,7 @@ namespace Engine::Internal
 
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector2^ position, Engine::Internal::Components::CameraType cameraType)
 		{
-			::Vector2 rlib_position;
+			RAYLIB::Vector2 rlib_position;
 			Camera2D camera;
 			rlib_position.x = position->x;
 			rlib_position.y = position->y;
@@ -177,8 +177,8 @@ namespace Engine::Internal
 		}
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector3^ initialPosition, Engine::Internal::Components::CameraType cameraType)
 		{
-			::Vector3 rlib_position;
-			Camera3D camera;
+			RAYLIB::Vector3 rlib_position;
+			RAYLIB::Camera3D camera;
 
 			rlib_position.x = initialPosition->x;
 			rlib_position.y = initialPosition->y;
@@ -200,7 +200,7 @@ namespace Engine::Internal
 		}
 
 		inline static void HL_DrawCube(Engine::Components::Vector3^ position, Engine::Components::Vector3^ scale, unsigned int color) {
-			::Vector3 rlib_v3;
+			RAYLIB::Vector3 rlib_v3;
 			rlib_v3.x = position->x;
 			rlib_v3.y = position->y;
 			rlib_v3.z = position->z;
@@ -211,7 +211,7 @@ namespace Engine::Internal
 		inline static void HL_DrawModel(unsigned int modelId, Engine::Components::Vector3^ position, float scale, unsigned int tint)
 		{
 			Model m = DataPacks::singleton().GetModel(modelId);
-			::Vector3 convertedVector;
+			RAYLIB::Vector3 convertedVector;
 
 
 			convertedVector.x = position->x;
@@ -249,7 +249,7 @@ namespace Engine::Internal
 
 		inline static void HL_Begin3DMode(unsigned int cameraId)
 		{
-			Camera3D c = (Camera3D)Engine::Assets::Storage::DataPacks::singleton().GetCamera3D(cameraId);
+			RAYLIB::Camera3D c = (RAYLIB::Camera3D)Engine::Assets::Storage::DataPacks::singleton().GetCamera3D(cameraId);
 
 			BeginMode3D(c);
 		}
@@ -286,10 +286,10 @@ namespace Engine::Internal
 			{
 			case Engine::Internal::Components::CameraType::C2D:
 				Camera2D cam2d = Engine::Assets::Storage::DataPacks::singleton().GetCamera2D(cameraId);
-				UpdateCamera((Camera*)&cam2d, (CameraMode)mode);
+				UpdateCamera((RAYLIB::Camera*)&cam2d, (CameraMode)mode);
 				break;
 			case Engine::Internal::Components::CameraType::C3D:
-				Camera3D cam3d = Engine::Assets::Storage::DataPacks::singleton().GetCamera3D(cameraId);
+				RAYLIB::Camera3D cam3d = Engine::Assets::Storage::DataPacks::singleton().GetCamera3D(cameraId);
 				UpdateCamera(&cam3d, (CameraMode)mode);
 				break;
 			}

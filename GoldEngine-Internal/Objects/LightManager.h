@@ -14,23 +14,34 @@ namespace Engine::EngineObjects
 			Shader shader;
 
 		public:
-			NativeLightSource(int lightType, ::Vector3 position, ::Vector3 target, ::Color color, float intensity, Shader& s) 
+			NativeLightSource(int lightType, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& s)
 			{
 				light = rPBR::CreateLight(lightType, position, target, color, intensity, s);
 				shader = s;
 			}
 
+			void reInstantiate(rPBR::Light light, Shader& s)
+			{
+				shader = s;
+				RAYLIB::Color c = { 0 };
+				c.r = light.color[0] * 255;
+				c.g = light.color[1] * 255;
+				c.b = light.color[2] * 255;
+				c.a = light.color[3] * 255;
+				light = rPBR::CreateLight(light.type, light.position, light.target, c, light.intensity, s);
+			}
+
 		public:
 			rPBR::Light getLight() { return light; }
 			Shader getShader() { return shader; }
-			void SetShader(Shader value) { shader = value; }
+			void SetShader(Shader& value) { shader = value; }
 			void SetLight(rPBR::Light value) { light = value; }
 
 			void SetLightEnabled(bool value) { light.enabled = value; }
 			void SetIntensity(float value) { light.intensity = value; }
 			void SetColor(float color[4]) { light.color[0] = color[0]; light.color[1] = color[1]; light.color[2] = color[2]; light.color[3] = color[3]; }
-			void SetPosition(::Vector3 pos) { light.position = pos; }
-			void SetTarget(::Vector3 pos) { light.target = pos; }
+			void SetPosition(RAYLIB::Vector3 pos) { light.position = pos; }
+			void SetTarget(RAYLIB::Vector3 pos) { light.target = pos; }
 
 			void UpdateLighting()
 			{
@@ -84,7 +95,7 @@ namespace Engine::EngineObjects
 			this->lightType = (rPBR::LightType)lightType;
 			this->target = target;
 			this->intensity = intensity;
-			::Color c =
+			RAYLIB::Color c =
 			{
 				lightColor >> 0,
 				lightColor >> 8,
@@ -109,7 +120,7 @@ namespace Engine::EngineObjects
 		rPBR::Light GetLight() { return nativeLightSource->getLight(); }
 		Shader GetShader() { return nativeLightSource->getShader(); }
 
-		void Update() override
+		void UpdateLighting() override
 		{
 			nativeLightSource->SetLightEnabled(enabled);
 			nativeLightSource->SetIntensity(intensity);
@@ -127,15 +138,25 @@ namespace Engine::EngineObjects
 			if (shaderId != oldShaderId)
 			{
 				oldShaderId = shaderId;
-				nativeLightSource->SetShader(DataPacks::singleton().GetShader(this->shaderId));
+				nativeLightSource->SetShader((Shader&)DataPacks::singleton().GetShader(this->shaderId));
 			}
 
 			nativeLightSource->UpdateLighting();
 		}
 
+		void reInstantiate(Shader& newShader)
+		{
+			nativeLightSource->reInstantiate(nativeLightSource->getLight(), newShader);
+		}
+
+		void Update() override
+		{
+			UpdateLighting();
+		}
+
 		void DrawGizmo() override
 		{
-			::Color c =
+			RAYLIB::Color c =
 			{
 				lightColor >> 0,
 				lightColor >> 8,
@@ -199,6 +220,9 @@ namespace Engine::EngineObjects
 
 	private:
 		int lightNum;
+		unsigned int shaderId;
+		String^ vs;
+		String^ fs;
 
 	public:
 		LightManager(String^ name, Engine::Internal::Components::Transform^ t, String^ vs, String^ fs) : Engine::EngineObjects::Script(name, t)
@@ -207,9 +231,8 @@ namespace Engine::EngineObjects
 			lightSources = gcnew System::Collections::Generic::List<Engine::EngineObjects::LightSource^>();
 			ambientColor = 0xFFFFFFFF;
 			ambientIntensity = 0.5f;
-
-			attributes->setAttribute(Engine::Scripting::Attribute::create("vertexShader", vs, String::typeid));
-			attributes->setAttribute(Engine::Scripting::Attribute::create("fragmentShader", fs, String::typeid));
+			this->vs = vs;
+			this->fs = fs;
 		}
 
 
@@ -251,14 +274,14 @@ namespace Engine::EngineObjects
 
 
 			float b = ambientIntensity;
-			::Color color = { 
+			RAYLIB::Color color = {
 				((ambientColor >> 0) & 0xFF),
 				((ambientColor >> 8) & 0xFF), 
 				((ambientColor >> 16) & 0xFF),
 				((ambientColor >> 24) & 0xFF) 
 			};
 
-			::Vector3 ambientColorNormalized = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f };
+			RAYLIB::Vector3 ambientColorNormalized = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f };
 
 			if(cameraPosition != nullptr)
 				SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], cameraPosition, SHADER_UNIFORM_VEC3);
@@ -278,14 +301,26 @@ namespace Engine::EngineObjects
 		}
 
 	public:
-		void ShaderUpdate(unsigned int shaderId)
+		void ShaderUpdate()
 		{
-			if (lightNum != lightSources->Count)
+			try
 			{
+				unsigned int shaderId = (UInt32)attributes->getAttribute("shaderId")->getValue();
+
 				String^ vs_net = File::ReadAllText((String^)attributes->getAttribute("vertexShader")->getValue());
 				String^ fs_net = File::ReadAllText((String^)attributes->getAttribute("fragmentShader")->getValue());
 
-				fs_net = fs_net->Replace("%numlights%", lightSources->Count.ToString());
+				if (lightSources->Count <= 0)
+				{
+					fs_net = fs_net->Replace("numlights", "1");
+
+				}
+				else
+				{
+					fs_net = fs_net->Replace("numlights", lightSources->Count.ToString());
+				}
+				
+				printConsole(fs_net);
 
 				Shader& s = LoadShaderFromMemory(CastStringToNative(vs_net).c_str(), CastStringToNative(fs_net).c_str());
 
@@ -315,7 +350,15 @@ namespace Engine::EngineObjects
 					DataPacks::singleton().AddShader(shaderId, s);
 				}
 
-				lightNum = lightSources->Count;
+				for each(auto src in lightSources)
+				{
+					src->reInstantiate(s);
+				}
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->StackTrace);
 			}
 		}
 
@@ -352,58 +395,37 @@ namespace Engine::EngineObjects
 
 		void Start() override
 		{
-			try 
+			if (!attributes->getAttribute("ambientColor"))
 			{
-				if (!attributes->getAttribute("shaderId"))
-				{
-					attributes->setAttribute(Engine::Scripting::Attribute::create("shaderId", 0, UInt32::typeid));
-				}
-				else
-				{
-					attributes->getAttribute("shaderId")->setType(attributes->getAttribute("shaderId")->userDataType);
-				}
-
-				unsigned int shaderId = (UInt32)attributes->getAttribute("shaderId")->getValue();
-
-				String^ vs_net = File::ReadAllText((String^)attributes->getAttribute("vertexShader")->getValue());
-				String^ fs_net = File::ReadAllText((String^)attributes->getAttribute("fragmentShader")->getValue());
-
-				fs_net = fs_net->Replace("%numlights%", lightSources->Count.ToString());
-
-				Shader& s = LoadShaderFromMemory(CastStringToNative(vs_net).c_str(), CastStringToNative(fs_net).c_str());
-
-				CreateLocs(s, lightSources->Count);
-
-				std::vector<rPBR::Light> _light;
-
-				for (int x = 0; x < lightSources->Count; x++)
-				{
-					_light.push_back(lightSources[x]->GetLight());
-				}
-
-				int lightCountLoc = GetShaderLocation(s, "numOfLights");
-				int maxLightCount = _light.size();
-				SetShaderValue(s, lightCountLoc, &maxLightCount, SHADER_UNIFORM_INT);
-
-				TraceLog(LOG_INFO, "Lights %d", _light.size());
-
-				if (&DataPacks::singleton().GetShader(shaderId) == nullptr)
-				{
-					DataPacks::singleton().AddShader(shaderId, s);
-				}
-				else
-				{
-					UnloadShader(DataPacks::singleton().GetShader(shaderId));
-
-					DataPacks::singleton().AddShader(shaderId, s);
-				}
-
+				attributes->addAttribute(Engine::Scripting::Attribute::create("ambientColor", gcnew Engine::Components::Color(0xFFFFFFFF), Engine::Components::Color::typeid));
 			}
-			catch (Exception^ ex)
+			else
 			{
-				printError(ex->Message);
-				printError(ex->StackTrace);
+				ambientColor = attributes->getAttribute("ambientColor")->getValue<Newtonsoft::Json::Linq::JObject^>()->ToObject<Engine::Components::Color^>()->toHex();
 			}
+
+			if (!attributes->getAttribute("ambientIntensity"))
+			{
+				attributes->addAttribute(Engine::Scripting::Attribute::create("ambientIntensity", 0.0f, float::typeid));
+			}
+
+			if (!attributes->getAttribute("shaderId"))
+			{
+				attributes->setAttribute(Engine::Scripting::Attribute::create("shaderId", 0, UInt32::typeid));
+			}
+			else
+			{
+				attributes->getAttribute("shaderId")->setType(attributes->getAttribute("shaderId")->userDataType);
+			}
+
+			if (!attributes->getAttribute("vertexShader"))
+			{
+				attributes->setAttribute(Engine::Scripting::Attribute::create("vertexShader", vs, String::typeid));
+				attributes->setAttribute(Engine::Scripting::Attribute::create("fragmentShader", fs, String::typeid));
+			}
+
+			shaderId = (unsigned int)attributes->getAttribute("shaderId")->getValue();
+			ShaderUpdate();
 		}
 
 		void DrawGizmo() override
@@ -418,22 +440,36 @@ namespace Engine::EngineObjects
 
 	public:
 		void Update() override
-		{/*
-			if(shaderId != -1)
-				if (cameraPosition != nullptr)
-					SetShaderValue(DataPacks::singleton().GetShader(shaderId), (DataPacks::singleton().GetShader(shaderId)).locs[SHADER_LOC_VECTOR_VIEW], cameraPosition, SHADER_UNIFORM_VEC3);
-		*/
+		{
+			if (shaderId != attributes->getAttribute("shaderId")->getValue<unsigned int>() || lightSources->Count != lightNum)
+			{
+				lightNum = lightSources->Count;
+				shaderId = attributes->getAttribute("shaderId")->getValue<unsigned int>();
+				ShaderUpdate();
+			}
 
-	
+			float ambientIntensity = attributes->getAttribute("ambientIntensity")->getValue<float>();
+
+			if (attributes->getAttribute("ambientColor")->getCurrentType()->Equals(Newtonsoft::Json::Linq::JObject::typeid))
+			{
+				rPBR::SetAmbientColor(DataPacks::singleton().GetShader(shaderId), attributes->getAttribute("ambientColor")->getValueFromJObject<Engine::Components::Color^>()->toFloat(), &ambientIntensity);
+			}
+			else
+			{
+				rPBR::SetAmbientColor(DataPacks::singleton().GetShader(shaderId), &attributes->getAttribute("ambientColor")->getValue<Engine::Components::Color^>()->toFloat(), &ambientIntensity);
+			}
 		}
 
-		void LightUpdate(unsigned int shaderId)
+		void LightUpdate()
 		{
 			max_lights = lightSources->Count;
 
 			for each (auto light in lightSources)
 			{
-				light->Update();
+				if (light == nullptr)
+					RemoveLight(light);
+				else
+					light->UpdateLighting();
 			}
 		}
 	};

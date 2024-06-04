@@ -12,6 +12,6 @@ namespace Engine::Components
 		[[JsonConstructorAttribute]]
 		Vector2(float x, float y);
 
-		::Vector2 toNative();
+		RAYLIB::Vector2 toNative();
 	};
 }

@@ -380,6 +380,18 @@ private:
 									attrib->setType(Int64::typeid);
 								}
 							}
+							else if (attrib->userData->GetType()->Equals(float::typeid))
+							{
+								float tmp = (float)attrib->userData;
+
+								float value = (float)tmp;
+
+								if (ImGui::InputFloat(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 0.1f, 0.5f, "%.2f"))
+								{
+									attrib->setValue(value, false);
+									attrib->setType(float::typeid);
+								}
+							}
 							else if (attrib->getValueType()->Equals(Engine::Components::Color::typeid))
 							{
 								Engine::Components::Color^ value = nullptr;
@@ -1977,7 +1989,7 @@ public:
 			if (camera == nullptr)
 				return;
 
-			BeginMode3D((::Camera3D)*camera->get());
+			BeginMode3D((RAYLIB::Camera3D)*camera->get());
 
 			int currentLayer = 1;
 			render(currentLayer);

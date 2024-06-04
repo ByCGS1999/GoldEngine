@@ -31,7 +31,7 @@ Color Engine::Components::Vector3::toColor()
 	return GetColor(x + y + z);
 }
 
-::Vector3 Engine::Components::Vector3::toNative()
+RAYLIB::Vector3 Engine::Components::Vector3::toNative()
 {
 	return { x,y,z };
 }

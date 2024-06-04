@@ -70,8 +70,7 @@ namespace Engine::EngineObjects::Daemons
 				}
 			}
 
-			lightM->ShaderUpdate(shaderId);
-			lightM->Update();
+			lightM->LightUpdate();
 		}
 	};
 }

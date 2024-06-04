@@ -10,15 +10,15 @@ namespace Engine::EngineObjects
 		private class NativeCamera
 		{
 		private:
-			::Camera* camera;
+			RAYLIB::Camera* camera;
 
 		public:
-			::Camera* getCameraPtr()
+			RAYLIB::Camera* getCameraPtr()
 			{
 				return this->camera;
 			}
 
-			::Camera get()
+			RAYLIB::Camera get()
 			{
 				return *this->camera;
 			}
@@ -27,7 +27,7 @@ namespace Engine::EngineObjects
 			NativeCamera(CameraProjection projection)
 			{
 				printf("Creating camera\n");
-				this->camera = new ::Camera();
+				this->camera = new RAYLIB::Camera();
 				this->camera->projection = projection;
 				this->camera->fovy = 90;
 				this->camera->position = { 0,0,0 };
@@ -36,7 +36,7 @@ namespace Engine::EngineObjects
 			}
 
 		public:
-			void setCameraPosition(::Vector3 nativeVector)
+			void setCameraPosition(RAYLIB::Vector3 nativeVector)
 			{
 				camera->position = nativeVector;
 			}
@@ -71,7 +71,7 @@ namespace Engine::EngineObjects
 			DrawLine3D(transform->position->toNative(), fwd->toNative(), GetColor(0xFF0000FF));
 		}
 
-		::Camera* get()
+		RAYLIB::Camera* get()
 		{
 			return nativeCamera->getCameraPtr();
 		}

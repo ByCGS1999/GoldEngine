@@ -55,7 +55,7 @@ namespace Engine::EngineObjects
 			auto jarray = attributes->getAttribute("materials")->getValue<Newtonsoft::Json::Linq::JArray^>();
 			auto materials = jarray->ToObject<List<unsigned int>^>();
 			
-			::Color c =
+			RAYLIB::Color c =
 			{
 				255,
 				0,

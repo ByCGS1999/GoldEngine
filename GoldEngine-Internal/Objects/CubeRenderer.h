@@ -21,7 +21,7 @@ namespace Engine::EngineObjects
 		void Draw() override
 		{
 			auto v3 = GetTransform()->scale->toNative();
-			::Color c =
+			RAYLIB::Color c =
 			{
 				color >> 0,
 				color >> 8,

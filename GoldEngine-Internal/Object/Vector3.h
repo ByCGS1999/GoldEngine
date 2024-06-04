@@ -21,9 +21,9 @@ namespace Engine::Components
 
 		void Set(float* v);
 
-		::Vector3 toNative();
+		RAYLIB::Vector3 toNative();
 
-		::Color toColor();
+		RAYLIB::Color toColor();
 
 		void add(float x, float y, float z);
 
@@ -72,7 +72,7 @@ namespace Engine::Components
 			return gcnew Vector3(left->x / right->x, left->y / right->y, left->z / right->z);
 		}
 
-		static Vector3^ create(::Vector3 vec)
+		static Vector3^ create(RAYLIB::Vector3 vec)
 		{
 			return gcnew Vector3(vec.x, vec.y, vec.z);
 		}

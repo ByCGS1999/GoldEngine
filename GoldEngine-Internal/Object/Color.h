@@ -1,3 +1,4 @@
+#pragma once
 
 namespace Engine::Components
 {
@@ -13,5 +14,7 @@ namespace Engine::Components
 		[Newtonsoft::Json::JsonConstructorAttribute]
 		Color(unsigned int colorHex);
 		unsigned int toHex();
+		RAYLIB::Color toNative();
+		float* toFloat();
 	};
 }

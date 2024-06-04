@@ -27,6 +27,12 @@ namespace Engine::Scripting
 			return (T)userData;
 		}
 
+		generic <class T>
+		T getValueFromJObject()
+		{
+			return (T)(getValue<Newtonsoft::Json::Linq::JObject^>()->ToObject<T>());
+		}
+
 		System::Object^ getValue()
 		{
 			return userData;
@@ -40,6 +46,11 @@ namespace Engine::Scripting
 		System::Type^ getValueType()
 		{
 			return this->userDataType;
+		}
+
+		System::Type^ getCurrentType()
+		{
+			return this->userData->GetType();
 		}
 
 	public:

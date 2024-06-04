@@ -10,7 +10,7 @@ Engine::Components::Vector2::Vector2(float x, float y)
 	this->y = y;
 }
 
-::Vector2 Engine::Components::Vector2::toNative()
+RAYLIB::Vector2 Engine::Components::Vector2::toNative()
 {
 	return { x, y };
 }
