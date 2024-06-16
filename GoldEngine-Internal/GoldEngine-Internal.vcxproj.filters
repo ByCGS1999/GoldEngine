@@ -184,15 +184,6 @@
     <Filter Include="raylib">
       <UniqueIdentifier>{92919462-bb7f-4617-8aea-0ec992ea0d3b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="raylib\lib">
-      <UniqueIdentifier>{89a90619-1f33-47f4-9e8a-be9ed836378f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\lib\x64">
-      <UniqueIdentifier>{65fad7e6-8fdc-4113-8df9-55ad53bf4b95}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\lib\x86">
-      <UniqueIdentifier>{246b9c9d-821b-4f37-9b35-17cf46159135}</UniqueIdentifier>
-    </Filter>
     <Filter Include="raylib\include">
       <UniqueIdentifier>{a58c4469-bad3-4eed-aee2-c8b1af098c30}</UniqueIdentifier>
     </Filter>
@@ -575,12 +566,6 @@
     <CopyFileToFolders Include="Binaries\FBX2glTF.exe">
       <Filter>Binaries\fbx2gltf</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Raylib\lib\x64\raylib.dll">
-      <Filter>raylib\lib\x64</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Raylib\lib\x86\raylib.dll">
-      <Filter>raylib\lib\x86</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Icons\Material.png">
       <Filter>Data\EditorAssets\Icons</Filter>
     </CopyFileToFolders>
@@ -596,14 +581,6 @@
     <CopyFileToFolders Include="Data\EditorAssets\Fonts\fontawesome-webfont.ttf">
       <Filter>Data\EditorAssets\Fonts</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="Raylib\lib\x86\raylibdll.lib">
-      <Filter>raylib\lib\x86</Filter>
-    </Library>
-    <Library Include="Raylib\lib\x64\raylibdll.lib">
-      <Filter>raylib\lib\x64</Filter>
-    </Library>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Engine\Shaders\Lighting\rlights.vert">

@@ -19,3 +19,7 @@
 #define RUNTIME_VERSION "GoldEngine Runtime Prev-Ver: 0.1a"
 
 #define JSON_SERIALIZE Newtonsoft::Json::JsonPropertyAttribute
+
+#define RLGL_SHOW_GL_DETAILS_INFO
+#define RLGL_ENABLE_OPENGL_DEBUG_CONTEXT
+#define GRAPHICS_API_OPENGL_43

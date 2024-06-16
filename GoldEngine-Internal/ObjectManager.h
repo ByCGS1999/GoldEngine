@@ -331,7 +331,7 @@ namespace Engine::Scripting
 					{
 						auto type = v->type;
 
-						if (type == Engine::Internal::Components::ObjectType::Datamodel || type == Engine::Internal::Components::ObjectType::Daemon || type == Engine::Internal::Components::ObjectType::LightManager)
+						if (type == Engine::Internal::Components::ObjectType::Datamodel || type == Engine::Internal::Components::ObjectType::Daemon || type == Engine::Internal::Components::ObjectType::LightManager || v->isProtected())
 							return;
 
 						// REPARENT ALL THE CHILDREN TO NULL (SET AS UNPARENTED).

@@ -76,6 +76,13 @@ namespace rPBR
     // NOTE: Light shader locations should be available
     static void UpdateLight(Shader& shader, Light& light)
     {
+        light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", lightCount));
+        light.typeLoc = GetShaderLocation(shader, TextFormat("lights[%i].type", lightCount));
+        light.positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", lightCount));
+        light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightCount));
+        light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightCount));
+        light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightCount));
+
         SetShaderValue(shader, light.enabledLoc, &light.enabled, SHADER_UNIFORM_INT);
         SetShaderValue(shader, light.typeLoc, &light.type, SHADER_UNIFORM_INT);
 

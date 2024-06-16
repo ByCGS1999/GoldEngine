@@ -108,11 +108,14 @@ char fileName[] = "Level0";
 
 ref class EditorWindow : Engine::Window
 {
+private:
+	Layer^ selectedLayer;
 	DataPack^ packedData;
 	Scene^ scene;
 	Engine::EngineObjects::LightManager^ lightManager;
 	Engine::Components::Vector3^ cameraPosition;
 	Engine::Internal::Components::Object^ selectedObject;
+	int selectedObjectIndex;
 	Engine::Internal::Components::Object^ reparentObject;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scripting::ObjectManager^ objectManager;
@@ -747,7 +750,7 @@ end
 					{
 						refName += "\t";
 					}
-
+					
 					refName += _reference->name;
 
 					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager || _reference->isProtected())
@@ -760,6 +763,7 @@ end
 							{
 								readonlyLock = true;
 								selectedObject = _reference;
+								selectedObjectIndex = scene->GetRenderQueue()->IndexOf(selectedObject);
 							}
 						}
 					}
@@ -773,6 +777,7 @@ end
 							{
 								readonlyLock = false;
 								selectedObject = _reference;
+								selectedObjectIndex = scene->GetRenderQueue()->IndexOf(selectedObject);
 							}
 						}
 					}
@@ -1131,6 +1136,7 @@ public:
 							{
 								readonlyLock = true;
 								selectedObject = reference;
+								selectedObjectIndex = scene->GetRenderQueue()->IndexOf(selectedObject);
 							}
 						}
 					}
@@ -1144,6 +1150,7 @@ public:
 							{
 								readonlyLock = false;
 								selectedObject = reference;
+								selectedObjectIndex = scene->GetRenderQueue()->IndexOf(selectedObject);
 							}
 						}
 					}
@@ -1169,10 +1176,8 @@ public:
 			{
 				if (ImGui::BeginMenuBar())
 				{
-					if (ImGui::BeginMenu("Instance"))
+					if (ImGui::BeginMenu("Instance Actions"))
 					{
-
-						ImGui::SeparatorText("Actions");
 
 						if (ImGui::MenuItem("Destroy Object"))
 						{
@@ -1186,8 +1191,13 @@ public:
 							return;
 						}
 
-						ImGui::Separator();
+						ImGui::EndMenu();
+					}
 
+					ImGui::Separator();
+
+					if (ImGui::BeginMenu("Instance Status"))
+					{
 						if (ImGui::BeginMenu("Rendering"))
 						{
 							{
@@ -1230,6 +1240,8 @@ public:
 								else
 									layer = "Select Layer";
 
+								Layer^ l = nullptr;
+
 								std::vector<std::string> layers = LayerManager::getLayerNames();
 
 								if (ImGui::BeginCombo("###CURR_LAYER", layer.c_str(), ImGuiComboFlags_None))
@@ -1254,7 +1266,7 @@ public:
 
 											String^ buffer = data->Substring(0, data->IndexOf(" -"));
 
-											Layer^ l = LayerManager::GetLayerFromId(int::Parse(buffer));
+											l = LayerManager::GetLayerFromId(int::Parse(buffer));
 
 											if (l == nullptr)
 											{
@@ -1262,21 +1274,30 @@ public:
 												return;
 											}
 
-											selectedObject->layerMask = l;
-
-											layer = CastStringToNative(selectedObject->layerMask->layerName);
+											printConsole("Swap layer from " + selectedObject->layerMask->layerName + " to " + l->layerName);
 										}
+
+										if (isSelected)
+											ImGui::SetItemDefaultFocus();
 									}
 
 									ImGui::EndCombo();
 								}
+
+								if(l!=nullptr)
+									selectedObject->layerMask = l;
+
+								l = nullptr;
 							}
 
 							ImGui::EndMenu();
 						}
 
-						ImGui::SeparatorText("Instance Properties");
+						ImGui::EndMenu();
+					}
 
+					if (ImGui::BeginMenu("Instance Properties"))
+					{
 						if (ImGui::MenuItem("Change Parent"))
 						{
 							if (!readonlyLock)
@@ -1297,6 +1318,24 @@ public:
 							}
 
 							ImGui::EndMenu();
+						}
+
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::BeginMenu("Class"))
+					{
+						if (ImGui::MenuItem("Protect Member"))
+						{
+							selectedObject->protectMember();
+						}
+
+						if (ImGui::MenuItem("Unprotect Member"))
+						{
+							if (selectedObject->type == ObjectType::Datamodel || selectedObject->type == ObjectType::Datamodel || selectedObject->type == ObjectType::LightManager)
+								return;
+
+							selectedObject->unprotectMember();
 						}
 
 						ImGui::EndMenu();

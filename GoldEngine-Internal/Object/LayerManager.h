@@ -25,7 +25,7 @@ namespace Engine::Scripting
 	public:
 		static std::vector<std::string> getLayerNames()
 		{
-			std::vector<std::string> slayers;
+			std::vector<std::string> slayers = std::vector<std::string>();
 
 			for (int x = 0; x < layers->Count; x++)
 			{
@@ -37,7 +37,7 @@ namespace Engine::Scripting
 
 		static std::vector<const char*> getLayerNames_char()
 		{
-			std::vector<const char*> slayers;
+			std::vector<const char*> slayers = std::vector<const char*>();
 
 			for (int x = 0; x < layers->Count; x++)
 			{

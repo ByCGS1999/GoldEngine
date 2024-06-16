@@ -147,7 +147,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -354,18 +354,6 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Bin/Ext/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Bin/Ext/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Raylib\lib\x64\raylib.dll">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Raylib\lib\x86\raylib.dll">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="Raylib\lib\x64\raylibdll.lib">
-      <FileType>Document</FileType>
-    </Library>
-    <Library Include="Raylib\lib\x86\raylibdll.lib" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MoonSharp.Interpreter">
