@@ -30,11 +30,7 @@
 
 #pragma once
 
-#ifdef _WIN64
-#include "x64/raylib.h"
-#else
-#include "x86/raylib.h"
-#endif
+#include "../../Raylib/include/x64/raylib.h"
 
 #ifndef NO_FONT_AWESOME
 #include "IconsFontAwesome6.h"
@@ -112,7 +108,7 @@ void rlImGuiBeginDelta(float deltaTime);
 /// Uses the current ImGui Cursor position and the full texture size.
 /// </summary>
 /// <param name="image">The raylib texture to draw</param>
-void rlImGuiImage(const Texture *image);
+void rlImGuiImage(const RAYLIB::Texture *image);
 
 /// <summary>
 /// Draw a texture as an image in an ImGui Context at a specific size
@@ -122,7 +118,7 @@ void rlImGuiImage(const Texture *image);
 /// <param name="image">The raylib texture to draw</param>
 /// <param name="width">The width of the drawn image</param>
 /// <param name="height">The height of the drawn image</param>
-void rlImGuiImageSize(const Texture *image, int width, int height);
+void rlImGuiImageSize(const RAYLIB::Texture *image, int width, int height);
 
 /// <summary>
 /// Draw a texture as an image in an ImGui Context at a specific size
@@ -131,7 +127,7 @@ void rlImGuiImageSize(const Texture *image, int width, int height);
 /// </summary>
 /// <param name="image">The raylib texture to draw</param>
 /// <param name="size">The size of drawn image</param>
-void rlImGuiImageSizeV(const Texture* image, Vector2 size);
+void rlImGuiImageSizeV(const RAYLIB::Texture* image, RAYLIB::Vector2 size);
 
 /// <summary>
 /// Draw a portion texture as an image in an ImGui Context at a defined size
@@ -142,20 +138,20 @@ void rlImGuiImageSizeV(const Texture* image, Vector2 size);
 /// <param name="destWidth">The width of the drawn image</param>
 /// <param name="destHeight">The height of the drawn image</param>
 /// <param name="sourceRect">The portion of the texture to draw as an image. Negative values for the width and height will flip the image</param>
-void rlImGuiImageRect(const Texture* image, int destWidth, int destHeight, Rectangle sourceRect);
+void rlImGuiImageRect(const RAYLIB::Texture* image, int destWidth, int destHeight, RAYLIB::Rectangle sourceRect);
 
 /// <summary>
 /// Draws a render texture as an image an ImGui Context, automatically flipping the Y axis so it will show correctly on screen
 /// </summary>
 /// <param name="image">The render texture to draw</param>
-void rlImGuiImageRenderTexture(const RenderTexture* image);
+void rlImGuiImageRenderTexture(const RAYLIB::RenderTexture* image);
 
 /// <summary>
 /// Draws a render texture as an image an ImGui Context, automatically flipping the Y axis so it will show correctly on screen
 /// </summary>
 /// <param name="image">The render texture to draw</param>
 /// <param name="scale">Scale of the render viewport</param>
-void rlImGuiImageRenderTextureCustom(const RenderTexture* image, int scale[2], float offset[2]);
+void rlImGuiImageRenderTextureCustom(const RAYLIB::RenderTexture* image, int scale[2], float offset[2]);
 
 /// <summary>
 /// Draws a render texture as an image an ImGui Context, automatically flipping the Y axis so it will show correctly on screen
@@ -163,7 +159,7 @@ void rlImGuiImageRenderTextureCustom(const RenderTexture* image, int scale[2], f
 /// </summary>
 /// <param name="image">The render texture to draw</param>
 /// <param name="center">When true the image will be centered in the content area</param>
-void rlImGuiImageRenderTextureFit(const RenderTexture* image, bool center);
+void rlImGuiImageRenderTextureFit(const RAYLIB::RenderTexture* image, bool center);
 
 /// <summary>
 /// Draws a texture as an image button in an ImGui context. Uses the current ImGui cursor position and the full size of the texture
@@ -171,7 +167,7 @@ void rlImGuiImageRenderTextureFit(const RenderTexture* image, bool center);
 /// <param name="name">The display name and ImGui ID for the button</param>
 /// <param name="image">The texture to draw</param>
 /// <returns>True if the button was clicked</returns>
-bool rlImGuiImageButton(const char* name, const Texture* image);
+bool rlImGuiImageButton(const char* name, const RAYLIB::Texture* image);
 
 /// <summary>
 /// Draws a texture as an image button in an ImGui context. Uses the current ImGui cursor position and the specified size.
@@ -180,7 +176,7 @@ bool rlImGuiImageButton(const char* name, const Texture* image);
 /// <param name="image">The texture to draw</param>
 /// <param name="size">The size of the button/param>
 /// <returns>True if the button was clicked</returns>
-bool rlImGuiImageButtonSize(const char* name, const Texture* image, struct ImVec2 size);
+bool rlImGuiImageButtonSize(const char* name, const RAYLIB::Texture* image, struct ImVec2 size);
 
 #ifdef __cplusplus
 }

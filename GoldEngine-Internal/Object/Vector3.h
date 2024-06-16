@@ -52,6 +52,11 @@ namespace Engine::Components
 			return gcnew Vector3(newX, newY, newZ);
 		}
 
+		static Vector3^ zero()
+		{
+			return gcnew Vector3(0, 0, 0);
+		}
+
 		static Vector3^ add(Vector3^ left, Vector3^ right)
 		{
 			return gcnew Vector3(left->x + right->x, left->y + right->y, left->z + right->z);

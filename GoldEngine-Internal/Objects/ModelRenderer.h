@@ -10,10 +10,8 @@ namespace Engine::EngineObjects
 	{
 		private class NativeModel
 		{
-		public:
-			Model model;
-
 		private:
+			Model model;
 			Shader shader;
 			Texture texture;
 			unsigned int tint;
@@ -28,15 +26,25 @@ namespace Engine::EngineObjects
 
 				setup();
 			}
+			
+			Model& getModel()
+			{
+				return model;
+			}
+
+			Shader& getShader()
+			{
+				return shader;
+			}
 
 			void setup()
 			{
 				RAYLIB::Color c =
 				{
-					tint >> 0,
-					tint >> 8,
-					tint >> 16,
-					tint >> 24
+					(tint >> 0) & 0xFF,
+					(tint >> 8) & 0xFF,
+					(tint >> 16) & 0xFF,
+					(tint >> 24) & 0xFF
 				};
 
 				model.materials[0].shader = shader;
@@ -110,10 +118,10 @@ namespace Engine::EngineObjects
 
 			RAYLIB::Color c =
 			{
-				tint >> 0,
-				tint >> 8,
-				tint >> 16,
-				tint >> 24
+					(tint >> 0) & 0xFF,
+					(tint >> 8) & 0xFF,
+					(tint >> 16) & 0xFF,
+					(tint >> 24) & 0xFF
 			};
 
 			if (modelManager != nullptr)
@@ -126,11 +134,25 @@ namespace Engine::EngineObjects
 			m.materials[0].shader = DataPacks::singleton().GetShader(shader);
 			*/
 
-			if (modelManager == nullptr || &modelManager->model == nullptr)
+			if (modelManager == nullptr || &modelManager->getModel() == nullptr)
 				return;
 
+			RAYLIB::Vector2 baseVctr = { 0.5f, 0.5f };
+			RAYLIB::Vector4 EmissiveColor = ColorNormalize(modelManager->getModel().materials[0].maps[MATERIAL_MAP_EMISSION].color);
+
+			int emmisiveIntensityLocation = GetShaderLocation(modelManager->getShader(), "emissivePower");
+			int emmisiveColorLocation = GetShaderLocation(modelManager->getShader(), "emissiveColor");
+			int textureTilingLocation = GetShaderLocation(modelManager->getShader(), "tiling");
+			float emissiveIntensity = 0.01f;
+
+			RAYLIB::SetShaderValue(modelManager->getShader(), textureTilingLocation, &baseVctr, SHADER_UNIFORM_VEC2);
+			RAYLIB::SetShaderValue(modelManager->getShader(), emmisiveColorLocation, &EmissiveColor, SHADER_UNIFORM_VEC4);
+			RAYLIB::SetShaderValue(modelManager->getShader(), emmisiveIntensityLocation, &emissiveIntensity, SHADER_UNIFORM_FLOAT);
+
+			rlCheckErrors();
+
 			DrawModelEx(
-				modelManager->model,
+				modelManager->getModel(),
 				{ t->position->x,t->position->y, t->position->z },
 				t->rotation->toNative(),
 				t->rotationValue,

@@ -40,6 +40,7 @@ namespace Engine
 		void OpenWindow(int width, int height, System::String^ name)
 		{
 			InitWindow(width, height, CastToNative(name));
+			rlglInit(width, height);
 			rlImGuiSetup(true);
 		}
 
@@ -47,8 +48,17 @@ namespace Engine
 		{
 			InitWindow(width, height, name);
 			InitAudioDevice();
+			rlglInit(width, height);
 			rlImGuiSetup(true);
 		}
+
+		/*
+		
+	void GLAPIENTRY glMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+	{
+
+	}
+	*/
 
 		void AddToDraw(System::Action^ invokable)
 		{

@@ -196,12 +196,6 @@
     <Filter Include="raylib\include">
       <UniqueIdentifier>{a58c4469-bad3-4eed-aee2-c8b1af098c30}</UniqueIdentifier>
     </Filter>
-    <Filter Include="raylib\include\x64">
-      <UniqueIdentifier>{213353d8-cff4-4605-afc8-7829ffb42860}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\x86">
-      <UniqueIdentifier>{a839e89b-dadc-4c70-9bc2-35bd88260c49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data\EditorAssets\Templates">
       <UniqueIdentifier>{784d2fb2-8d10-45fe-a804-30d43454375e}</UniqueIdentifier>
     </Filter>
@@ -222,6 +216,9 @@
     </Filter>
     <Filter Include="raylib\include\impls\other">
       <UniqueIdentifier>{1560900a-6699-48c2-9657-54dcde1a812a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Engine\Shaders\Lighting">
+      <UniqueIdentifier>{fcdb4358-6ea0-4f9d-a048-c14ccf451478}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -402,24 +399,6 @@
     <ClInclude Include="LogFileReporter.h">
       <Filter>Archivos de origen\Engine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Raylib\include\x64\raylib.h">
-      <Filter>raylib\include\x64</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\x64\raymath.h">
-      <Filter>raylib\include\x64</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\x64\rlgl.h">
-      <Filter>raylib\include\x64</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\x86\raylib.h">
-      <Filter>raylib\include\x86</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\x86\raymath.h">
-      <Filter>raylib\include\x86</Filter>
-    </ClInclude>
-    <ClInclude Include="Raylib\include\x86\rlgl.h">
-      <Filter>raylib\include\x86</Filter>
-    </ClInclude>
     <ClInclude Include="EngineConfig.h">
       <Filter>Archivos de origen\Engine\Configuration</Filter>
     </ClInclude>
@@ -485,6 +464,15 @@
     </ClInclude>
     <ClInclude Include="Raylib\include\rlights.h">
       <Filter>raylib\include\impls\other</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\x64\raylib.h">
+      <Filter>raylib\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\x64\raymath.h">
+      <Filter>raylib\include</Filter>
+    </ClInclude>
+    <ClInclude Include="Raylib\include\x64\rlgl.h">
+      <Filter>raylib\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -610,17 +598,19 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Raylib\lib\x86\raylib.lib">
-      <Filter>raylib\lib\x86</Filter>
-    </Library>
     <Library Include="Raylib\lib\x86\raylibdll.lib">
       <Filter>raylib\lib\x86</Filter>
-    </Library>
-    <Library Include="Raylib\lib\x64\raylib.lib">
-      <Filter>raylib\lib\x64</Filter>
     </Library>
     <Library Include="Raylib\lib\x64\raylibdll.lib">
       <Filter>raylib\lib\x64</Filter>
     </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Engine\Shaders\Lighting\rlights.vert">
+      <Filter>Data\Engine\Shaders\Lighting</Filter>
+    </None>
+    <None Include="Data\Engine\Shaders\Lighting\rlights.frag">
+      <Filter>Data\Engine\Shaders\Lighting</Filter>
+    </None>
   </ItemGroup>
 </Project>

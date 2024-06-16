@@ -12,7 +12,8 @@
   "models": {
     "0": "./Data/Engine/Models/Skybox_cube.glb",
     "1": "./Data/Models/castle.obj",
-    "2": "./Data/Models/3x3x3.vox"
+    "2": "./Data/Models/3x3x3.vox",
+    "3": "./Data/Game/Models/Spaceship.obj"
   },
   "materials": {},
   "textures2d": {

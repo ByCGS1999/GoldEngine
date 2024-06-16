@@ -83,9 +83,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ManagedAssembly>true</ManagedAssembly>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
+    <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <ManagedAssembly>true</ManagedAssembly>
   </PropertyGroup>
@@ -132,7 +133,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,7 +147,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -202,9 +203,9 @@
     <ClInclude Include="Object\ViewSpace.h" />
     <ClInclude Include="Packs.h" />
     <ClInclude Include="PreloadScript.h" />
-    <ClInclude Include="Raylib\include\x86\raylib.h" />
-    <ClInclude Include="Raylib\include\x86\raymath.h" />
-    <ClInclude Include="Raylib\include\x86\rlgl.h" />
+    <ClInclude Include="Raylib\include\x64\raylib.h" />
+    <ClInclude Include="Raylib\include\x64\raymath.h" />
+    <ClInclude Include="Raylib\include\x64\rlgl.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneObject.h" />
@@ -227,9 +228,6 @@
     <ClInclude Include="Raylib\include\IconsFontAwesome6.h" />
     <ClInclude Include="Raylib\include\imgui_impl_raylib.h" />
     <ClInclude Include="Raylib\include\raygui.h" />
-    <ClInclude Include="Raylib\include\x64\raylib.h" />
-    <ClInclude Include="Raylib\include\x64\raymath.h" />
-    <ClInclude Include="Raylib\include\x64\rlgl.h" />
     <ClInclude Include="Raylib\include\rlights.h" />
     <ClInclude Include="Raylib\include\rlImGui.h" />
     <ClInclude Include="Raylib\include\rlImGuiColors.h" />
@@ -271,15 +269,19 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Icons\Material.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Icons\Model.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Icons\Run.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Icons\Stop.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -360,13 +362,9 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="Raylib\lib\x64\raylib.lib">
-      <FileType>Document</FileType>
-    </Library>
     <Library Include="Raylib\lib\x64\raylibdll.lib">
       <FileType>Document</FileType>
     </Library>
-    <Library Include="Raylib\lib\x86\raylib.lib" />
     <Library Include="Raylib\lib\x86\raylibdll.lib" />
   </ItemGroup>
   <ItemGroup>
@@ -394,7 +392,26 @@
     <CopyFileToFolders Include="Data\EditorAssets\Fonts\fontawesome-webfont.ttf">
       <FileType>Document</FileType>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\Engine\Shaders\Lighting\rlights.frag" />
+    <None Include="Data\Engine\Shaders\Lighting\rlights.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Solutions\API\raylib\build\x64\raylib\external\glfw\src\glfw.vcxproj">
+      <Project>{c91df341-6aba-37da-a77f-5c7366f8b376}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Solutions\API\raylib\build\x64\raylib\raylib.vcxproj">
+      <Project>{32b999c1-4bc6-3235-b369-6e75f1590f28}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Solutions\API\raylib\build\x86\raylib\external\glfw\src\glfw.vcxproj">
+      <Project>{bc9b5eb3-da41-317c-80c3-02d41eb178f7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Solutions\API\raylib\build\x86\raylib\raylib.vcxproj">
+      <Project>{f9b3c4ed-8979-33ea-bf8f-f8408abdd508}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

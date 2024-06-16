@@ -20,7 +20,7 @@ namespace Engine::EngineObjects
 				shader = s;
 			}
 
-			void reInstantiate(rPBR::Light light, Shader& s)
+			void reInstantiate(rPBR::Light& light, Shader& s)
 			{
 				shader = s;
 				RAYLIB::Color c = { 0 };
@@ -32,10 +32,10 @@ namespace Engine::EngineObjects
 			}
 
 		public:
-			rPBR::Light getLight() { return light; }
-			Shader getShader() { return shader; }
+			rPBR::Light& getLight() { return light; }
+			Shader& getShader() { return shader; }
 			void SetShader(Shader& value) { shader = value; }
-			void SetLight(rPBR::Light value) { light = value; }
+			void SetLight(rPBR::Light& value) { light = value; }
 
 			void SetLightEnabled(bool value) { light.enabled = value; }
 			void SetIntensity(float value) { light.intensity = value; }
@@ -117,15 +117,15 @@ namespace Engine::EngineObjects
 			enabled = true;
 		}
 
-		rPBR::Light GetLight() { return nativeLightSource->getLight(); }
-		Shader GetShader() { return nativeLightSource->getShader(); }
+		rPBR::Light& GetLight() { return nativeLightSource->getLight(); }
+		Shader& GetShader() { return nativeLightSource->getShader(); }
 
 		void UpdateLighting() override
 		{
 			nativeLightSource->SetLightEnabled(enabled);
 			nativeLightSource->SetIntensity(intensity);
 			nativeLightSource->SetPosition(GetTransform()->position->toNative());
-			nativeLightSource->SetTarget(target->toNative());
+			nativeLightSource->SetTarget(Engine::Components::Vector3::zero()->toNative());
 			
 			float v[4] = {
 				lightColor >> 0,
@@ -245,6 +245,8 @@ namespace Engine::EngineObjects
 		void UpdateCameraPosition(float* value)
 		{
 			this->cameraPosition = value;
+			Shader& shader = DataPacks::singleton().GetShader((unsigned int)attributes->getAttribute("shaderId")->getValueAuto());
+			SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], cameraPosition, SHADER_UNIFORM_VEC3);
 		}
 
 	public:
@@ -261,17 +263,16 @@ namespace Engine::EngineObjects
 		}
 
 	private:
-		void CreateLocs(Shader shader, int maxLights)
+		void CreateLocs(Shader& shader, int maxLights)
 		{
-			shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
-			shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
-
 			shader.locs[SHADER_LOC_MAP_ALBEDO] = GetShaderLocation(shader, "albedoMap");
+			shader.locs[SHADER_LOC_MAP_METALNESS] = GetShaderLocation(shader, "mraMap");
 			shader.locs[SHADER_LOC_MAP_NORMAL] = GetShaderLocation(shader, "normalMap");
-			shader.locs[SHADER_LOC_MAP_METALNESS] = GetShaderLocation(shader, "metalnessMap");
-			shader.locs[SHADER_LOC_MAP_ROUGHNESS] = GetShaderLocation(shader, "roughnessMap");
-			shader.locs[SHADER_LOC_MAP_OCCLUSION] = GetShaderLocation(shader, "aoMap");
+			shader.locs[SHADER_LOC_MAP_EMISSION] = GetShaderLocation(shader, "emissiveMap");
+			shader.locs[SHADER_LOC_COLOR_DIFFUSE] = GetShaderLocation(shader, "albedoColor");
 
+			shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
+			
 
 			float b = ambientIntensity;
 			RAYLIB::Color color = {
@@ -283,9 +284,11 @@ namespace Engine::EngineObjects
 
 			RAYLIB::Vector3 ambientColorNormalized = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f };
 
-			if(cameraPosition != nullptr)
+			if (cameraPosition != nullptr)
 				SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], cameraPosition, SHADER_UNIFORM_VEC3);
-
+			else
+				SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], new float[3] {0,0,0}, SHADER_UNIFORM_VEC3);
+				
 			SetShaderValue(shader, GetShaderLocation(shader, "ambientColor"), &ambientColorNormalized, SHADER_UNIFORM_VEC3);
 			SetShaderValue(shader, GetShaderLocation(shader, "ambient"), &b, SHADER_UNIFORM_FLOAT);
 
@@ -320,13 +323,11 @@ namespace Engine::EngineObjects
 					fs_net = fs_net->Replace("numlights", lightSources->Count.ToString());
 				}
 				
-				printConsole(fs_net);
-
 				Shader& s = LoadShaderFromMemory(CastStringToNative(vs_net).c_str(), CastStringToNative(fs_net).c_str());
-
+			    
 				CreateLocs(s, lightSources->Count);
 
-				std::vector<rPBR::Light> _light;
+				std::vector<rPBR::Light> _light = std::vector<rPBR::Light>();
 
 				for (int x = 0; x < lightSources->Count; x++)
 				{
@@ -354,6 +355,7 @@ namespace Engine::EngineObjects
 				{
 					src->reInstantiate(s);
 				}
+
 			}
 			catch (Exception^ ex)
 			{
@@ -426,6 +428,8 @@ namespace Engine::EngineObjects
 
 			shaderId = (unsigned int)attributes->getAttribute("shaderId")->getValue();
 			ShaderUpdate();
+
+			rlCheckErrors();
 		}
 
 		void DrawGizmo() override
@@ -435,12 +439,8 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
+			
 
-		}
-
-	public:
-		void Update() override
-		{
 			if (shaderId != attributes->getAttribute("shaderId")->getValue<unsigned int>() || lightSources->Count != lightNum)
 			{
 				lightNum = lightSources->Count;
@@ -448,16 +448,22 @@ namespace Engine::EngineObjects
 				ShaderUpdate();
 			}
 
-			float ambientIntensity = attributes->getAttribute("ambientIntensity")->getValue<float>();
+			float ambientIntensity = (float)attributes->getAttribute("ambientIntensity")->getValueAuto();
 
 			if (attributes->getAttribute("ambientColor")->getCurrentType()->Equals(Newtonsoft::Json::Linq::JObject::typeid))
 			{
-				rPBR::SetAmbientColor(DataPacks::singleton().GetShader(shaderId), attributes->getAttribute("ambientColor")->getValueFromJObject<Engine::Components::Color^>()->toFloat(), &ambientIntensity);
+				rPBR::SetAmbientColor(DataPacks::singleton().GetShader(shaderId), &attributes->getAttribute("ambientColor")->getValueFromJObject<Engine::Components::Color^>()->toNativeVector3(), &ambientIntensity);
 			}
 			else
 			{
-				rPBR::SetAmbientColor(DataPacks::singleton().GetShader(shaderId), &attributes->getAttribute("ambientColor")->getValue<Engine::Components::Color^>()->toFloat(), &ambientIntensity);
+				rPBR::SetAmbientColor(DataPacks::singleton().GetShader(shaderId), &attributes->getAttribute("ambientColor")->getValue<Engine::Components::Color^>()->toNativeVector3(), &ambientIntensity);
 			}
+		}
+
+	public:
+		void Update() override
+		{
+			
 		}
 
 		void LightUpdate()

@@ -15,6 +15,7 @@ namespace Engine::Components
 		Color(unsigned int colorHex);
 		unsigned int toHex();
 		RAYLIB::Color toNative();
+		RAYLIB::Vector3 toNativeVector3();
 		float* toFloat();
 	};
 }

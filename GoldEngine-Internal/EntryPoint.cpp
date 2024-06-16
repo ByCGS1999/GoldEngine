@@ -56,7 +56,6 @@ unsigned int passwd = 0;
 // lua script object
 #include "Objects/LuaScript.h"
 
-
 using namespace Engine;
 using namespace Engine::EngineObjects;
 using namespace Engine::EngineObjects::Native;
@@ -346,7 +345,7 @@ private:
 									attrib->setValue(gcnew String(data));
 
 								}
-								free(data);
+								delete data;
 							}
 							else if (attrib->userData->GetType()->Equals(UInt32::typeid))
 							{
@@ -385,6 +384,30 @@ private:
 								float tmp = (float)attrib->userData;
 
 								float value = (float)tmp;
+
+								if (ImGui::InputFloat(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 0.1f, 0.5f, "%.2f"))
+								{
+									attrib->setValue(value, false);
+									attrib->setType(float::typeid);
+								}
+							}
+							else if (attrib->userData->GetType()->Equals(Single::typeid))
+							{
+								float tmp = (float)attrib->userData;
+
+								float value = (float)tmp;
+
+								if (ImGui::InputFloat(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 0.1f, 0.5f, "%.2f"))
+								{
+									attrib->setValue(value, false);
+									attrib->setType(float::typeid);
+								}
+							}
+							else if (attrib->userData->GetType()->Equals(Double::typeid))
+							{
+								float tmp = (double)attrib->userData;
+
+								float value = (double)tmp;
 
 								if (ImGui::InputFloat(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 0.1f, 0.5f, "%.2f"))
 								{
@@ -1068,6 +1091,7 @@ public:
 				{
 					fpsCap = fpsCheck;
 				}
+
 				ImGui::EndMenu();
 			}
 
@@ -2167,6 +2191,10 @@ public:
 			WaitTime(1.0);
 
 		create();
+
+
+
+		Logging::LogCustom("[GL Version]:", "Current OpenGL version is -> " + rlGetVersion() + ".");
 	}
 
 	void Preload() override

@@ -32,13 +32,8 @@
 #include "imgui_impl_raylib.h"
 
 
-#ifdef _WIN64
-#include "x64/raylib.h"
-#include "x64/rlgl.h"
-#else
-#include "x86/raylib.h"
-#include "x86/rlgl.h"
-#endif
+#include "../../Raylib/include/x64/raylib.h"
+#include "../../Raylib/include/x64/rlgl.h"
 
 #ifdef PLATFORM_DESKTOP
 #include <GLFW/glfw3.h>
@@ -50,6 +45,8 @@
 #ifndef NO_FONT_AWESOME
 #include "FA6FreeSolidFontData.h"
 #endif
+
+using namespace RAYLIB;
 
 static ImGuiMouseCursor CurrentMouseCursor = ImGuiMouseCursor_COUNT;
 static MouseCursor MouseCursorMap[ImGuiMouseCursor_COUNT];
@@ -568,7 +565,7 @@ void rlImGuiImageRenderTexture(const RenderTexture* image)
     rlImGuiImageRect(&image->texture, image->texture.width, image->texture.height, Rectangle{ 0,0, float(image->texture.width), -float(image->texture.height) });
 }
 
-void rlImGuiImageRenderTextureCustom(const RenderTexture* image, int scale[2], float offset[2])
+void rlImGuiImageRenderTextureCustom(const RAYLIB::RenderTexture* image, int scale[2], float offset[2])
 {
     if (!image)
         return;
@@ -579,7 +576,7 @@ void rlImGuiImageRenderTextureCustom(const RenderTexture* image, int scale[2], f
     rlImGuiImageRect(&image->texture, scale[0] - offset[0], scale[1] - offset[1], {0.0f, 0.0f, (float)image->texture.width, -(float)image->texture.height});
 }
 
-void rlImGuiImageRenderTextureFit(const RenderTexture* image, bool center)
+void rlImGuiImageRenderTextureFit(const RAYLIB::RenderTexture* image, bool center)
 {
 	if (!image)
 		return;
