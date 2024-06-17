@@ -7,7 +7,7 @@ Features:</br>
   Editor Customizable Style [x]</br>
   Playback Engine [~] - For now boots and loads the scene, needs more testing</br>
   Lighting [x]</br>
-  Dynamic Lighting []</br>
+  Dynamic Lighting [x]</br>
   Global Illumination (GI) []</br>
   PBR [x]</br>
   Scripting API [x]</br>
