@@ -295,6 +295,14 @@ private:
 				}
 
 
+				float lightPower = light->lightPower;
+				ImGui::Text("Light Power:");
+				ImGui::SameLine();
+				if (ImGui::InputFloat("###LIGHT_POWER", &lightPower, 100.0f, 1000.0f, "%.1f"))
+				{
+					light->lightPower = lightPower;
+				}
+
 				auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(light->lightColor));
 
 				float rawData[4] =

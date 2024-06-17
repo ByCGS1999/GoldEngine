@@ -63,6 +63,7 @@ namespace Engine::EngineObjects
 		Engine::Components::Vector3^ target;
 		rPBR::LightType lightType;
 		bool enabled;
+		float lightPower;
 
 	private:
 		unsigned int oldShaderId;
@@ -75,6 +76,10 @@ namespace Engine::EngineObjects
 			this->target = target;
 			this->shaderId = shader;
 			this->intensity = intensity;
+
+			if(this->lightPower <= 0)
+				this->lightPower = 10000;
+
 			Shader& s = DataPacks::singleton().GetShader(this->shaderId);
 
 			nativeLightSource = new Native::NativeLightSource(
@@ -88,6 +93,7 @@ namespace Engine::EngineObjects
 			oldShaderId = shaderId;
 			nativeLightSource->SetLightEnabled(true);
 			enabled = true;
+			
 		}
 
 		void Init(unsigned int lightColor, float intensity, Engine::Components::Vector3^ target, int lightType, unsigned int shaderId) override
@@ -139,12 +145,13 @@ namespace Engine::EngineObjects
 			nativeLightSource->SetPosition(GetTransform()->position->toNative());
 			nativeLightSource->SetTarget(Engine::Components::Vector3::zero()->toNative());
 
-			float v[4] = {
-				(lightColor >> 0)/255,
-				(lightColor >> 8)/255,
-				(lightColor >> 16)/255,
-				(lightColor >> 24)/255
-			};
+			float red = static_cast<float>((lightColor >> 0) & 0xFF) * lightPower;
+			float green = static_cast<float>((lightColor >> 8) & 0xFF) * lightPower;
+			float blue = static_cast<float>((lightColor >> 16) & 0xFF) * lightPower;
+			float alpha = static_cast<float>((lightColor >> 24) & 0xFF) * lightPower;
+
+			float v[4] = { red, green, blue, alpha };
+
 			nativeLightSource->SetColor(v);
 
 			if (shaderId != oldShaderId)
