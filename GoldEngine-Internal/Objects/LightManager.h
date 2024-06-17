@@ -2,6 +2,7 @@
 #include <list>
 #include "../Object/Vector3.h"
 #include "../Object/Transform.h"
+#include "LightManager.h"
 
 namespace Engine::EngineObjects
 {
@@ -24,11 +25,11 @@ namespace Engine::EngineObjects
 			{
 				shader = s;
 				RAYLIB::Color c = { 0 };
-				c.r = light.color[0] * 255;
-				c.g = light.color[1] * 255;
-				c.b = light.color[2] * 255;
-				c.a = light.color[3] * 255;
-				light = rPBR::CreateLight(light.type, light.position, light.target, c, light.intensity, s);
+				c.r = light.color[0];
+				c.g = light.color[1];
+				c.b = light.color[2];
+				c.a = light.color[3];
+				light = rPBR::ReInstantiateLight(light.type, light.position, light.target, c, light.intensity, s, light.lightId);
 			}
 
 		public:
@@ -91,6 +92,7 @@ namespace Engine::EngineObjects
 
 		void Init(unsigned int lightColor, float intensity, Engine::Components::Vector3^ target, int lightType, unsigned int shaderId) override
 		{
+			/*
 			this->lightColor = lightColor;
 			this->lightType = (rPBR::LightType)lightType;
 			this->target = target;
@@ -104,7 +106,6 @@ namespace Engine::EngineObjects
 			};
 
 			Shader& s = DataPacks::singleton().GetShader(this->shaderId);
-
 			nativeLightSource = new Native::NativeLightSource(
 				this->lightType,
 				GetTransform()->position->toNative(),
@@ -115,6 +116,7 @@ namespace Engine::EngineObjects
 			);
 			nativeLightSource->SetLightEnabled(true);
 			enabled = true;
+			*/
 		}
 
 		rPBR::Light& GetLight() { return nativeLightSource->getLight(); }
@@ -122,26 +124,7 @@ namespace Engine::EngineObjects
 
 		void UpdateLighting() override
 		{
-			nativeLightSource->SetLightEnabled(enabled);
-			nativeLightSource->SetIntensity(intensity);
-			nativeLightSource->SetPosition(GetTransform()->position->toNative());
-			nativeLightSource->SetTarget(Engine::Components::Vector3::zero()->toNative());
-			
-			float v[4] = {
-				lightColor >> 0,
-				lightColor >> 8,
-				lightColor >> 16,
-				lightColor >> 24
-			};
-			nativeLightSource->SetColor(v);
-
-			if (shaderId != oldShaderId)
-			{
-				oldShaderId = shaderId;
-				nativeLightSource->SetShader((Shader&)DataPacks::singleton().GetShader(this->shaderId));
-			}
-
-			nativeLightSource->UpdateLighting();
+		//	nativeLightSource->UpdateLighting();
 		}
 
 		void reInstantiate(Shader& newShader)
@@ -151,7 +134,32 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
+			nativeLightSource->SetLightEnabled(enabled);
+			nativeLightSource->SetIntensity(intensity);
+			nativeLightSource->SetPosition(GetTransform()->position->toNative());
+			nativeLightSource->SetTarget(Engine::Components::Vector3::zero()->toNative());
+
+			float v[4] = {
+				(lightColor >> 0)/255,
+				(lightColor >> 8)/255,
+				(lightColor >> 16)/255,
+				(lightColor >> 24)/255
+			};
+			nativeLightSource->SetColor(v);
+
+			if (shaderId != oldShaderId)
+			{
+				oldShaderId = shaderId;
+				nativeLightSource->SetShader((Shader&)DataPacks::singleton().GetShader(this->shaderId));
+			}
+
 			UpdateLighting();
+		}
+
+		void Destroy() override
+		{
+			this->enabled = false;
+			this->~LightSource();
 		}
 
 		void DrawGizmo() override
@@ -371,6 +379,15 @@ namespace Engine::EngineObjects
 			{
 				lightSources->Add(light);
 
+				std::vector<rPBR::Light> lights = std::vector<rPBR::Light>();
+
+				for each (auto t in lightSources)
+				{
+					lights.push_back(t->GetLight());
+				}
+
+				rPBR::ReorganizeLights(lights.data());
+
 				return lightSources->IndexOf(light);
 			}
 			else
@@ -381,6 +398,14 @@ namespace Engine::EngineObjects
 
 		void RemoveLight(Engine::EngineObjects::LightSource^ light)
 		{
+			std::vector<rPBR::Light> lights = std::vector<rPBR::Light>();
+
+			for each (auto t in lightSources)
+			{
+				lights.push_back(t->GetLight());
+			}
+
+			rPBR::ReorganizeLights(lights.data());
 			lightSources->Remove(light);
 		}
 
@@ -439,7 +464,11 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			
+			for each (auto light in lightSources)
+			{
+				if (light == nullptr)
+					RemoveLight(light);
+			}
 
 			if (shaderId != attributes->getAttribute("shaderId")->getValue<unsigned int>() || lightSources->Count != lightNum)
 			{
@@ -463,11 +492,18 @@ namespace Engine::EngineObjects
 	public:
 		void Update() override
 		{
-			
+
 		}
 
 		void LightUpdate()
 		{
+			if (shaderId != attributes->getAttribute("shaderId")->getValue<unsigned int>() || lightSources->Count != lightNum)
+			{
+				lightNum = lightSources->Count;
+				shaderId = attributes->getAttribute("shaderId")->getValue<unsigned int>();
+				ShaderUpdate();
+			}
+
 			max_lights = lightSources->Count;
 
 			for each (auto light in lightSources)
@@ -475,7 +511,7 @@ namespace Engine::EngineObjects
 				if (light == nullptr)
 					RemoveLight(light);
 				else
-					light->UpdateLighting();
+					rPBR::UpdateLight(DataPacks::singleton().GetShader(shaderId), light->GetLight());
 			}
 		}
 	};

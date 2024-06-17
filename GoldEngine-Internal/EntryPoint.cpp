@@ -293,6 +293,24 @@ private:
 				{
 					light->shaderId = shaderId;
 				}
+
+
+				auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(light->lightColor));
+
+				float rawData[4] =
+				{
+					float4.x,
+					float4.y,
+					float4.z,
+					float4.w
+				};
+
+				ImGui::Text("Tint Editor: ");
+				ImGui::SameLine();
+				if (ImGui::ColorPicker4("###TINT_SETTER", rawData))
+				{
+					light->lightColor = (ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3])));
+				}
 			}
 			break;
 
@@ -827,7 +845,7 @@ public:
 	void Start()
 	{
 		//WinAPI::FreeCons();
-		
+		SetTraceLogLevel(LOG_DEBUG);
 		SetWindowFlags(FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
 
@@ -2009,6 +2027,8 @@ public:
 
 	void render(int currentLayer)
 	{
+		lightManager->LightUpdate();
+
 		while (currentLayer != LayerManager::getHigherLayer())
 		{
 			Layer^ cL = LayerManager::GetLayerFromId(currentLayer);

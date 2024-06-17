@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdio>
+
 namespace rPBR
 {
     using namespace rPBR;
@@ -27,6 +29,8 @@ namespace rPBR
         int targetLoc;
         int colorLoc;
         int intensityLoc;
+
+        int lightId;
     } Light;
 
     //----------------------------------------------------------------------------------
@@ -41,7 +45,9 @@ namespace rPBR
 
     static void UpdateLight(Shader& shader, Light& light);
     static Light CreateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& shader);
+    static Light ReInstantiateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& shader, unsigned int lightId);
     static void SetAmbientColor(Shader& shader, RAYLIB::Vector3* color, float* intensity);
+    static void ReorganizeLights(Light[]);
 
     static Light CreateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& shader)
     {
@@ -65,9 +71,60 @@ namespace rPBR
             light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightCount));
             light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightCount));
 
+            light.lightId = lightCount;
+
+            printf("[Shader Debugger]: Light ID -> %d\n", light.lightId);
+            printf("[Shader Debugger]: enabledLoc -> %d\n", light.enabledLoc);
+            printf("[Shader Debugger]: typeLoc -> %d\n", light.typeLoc);
+            printf("[Shader Debugger]: positionLoc -> %d\n", light.positionLoc);
+            printf("[Shader Debugger]: targetLoc -> %d\n", light.targetLoc);
+            printf("[Shader Debugger]: colorLoc -> %d\n", light.colorLoc);
+            printf("[Shader Debugger]: intensityLoc -> %d\n", light.intensityLoc);
+            printf("-------------------------------------------\n");
+
             UpdateLight(shader, light);
 
             lightCount++;
+
+        return light;
+    }
+
+    static Light ReInstantiateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& shader, unsigned int lightId)
+    {
+        Light light = { 0 };
+
+        light.enabled = 1;
+        light.type = type;
+        light.position = position;
+        light.target = target;
+        light.color[0] = (float)color.r / 255.0f;
+        light.color[1] = (float)color.g / 255.0f;
+        light.color[2] = (float)color.b / 255.0f;
+        light.color[3] = (float)color.a / 255.0f;
+        light.intensity = intensity;
+
+        // NOTE: Shader parameters names for lights must match the requested ones
+        light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", lightId));
+        light.typeLoc = GetShaderLocation(shader, TextFormat("lights[%i].type", lightId));
+        light.positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", lightId));
+        light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightId));
+        light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightId));
+        light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightId));
+
+        light.lightId = lightId;
+
+        printf("Reinstantiating Light\n");
+
+        printf("[Shader Debugger]: Light ID -> %d\n", light.lightId);
+        printf("[Shader Debugger]: enabledLoc -> %d\n", light.enabledLoc);
+        printf("[Shader Debugger]: typeLoc -> %d\n", light.typeLoc);
+        printf("[Shader Debugger]: positionLoc -> %d\n", light.positionLoc);
+        printf("[Shader Debugger]: targetLoc -> %d\n", light.targetLoc);
+        printf("[Shader Debugger]: colorLoc -> %d\n", light.colorLoc);
+        printf("[Shader Debugger]: intensityLoc -> %d\n", light.intensityLoc);
+        printf("-------------------------------------------\n");
+
+        UpdateLight(shader, light);
 
         return light;
     }
@@ -76,13 +133,13 @@ namespace rPBR
     // NOTE: Light shader locations should be available
     static void UpdateLight(Shader& shader, Light& light)
     {
-        light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", lightCount));
-        light.typeLoc = GetShaderLocation(shader, TextFormat("lights[%i].type", lightCount));
-        light.positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", lightCount));
-        light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightCount));
-        light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightCount));
-        light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightCount));
-
+        light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", light.lightId));
+        light.typeLoc = GetShaderLocation(shader, TextFormat("lights[%i].type", light.lightId));
+        light.positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", light.lightId));
+        light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", light.lightId));
+        light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", light.lightId));
+        light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", light.lightId));
+        
         SetShaderValue(shader, light.enabledLoc, &light.enabled, SHADER_UNIFORM_INT);
         SetShaderValue(shader, light.typeLoc, &light.type, SHADER_UNIFORM_INT);
 
@@ -101,5 +158,18 @@ namespace rPBR
     {
         SetShaderValue(shader, GetShaderLocation(shader, "ambientColor"), col, SHADER_UNIFORM_VEC3);
         SetShaderValue(shader, GetShaderLocation(shader, "ambient"), intensity, SHADER_UNIFORM_FLOAT);
+    }
+
+    static void ReorganizeLights(Light light[])
+    {
+        int lastIndex = 0;
+
+        for (int x = 0; x < (sizeof(light) / sizeof(Light)); x++)
+        {
+            light[x].lightId = x;
+            lastIndex++;
+        }
+
+        lightCount = lastIndex;
     }
 }

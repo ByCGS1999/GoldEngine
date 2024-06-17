@@ -52,11 +52,13 @@ namespace Engine::EngineObjects
 				model.materials[0].maps[MATERIAL_MAP_ALBEDO].color = c;
 				model.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = (Texture2D)texture;
 
-				model.materials[0].maps[MATERIAL_MAP_METALNESS].value = 0.0f;
+				model.materials[0].maps[MATERIAL_MAP_METALNESS].value = 0.5f;
 				model.materials[0].maps[MATERIAL_MAP_ROUGHNESS].value = 0.0f;
-				model.materials[0].maps[MATERIAL_MAP_OCCLUSION].value = 1.0f;
+				model.materials[0].maps[MATERIAL_MAP_OCCLUSION].value = 0.0f;
 				model.materials[0].maps[MATERIAL_MAP_EMISSION].color = RAYLIB::WHITE;
 				model.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
+
+				rlCheckErrors();
 			}
 		};
 	}
