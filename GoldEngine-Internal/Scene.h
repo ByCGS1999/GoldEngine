@@ -85,7 +85,8 @@ namespace Engine::Management
 
 			sceneDatapack->ReadFromFile(sceneRequirements, password);
 
-			Directory::Delete("Data/tmp/", true);
+			if(Directory::Exists("Data/tmp/"))
+				Directory::Delete("Data/tmp/", true);
 
 			sceneFinishedLoading = true;
 

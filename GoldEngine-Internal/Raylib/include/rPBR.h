@@ -9,8 +9,8 @@ namespace rPBR
     // Light type
     typedef enum {
         LIGHT_DIRECTIONAL = 0,
-        LIGHT_POINT,
-        LIGHT_SPOT
+        LIGHT_POINT = 1,
+        LIGHT_SPOT = 2
     } LightType;
 
     // Light data
@@ -21,6 +21,8 @@ namespace rPBR
         RAYLIB::Vector3 target;
         float color[4];
         float intensity;
+        float cutOff;
+        float outerCutOff;
 
         // Shader light parameters locations
         int typeLoc;
@@ -29,6 +31,8 @@ namespace rPBR
         int targetLoc;
         int colorLoc;
         int intensityLoc;
+        int cutoffLoc;
+        int outercutoffLoc;
 
         int lightId;
     } Light;
@@ -44,12 +48,12 @@ namespace rPBR
     // Create a light and get shader locations
 
     static void UpdateLight(Shader& shader, Light& light);
-    static Light CreateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& shader);
-    static Light ReInstantiateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& shader, unsigned int lightId);
+    static Light CreateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, float cutoff, float outerCutoff, Shader& shader);
+    static Light ReInstantiateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, float cutoff, float outerCutoff, Shader& shader, unsigned int lightId);
     static void SetAmbientColor(Shader& shader, RAYLIB::Vector3* color, float* intensity);
     static void ReorganizeLights(Light[]);
 
-    static Light CreateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& shader)
+    static Light CreateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity , float cutoff, float outerCutoff, Shader& shader)
     {
         Light light = { 0 };
 
@@ -61,6 +65,8 @@ namespace rPBR
             light.color[1] = (float)color.g / 255.0f;
             light.color[2] = (float)color.b / 255.0f;
             light.color[3] = (float)color.a / 255.0f;
+            light.cutOff = cutoff;
+            light.outerCutOff = outerCutoff;
             light.intensity = intensity;
 
             // NOTE: Shader parameters names for lights must match the requested ones
@@ -70,6 +76,8 @@ namespace rPBR
             light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightCount));
             light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightCount));
             light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightCount));
+            light.cutoffLoc = GetShaderLocation(shader, TextFormat("lights[%i].cutOff", lightCount));
+            light.outercutoffLoc = GetShaderLocation(shader, TextFormat("lights[%i].outerCutOff", lightCount));
 
             light.lightId = lightCount;
 
@@ -89,7 +97,7 @@ namespace rPBR
         return light;
     }
 
-    static Light ReInstantiateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& shader, unsigned int lightId)
+    static Light ReInstantiateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, float cutoff, float outerCutoff, Shader& shader, unsigned int lightId)
     {
         Light light = { 0 };
 
@@ -102,6 +110,8 @@ namespace rPBR
         light.color[2] = (float)color.b / 255.0f;
         light.color[3] = (float)color.a / 255.0f;
         light.intensity = intensity;
+        light.cutOff = cutoff;
+        light.outerCutOff = outerCutoff;
 
         // NOTE: Shader parameters names for lights must match the requested ones
         light.enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", lightId));
@@ -110,6 +120,8 @@ namespace rPBR
         light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", lightId));
         light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", lightId));
         light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", lightId));
+        light.cutoffLoc = GetShaderLocation(shader, TextFormat("lights[%i].cutOff", lightCount));
+        light.outercutoffLoc = GetShaderLocation(shader, TextFormat("lights[%i].outerCutOff", lightCount));
 
         light.lightId = lightId;
 
@@ -139,6 +151,8 @@ namespace rPBR
         light.targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", light.lightId));
         light.colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", light.lightId));
         light.intensityLoc = GetShaderLocation(shader, TextFormat("lights[%i].intensity", light.lightId));
+        light.cutoffLoc = GetShaderLocation(shader, TextFormat("lights[%i].cutOff", lightCount));
+        light.outercutoffLoc = GetShaderLocation(shader, TextFormat("lights[%i].outerCutOff", lightCount));
         
         SetShaderValue(shader, light.enabledLoc, &light.enabled, SHADER_UNIFORM_INT);
         SetShaderValue(shader, light.typeLoc, &light.type, SHADER_UNIFORM_INT);
@@ -152,6 +166,9 @@ namespace rPBR
         SetShaderValue(shader, light.targetLoc, target, SHADER_UNIFORM_VEC3);
         SetShaderValue(shader, light.colorLoc, light.color, SHADER_UNIFORM_VEC4);
         SetShaderValue(shader, light.intensityLoc, &light.intensity, SHADER_UNIFORM_FLOAT);
+
+        SetShaderValue(shader, light.cutoffLoc, &light.cutOff, SHADER_UNIFORM_FLOAT);
+        SetShaderValue(shader, light.outercutoffLoc, &light.outerCutOff, SHADER_UNIFORM_FLOAT);
     }
 
     static void SetAmbientColor(RAYLIB::Shader& shader,  RAYLIB::Vector3* col, float* intensity)

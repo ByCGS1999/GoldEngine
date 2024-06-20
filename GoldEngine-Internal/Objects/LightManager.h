@@ -15,9 +15,9 @@ namespace Engine::EngineObjects
 			Shader shader;
 
 		public:
-			NativeLightSource(int lightType, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, Shader& s)
+			NativeLightSource(int lightType, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, float cutoff, float outerCutoff, Shader& s)
 			{
-				light = rPBR::CreateLight(lightType, position, target, color, intensity, s);
+				light = rPBR::CreateLight(lightType, position, target, color, intensity, cutoff, outerCutoff, s);
 				shader = s;
 			}
 
@@ -29,7 +29,7 @@ namespace Engine::EngineObjects
 				c.g = light.color[1];
 				c.b = light.color[2];
 				c.a = light.color[3];
-				light = rPBR::ReInstantiateLight(light.type, light.position, light.target, c, light.intensity, s, light.lightId);
+				light = rPBR::ReInstantiateLight(light.type, light.position, light.target, c, light.intensity, light.cutOff, light.outerCutOff, s, light.lightId);
 			}
 
 		public:
@@ -64,6 +64,8 @@ namespace Engine::EngineObjects
 		rPBR::LightType lightType;
 		bool enabled;
 		float lightPower;
+		float cutoff;
+		float outerCutoff;
 
 	private:
 		unsigned int oldShaderId;
@@ -76,6 +78,8 @@ namespace Engine::EngineObjects
 			this->target = target;
 			this->shaderId = shader;
 			this->intensity = intensity;
+			this->cutoff = 10;
+			this->outerCutoff = 30;
 
 			if(this->lightPower <= 0)
 				this->lightPower = 10000;
@@ -88,6 +92,8 @@ namespace Engine::EngineObjects
 				{0,0,0},
 				GetColor(this->lightColor),
 				this->intensity,
+				cutoff,
+				outerCutoff,
 				s
 			);
 			oldShaderId = shaderId;
@@ -207,7 +213,7 @@ namespace Engine::EngineObjects
 			}
 			else if (lightType == rPBR::LIGHT_SPOT)
 			{
-				DrawCylinderWiresEx(lightTransform->position->toNative(), this->target->toNative(), lightTransform->scale->x, this->intensity, 6, c);
+				DrawCylinderWiresEx(lightTransform->position->toNative(), this->target->toNative(), cutoff, outerCutoff, 6, c);
 			}
 			else
 			{

@@ -3,6 +3,7 @@
 #define MAX_LIGHTS              numlights
 #define LIGHT_DIRECTIONAL       0
 #define LIGHT_POINT             1
+#define LIGHT_SPOT              2
 #define PI 3.14159265358979323846
 
 struct Light {
@@ -11,7 +12,11 @@ struct Light {
     vec3 position;
     vec3 target;
     vec4 color;
+
     float intensity;
+
+    float cutOff;
+    float outerCutOff;
 };
 
 // Input vertex attributes (from vertex shader)
@@ -117,7 +122,29 @@ vec3 ComputePBR()
 
     for (int i = 0; i < numOfLights; i++)
     {
-        vec3 L = normalize(lights[i].position - fragPosition);      // Compute light vector
+        vec3 L = vec3(0,0,0);
+
+        if(lights[i].type == LIGHT_POINT)
+        {
+            L = normalize(lights[i].position - fragPosition);      // Compute light vector
+        }
+        else if(lights[i].type == LIGHT_DIRECTIONAL)
+        {
+            L = -normalize(lights[i].target - lights[i].position);
+        }
+        else if(lights[i].type == LIGHT_SPOT)
+        {
+            L = normalize(lights[i].position -fragPosition);
+            float theta = dot(L, normalize(lights[i].target - lights[i].position));
+            float epsilon = lights[i].cutOff - lights[i].outerCutOff;
+            float intensity = clamp((theta - lights[i].outerCutOff)/epsilon, 0.0, 1.0);
+
+            if(theta > lights[i].outerCutOff)
+                L*=intensity;
+            else
+                continue;
+        }
+
         vec3 H = normalize(V + L);                                  // Compute halfway bisecting vector
         float dist = length(lights[i].position - fragPosition);     // Compute distance to light
         float attenuation = 1.0/(dist*dist*0.23);                   // Compute attenuation

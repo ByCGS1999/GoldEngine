@@ -1,0 +1,2 @@
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\PlaybackEngine_Release\GoldEngine-Internal.vcxproj.AssemblyReference.cache
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\PlaybackEngine_Release\GoldEngine-Internal.vcxproj.CopyComplete

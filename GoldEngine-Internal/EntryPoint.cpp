@@ -68,7 +68,7 @@ using namespace Engine::Scripting;
 
 DataPacks dataPack;
 
-#if PRODUCTION_BUILD == false
+#if !defined(PRODUCTION_BUILD)
 
 #pragma region EDITOR ENGINE
 
@@ -139,7 +139,7 @@ private:
 			array<String^>^ tmp = f->Split('/');
 			auto t = tmp[tmp->Length - 1] + "\n";
 
-			if (f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".fbx") || f->Contains(".vox")) // model types
+			if (f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".vox")) // model types
 			{
 				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
 				{
@@ -279,6 +279,17 @@ private:
 						light->enabled = false;
 					}
 				}
+
+				int lightType = light->lightType;
+				ImGui::Text("Intensity:");
+				ImGui::SameLine();
+				const char* data[] = { "Directional Light", "Point Light", "Spot Light" };
+
+				if (ImGui::Combo("###LIGHT_TYPE", &lightType, data, IM_ARRAYSIZE(data)))
+				{
+					light->lightType = (rPBR::LightType)lightType;
+				}
+
 				float intensity = light->intensity;
 				ImGui::Text("Intensity:");
 				ImGui::SameLine();
@@ -303,6 +314,40 @@ private:
 					light->lightPower = lightPower;
 				}
 
+				if ((rPBR::LightType)lightType == rPBR::LightType::LIGHT_DIRECTIONAL || (rPBR::LightType)lightType == rPBR::LightType::LIGHT_SPOT)
+				{
+					Engine::Components::Vector3^ target = light->target;
+
+					float nativeVector[3] = { light->target->x, light->target->y, light->target->z };
+
+					ImGui::Text("Target: ");
+					ImGui::SameLine();
+					if (ImGui::InputFloat2("###LIGHT_TARGET", nativeVector, "%.3f"))
+					{
+						light->target = gcnew Engine::Components::Vector3(nativeVector[0], nativeVector[1], nativeVector[2]);
+					}
+				}
+
+				if ((rPBR::LightType)lightType == rPBR::LightType::LIGHT_SPOT)
+				{
+					float cutoff = light->cutoff;
+					ImGui::Text("Cutoff:");
+					ImGui::SameLine();
+					if (ImGui::InputFloat("###LIGHT_CUTOFF", &cutoff, 0.1f, 1.0f, "%.1f"))
+					{
+						light->cutoff = cutoff;
+					}
+
+
+					float outercutoff = light->outerCutoff;
+					ImGui::Text("Outer Cutoff:");
+					ImGui::SameLine();
+					if (ImGui::InputFloat("###LIGHT_OUTERCUTOFF", &outercutoff, 0.1f, 1.0f, "%.1f"))
+					{
+						light->outerCutoff = outercutoff;
+					}
+				}
+
 				auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(light->lightColor));
 
 				float rawData[4] =
@@ -319,6 +364,7 @@ private:
 				{
 					light->lightColor = (ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3])));
 				}
+
 			}
 			break;
 
@@ -442,6 +488,18 @@ private:
 								{
 									attrib->setValue(value, false);
 									attrib->setType(float::typeid);
+								}
+							}
+							else if (attrib->getValueType()->Equals(bool::typeid))
+							{
+								bool tmp = (bool)attrib->userData;
+
+								bool value = (bool)tmp;
+
+								if (ImGui::Checkbox(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value))
+								{
+									attrib->setValue(value, false);
+									attrib->setType(bool::typeid);
 								}
 							}
 							else if (attrib->getValueType()->Equals(Engine::Components::Color::typeid))
@@ -769,7 +827,7 @@ end
 
 			if (_reference->GetTransform()->parent != nullptr)
 			{
-				if (_reference->GetTransform()->parent->GetUID()->Equals(parent->GetTransform()->GetUID()))
+				if (_reference->GetTransform()->parent->GetUID() == parent->GetTransform()->GetUID())
 				{
 					String^ refName = "";
 					for (int x = 0; x < depth; x++)
@@ -808,12 +866,9 @@ end
 						}
 					}
 
-					int nDepth = depth + 1;
-					DrawHierarchyInherits(scene, _reference, nDepth);
+					DrawHierarchyInherits(scene, _reference, depth + 1);
 				}
-
 			}
-
 		}
 	}
 
@@ -836,7 +891,7 @@ public:
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
 
-		assemblies->Add(gcnew EngineAssembly("Data/Asm/GoldEngine_ScriptAssembly.dll"));
+		assemblies->Add(gcnew EngineAssembly("Bin/Asm/GoldEngine_ScriptAssembly.dll"));
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
 
 		SceneManager::SetAssemblyManager(assemblies);
@@ -1024,6 +1079,49 @@ public:
 
 			if (ImGui::BeginMenu("Object", true))
 			{
+				if (ImGui::MenuItem("Empty Object"))
+				{
+					Engine::Internal::Components::Object^ newObject = gcnew Engine::Internal::Components::Object("Empty Object", 
+						gcnew Engine::Internal::Components::Transform(
+						Engine::Components::Vector3::create({ 0,0,0 }),
+						Engine::Components::Vector3::create({ 0,0,0 }),
+						0.0f,
+						Engine::Components::Vector3::create({ 1,1,1 }),
+						scene->GetDatamodelMember("workspace")->GetTransform()
+						), 
+						ObjectType::Script, 
+						"", 
+						LayerManager::GetLayerFromId(1)
+					);
+
+					scene->AddObjectToScene(newObject);
+					scene->PushToRenderQueue(newObject);
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::BeginMenu("Primitives"))
+				{
+					if (ImGui::MenuItem("Cube Renderer"))
+					{
+						Engine::EngineObjects::CubeRenderer^ cubeRenderer = gcnew Engine::EngineObjects::CubeRenderer("CubeRenderer",
+							gcnew Engine::Internal::Components::Transform(
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								0.0f,
+								Engine::Components::Vector3::create({ 1,1,1 }),
+								scene->GetDatamodelMember("workspace")->GetTransform()
+							), 0xFFFFFFFF);
+
+						scene->AddObjectToScene(cubeRenderer);
+						scene->PushToRenderQueue(cubeRenderer);
+					}
+
+					ImGui::EndMenu();
+				}
+
+				ImGui::Separator();
+
 				if (ImGui::BeginMenu("Cameras"))
 				{
 					if (ImGui::MenuItem("Camera3D"))
@@ -1152,6 +1250,9 @@ public:
 
 				if (reference != nullptr)
 				{
+					if (reference->GetTransform()->parent != nullptr)
+						continue;
+
 					if (type == ObjectType::Datamodel || type == ObjectType::LightManager || reference->isProtected())
 					{
 						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)" + "###" + reference->GetTransform()->GetUID())))
@@ -2035,7 +2136,7 @@ public:
 
 	void render(int currentLayer)
 	{
-		lightManager->LightUpdate();
+		ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
 
 		while (currentLayer != LayerManager::getHigherLayer())
 		{
@@ -2193,64 +2294,10 @@ private:
 public:
 	void Init() override
 	{
-		/*
-		modelTexture = DataPack::singleton()->AddTextures2D(256, "./Data/EditorAssets/Icons/Model.png");
-		DataPack::singleton()->AddTextures2D(257, "Data/EditorAssets/Icons/Run.png");
-		DataPack::singleton()->AddTextures2D(258, "Data/EditorAssets/Icons/Stop.png");
-		DataPack::singleton()->AddTextures2D(259, "Data/EditorAssets/Icons/Material.png");
-		DataPack::singleton()->AddShader(0, "Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
-		*/
-
 		modelTexture = DataPacks::singleton().GetTexture2D(256);
 		materialTexture = DataPacks::singleton().GetTexture2D(259);
 
-		//packedData->WriteToFile(packedData->getFile(), passwd);
-
-		/*
-		Shader lightShader = dataPack.GetShader(1);
-
-		lightShader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(lightShader, "viewPos");
-
-		dataPack.SetShader(1, lightShader);
-		*/
-
-		/*
-		auto workSpace = gcnew Components::Object(
-			"Workspace",
-			gcnew Components::Transform(
-				gcnew Components::Vector3(0,0,0),
-				gcnew Components::Quaternion(0, 0, 0, 0),
-				1.0f
-			),
-			Components::Datamodel,
-			nullptr
-		);
-
-		auto skyBox = gcnew Engine::EngineObjects::Skybox(
-			"Skybox",
-			gcnew Components::Transform(
-				gcnew Components::Vector3(0, 0, 0),
-				gcnew Components::Quaternion(0, 0, 0, 0),
-				5.0f
-			),
-			0
-		);
-
-		scene->AddObjectToScene(workSpace);
-		scene->AddObjectToScene(skyBox);
-		*/
-
-		//int numLights = 1;
-		//SetShaderValue(dataPack.GetShader(1), GetShaderLocation(dataPack.GetShader(1), "numOfLights"), &numLights, SHADER_UNIFORM_INT);
-		//rPBR::PBRSetAmbient(dataPack.GetShader(1), { 0, 0, 0, 255 }, 0.0f);
-		//lights[0] = rPBR::PBRLightCreate(rPBR::LIGHT_POINT, { -5,5,0 }, { .5f,-.5f,0 }, { 255,255,255, 255 }, 2.5f, dataPack.GetShader(1));
-
-		//FileManager::ReadCustomFileFormat("Data/assets1.gold", passwd);
-
 		cameraPosition = gcnew Engine::Components::Vector3(0, 0, 0);
-		//Directory::Delete("Data/tmp/", true);
-		//SceneManager::SaveSceneToFile(scene, passwd);
-		//packedData->WriteToFile("Assets1", passwd);
 
 		objectManager = gcnew Scripting::ObjectManager(scene);
 
@@ -2258,8 +2305,6 @@ public:
 			WaitTime(1.0);
 
 		create();
-
-
 
 		Logging::LogCustom("[GL Version]:", "Current OpenGL version is -> " + rlGetVersion() + ".");
 	}
@@ -2360,12 +2405,6 @@ public:
 			SetFPS(-1);
 		}
 
-		Shader lightShader = dataPack.GetShader(1);
-		float cameraPos[3] = { camera->transform->position->x, camera->transform->position->y, camera->transform->position->z };
-		SetShaderValue(lightShader, lightShader.locs[SHADER_LOC_VECTOR_VIEW], cameraPos, SHADER_UNIFORM_VEC3);
-
-		dataPack.AddShader(1, lightShader);
-
 		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 		{
 			if (obj->GetReference() != nullptr)
@@ -2402,7 +2441,7 @@ public ref class GameWindow : public Engine::Window
 public:
 	GameWindow()
 	{
-		WinAPI::FreeCons();
+		//WinAPI::FreeCons();
 
 		dataPack = DataPacks();
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
@@ -2425,7 +2464,6 @@ public:
 
 		SetWindowFlags(config->windowFlags);
 		OpenWindow(config->resolution->w, config->resolution->h, config->getWindowName().c_str());
-		//SetWindowPosition(config->resolution->x, config->resolution->y);
 
 		if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
 		{
@@ -2449,7 +2487,7 @@ public:
 
 	virtual void Init() override
 	{
-		DataPack::SetSingletonReference(packedData);
+		//Engine::Assets::Management::DataPack::SetSingletonReference(packedData);
 	}
 
 	virtual void Preload() override
@@ -2468,11 +2506,14 @@ public:
 
 		gcnew Scripting::ObjectManager(scene);
 
+
 		Init();
 	}
 
 	void render(int currentLayer)
 	{
+		ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
+
 		while (currentLayer != LayerManager::getHigherLayer())
 		{
 			Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
@@ -2489,6 +2530,7 @@ public:
 					if (reference->layerMask = cL)
 					{
 						reference->Draw();
+						reference->DrawGizmo();
 					}
 				}
 			}
@@ -2506,14 +2548,14 @@ public:
 	{
 		BeginDrawing();
 
-		ClearBackground(::BLACK);
+		ClearBackground(RAYLIB::BLACK);
 
 		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
 
 		if (camera == nullptr)
 			return;
 
-		BeginMode3D((::Camera3D)*camera->get());
+		BeginMode3D((RAYLIB::Camera3D)*camera->get());
 
 		int currentLayer = 0;
 
@@ -2535,9 +2577,9 @@ public:
 
 	virtual void Update() override
 	{
-		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 		{
-			sceneObject->GetReference()->Update();
+			obj->GetReference()->Update();
 		}
 	}
 

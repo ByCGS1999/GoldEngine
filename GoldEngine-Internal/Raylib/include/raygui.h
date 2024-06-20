@@ -264,12 +264,12 @@
 *           - int GetCharPressed(void);         // -- GuiTextBox(), GuiValueBox()
 *
 *           - void DrawRectangle(int x, int y, int width, int height, Color color); // -- GuiDrawRectangle()
-*           - void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4); // -- GuiColorPicker()
+*           - void DrawRectangleGradientEx(RAYLIB::Rectangle rec, Color col1, Color col2, Color col3, Color col4); // -- GuiColorPicker()
 *
 *           - Font GetFontDefault(void);                            // -- GuiLoadStyleDefault()
 *           - Font LoadFontEx(const char *fileName, int fontSize, int *codepoints, int codepointCount); // -- GuiLoadStyle()
 *           - Texture2D LoadTextureFromImage(Image image);          // -- GuiLoadStyle(), required to load texture from embedded font atlas image
-*           - void SetShapesTexture(Texture2D tex, Rectangle rec);  // -- GuiLoadStyle(), required to set shapes rec to font white rec (optimization)
+*           - void SetShapesTexture(Texture2D tex, RAYLIB::Rectangle rec);  // -- GuiLoadStyle(), required to set shapes rec to font white rec (optimization)
 *           - char *LoadFileText(const char *fileName);             // -- GuiLoadStyle(), required to load charset data
 *           - void UnloadFileText(char *text);                      // -- GuiLoadStyle(), required to unload charset data
 *           - const char *GetDirectoryPath(const char *filePath);   // -- GuiLoadStyle(), required to find charset/font file from text .rgs
@@ -321,6 +321,8 @@
 #if !defined(RAYGUI_STANDALONE)
     #include "./x64/raylib.h"
 #endif
+
+using namespace RAYLIB;
 
 // Function specifiers in case library is build/used as a shared library (Windows)
 // NOTE: Microsoft specifiers to tell compiler that symbols are imported/exported from a .dll
@@ -702,46 +704,46 @@ RAYGUIAPI void GuiDrawIcon(int iconId, int posX, int posY, int pixelSize, Color 
 // Controls
 //----------------------------------------------------------------------------------------------------------
 // Container/separator controls, useful for controls organization
-RAYGUIAPI int GuiWindowBox(Rectangle bounds, const char *title);                                       // Window Box control, shows a window that can be closed
-RAYGUIAPI int GuiGroupBox(Rectangle bounds, const char *text);                                         // Group Box control with text name
-RAYGUIAPI int GuiLine(Rectangle bounds, const char *text);                                             // Line separator control, could contain text
-RAYGUIAPI int GuiPanel(Rectangle bounds, const char *text);                                            // Panel control, useful to group controls
-RAYGUIAPI int GuiTabBar(Rectangle bounds, const char **text, int count, int *active);                  // Tab Bar control, returns TAB to be closed or -1
-RAYGUIAPI int GuiScrollPanel(Rectangle bounds, const char *text, Rectangle content, Vector2 *scroll, Rectangle *view); // Scroll Panel control
+RAYGUIAPI int GuiWindowBox(RAYLIB::Rectangle bounds, const char *title);                                       // Window Box control, shows a window that can be closed
+RAYGUIAPI int GuiGroupBox(RAYLIB::Rectangle bounds, const char *text);                                         // Group Box control with text name
+RAYGUIAPI int GuiLine(RAYLIB::Rectangle bounds, const char *text);                                             // Line separator control, could contain text
+RAYGUIAPI int GuiPanel(RAYLIB::Rectangle bounds, const char *text);                                            // Panel control, useful to group controls
+RAYGUIAPI int GuiTabBar(RAYLIB::Rectangle bounds, const char **text, int count, int *active);                  // Tab Bar control, returns TAB to be closed or -1
+RAYGUIAPI int GuiScrollPanel(RAYLIB::Rectangle bounds, const char *text, RAYLIB::Rectangle content, Vector2 *scroll, RAYLIB::Rectangle *view); // Scroll Panel control
 
 // Basic controls set
-RAYGUIAPI int GuiLabel(Rectangle bounds, const char *text);                                            // Label control, shows text
-RAYGUIAPI int GuiButton(Rectangle bounds, const char *text);                                           // Button control, returns true when clicked
-RAYGUIAPI int GuiLabelButton(Rectangle bounds, const char *text);                                      // Label button control, show true when clicked
-RAYGUIAPI int GuiToggle(Rectangle bounds, const char *text, bool *active);                             // Toggle Button control, returns true when active
-RAYGUIAPI int GuiToggleGroup(Rectangle bounds, const char *text, int *active);                         // Toggle Group control, returns active toggle index
-RAYGUIAPI int GuiToggleSlider(Rectangle bounds, const char *text, int *active);                        // Toggle Slider control, returns true when clicked
-RAYGUIAPI int GuiCheckBox(Rectangle bounds, const char *text, bool *checked);                          // Check Box control, returns true when active
-RAYGUIAPI int GuiComboBox(Rectangle bounds, const char *text, int *active);                            // Combo Box control, returns selected item index
+RAYGUIAPI int GuiLabel(RAYLIB::Rectangle bounds, const char *text);                                            // Label control, shows text
+RAYGUIAPI int GuiButton(RAYLIB::Rectangle bounds, const char *text);                                           // Button control, returns true when clicked
+RAYGUIAPI int GuiLabelButton(RAYLIB::Rectangle bounds, const char *text);                                      // Label button control, show true when clicked
+RAYGUIAPI int GuiToggle(RAYLIB::Rectangle bounds, const char *text, bool *active);                             // Toggle Button control, returns true when active
+RAYGUIAPI int GuiToggleGroup(RAYLIB::Rectangle bounds, const char *text, int *active);                         // Toggle Group control, returns active toggle index
+RAYGUIAPI int GuiToggleSlider(RAYLIB::Rectangle bounds, const char *text, int *active);                        // Toggle Slider control, returns true when clicked
+RAYGUIAPI int GuiCheckBox(RAYLIB::Rectangle bounds, const char *text, bool *checked);                          // Check Box control, returns true when active
+RAYGUIAPI int GuiComboBox(RAYLIB::Rectangle bounds, const char *text, int *active);                            // Combo Box control, returns selected item index
 
-RAYGUIAPI int GuiDropdownBox(Rectangle bounds, const char *text, int *active, bool editMode);          // Dropdown Box control, returns selected item
-RAYGUIAPI int GuiSpinner(Rectangle bounds, const char *text, int *value, int minValue, int maxValue, bool editMode); // Spinner control, returns selected value
-RAYGUIAPI int GuiValueBox(Rectangle bounds, const char *text, int *value, int minValue, int maxValue, bool editMode); // Value Box control, updates input text with numbers
-RAYGUIAPI int GuiTextBox(Rectangle bounds, char *text, int textSize, bool editMode);                   // Text Box control, updates input text
+RAYGUIAPI int GuiDropdownBox(RAYLIB::Rectangle bounds, const char *text, int *active, bool editMode);          // Dropdown Box control, returns selected item
+RAYGUIAPI int GuiSpinner(RAYLIB::Rectangle bounds, const char *text, int *value, int minValue, int maxValue, bool editMode); // Spinner control, returns selected value
+RAYGUIAPI int GuiValueBox(RAYLIB::Rectangle bounds, const char *text, int *value, int minValue, int maxValue, bool editMode); // Value Box control, updates input text with numbers
+RAYGUIAPI int GuiTextBox(RAYLIB::Rectangle bounds, char *text, int textSize, bool editMode);                   // Text Box control, updates input text
 
-RAYGUIAPI int GuiSlider(Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue); // Slider control, returns selected value
-RAYGUIAPI int GuiSliderBar(Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue); // Slider Bar control, returns selected value
-RAYGUIAPI int GuiProgressBar(Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue); // Progress Bar control, shows current progress value
-RAYGUIAPI int GuiStatusBar(Rectangle bounds, const char *text);                                        // Status Bar control, shows info text
-RAYGUIAPI int GuiDummyRec(Rectangle bounds, const char *text);                                         // Dummy control for placeholders
-RAYGUIAPI int GuiGrid(Rectangle bounds, const char *text, float spacing, int subdivs, Vector2 *mouseCell); // Grid control, returns mouse cell position
+RAYGUIAPI int GuiSlider(RAYLIB::Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue); // Slider control, returns selected value
+RAYGUIAPI int GuiSliderBar(RAYLIB::Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue); // Slider Bar control, returns selected value
+RAYGUIAPI int GuiProgressBar(RAYLIB::Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue); // Progress Bar control, shows current progress value
+RAYGUIAPI int GuiStatusBar(RAYLIB::Rectangle bounds, const char *text);                                        // Status Bar control, shows info text
+RAYGUIAPI int GuiDummyRec(RAYLIB::Rectangle bounds, const char *text);                                         // Dummy control for placeholders
+RAYGUIAPI int GuiGrid(RAYLIB::Rectangle bounds, const char *text, float spacing, int subdivs, Vector2 *mouseCell); // Grid control, returns mouse cell position
 
 // Advance controls set
-RAYGUIAPI int GuiListView(Rectangle bounds, const char *text, int *scrollIndex, int *active);          // List View control, returns selected list item index
-RAYGUIAPI int GuiListViewEx(Rectangle bounds, const char **text, int count, int *scrollIndex, int *active, int *focus); // List View with extended parameters
-RAYGUIAPI int GuiMessageBox(Rectangle bounds, const char *title, const char *message, const char *buttons); // Message Box control, displays a message
-RAYGUIAPI int GuiTextInputBox(Rectangle bounds, const char *title, const char *message, const char *buttons, char *text, int textMaxSize, bool *secretViewActive); // Text Input Box control, ask for text, supports secret
-RAYGUIAPI int GuiColorPicker(Rectangle bounds, const char *text, Color *color);                        // Color Picker control (multiple color controls)
-RAYGUIAPI int GuiColorPanel(Rectangle bounds, const char *text, Color *color);                         // Color Panel control
-RAYGUIAPI int GuiColorBarAlpha(Rectangle bounds, const char *text, float *alpha);                      // Color Bar Alpha control
-RAYGUIAPI int GuiColorBarHue(Rectangle bounds, const char *text, float *value);                        // Color Bar Hue control
-RAYGUIAPI int GuiColorPickerHSV(Rectangle bounds, const char *text, Vector3 *colorHsv);                // Color Picker control that avoids conversion to RGB on each call (multiple color controls)
-RAYGUIAPI int GuiColorPanelHSV(Rectangle bounds, const char *text, Vector3 *colorHsv);                 // Color Panel control that returns HSV color value, used by GuiColorPickerHSV()
+RAYGUIAPI int GuiListView(RAYLIB::Rectangle bounds, const char *text, int *scrollIndex, int *active);          // List View control, returns selected list item index
+RAYGUIAPI int GuiListViewEx(RAYLIB::Rectangle bounds, const char **text, int count, int *scrollIndex, int *active, int *focus); // List View with extended parameters
+RAYGUIAPI int GuiMessageBox(RAYLIB::Rectangle bounds, const char *title, const char *message, const char *buttons); // Message Box control, displays a message
+RAYGUIAPI int GuiTextInputBox(RAYLIB::Rectangle bounds, const char *title, const char *message, const char *buttons, char *text, int textMaxSize, bool *secretViewActive); // Text Input Box control, ask for text, supports secret
+RAYGUIAPI int GuiColorPicker(RAYLIB::Rectangle bounds, const char *text, Color *color);                        // Color Picker control (multiple color controls)
+RAYGUIAPI int GuiColorPanel(RAYLIB::Rectangle bounds, const char *text, Color *color);                         // Color Panel control
+RAYGUIAPI int GuiColorBarAlpha(RAYLIB::Rectangle bounds, const char *text, float *alpha);                      // Color Bar Alpha control
+RAYGUIAPI int GuiColorBarHue(RAYLIB::Rectangle bounds, const char *text, float *value);                        // Color Bar Hue control
+RAYGUIAPI int GuiColorPickerHSV(RAYLIB::Rectangle bounds, const char *text, Vector3 *colorHsv);                // Color Picker control that avoids conversion to RGB on each call (multiple color controls)
+RAYGUIAPI int GuiColorPanelHSV(RAYLIB::Rectangle bounds, const char *text, Vector3 *colorHsv);                 // Color Panel control that returns HSV color value, used by GuiColorPickerHSV()
 //----------------------------------------------------------------------------------------------------------
 
 
@@ -1420,7 +1422,7 @@ static int GetCharPressed(void);         // -- GuiTextBox(), GuiValueBox()
 // Drawing required functions
 //-------------------------------------------------------------------------------
 static void DrawRectangle(int x, int y, int width, int height, Color color);        // -- GuiDrawRectangle()
-static void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4); // -- GuiColorPicker()
+static void DrawRectangleGradientEx(RAYLIB::Rectangle rec, Color col1, Color col2, Color col3, Color col4); // -- GuiColorPicker()
 //-------------------------------------------------------------------------------
 
 // Text required functions
@@ -1429,7 +1431,7 @@ static Font GetFontDefault(void);                            // -- GuiLoadStyleD
 static Font LoadFontEx(const char *fileName, int fontSize, int *codepoints, int codepointCount); // -- GuiLoadStyle(), load font
 
 static Texture2D LoadTextureFromImage(Image image);          // -- GuiLoadStyle(), required to load texture from embedded font atlas image
-static void SetShapesTexture(Texture2D tex, Rectangle rec);  // -- GuiLoadStyle(), required to set shapes rec to font white rec (optimization)
+static void SetShapesTexture(Texture2D tex, RAYLIB::Rectangle rec);  // -- GuiLoadStyle(), required to set shapes rec to font white rec (optimization)
 
 static char *LoadFileText(const char *fileName);             // -- GuiLoadStyle(), required to load charset data
 static void UnloadFileText(char *text);                      // -- GuiLoadStyle(), required to unload charset data
@@ -1446,7 +1448,7 @@ static unsigned char *DecompressData(const unsigned char *compData, int compData
 //-------------------------------------------------------------------------------
 static Color GetColor(int hexValue);                // Returns a Color struct from hexadecimal value
 static int ColorToInt(Color color);                 // Returns hexadecimal value for a Color
-static bool CheckCollisionPointRec(Vector2 point, Rectangle rec);   // Check if point is inside rectangle
+static bool CheckCollisionPointRec(Vector2 point, RAYLIB::Rectangle rec);   // Check if point is inside rectangle
 static const char *TextFormat(const char *text, ...);               // Formatting of text with variables to 'embed'
 static const char **TextSplit(const char *text, char delimiter, int *count);    // Split text into multiple strings
 static int TextToInteger(const char *text);         // Get integer value from text
@@ -1465,18 +1467,18 @@ static void DrawRectangleGradientV(int posX, int posY, int width, int height, Co
 static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize);    // Load style from memory (binary only)
 
 static int GetTextWidth(const char *text);                      // Gui get text width using gui font and style
-static Rectangle GetTextBounds(int control, Rectangle bounds);  // Get text bounds considering control bounds
+static Rectangle GetTextBounds(int control, RAYLIB::Rectangle bounds);  // Get text bounds considering control bounds
 static const char *GetTextIcon(const char *text, int *iconId);  // Get text icon if provided and move text cursor
 
-static void GuiDrawText(const char *text, Rectangle textBounds, int alignment, Color tint);     // Gui draw text using default font
-static void GuiDrawRectangle(Rectangle rec, int borderWidth, Color borderColor, Color color);   // Gui draw rectangle using default raygui style
+static void GuiDrawText(const char *text, RAYLIB::Rectangle textBounds, int alignment, Color tint);     // Gui draw text using default font
+static void GuiDrawRectangle(RAYLIB::Rectangle rec, int borderWidth, Color borderColor, Color color);   // Gui draw rectangle using default raygui style
 
 static const char **GuiTextSplit(const char *text, char delimiter, int *count, int *textRow);   // Split controls text into multiple strings
 static Vector3 ConvertHSVtoRGB(Vector3 hsv);                    // Convert color data from HSV to RGB
 static Vector3 ConvertRGBtoHSV(Vector3 rgb);                    // Convert color data from RGB to HSV
 
-static int GuiScrollBar(Rectangle bounds, int value, int minValue, int maxValue);   // Scroll bar control, used by GuiScrollPanel()
-static void GuiTooltip(Rectangle controlRec);                   // Draw tooltip using control rec position
+static int GuiScrollBar(RAYLIB::Rectangle bounds, int value, int minValue, int maxValue);   // Scroll bar control, used by GuiScrollPanel()
+static void GuiTooltip(RAYLIB::Rectangle controlRec);                   // Draw tooltip using control rec position
 
 static Color GuiFade(Color color, float alpha);         // Fade color by an alpha factor
 
@@ -1561,7 +1563,7 @@ int GuiGetStyle(int control, int property)
 //----------------------------------------------------------------------------------
 
 // Window Box control
-int GuiWindowBox(Rectangle bounds, const char *title)
+int GuiWindowBox(RAYLIB::Rectangle bounds, const char *title)
 {
     // Window title bar height (including borders)
     // NOTE: This define is also used by GuiMessageBox() and GuiTextInputBox()
@@ -1609,7 +1611,7 @@ int GuiWindowBox(Rectangle bounds, const char *title)
 }
 
 // Group Box control with text name
-int GuiGroupBox(Rectangle bounds, const char *text)
+int GuiGroupBox(RAYLIB::Rectangle bounds, const char *text)
 {
     #if !defined(RAYGUI_GROUPBOX_LINE_THICK)
         #define RAYGUI_GROUPBOX_LINE_THICK     1
@@ -1620,18 +1622,18 @@ int GuiGroupBox(Rectangle bounds, const char *text)
 
     // Draw control
     //--------------------------------------------------------------------
-    GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y, RAYGUI_GROUPBOX_LINE_THICK, bounds.height }, 0, BLANK, GetColor(GuiGetStyle(DEFAULT, (state == STATE_DISABLED)? BORDER_COLOR_DISABLED : LINE_COLOR)));
-    GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y + bounds.height - 1, bounds.width, RAYGUI_GROUPBOX_LINE_THICK }, 0, BLANK, GetColor(GuiGetStyle(DEFAULT, (state == STATE_DISABLED)? BORDER_COLOR_DISABLED : LINE_COLOR)));
-    GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x + bounds.width - 1, bounds.y, RAYGUI_GROUPBOX_LINE_THICK, bounds.height }, 0, BLANK, GetColor(GuiGetStyle(DEFAULT, (state == STATE_DISABLED)? BORDER_COLOR_DISABLED : LINE_COLOR)));
+    GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y, RAYGUI_GROUPBOX_LINE_THICK, bounds.height }, 0, BLANK, GetColor(GuiGetStyle(DEFAULT, (state == STATE_DISABLED)? BORDER_COLOR_DISABLED : LINE_COLOR)));
+    GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y + bounds.height - 1, bounds.width, RAYGUI_GROUPBOX_LINE_THICK }, 0, BLANK, GetColor(GuiGetStyle(DEFAULT, (state == STATE_DISABLED)? BORDER_COLOR_DISABLED : LINE_COLOR)));
+    GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + bounds.width - 1, bounds.y, RAYGUI_GROUPBOX_LINE_THICK, bounds.height }, 0, BLANK, GetColor(GuiGetStyle(DEFAULT, (state == STATE_DISABLED)? BORDER_COLOR_DISABLED : LINE_COLOR)));
 
-    GuiLine(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y - GuiGetStyle(DEFAULT, TEXT_SIZE)/2, bounds.width, (float)GuiGetStyle(DEFAULT, TEXT_SIZE) }, text);
+    GuiLine(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y - GuiGetStyle(DEFAULT, TEXT_SIZE)/2, bounds.width, (float)GuiGetStyle(DEFAULT, TEXT_SIZE) }, text);
     //--------------------------------------------------------------------
 
     return result;
 }
 
 // Line control
-int GuiLine(Rectangle bounds, const char *text)
+int GuiLine(RAYLIB::Rectangle bounds, const char *text)
 {
     #if !defined(RAYGUI_LINE_ORIGIN_SIZE)
         #define RAYGUI_LINE_MARGIN_TEXT  12
@@ -1647,7 +1649,7 @@ int GuiLine(Rectangle bounds, const char *text)
 
     // Draw control
     //--------------------------------------------------------------------
-    if (text == NULL) GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y + bounds.height/2, bounds.width, 1 }, 0, BLANK, color);
+    if (text == NULL) GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y + bounds.height/2, bounds.width, 1 }, 0, BLANK, color);
     else
     {
         Rectangle textBounds = { 0 };
@@ -1657,9 +1659,9 @@ int GuiLine(Rectangle bounds, const char *text)
         textBounds.y = bounds.y;
 
         // Draw line with embedded text label: "--- text --------------"
-        GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y + bounds.height/2, RAYGUI_LINE_MARGIN_TEXT - RAYGUI_LINE_TEXT_PADDING, 1 }, 0, BLANK, color);
+        GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y + bounds.height/2, RAYGUI_LINE_MARGIN_TEXT - RAYGUI_LINE_TEXT_PADDING, 1 }, 0, BLANK, color);
         GuiDrawText(text, textBounds, TEXT_ALIGN_LEFT, color);
-        GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x + 12 + textBounds.width + 4, bounds.y + bounds.height/2, bounds.width - textBounds.width - RAYGUI_LINE_MARGIN_TEXT - RAYGUI_LINE_TEXT_PADDING, 1 }, 0, BLANK, color);
+        GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + 12 + textBounds.width + 4, bounds.y + bounds.height/2, bounds.width - textBounds.width - RAYGUI_LINE_MARGIN_TEXT - RAYGUI_LINE_TEXT_PADDING, 1 }, 0, BLANK, color);
     }
     //--------------------------------------------------------------------
 
@@ -1667,7 +1669,7 @@ int GuiLine(Rectangle bounds, const char *text)
 }
 
 // Panel control
-int GuiPanel(Rectangle bounds, const char *text)
+int GuiPanel(RAYLIB::Rectangle bounds, const char *text)
 {
     #if !defined(RAYGUI_PANEL_BORDER_WIDTH)
         #define RAYGUI_PANEL_BORDER_WIDTH   1
@@ -1700,7 +1702,7 @@ int GuiPanel(Rectangle bounds, const char *text)
 
 // Tab Bar control
 // NOTE: Using GuiToggle() for the TABS
-int GuiTabBar(Rectangle bounds, const char **text, int count, int *active)
+int GuiTabBar(RAYLIB::Rectangle bounds, const char **text, int count, int *active)
 {
     #define RAYGUI_TABBAR_ITEM_WIDTH    160
 
@@ -1754,9 +1756,9 @@ int GuiTabBar(Rectangle bounds, const char **text, int count, int *active)
             GuiSetStyle(BUTTON, BORDER_WIDTH, 1);
             GuiSetStyle(BUTTON, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
 #if defined(RAYGUI_NO_ICONS)
-            if (GuiButton(RAYGUI_CLITERAL(Rectangle){ tabBounds.x + tabBounds.width - 14 - 5, tabBounds.y + 5, 14, 14 }, "x")) result = i;
+            if (GuiButton(RAYGUI_CLITERAL(RAYLIB::Rectangle){ tabBounds.x + tabBounds.width - 14 - 5, tabBounds.y + 5, 14, 14 }, "x")) result = i;
 #else
-            if (GuiButton(RAYGUI_CLITERAL(Rectangle){ tabBounds.x + tabBounds.width - 14 - 5, tabBounds.y + 5, 14, 14 }, GuiIconText(ICON_CROSS_SMALL, NULL))) result = i;
+            if (GuiButton(RAYGUI_CLITERAL(RAYLIB::Rectangle){ tabBounds.x + tabBounds.width - 14 - 5, tabBounds.y + 5, 14, 14 }, GuiIconText(ICON_CROSS_SMALL, NULL))) result = i;
 #endif
             GuiSetStyle(BUTTON, BORDER_WIDTH, tempBorderWidth);
             GuiSetStyle(BUTTON, TEXT_ALIGNMENT, tempTextAlignment);
@@ -1764,14 +1766,14 @@ int GuiTabBar(Rectangle bounds, const char **text, int count, int *active)
     }
 
     // Draw tab-bar bottom line
-    GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y + bounds.height - 1, bounds.width, 1 }, 0, BLANK, GetColor(GuiGetStyle(TOGGLE, BORDER_COLOR_NORMAL)));
+    GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y + bounds.height - 1, bounds.width, 1 }, 0, BLANK, GetColor(GuiGetStyle(TOGGLE, BORDER_COLOR_NORMAL)));
     //--------------------------------------------------------------------
 
     return result;     // Return as result the current TAB closing requested
 }
 
 // Scroll Panel control
-int GuiScrollPanel(Rectangle bounds, const char *text, Rectangle content, Vector2 *scroll, Rectangle *view)
+int GuiScrollPanel(RAYLIB::Rectangle bounds, const char *text, RAYLIB::Rectangle content, Vector2 *scroll, RAYLIB::Rectangle *view)
 {
     #define RAYGUI_MIN_SCROLLBAR_WIDTH     40
     #define RAYGUI_MIN_SCROLLBAR_HEIGHT    40
@@ -1834,8 +1836,8 @@ int GuiScrollPanel(Rectangle bounds, const char *text, Rectangle content, Vector
 
     // Calculate view area (area without the scrollbars)
     *view = (GuiGetStyle(LISTVIEW, SCROLLBAR_SIDE) == SCROLLBAR_LEFT_SIDE)?
-                RAYGUI_CLITERAL(Rectangle){ bounds.x + verticalScrollBarWidth + GuiGetStyle(DEFAULT, BORDER_WIDTH), bounds.y + GuiGetStyle(DEFAULT, BORDER_WIDTH), bounds.width - 2*GuiGetStyle(DEFAULT, BORDER_WIDTH) - verticalScrollBarWidth, bounds.height - 2*GuiGetStyle(DEFAULT, BORDER_WIDTH) - horizontalScrollBarWidth } :
-                RAYGUI_CLITERAL(Rectangle){ bounds.x + GuiGetStyle(DEFAULT, BORDER_WIDTH), bounds.y + GuiGetStyle(DEFAULT, BORDER_WIDTH), bounds.width - 2*GuiGetStyle(DEFAULT, BORDER_WIDTH) - verticalScrollBarWidth, bounds.height - 2*GuiGetStyle(DEFAULT, BORDER_WIDTH) - horizontalScrollBarWidth };
+                RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + verticalScrollBarWidth + GuiGetStyle(DEFAULT, BORDER_WIDTH), bounds.y + GuiGetStyle(DEFAULT, BORDER_WIDTH), bounds.width - 2*GuiGetStyle(DEFAULT, BORDER_WIDTH) - verticalScrollBarWidth, bounds.height - 2*GuiGetStyle(DEFAULT, BORDER_WIDTH) - horizontalScrollBarWidth } :
+                RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + GuiGetStyle(DEFAULT, BORDER_WIDTH), bounds.y + GuiGetStyle(DEFAULT, BORDER_WIDTH), bounds.width - 2*GuiGetStyle(DEFAULT, BORDER_WIDTH) - verticalScrollBarWidth, bounds.height - 2*GuiGetStyle(DEFAULT, BORDER_WIDTH) - horizontalScrollBarWidth };
 
     // Clip view area to the actual content size
     if (view->width > content.width) view->width = content.width;
@@ -1933,7 +1935,7 @@ int GuiScrollPanel(Rectangle bounds, const char *text, Rectangle content, Vector
 }
 
 // Label control
-int GuiLabel(Rectangle bounds, const char *text)
+int GuiLabel(RAYLIB::Rectangle bounds, const char *text)
 {
     int result = 0;
     GuiState state = guiState;
@@ -1952,7 +1954,7 @@ int GuiLabel(Rectangle bounds, const char *text)
 }
 
 // Button control, returns true when clicked
-int GuiButton(Rectangle bounds, const char *text)
+int GuiButton(RAYLIB::Rectangle bounds, const char *text)
 {
     int result = 0;
     GuiState state = guiState;
@@ -1986,7 +1988,7 @@ int GuiButton(Rectangle bounds, const char *text)
 }
 
 // Label button control
-int GuiLabelButton(Rectangle bounds, const char *text)
+int GuiLabelButton(RAYLIB::Rectangle bounds, const char *text)
 {
     GuiState state = guiState;
     bool pressed = false;
@@ -2021,7 +2023,7 @@ int GuiLabelButton(Rectangle bounds, const char *text)
 }
 
 // Toggle Button control, returns true when active
-int GuiToggle(Rectangle bounds, const char *text, bool *active)
+int GuiToggle(RAYLIB::Rectangle bounds, const char *text, bool *active)
 {
     int result = 0;
     GuiState state = guiState;
@@ -2069,7 +2071,7 @@ int GuiToggle(Rectangle bounds, const char *text, bool *active)
 }
 
 // Toggle Group control, returns toggled button codepointIndex
-int GuiToggleGroup(Rectangle bounds, const char *text, int *active)
+int GuiToggleGroup(RAYLIB::Rectangle bounds, const char *text, int *active)
 {
     #if !defined(RAYGUI_TOGGLEGROUP_MAX_ITEMS)
         #define RAYGUI_TOGGLEGROUP_MAX_ITEMS    32
@@ -2118,7 +2120,7 @@ int GuiToggleGroup(Rectangle bounds, const char *text, int *active)
 }
 
 // Toggle Slider control extended, returns true when clicked
-int GuiToggleSlider(Rectangle bounds, const char *text, int *active)
+int GuiToggleSlider(RAYLIB::Rectangle bounds, const char *text, int *active)
 {
     int result = 0;
     GuiState state = guiState;
@@ -2190,7 +2192,7 @@ int GuiToggleSlider(Rectangle bounds, const char *text, int *active)
 }
 
 // Check Box control, returns true when active
-int GuiCheckBox(Rectangle bounds, const char *text, bool *checked)
+int GuiCheckBox(RAYLIB::Rectangle bounds, const char *text, bool *checked)
 {
     int result = 0;
     GuiState state = guiState;
@@ -2253,7 +2255,7 @@ int GuiCheckBox(Rectangle bounds, const char *text, bool *checked)
 }
 
 // Combo Box control, returns selected item codepointIndex
-int GuiComboBox(Rectangle bounds, const char *text, int *active)
+int GuiComboBox(RAYLIB::Rectangle bounds, const char *text, int *active)
 {
     int result = 0;
     GuiState state = guiState;
@@ -2318,7 +2320,7 @@ int GuiComboBox(Rectangle bounds, const char *text, int *active)
 
 // Dropdown Box control
 // NOTE: Returns mouse click
-int GuiDropdownBox(Rectangle bounds, const char *text, int *active, bool editMode)
+int GuiDropdownBox(RAYLIB::Rectangle bounds, const char *text, int *active, bool editMode)
 {
     int result = 0;
     GuiState state = guiState;
@@ -2420,10 +2422,10 @@ int GuiDropdownBox(Rectangle bounds, const char *text, int *active, bool editMod
 
     // Draw arrows (using icon if available)
 #if defined(RAYGUI_NO_ICONS)
-    GuiDrawText("v", RAYGUI_CLITERAL(Rectangle){ bounds.x + bounds.width - GuiGetStyle(DROPDOWNBOX, ARROW_PADDING), bounds.y + bounds.height/2 - 2, 10, 10 },
+    GuiDrawText("v", RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + bounds.width - GuiGetStyle(DROPDOWNBOX, ARROW_PADDING), bounds.y + bounds.height/2 - 2, 10, 10 },
                 TEXT_ALIGN_CENTER, GetColor(GuiGetStyle(DROPDOWNBOX, TEXT + (state*3))));
 #else
-    GuiDrawText("#120#", RAYGUI_CLITERAL(Rectangle){ bounds.x + bounds.width - GuiGetStyle(DROPDOWNBOX, ARROW_PADDING), bounds.y + bounds.height/2 - 6, 10, 10 },
+    GuiDrawText("#120#", RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + bounds.width - GuiGetStyle(DROPDOWNBOX, ARROW_PADDING), bounds.y + bounds.height/2 - 6, 10, 10 },
                 TEXT_ALIGN_CENTER, GetColor(GuiGetStyle(DROPDOWNBOX, TEXT + (state*3))));   // ICON_ARROW_DOWN_FILL
 #endif
     //--------------------------------------------------------------------
@@ -2436,7 +2438,7 @@ int GuiDropdownBox(Rectangle bounds, const char *text, int *active, bool editMod
 
 // Text Box control
 // NOTE: Returns true on ENTER pressed (useful for data validation)
-int GuiTextBox(Rectangle bounds, char *text, int bufferSize, bool editMode)
+int GuiTextBox(RAYLIB::Rectangle bounds, char *text, int bufferSize, bool editMode)
 {
     #if !defined(RAYGUI_TEXTBOX_AUTO_CURSOR_COOLDOWN)
         #define RAYGUI_TEXTBOX_AUTO_CURSOR_COOLDOWN  40        // Frames to wait for autocursor movement
@@ -2725,7 +2727,7 @@ int GuiTextBox(Rectangle bounds, char *text, int bufferSize, bool editMode)
 /*
 // Text Box control with multiple lines and word-wrap
 // NOTE: This text-box is readonly, no editing supported by default
-bool GuiTextBoxMulti(Rectangle bounds, char *text, int bufferSize, bool editMode)
+bool GuiTextBoxMulti(RAYLIB::Rectangle bounds, char *text, int bufferSize, bool editMode)
 {
     bool pressed = false;
 
@@ -2745,7 +2747,7 @@ bool GuiTextBoxMulti(Rectangle bounds, char *text, int bufferSize, bool editMode
 */
 
 // Spinner control, returns selected value
-int GuiSpinner(Rectangle bounds, const char *text, int *value, int minValue, int maxValue, bool editMode)
+int GuiSpinner(RAYLIB::Rectangle bounds, const char *text, int *value, int minValue, int maxValue, bool editMode)
 {
     int result = 1;
     GuiState state = guiState;
@@ -2820,7 +2822,7 @@ int GuiSpinner(Rectangle bounds, const char *text, int *value, int minValue, int
 
 // Value Box control, updates input text with numbers
 // NOTE: Requires static variables: frameCounter
-int GuiValueBox(Rectangle bounds, const char *text, int *value, int minValue, int maxValue, bool editMode)
+int GuiValueBox(RAYLIB::Rectangle bounds, const char *text, int *value, int minValue, int maxValue, bool editMode)
 {
     #if !defined(RAYGUI_VALUEBOX_MAX_CHARS)
         #define RAYGUI_VALUEBOX_MAX_CHARS  32
@@ -2930,7 +2932,7 @@ int GuiValueBox(Rectangle bounds, const char *text, int *value, int minValue, in
 
 // Slider control with pro parameters
 // NOTE: Other GuiSlider*() controls use this one
-int GuiSliderPro(Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue, int sliderWidth)
+int GuiSliderPro(RAYLIB::Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue, int sliderWidth)
 {
     int result = 0;
     GuiState state = guiState;
@@ -2975,7 +2977,7 @@ int GuiSliderPro(Rectangle bounds, const char *textLeft, const char *textRight, 
             else
             {
                 guiSliderDragging = false;
-                guiSliderActive = RAYGUI_CLITERAL(Rectangle){ 0, 0, 0, 0 };
+                guiSliderActive = RAYGUI_CLITERAL(RAYLIB::Rectangle){ 0, 0, 0, 0 };
             }
         }
         else if (CheckCollisionPointRec(mousePoint, bounds))
@@ -3051,19 +3053,19 @@ int GuiSliderPro(Rectangle bounds, const char *textLeft, const char *textRight, 
 }
 
 // Slider control extended, returns selected value and has text
-int GuiSlider(Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue)
+int GuiSlider(RAYLIB::Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue)
 {
     return GuiSliderPro(bounds, textLeft, textRight, value, minValue, maxValue, GuiGetStyle(SLIDER, SLIDER_WIDTH));
 }
 
 // Slider Bar control extended, returns selected value
-int GuiSliderBar(Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue)
+int GuiSliderBar(RAYLIB::Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue)
 {
     return GuiSliderPro(bounds, textLeft, textRight, value, minValue, maxValue, 0);
 }
 
 // Progress Bar control extended, shows current progress value
-int GuiProgressBar(Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue)
+int GuiProgressBar(RAYLIB::Rectangle bounds, const char *textLeft, const char *textRight, float *value, float minValue, float maxValue)
 {
     int result = 0;
     GuiState state = guiState;
@@ -3095,19 +3097,19 @@ int GuiProgressBar(Rectangle bounds, const char *textLeft, const char *textRight
         if (*value > minValue)
         {
             // Draw progress bar with colored border, more visual
-            GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y, (int)progress.width + (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH) }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_FOCUSED)));
-            GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y + 1, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), bounds.height - 2 }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_FOCUSED)));
-            GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y + bounds.height - 1, (int)progress.width + (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH) }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_FOCUSED)));
+            GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y, (int)progress.width + (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH) }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_FOCUSED)));
+            GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y + 1, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), bounds.height - 2 }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_FOCUSED)));
+            GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y + bounds.height - 1, (int)progress.width + (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH) }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_FOCUSED)));
         }
-        else GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x, bounds.y, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), bounds.height }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_NORMAL)));
+        else GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x, bounds.y, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), bounds.height }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_NORMAL)));
 
-        if (*value >= maxValue) GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x + progress.width + 1, bounds.y, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), bounds.height }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_FOCUSED)));
+        if (*value >= maxValue) GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + progress.width + 1, bounds.y, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), bounds.height }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_FOCUSED)));
         else
         {
             // Draw borders not yet reached by value
-            GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x + (int)progress.width + 1, bounds.y, bounds.width - (int)progress.width - 1, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH) }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_NORMAL)));
-            GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x + (int)progress.width + 1, bounds.y + bounds.height - 1, bounds.width - (int)progress.width - 1, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH) }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_NORMAL)));
-            GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ bounds.x + bounds.width - 1, bounds.y + 1, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), bounds.height - 2 }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_NORMAL)));
+            GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + (int)progress.width + 1, bounds.y, bounds.width - (int)progress.width - 1, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH) }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_NORMAL)));
+            GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + (int)progress.width + 1, bounds.y + bounds.height - 1, bounds.width - (int)progress.width - 1, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH) }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_NORMAL)));
+            GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + bounds.width - 1, bounds.y + 1, (float)GuiGetStyle(PROGRESSBAR, BORDER_WIDTH), bounds.height - 2 }, 0, BLANK, GetColor(GuiGetStyle(PROGRESSBAR, BORDER_COLOR_NORMAL)));
         }
 
         // Draw slider internal progress bar (depends on state)
@@ -3142,7 +3144,7 @@ int GuiProgressBar(Rectangle bounds, const char *textLeft, const char *textRight
 }
 
 // Status Bar control
-int GuiStatusBar(Rectangle bounds, const char *text)
+int GuiStatusBar(RAYLIB::Rectangle bounds, const char *text)
 {
     int result = 0;
     GuiState state = guiState;
@@ -3157,7 +3159,7 @@ int GuiStatusBar(Rectangle bounds, const char *text)
 }
 
 // Dummy rectangle control, intended for placeholding
-int GuiDummyRec(Rectangle bounds, const char *text)
+int GuiDummyRec(RAYLIB::Rectangle bounds, const char *text)
 {
     int result = 0;
     GuiState state = guiState;
@@ -3187,7 +3189,7 @@ int GuiDummyRec(Rectangle bounds, const char *text)
 }
 
 // List View control
-int GuiListView(Rectangle bounds, const char *text, int *scrollIndex, int *active)
+int GuiListView(RAYLIB::Rectangle bounds, const char *text, int *scrollIndex, int *active)
 {
     int result = 0;
     int itemCount = 0;
@@ -3201,7 +3203,7 @@ int GuiListView(Rectangle bounds, const char *text, int *scrollIndex, int *activ
 }
 
 // List View control with extended parameters
-int GuiListViewEx(Rectangle bounds, const char **text, int count, int *scrollIndex, int *active, int *focus)
+int GuiListViewEx(RAYLIB::Rectangle bounds, const char **text, int count, int *scrollIndex, int *active, int *focus)
 {
     int result = 0;
     GuiState state = guiState;
@@ -3347,7 +3349,7 @@ int GuiListViewEx(Rectangle bounds, const char **text, int count, int *scrollInd
 }
 
 // Color Panel control
-int GuiColorPanel(Rectangle bounds, const char *text, Color *color)
+int GuiColorPanel(RAYLIB::Rectangle bounds, const char *text, Color *color)
 {
     int result = 0;
     GuiState state = guiState;
@@ -3429,7 +3431,7 @@ int GuiColorPanel(Rectangle bounds, const char *text, Color *color)
 
 // Color Bar Alpha control
 // NOTE: Returns alpha value normalized [0..1]
-int GuiColorBarAlpha(Rectangle bounds, const char *text, float *alpha)
+int GuiColorBarAlpha(RAYLIB::Rectangle bounds, const char *text, float *alpha)
 {
     #if !defined(RAYGUI_COLORBARALPHA_CHECKED_SIZE)
         #define RAYGUI_COLORBARALPHA_CHECKED_SIZE   10
@@ -3461,7 +3463,7 @@ int GuiColorBarAlpha(Rectangle bounds, const char *text, float *alpha)
             else
             {
                 guiSliderDragging = false;
-                guiSliderActive = RAYGUI_CLITERAL(Rectangle){ 0, 0, 0, 0 };
+                guiSliderActive = RAYGUI_CLITERAL(RAYLIB::Rectangle){ 0, 0, 0, 0 };
             }
         }
         else if (CheckCollisionPointRec(mousePoint, bounds) || CheckCollisionPointRec(mousePoint, selector))
@@ -3519,7 +3521,7 @@ int GuiColorBarAlpha(Rectangle bounds, const char *text, float *alpha)
 //      Color GuiColorBarSat() [WHITE->color]
 //      Color GuiColorBarValue() [BLACK->color], HSV/HSL
 //      float GuiColorBarLuminance() [BLACK->WHITE]
-int GuiColorBarHue(Rectangle bounds, const char *text, float *hue)
+int GuiColorBarHue(RAYLIB::Rectangle bounds, const char *text, float *hue)
 {
     int result = 0;
     GuiState state = guiState;
@@ -3547,7 +3549,7 @@ int GuiColorBarHue(Rectangle bounds, const char *text, float *hue)
             else
             {
                 guiSliderDragging = false;
-                guiSliderActive = RAYGUI_CLITERAL(Rectangle){ 0, 0, 0, 0 };
+                guiSliderActive = RAYGUI_CLITERAL(RAYLIB::Rectangle){ 0, 0, 0, 0 };
             }
         }
         else if (CheckCollisionPointRec(mousePoint, bounds) || CheckCollisionPointRec(mousePoint, selector))
@@ -3605,11 +3607,11 @@ int GuiColorBarHue(Rectangle bounds, const char *text, float *hue)
 
 // Color Picker control
 // NOTE: It's divided in multiple controls:
-//      Color GuiColorPanel(Rectangle bounds, Color color)
-//      float GuiColorBarAlpha(Rectangle bounds, float alpha)
-//      float GuiColorBarHue(Rectangle bounds, float value)
+//      Color GuiColorPanel(RAYLIB::Rectangle bounds, Color color)
+//      float GuiColorBarAlpha(RAYLIB::Rectangle bounds, float alpha)
+//      float GuiColorBarHue(RAYLIB::Rectangle bounds, float value)
 // NOTE: bounds define GuiColorPanel() size
-int GuiColorPicker(Rectangle bounds, const char *text, Color *color)
+int GuiColorPicker(RAYLIB::Rectangle bounds, const char *text, Color *color)
 {
     int result = 0;
 
@@ -3636,11 +3638,11 @@ int GuiColorPicker(Rectangle bounds, const char *text, Color *color)
 // Color Picker control that avoids conversion to RGB and back to HSV on each call, thus avoiding jittering.
 // The user can call ConvertHSVtoRGB() to convert *colorHsv value to RGB.
 // NOTE: It's divided in multiple controls:
-//      int GuiColorPanelHSV(Rectangle bounds, const char *text, Vector3 *colorHsv)
-//      int GuiColorBarAlpha(Rectangle bounds, const char *text, float *alpha)
-//      float GuiColorBarHue(Rectangle bounds, float value)
+//      int GuiColorPanelHSV(RAYLIB::Rectangle bounds, const char *text, Vector3 *colorHsv)
+//      int GuiColorBarAlpha(RAYLIB::Rectangle bounds, const char *text, float *alpha)
+//      float GuiColorBarHue(RAYLIB::Rectangle bounds, float value)
 // NOTE: bounds define GuiColorPanelHSV() size
-int GuiColorPickerHSV(Rectangle bounds, const char *text, Vector3 *colorHsv)
+int GuiColorPickerHSV(RAYLIB::Rectangle bounds, const char *text, Vector3 *colorHsv)
 {
     int result = 0;
 
@@ -3664,7 +3666,7 @@ int GuiColorPickerHSV(Rectangle bounds, const char *text, Vector3 *colorHsv)
 
 // Color Panel control, returns HSV color value in *colorHsv.
 // Used by GuiColorPickerHSV()
-int GuiColorPanelHSV(Rectangle bounds, const char *text, Vector3 *colorHsv)
+int GuiColorPanelHSV(RAYLIB::Rectangle bounds, const char *text, Vector3 *colorHsv)
 {
     int result = 0;
     GuiState state = guiState;
@@ -3733,7 +3735,7 @@ int GuiColorPanelHSV(Rectangle bounds, const char *text, Vector3 *colorHsv)
 }
 
 // Message Box control
-int GuiMessageBox(Rectangle bounds, const char *title, const char *message, const char *buttons)
+int GuiMessageBox(RAYLIB::Rectangle bounds, const char *title, const char *message, const char *buttons)
 {
     #if !defined(RAYGUI_MESSAGEBOX_BUTTON_HEIGHT)
         #define RAYGUI_MESSAGEBOX_BUTTON_HEIGHT    24
@@ -3785,7 +3787,7 @@ int GuiMessageBox(Rectangle bounds, const char *title, const char *message, cons
 }
 
 // Text Input Box control, ask for text
-int GuiTextInputBox(Rectangle bounds, const char *title, const char *message, const char *buttons, char *text, int textMaxSize, bool *secretViewActive)
+int GuiTextInputBox(RAYLIB::Rectangle bounds, const char *title, const char *message, const char *buttons, char *text, int textMaxSize, bool *secretViewActive)
 {
     #if !defined(RAYGUI_TEXTINPUTBOX_BUTTON_HEIGHT)
         #define RAYGUI_TEXTINPUTBOX_BUTTON_HEIGHT      24
@@ -3848,10 +3850,10 @@ int GuiTextInputBox(Rectangle bounds, const char *title, const char *message, co
     if (secretViewActive != NULL)
     {
         static char stars[] = "****************";
-        if (GuiTextBox(RAYGUI_CLITERAL(Rectangle){ textBoxBounds.x, textBoxBounds.y, textBoxBounds.width - 4 - RAYGUI_TEXTINPUTBOX_HEIGHT, textBoxBounds.height },
+        if (GuiTextBox(RAYGUI_CLITERAL(RAYLIB::Rectangle){ textBoxBounds.x, textBoxBounds.y, textBoxBounds.width - 4 - RAYGUI_TEXTINPUTBOX_HEIGHT, textBoxBounds.height },
             ((*secretViewActive == 1) || textEditMode)? text : stars, textMaxSize, textEditMode)) textEditMode = !textEditMode;
 
-        GuiToggle(RAYGUI_CLITERAL(Rectangle){ textBoxBounds.x + textBoxBounds.width - RAYGUI_TEXTINPUTBOX_HEIGHT, textBoxBounds.y, RAYGUI_TEXTINPUTBOX_HEIGHT, RAYGUI_TEXTINPUTBOX_HEIGHT }, (*secretViewActive == 1)? "#44#" : "#45#", secretViewActive);
+        GuiToggle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ textBoxBounds.x + textBoxBounds.width - RAYGUI_TEXTINPUTBOX_HEIGHT, textBoxBounds.y, RAYGUI_TEXTINPUTBOX_HEIGHT, RAYGUI_TEXTINPUTBOX_HEIGHT }, (*secretViewActive == 1)? "#44#" : "#45#", secretViewActive);
     }
     else
     {
@@ -3879,7 +3881,7 @@ int GuiTextInputBox(Rectangle bounds, const char *title, const char *message, co
 // NOTE: Returns grid mouse-hover selected cell
 // About drawing lines at subpixel spacing, simple put, not easy solution:
 // https://stackoverflow.com/questions/4435450/2d-opengl-drawing-lines-that-dont-exactly-fit-pixel-raster
-int GuiGrid(Rectangle bounds, const char *text, float spacing, int subdivs, Vector2 *mouseCell)
+int GuiGrid(RAYLIB::Rectangle bounds, const char *text, float spacing, int subdivs, Vector2 *mouseCell)
 {
     // Grid lines alpha amount
     #if !defined(RAYGUI_GRID_ALPHA)
@@ -4172,7 +4174,7 @@ void GuiLoadStyleDefault(void)
         Rectangle whiteChar = guiFont.recs[95];
 
         // NOTE: We set up a 1px padding on char rectangle to avoid pixel bleeding on MSAA filtering
-        SetShapesTexture(guiFont.texture, RAYGUI_CLITERAL(Rectangle){ whiteChar.x + 1, whiteChar.y + 1, whiteChar.width - 2, whiteChar.height - 2 });
+        SetShapesTexture(guiFont.texture, RAYGUI_CLITERAL(RAYLIB::Rectangle){ whiteChar.x + 1, whiteChar.y + 1, whiteChar.width - 2, whiteChar.height - 2 });
     }
 }
 
@@ -4299,7 +4301,7 @@ void GuiDrawIcon(int iconId, int posX, int posY, int pixelSize, Color color)
             if (BIT_CHECK(guiIconsPtr[iconId*RAYGUI_ICON_DATA_ELEMENTS + i], k))
             {
             #if !defined(RAYGUI_STANDALONE)
-                GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ (float)posX + (k%RAYGUI_ICON_SIZE)*pixelSize, (float)posY + y*pixelSize, (float)pixelSize, (float)pixelSize }, 0, BLANK, color);
+                GuiDrawRectangle(RAYGUI_CLITERAL(RAYLIB::Rectangle){ (float)posX + (k%RAYGUI_ICON_SIZE)*pixelSize, (float)posY + y*pixelSize, (float)pixelSize, (float)pixelSize }, 0, BLANK, color);
             #endif
             }
 
@@ -4384,7 +4386,7 @@ static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize)
 
             // Load font white rectangle
             Rectangle fontWhiteRec = { 0 };
-            memcpy(&fontWhiteRec, fileDataPtr, sizeof(Rectangle));
+            memcpy(&fontWhiteRec, fileDataPtr, sizeof(RAYLIB::Rectangle));
             fileDataPtr += 16;
 
             // Load font image parameters
@@ -4433,7 +4435,7 @@ static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize)
             if (font.texture.id != 0)
             {
                 // Load font recs data
-                int recsDataSize = font.glyphCount*sizeof(Rectangle);
+                int recsDataSize = font.glyphCount*sizeof(RAYLIB::Rectangle);
                 int recsDataCompressedSize = 0;
 
                 // WARNING: Version 400 adds the compression size parameter
@@ -4453,7 +4455,7 @@ static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize)
                     fileDataPtr += recsDataCompressedSize;
 
                     int recsDataUncompSize = 0;
-                    font.recs = (Rectangle *)DecompressData(recsDataCompressed, recsDataCompressedSize, &recsDataUncompSize);
+                    font.recs = (RAYLIB::Rectangle *)DecompressData(recsDataCompressed, recsDataCompressedSize, &recsDataUncompSize);
 
                     // Security check, data uncompressed size must match the expected original data size
                     if (recsDataUncompSize != recsDataSize) RAYGUI_LOG("WARNING: Uncompressed font recs data could be corrupted");
@@ -4463,11 +4465,11 @@ static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize)
                 else
                 {
                     // Recs data is uncompressed
-                    font.recs = (Rectangle *)RAYGUI_CALLOC(font.glyphCount, sizeof(Rectangle));
+                    font.recs = (RAYLIB::Rectangle *)RAYGUI_CALLOC(font.glyphCount, sizeof(RAYLIB::Rectangle));
                     for (int i = 0; i < font.glyphCount; i++)
                     {
-                        memcpy(&font.recs[i], fileDataPtr, sizeof(Rectangle));
-                        fileDataPtr += sizeof(Rectangle);
+                        memcpy(&font.recs[i], fileDataPtr, sizeof(RAYLIB::Rectangle));
+                        fileDataPtr += sizeof(RAYLIB::Rectangle);
                     }
                 }
 
@@ -4605,7 +4607,7 @@ static int GetTextWidth(const char *text)
 }
 
 // Get text bounds considering control bounds
-static Rectangle GetTextBounds(int control, Rectangle bounds)
+static Rectangle GetTextBounds(int control, RAYLIB::Rectangle bounds)
 {
     Rectangle textBounds = bounds;
 
@@ -4732,7 +4734,7 @@ static float GetNextSpaceWidth(const char *text, int *nextSpaceIndex)
 }
 
 // Gui draw text using default font
-static void GuiDrawText(const char *text, Rectangle textBounds, int alignment, Color tint)
+static void GuiDrawText(const char *text, RAYLIB::Rectangle textBounds, int alignment, Color tint)
 {
     #define TEXT_VALIGN_PIXEL_OFFSET(h)  ((int)h%2)     // Vertical alignment for pixel perfect
 
@@ -4910,7 +4912,7 @@ static void GuiDrawText(const char *text, Rectangle textBounds, int alignment, C
 }
 
 // Gui draw rectangle using default raygui plain style with borders
-static void GuiDrawRectangle(Rectangle rec, int borderWidth, Color borderColor, Color color)
+static void GuiDrawRectangle(RAYLIB::Rectangle rec, int borderWidth, Color borderColor, Color color)
 {
     if (color.a > 0)
     {
@@ -4933,7 +4935,7 @@ static void GuiDrawRectangle(Rectangle rec, int borderWidth, Color borderColor, 
 }
 
 // Draw tooltip using control bounds
-static void GuiTooltip(Rectangle controlRec)
+static void GuiTooltip(RAYLIB::Rectangle controlRec)
 {
     if (!guiLocked && guiTooltip && (guiTooltipPtr != NULL) && !guiSliderDragging)
     {
@@ -4941,13 +4943,13 @@ static void GuiTooltip(Rectangle controlRec)
 
         if ((controlRec.x + textSize.x + 16) > GetScreenWidth()) controlRec.x -= (textSize.x + 16 - controlRec.width);
 
-        GuiPanel(RAYGUI_CLITERAL(Rectangle){ controlRec.x, controlRec.y + controlRec.height + 4, textSize.x + 16, GuiGetStyle(DEFAULT, TEXT_SIZE) + 8.f }, NULL);
+        GuiPanel(RAYGUI_CLITERAL(RAYLIB::Rectangle){ controlRec.x, controlRec.y + controlRec.height + 4, textSize.x + 16, GuiGetStyle(DEFAULT, TEXT_SIZE) + 8.f }, NULL);
 
         int textPadding = GuiGetStyle(LABEL, TEXT_PADDING);
         int textAlignment = GuiGetStyle(LABEL, TEXT_ALIGNMENT);
         GuiSetStyle(LABEL, TEXT_PADDING, 0);
         GuiSetStyle(LABEL, TEXT_ALIGNMENT, TEXT_ALIGN_CENTER);
-        GuiLabel(RAYGUI_CLITERAL(Rectangle){ controlRec.x, controlRec.y + controlRec.height + 4, textSize.x + 16, GuiGetStyle(DEFAULT, TEXT_SIZE) + 8.f }, guiTooltipPtr);
+        GuiLabel(RAYGUI_CLITERAL(RAYLIB::Rectangle){ controlRec.x, controlRec.y + controlRec.height + 4, textSize.x + 16, GuiGetStyle(DEFAULT, TEXT_SIZE) + 8.f }, guiTooltipPtr);
         GuiSetStyle(LABEL, TEXT_ALIGNMENT, textAlignment);
         GuiSetStyle(LABEL, TEXT_PADDING, textPadding);
     }
@@ -5135,7 +5137,7 @@ static Vector3 ConvertHSVtoRGB(Vector3 hsv)
 }
 
 // Scroll bar control (used by GuiScrollPanel())
-static int GuiScrollBar(Rectangle bounds, int value, int minValue, int maxValue)
+static int GuiScrollBar(RAYLIB::Rectangle bounds, int value, int minValue, int maxValue)
 {
     GuiState state = guiState;
 
@@ -5165,19 +5167,19 @@ static int GuiScrollBar(Rectangle bounds, int value, int minValue, int maxValue)
     int sliderSize = GuiGetStyle(SCROLLBAR, SCROLL_SLIDER_SIZE);
 
     // Calculate rectangles for all of the components
-    arrowUpLeft = RAYGUI_CLITERAL(Rectangle){
+    arrowUpLeft = RAYGUI_CLITERAL(RAYLIB::Rectangle){
         (float)bounds.x + GuiGetStyle(SCROLLBAR, BORDER_WIDTH),
         (float)bounds.y + GuiGetStyle(SCROLLBAR, BORDER_WIDTH),
         (float)spinnerSize, (float)spinnerSize };
 
     if (isVertical)
     {
-        arrowDownRight = RAYGUI_CLITERAL(Rectangle){ (float)bounds.x + GuiGetStyle(SCROLLBAR, BORDER_WIDTH), (float)bounds.y + bounds.height - spinnerSize - GuiGetStyle(SCROLLBAR, BORDER_WIDTH), (float)spinnerSize, (float)spinnerSize };
-        scrollbar = RAYGUI_CLITERAL(Rectangle){ bounds.x + GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_PADDING), arrowUpLeft.y + arrowUpLeft.height, bounds.width - 2*(GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_PADDING)), bounds.height - arrowUpLeft.height - arrowDownRight.height - 2*GuiGetStyle(SCROLLBAR, BORDER_WIDTH) };
+        arrowDownRight = RAYGUI_CLITERAL(RAYLIB::Rectangle){ (float)bounds.x + GuiGetStyle(SCROLLBAR, BORDER_WIDTH), (float)bounds.y + bounds.height - spinnerSize - GuiGetStyle(SCROLLBAR, BORDER_WIDTH), (float)spinnerSize, (float)spinnerSize };
+        scrollbar = RAYGUI_CLITERAL(RAYLIB::Rectangle){ bounds.x + GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_PADDING), arrowUpLeft.y + arrowUpLeft.height, bounds.width - 2*(GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_PADDING)), bounds.height - arrowUpLeft.height - arrowDownRight.height - 2*GuiGetStyle(SCROLLBAR, BORDER_WIDTH) };
 
         // Make sure the slider won't get outside of the scrollbar
         sliderSize = (sliderSize >= scrollbar.height)? ((int)scrollbar.height - 2) : sliderSize;
-        slider = RAYGUI_CLITERAL(Rectangle){
+        slider = RAYGUI_CLITERAL(RAYLIB::Rectangle){
             bounds.x + GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_SLIDER_PADDING),
             scrollbar.y + (int)(((float)(value - minValue)/valueRange)*(scrollbar.height - sliderSize)),
             bounds.width - 2*(GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_SLIDER_PADDING)),
@@ -5185,12 +5187,12 @@ static int GuiScrollBar(Rectangle bounds, int value, int minValue, int maxValue)
     }
     else    // horizontal
     {
-        arrowDownRight = RAYGUI_CLITERAL(Rectangle){ (float)bounds.x + bounds.width - spinnerSize - GuiGetStyle(SCROLLBAR, BORDER_WIDTH), (float)bounds.y + GuiGetStyle(SCROLLBAR, BORDER_WIDTH), (float)spinnerSize, (float)spinnerSize };
-        scrollbar = RAYGUI_CLITERAL(Rectangle){ arrowUpLeft.x + arrowUpLeft.width, bounds.y + GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_PADDING), bounds.width - arrowUpLeft.width - arrowDownRight.width - 2*GuiGetStyle(SCROLLBAR, BORDER_WIDTH), bounds.height - 2*(GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_PADDING)) };
+        arrowDownRight = RAYGUI_CLITERAL(RAYLIB::Rectangle){ (float)bounds.x + bounds.width - spinnerSize - GuiGetStyle(SCROLLBAR, BORDER_WIDTH), (float)bounds.y + GuiGetStyle(SCROLLBAR, BORDER_WIDTH), (float)spinnerSize, (float)spinnerSize };
+        scrollbar = RAYGUI_CLITERAL(RAYLIB::Rectangle){ arrowUpLeft.x + arrowUpLeft.width, bounds.y + GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_PADDING), bounds.width - arrowUpLeft.width - arrowDownRight.width - 2*GuiGetStyle(SCROLLBAR, BORDER_WIDTH), bounds.height - 2*(GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_PADDING)) };
 
         // Make sure the slider won't get outside of the scrollbar
         sliderSize = (sliderSize >= scrollbar.width)? ((int)scrollbar.width - 2) : sliderSize;
-        slider = RAYGUI_CLITERAL(Rectangle){
+        slider = RAYGUI_CLITERAL(RAYLIB::Rectangle){
             scrollbar.x + (int)(((float)(value - minValue)/valueRange)*(scrollbar.width - sliderSize)),
             bounds.y + GuiGetStyle(SCROLLBAR, BORDER_WIDTH) + GuiGetStyle(SCROLLBAR, SCROLL_SLIDER_PADDING),
             (float)sliderSize,
@@ -5220,7 +5222,7 @@ static int GuiScrollBar(Rectangle bounds, int value, int minValue, int maxValue)
             else
             {
                 guiSliderDragging = false;
-                guiSliderActive = RAYGUI_CLITERAL(Rectangle){ 0, 0, 0, 0 };
+                guiSliderActive = RAYGUI_CLITERAL(RAYLIB::Rectangle){ 0, 0, 0, 0 };
             }
         }
         else if (CheckCollisionPointRec(mousePoint, bounds))
@@ -5283,17 +5285,17 @@ static int GuiScrollBar(Rectangle bounds, int value, int minValue, int maxValue)
     {
 #if defined(RAYGUI_NO_ICONS)
         GuiDrawText(isVertical? "^" : "<",
-            RAYGUI_CLITERAL(Rectangle){ arrowUpLeft.x, arrowUpLeft.y, isVertical? bounds.width : bounds.height, isVertical? bounds.width : bounds.height },
+            RAYGUI_CLITERAL(RAYLIB::Rectangle){ arrowUpLeft.x, arrowUpLeft.y, isVertical? bounds.width : bounds.height, isVertical? bounds.width : bounds.height },
             TEXT_ALIGN_CENTER, GetColor(GuiGetStyle(DROPDOWNBOX, TEXT + (state*3))));
         GuiDrawText(isVertical? "v" : ">",
-            RAYGUI_CLITERAL(Rectangle){ arrowDownRight.x, arrowDownRight.y, isVertical? bounds.width : bounds.height, isVertical? bounds.width : bounds.height },
+            RAYGUI_CLITERAL(RAYLIB::Rectangle){ arrowDownRight.x, arrowDownRight.y, isVertical? bounds.width : bounds.height, isVertical? bounds.width : bounds.height },
             TEXT_ALIGN_CENTER, GetColor(GuiGetStyle(DROPDOWNBOX, TEXT + (state*3))));
 #else
         GuiDrawText(isVertical? "#121#" : "#118#",
-            RAYGUI_CLITERAL(Rectangle){ arrowUpLeft.x, arrowUpLeft.y, isVertical? bounds.width : bounds.height, isVertical? bounds.width : bounds.height },
+            RAYGUI_CLITERAL(RAYLIB::Rectangle){ arrowUpLeft.x, arrowUpLeft.y, isVertical? bounds.width : bounds.height, isVertical? bounds.width : bounds.height },
             TEXT_ALIGN_CENTER, GetColor(GuiGetStyle(SCROLLBAR, TEXT + state*3)));   // ICON_ARROW_UP_FILL / ICON_ARROW_LEFT_FILL
         GuiDrawText(isVertical? "#120#" : "#119#",
-            RAYGUI_CLITERAL(Rectangle){ arrowDownRight.x, arrowDownRight.y, isVertical? bounds.width : bounds.height, isVertical? bounds.width : bounds.height },
+            RAYGUI_CLITERAL(RAYLIB::Rectangle){ arrowDownRight.x, arrowDownRight.y, isVertical? bounds.width : bounds.height, isVertical? bounds.width : bounds.height },
             TEXT_ALIGN_CENTER, GetColor(GuiGetStyle(SCROLLBAR, TEXT + state*3)));   // ICON_ARROW_DOWN_FILL / ICON_ARROW_RIGHT_FILL
 #endif
     }
@@ -5335,7 +5337,7 @@ static int ColorToInt(Color color)
 }
 
 // Check if point is inside rectangle
-static bool CheckCollisionPointRec(Vector2 point, Rectangle rec)
+static bool CheckCollisionPointRec(Vector2 point, RAYLIB::Rectangle rec)
 {
     bool collision = false;
 

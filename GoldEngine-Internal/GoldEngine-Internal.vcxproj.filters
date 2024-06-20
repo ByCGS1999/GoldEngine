@@ -563,9 +563,6 @@
     <CopyFileToFolders Include="Data\Engine\Textures\Error.png">
       <Filter>Data\Engine\Textures</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Binaries\FBX2glTF.exe">
-      <Filter>Binaries\fbx2gltf</Filter>
-    </CopyFileToFolders>
     <CopyFileToFolders Include="Data\EditorAssets\Icons\Material.png">
       <Filter>Data\EditorAssets\Icons</Filter>
     </CopyFileToFolders>
@@ -588,6 +585,9 @@
     </None>
     <None Include="Data\Engine\Shaders\Lighting\rlights.frag">
       <Filter>Data\Engine\Shaders\Lighting</Filter>
+    </None>
+    <None Include="Bin\FBX2glTF.exe">
+      <Filter>Binaries\fbx2gltf</Filter>
     </None>
   </ItemGroup>
 </Project>

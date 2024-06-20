@@ -99,7 +99,10 @@ namespace Engine::EngineObjects
 		void Start() override
 		{
 			if (!Engine::Management::Scene::getLoadedScene()->sceneLoaded())
+			{
+				printError("Scene has not finished loading, aborting execution");
 				return;
+			}
 
 			if (virtualMachine == nullptr)
 				initVM();

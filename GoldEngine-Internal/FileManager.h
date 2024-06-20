@@ -70,6 +70,7 @@ namespace Engine::Assets::IO
 						bW->Write(
 							fC
 						);
+
 						bW->Close();
 					}
 				}

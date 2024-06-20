@@ -281,6 +281,7 @@ namespace Engine::Assets::Storage
 			if (!hasModel)
 			{
 				retn = LoadModel("Data/Engine/Models/Error.obj");
+				AddModel(modelId, retn);
 			}
 
 			return retn;

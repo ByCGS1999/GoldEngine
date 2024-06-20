@@ -51,12 +51,24 @@ namespace Engine::EngineObjects
 		Native::NativeCamera* nativeCamera;
 		CameraProjection cameraProjection;
 
+	private:
+		bool isMainCamera;
+
 	public:
 		Camera(String^ name, Engine::Internal::Components::Transform^ trans, CameraProjection projection) : Engine::EngineObjects::Script(name, trans)
 		{
 			cameraProjection = projection;
 
 			nativeCamera = new Native::NativeCamera(cameraProjection);
+
+			if (!attributes->getAttribute("IsMainCamera"))
+			{
+				attributes->addAttribute(Engine::Scripting::Attribute::create("IsMainCamera", false, bool::typeid));
+			}
+			else
+			{
+				isMainCamera = attributes->getAttribute("IsMainCamera")->getValue<bool>();
+			}
 		}
 
 		void Update() override

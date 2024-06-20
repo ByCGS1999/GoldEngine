@@ -311,6 +311,22 @@ namespace Engine::Scripting
 			return nullptr;
 		}
 
+		Engine::EngineObjects::Camera^ GetMainCamera()
+		{
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->GetReference()->GetType()->IsSubclassOf(Engine::EngineObjects::Camera::typeid))
+				{
+					if (((Engine::EngineObjects::Camera^)t->GetReference())->attributes->getAttribute("IsMainCamera")->getValue<bool>() == true)
+					{
+						return (Engine::EngineObjects::Camera^)t->GetReference();
+					}
+				}
+			}
+
+			return nullptr;
+		}
+
 		Engine::Internal::Components::Object^ Instantiate(Engine::Internal::Components::Object^ newObject)
 		{
 			loadedScene->AddObjectToScene(newObject);

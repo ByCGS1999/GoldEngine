@@ -34,11 +34,17 @@ namespace Engine::Internal::Components
 		Engine::Components::Vector3^ localPosition;
 		Engine::Components::Vector3^ localRotation;
 		// CONSTANT VECTORS
+		[Newtonsoft::Json::JsonIgnoreAttribute]
 		const Engine::Components::Vector3^ forward = gcnew Engine::Components::Vector3(0, 0, 1);
+		[Newtonsoft::Json::JsonIgnoreAttribute]
 		const Engine::Components::Vector3^ top = gcnew Engine::Components::Vector3(0, 1, 0);
+		[Newtonsoft::Json::JsonIgnoreAttribute]
 		const Engine::Components::Vector3^ right = gcnew Engine::Components::Vector3(1, 0, 0);
+		[Newtonsoft::Json::JsonIgnoreAttribute]
 		const Engine::Components::Vector3^ backward = gcnew Engine::Components::Vector3(0, 0, -1);
+		[Newtonsoft::Json::JsonIgnoreAttribute]
 		const Engine::Components::Vector3^ bottom = gcnew Engine::Components::Vector3(0, -1, 0);
+		[Newtonsoft::Json::JsonIgnoreAttribute]
 		const Engine::Components::Vector3^ left = gcnew Engine::Components::Vector3(-1, 0, 0);
 
 	private:

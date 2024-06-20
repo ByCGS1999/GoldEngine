@@ -15,10 +15,10 @@ namespace Engine::Scripting
 	public ref class Log
 	{
 	public:
-		TraceLogLevel logType;
+		int logType;
 		String^ message;
 
-		Log(TraceLogLevel level, String^ mesg)
+		Log(int level, String^ mesg)
 		{
 			logType = level;
 			message = mesg;

@@ -1,6 +1,5 @@
 
 #include "Typedefs.h"
-#include <Windows.h>
 
 using namespace Engine::EngineObjects;
 using namespace Engine::Management;
@@ -11,10 +10,10 @@ using namespace Engine::Internal::Components;
 
 namespace EditorScripts
 {
-	public ref class SampleBehaviour : public Engine::EngineObjects::Script
+	public ref class RuntimeConsole : public Engine::EngineObjects::Script
 	{
 	public:
-		SampleBehaviour(System::String^ objectName, Transform^ transformComponent) : Engine::EngineObjects::Script(objectName, transformComponent) { };
+		RuntimeConsole(System::String^ objectName, Engine::Internal::Components::Transform^ transformComponent) : Engine::EngineObjects::Script(objectName, transformComponent) { };
 
 	public:
 		void Start() override
@@ -30,6 +29,24 @@ namespace EditorScripts
 		void Update() override
 		{
 
+		}
+
+		void DrawImGUI() override
+		{
+			if (ImguiHook::ImGui_begin_window("Runtime Console", true))
+			{
+				if (ImguiHook::ImGui_begin_listbox("###LOGS"))
+				{
+					for each (Engine::Scripting::Log^ x in Engine::Scripting::Logging::getLogs())
+					{
+						ImguiHook::ImGui_text(x->message);
+					}
+
+					ImguiHook::ImGui_end_listbox();
+				}
+
+				ImguiHook::ImGui_end_window();
+			}
 		}
 	};
 }
