@@ -21,4 +21,7 @@ Release/
 ./GoldEngine_Editor/Win32/*
 ./GoldEngine_Editor/Release/*
 ./Build/*
-./Build/
+./Build/**
+**/Build
+Build
+./GoldEngine-Internal/x64/
