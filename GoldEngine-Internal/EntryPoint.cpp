@@ -53,6 +53,7 @@ unsigned int passwd = 0;
 
 // lua virtual machine
 #include "LuaVM.h"
+#include "ManagedSignal.h"
 // lua script object
 #include "Objects/LuaScript.h"
 
@@ -956,13 +957,13 @@ public:
 		Start();
 	}
 
-
 	void Start()
 	{
 		//WinAPI::FreeCons();
 		SetTraceLogLevel(LOG_DEBUG);
 		SetWindowFlags(FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
+		gcnew Engine::Managers::SignalManager();
 
 		if (File::Exists("./Data/Keys/secrets.dat"))
 		{

@@ -38,6 +38,7 @@ namespace Engine::EngineObjects
 
 				virtualMachine->RegisterGlobal("script", this);
 				virtualMachine->RegisterGlobal("attributes", attributes);
+				virtualMachine->RegisterGlobal("SignalManager", Engine::Managers::SignalManager::Instance);
 
 				virtualMachine->RegisterScript(luaSource);
 

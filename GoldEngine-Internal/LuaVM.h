@@ -26,6 +26,12 @@ namespace Engine::Lua::VM
 		}
 
 	public:
+		MoonSharp::Interpreter::Script^ GetScriptState()
+		{
+			return scriptState;
+		}
+
+	public:
 		void LoadSource(String^ source)
 		{
 			this->source = source;
@@ -185,6 +191,11 @@ namespace Engine::Lua::VM
 			return scriptState->Globals[data] != nullptr;
 		}
 
+		bool hasFunction(MoonSharp::Interpreter::DynValue^ data)
+		{
+			return scriptState->Globals[data] != nullptr;
+		}
+
 	public:
 		bool InvokeFunction(String^ functionName)
 		{
@@ -195,6 +206,32 @@ namespace Engine::Lua::VM
 					scriptState->Call(scriptState->Globals[functionName]);
 					return true;
 				}
+			}
+			catch (MoonSharp::Interpreter::ScriptRuntimeException^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->DecoratedMessage);
+			}
+			catch (MoonSharp::Interpreter::InterpreterException^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->DecoratedMessage);
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->StackTrace);
+			}
+
+			return false;
+		}
+
+		bool InvokeFunction(MoonSharp::Interpreter::DynValue^ functionName)
+		{
+			try
+			{
+				scriptState->Call(functionName);
+				return true;
 			}
 			catch (MoonSharp::Interpreter::ScriptRuntimeException^ ex)
 			{

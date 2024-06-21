@@ -241,6 +241,7 @@
     <ClInclude Include="LogFileReporter.h" />
     <ClInclude Include="LoggingAPI.h" />
     <ClInclude Include="LuaVM.h" />
+    <ClInclude Include="ManagedSignal.h" />
     <ClInclude Include="native\json.hpp" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Macros.h" />

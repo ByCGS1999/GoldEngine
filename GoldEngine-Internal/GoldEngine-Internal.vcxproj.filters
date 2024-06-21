@@ -468,6 +468,9 @@
     <ClInclude Include="Raylib\include\x64\rlgl.h">
       <Filter>raylib\include</Filter>
     </ClInclude>
+    <ClInclude Include="ManagedSignal.h">
+      <Filter>Archivos de origen\Engine\Signals</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
