@@ -83,6 +83,7 @@ bool initSettings = false;
 bool styleEditor = false;
 bool showCursor = true;
 bool b1, b2, b3, b4, b5, b6, b7, b8, b9;
+bool visualizeError;
 bool readonlyLock = false;
 bool fpsCap = true;
 bool fpsCheck = true;
@@ -99,6 +100,10 @@ std::string codeEditorFile = "";
 bool fileDialogOpen = false;
 int tmp1;
 char* password = new char[512];
+char* packDataFileName = new char[64];
+
+// error handling
+char* errorReason;
 
 bool ce1, ce2, ce3, ce4, ce5, ce6;
 
@@ -121,6 +126,7 @@ private:
 	Scripting::ObjectManager^ objectManager;
 	Engine::Lua::VM::LuaVM^ luaVM;
 	Engine::Editor::Gui::fileExplorer^ fileExplorer = gcnew Engine::Editor::Gui::fileExplorer(std::string("File Explorer"));
+	System::Collections::Generic::List<String^>^ loadedAssets;
 
 private:
 	void SaveEditorCode()
@@ -200,7 +206,6 @@ private:
 		}
 	}
 
-private:
 	void SpecializedPropertyEditor(Engine::Internal::Components::Object^ object)
 	{
 		if (object != nullptr)
@@ -547,7 +552,6 @@ private:
 		}
 	}
 
-private:
 	void SetEditorCode(std::string fileName, std::string fileContents)
 	{
 		SaveEditorCode();
@@ -593,7 +597,7 @@ private:
 		File::WriteAllText(path, gcnew String(codeEditorChunk.c_str()));
 	}
 
-	void OpenFileExplorer(std::string name, Engine::Editor::Gui::explorerMode mode, Action<String^>^ callback)
+	void OpenFileExplorer(std::string name, Engine::Editor::Gui::explorerMode mode, Engine::Editor::Gui::onFileSelected^ callback)
 	{
 		fileExplorer->SetWindowName(name);
 		fileExplorer->setExplorerMode(mode);
@@ -623,7 +627,7 @@ private:
 							}
 							else
 							{
-								OpenFileExplorer("Open File", Engine::Editor::Gui::explorerMode::Open, (gcnew Action<String^>(this, &EditorWindow::SetEditorCode)));
+								OpenFileExplorer("Open File", Engine::Editor::Gui::explorerMode::Open, (gcnew Engine::Editor::Gui::onFileSelected(this, &EditorWindow::SetEditorCode)));
 							}
 
 							delete chunk;
@@ -631,14 +635,14 @@ private:
 						}
 						else
 						{
-							OpenFileExplorer("Open File", Engine::Editor::Gui::explorerMode::Open, (gcnew Action<String^>(this, &EditorWindow::SetEditorCode)));
+							OpenFileExplorer("Open File", Engine::Editor::Gui::explorerMode::Open, (gcnew Engine::Editor::Gui::onFileSelected(this, &EditorWindow::SetEditorCode)));
 						}
 					}
 					if (ImGui::MenuItem("Save"))
 					{
 						codeEditorChunk = codeEditor->GetText();
 
-						OpenFileExplorer("Save File", Engine::Editor::Gui::explorerMode::Save, (gcnew Action<String^>(this, &EditorWindow::SaveEditorContents)));
+						OpenFileExplorer("Save File", Engine::Editor::Gui::explorerMode::Save, (gcnew Engine::Editor::Gui::onFileSelected(this, &EditorWindow::SaveEditorContents)));
 					}
 					ImGui::Separator();
 					if (ImGui::BeginMenu("Lua Compiler"))
@@ -647,7 +651,7 @@ private:
 						{
 							luaVM->LoadSource(gcnew String(codeEditor->GetText().c_str()));
 
-							OpenFileExplorer("Save Lua Compiled File", Engine::Editor::Gui::explorerMode::Save, (gcnew Action<String^>(luaVM, &Engine::Lua::VM::LuaVM::WriteLuaCodeToFile)));
+							OpenFileExplorer("Save Lua Compiled File", Engine::Editor::Gui::explorerMode::Save, (gcnew Engine::Editor::Gui::onFileSelected(luaVM, &Engine::Lua::VM::LuaVM::WriteLuaCodeToFile)));
 						}
 
 						ImGui::EndMenu();
@@ -882,6 +886,54 @@ end
 		}
 	}
 
+	void ThrowUIError(String^ eR)
+	{
+		std::string convErrRes = CastStringToNative(eR);
+
+		errorReason = new char[convErrRes.size()];
+
+		strcpy(errorReason, convErrRes.c_str());
+
+		visualizeError = true;
+	}
+
+	void PackData(String^ convertedData)
+	{
+		if (!convertedData->Contains("."))
+		{
+			ImGui::CloseCurrentPopup();
+			ThrowUIError("File does not have extension");
+			ImGui::EndPopup();
+			return;
+		}
+		else if (convertedData->Length <= 0)
+		{
+			ImGui::CloseCurrentPopup();
+			ThrowUIError("File length is not valid");
+			ImGui::EndPopup();
+			return;
+		}
+		else if (convertedData->IsNullOrEmpty(convertedData))
+		{
+			ImGui::CloseCurrentPopup();
+			ThrowUIError("FileName is not valid");
+			ImGui::EndPopup();
+			return;
+		}
+
+		print("[Asset Packer]: ", "------------------------");
+		print("[Asset Packer]: ", "Packing data to -> " + convertedData);
+
+		for each (auto asset in loadedAssets)
+		{
+			print("[Asset Packer]: ", "Packing asset -> " + asset);
+		}
+
+		print("[Asset Packer]: ", "------------------------");
+
+		FileManager::WriteToCustomFile(convertedData, gcnew String(password), loadedAssets->ToArray());
+	}
+
 public:
 	EditorWindow()
 	{
@@ -963,6 +1015,22 @@ public:
 	}
 
 	#pragma region EditorGUI
+
+	void ShowError()
+	{
+		if (ImGui::BeginPopupModal("Unexpected Error", (bool*)false, ImGuiWindowFlags_NoResize))
+		{
+			ImGui::Text(errorReason);
+
+			if (ImGui::Button("Accept"))
+			{
+				visualizeError = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
 
 	void DrawMainMenuBar()
 	{
@@ -1537,6 +1605,44 @@ public:
 		}
 	}
 
+	void DrawAssets()
+	{
+		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_MenuBar))
+		{
+			if (ImGui::BeginMenuBar())
+			{
+				if (ImGui::BeginMenu("Assets"))
+				{
+					if (ImGui::MenuItem("Pack Setup"))
+					{
+						packDataFileName = "";
+						loadedAssets = gcnew System::Collections::Generic::List<String^>();
+						b5 = true;
+					}
+					if (ImGui::MenuItem("Scene Loader Setup"))
+					{
+						SetEditorCode(CastStringToNative("Data/" + scene->sceneRequirements + ".asset"), CastStringToNative(System::IO::File::ReadAllText("Data/" + scene->sceneRequirements + ".asset")));
+						codeEditorOpen = true;
+					}
+
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenuBar();
+			}
+
+			ImVec2 size = ImGui::GetWindowSize();
+
+			ImGui::BeginListBox("###ASSETS", { size.x - 20, size.y - 55 });
+
+			createAssetEntries("./Data/");
+
+			ImGui::EndListBox();
+
+
+			ImGui::End();
+		}
+	}
+
 	#pragma endregion
 
 	void DrawImGui() override
@@ -1562,38 +1668,7 @@ public:
 			CodeEditor();
 		}
 
-		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_MenuBar))
-		{
-			if (ImGui::BeginMenuBar())
-			{
-				if (ImGui::BeginMenu("Assets"))
-				{
-					if (ImGui::MenuItem("Pack Setup"))
-					{
-						b5 = true;
-					}
-					if (ImGui::MenuItem("Scene Loader Setup"))
-					{
-						SetEditorCode(CastStringToNative("Data/" + scene->sceneRequirements + ".asset"), CastStringToNative(System::IO::File::ReadAllText("Data/" + scene->sceneRequirements + ".asset")));
-						codeEditorOpen = true;
-					}
-
-					ImGui::EndMenu();
-				}
-				ImGui::EndMenuBar();
-			}
-
-			ImVec2 size = ImGui::GetWindowSize();
-
-			ImGui::BeginListBox("###ASSETS", { size.x - 20, size.y - 55 });
-
-			createAssetEntries("./Data/");
-
-			ImGui::EndListBox();
-
-
-			ImGui::End();
-		}
+		DrawAssets();
 
 		if (styleEditor)
 		{
@@ -1889,6 +1964,10 @@ public:
 		{
 			ImGui::OpenPopup("AssetPack Editor");
 		}
+		else if (b5)
+		{
+			ImGui::OpenPopup("Pack Setup");
+		}
 		else if (b6)
 		{
 			//ImGui::OpenPopup("Scene Loader Editor");
@@ -1904,6 +1983,11 @@ public:
 		else if (b9)
 		{
 			ImGui::OpenPopup("Engine Configuration");
+		}
+		
+		if (visualizeError)
+		{
+			ImGui::OpenPopup("Unexpected Error");
 		}
 
 		fileExplorer->DrawExplorer();
@@ -1923,6 +2007,62 @@ public:
 		}
 
 		// popups
+
+		if (ImGui::BeginPopupModal("Pack Setup", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
+		{
+			char* buffer = new char[512];
+
+			for (int x = 0; x < loadedAssets->Count; x++)
+			{
+				if (buffer != "")
+					delete buffer;
+
+				buffer = new char[512];
+				strcpy(buffer, CastToNative(loadedAssets[x]));
+				std::string name = "###" + std::string(CastToNative(loadedAssets[x])) + "###_index" + std::to_string(x);
+				if (ImGui::InputText(name.c_str(), buffer, 512))
+				{
+					loadedAssets[x] = gcnew String(buffer);
+				}
+			}
+
+			ImGui::Separator();
+			{
+				if (ImGui::Button("+"))
+				{
+					loadedAssets->Add("");
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("-"))
+				{
+					if (loadedAssets->Count >= 1)
+					{
+						loadedAssets->RemoveAt(loadedAssets->Count-1);
+					}
+				}
+			}
+			ImGui::Separator();
+
+
+			if (ImGui::Button("Pack all the files"))
+			{
+				OpenFileExplorer("Select output file", Engine::Editor::Gui::explorerMode::Save, gcnew Engine::Editor::Gui::onFileSelected(this, &EditorWindow::PackData));
+
+				delete buffer;
+
+				b5 = false;
+
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Close"))
+			{
+				b5 = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
 
 		if (ImGui::BeginPopupModal("Engine Configuration", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
 		{
@@ -2108,9 +2248,9 @@ public:
 				ImGui::SameLine();
 				if (ImGui::Button("-"))
 				{
-					if (scene->assetPacks->Count > 1)
+					if (scene->assetPacks->Count >= 1)
 					{
-						scene->assetPacks->RemoveAt(scene->assetPacks->Count);
+						scene->assetPacks->RemoveAt(scene->assetPacks->Count-1);
 					}
 				}
 			}
@@ -2124,6 +2264,10 @@ public:
 
 			ImGui::EndPopup();
 		}
+	
+
+		ShowError();
+
 	}
 
 	void Exit() override
@@ -2321,7 +2465,7 @@ public:
 		SetExitKey(KEY_NULL);
 		viewportTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 
-		scene = SceneManager::CreateScene("GoldEngineBoot");
+		//scene = SceneManager::CreateScene("GoldEngineBoot");
 
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
 

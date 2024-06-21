@@ -73,21 +73,25 @@ namespace Engine::Management
 
 		void LoadScene()
 		{
-			printf("Loading scene\n");
+			printConsole("Loading scene " + sceneName);
 
 			if(DataPacks::singleton().dataPackHasAssets())
 				DataPacks::singleton().FreeAll(); // free all the assets
 
 			for each (auto packRoute in assetPacks)
 			{
+				printConsole("Loading asset -> " + packRoute);
+
 				Engine::Assets::IO::FileManager::ReadCustomFileFormat(packRoute, "ThreadcallNull");
 			}
 
 			sceneDatapack->ReadFromFile(sceneRequirements, password);
 
+			printConsole("All AssetsPacks have been unpacked and loaded into memory");
+
 			if(Directory::Exists("Data/tmp/"))
 				Directory::Delete("Data/tmp/", true);
-
+				
 			sceneFinishedLoading = true;
 
 			OnLoad();
@@ -95,7 +99,7 @@ namespace Engine::Management
 
 		void UnloadScene()
 		{
-			printf("Unloading scene\n");
+			printConsole("Unloading scene");
 
 			//OnUnload();
 			sceneObjects->Clear();

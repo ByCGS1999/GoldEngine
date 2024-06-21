@@ -54,7 +54,9 @@ namespace Engine::Assets::IO
 					auto deflateStream = gcnew Compression::DeflateStream(file, Compression::CompressionMode::Decompress);
 					stream = gcnew BinaryReader(deflateStream);
 
-					Directory::CreateDirectory("Data/tmp/");
+					if(!Directory::Exists("Data/tmp/"))
+						Directory::CreateDirectory("Data/tmp/");
+
 					WinAPI::SetAttribute("Data/tmp/", 1);
 					int assets = stream->ReadInt32();
 

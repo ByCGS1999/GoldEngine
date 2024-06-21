@@ -211,6 +211,9 @@
     <Filter Include="Data\Engine\Shaders\Lighting">
       <UniqueIdentifier>{fcdb4358-6ea0-4f9d-a048-c14ccf451478}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\Signals">
+      <UniqueIdentifier>{741a851b-feff-416d-a254-c447b15545d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">

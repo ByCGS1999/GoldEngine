@@ -162,7 +162,7 @@ namespace Engine::Internal::Components
 		virtual void DrawImGUI() {}
 
 		// defined
-
+	public:
 		bool isProtected()
 		{
 			return memberIsProtected;

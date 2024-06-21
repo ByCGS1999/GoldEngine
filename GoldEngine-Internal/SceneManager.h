@@ -41,6 +41,7 @@ namespace Engine::Managers
 				}
 
 				loadedScene->setPassword(passwd);
+				loadedScene = parsedScene; // bridge all the unsetted values from the parsed scene
 
 				for each (auto t in parsedScene->sceneObjects)
 				{

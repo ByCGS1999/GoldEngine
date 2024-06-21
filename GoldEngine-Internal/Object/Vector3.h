@@ -81,5 +81,10 @@ namespace Engine::Components
 		{
 			return gcnew Vector3(vec.x, vec.y, vec.z);
 		}
+
+		bool Equals(Vector3^ value) override
+		{
+			return ((this->x == value->x) && (this->y == value->y) && (this->z == value->z));
+		}
 	};
 }

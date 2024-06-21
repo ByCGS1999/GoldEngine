@@ -10,6 +10,8 @@ namespace Engine::Editor::Gui
 		Save
 	};
 
+	public delegate void onFileSelected(String^ str);
+
 	ref class fileExplorer
 	{
 	private:
@@ -22,7 +24,7 @@ namespace Engine::Editor::Gui
 		explorerMode mode;
 		String^ dialogResult;
 		String^ current_filter;
-		Action<String^>^ bind;
+		onFileSelected^ bind;
 
 		bool registeredFont = false;
 
@@ -101,7 +103,7 @@ namespace Engine::Editor::Gui
 		}
 
 	public:
-		void OnCompleted(Action<String^>^ t) {
+		void OnCompleted(onFileSelected^ t) {
 			bind = t;
 			if (dialogResult != "")
 			{
