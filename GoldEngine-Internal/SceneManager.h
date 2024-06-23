@@ -216,6 +216,8 @@ namespace Engine::Managers
 					break;
 					}
 				}
+
+				Engine::Management::Scene::getLoadedScene()->flagSceneLoaded(true);
 			}
 			else
 			{

@@ -2,7 +2,6 @@
 
 namespace Engine::Signals
 {
-	generic <typename T>
 	ref class ManagedSignal;
 }
 
@@ -13,11 +12,13 @@ namespace Engine::Managers
 
 namespace Engine::Signals
 {
+	// types of signals
+
 	public delegate void SimpleSignal();
-	
+
 	public delegate bool LuaSignal(System::String^);
 
-	public delegate bool LuaSignal_V2();
+	public delegate System::Object^ LuaSignal_V2(DynValue^);
 
 	generic<typename T>
 	public delegate T SignalWithArgs(cli::array<System::Object^>^);
@@ -28,39 +29,46 @@ namespace Engine::Signals
 	generic<typename T>
 	public delegate T Signal();
 
-	generic <typename T>
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class ManagedSignal
 	{
 	private:
 		System::Delegate^ bindedSignal;
 
-		void Callback()
+		System::Object^ Callback()
 		{
 			if (bindedSignal != nullptr)
 			{
-				bindedSignal->DynamicInvoke();
+				return bindedSignal->DynamicInvoke();
 			}
+
+			return nullptr;
 		}
 
-		void Callback(System::Object^ arg)
+		System::Object^ Callback(System::Object^ arg)
 		{
 			if (bindedSignal != nullptr)
 			{
-				bindedSignal->DynamicInvoke(arg);
+				return bindedSignal->DynamicInvoke(arg);
 			}
+
+			return nullptr;
 		}
 
-		void Callback(cli::array<System::Object^>^ args)
+		System::Object^ Callback(cli::array<System::Object^>^ args)
 		{
 			if (bindedSignal != nullptr)
 			{
-				bindedSignal->DynamicInvoke(args);
+				return bindedSignal->DynamicInvoke(args);
 			}
+
+			return nullptr;
 		}
 
 		Object^ invoker;
 
 	public:
+		// constructors & destructors (only called by the signalmanager)
 		ManagedSignal(Engine::Managers::SignalManager^ signalManager)
 		{
 			if (signalManager == nullptr)
@@ -73,21 +81,26 @@ namespace Engine::Signals
 		}
 
 	public:
+		// bind functions, to bind the incomming signals to the instance
+		generic <typename T>
 		void Bind(Signal<T>^ signal)
 		{
 			bindedSignal = signal;
 		}
 
+		generic <typename T>
 		void Bind(SignalWithArg<T>^ signal)
 		{
 			bindedSignal = signal;
 		}
 
+		generic <typename T>
 		void Bind(SignalWithArgs<T>^ signal)
 		{
 			bindedSignal = signal;
 		}
 
+		generic <typename T>
 		void Bind(SimpleSignal^ signal)
 		{
 			bindedSignal = signal;
@@ -101,6 +114,7 @@ namespace Engine::Signals
 			if (temp->Type == DataType::Function)
 			{
 				LuaSignal^ signal = gcnew LuaSignal(vmInstance, &Engine::Lua::VM::LuaVM::InvokeFunction);
+				bindedSignal = signal;
 			}
 		}
 		
@@ -110,28 +124,35 @@ namespace Engine::Signals
 
 			if (temp->Type == DataType::Function)
 			{
-				LuaSignal^ signal = gcnew LuaSignal(vmInstance, &Engine::Lua::VM::LuaVM::InvokeFunction);
+				LuaSignal_V2^ signal = gcnew LuaSignal_V2(vmInstance, &Engine::Lua::VM::LuaVM::InvokeFunctionO);
+				bindedSignal = signal;
 			}
 		}
 
-		void Call() 
+		// call fucntions (to call the binded signals)
+		System::Object^ Call() 
 		{
-			Callback();
+			return Callback();
 		}
 
-		void Call(System::Object^ arg)
+		System::Object^ Call(System::Object^ arg)
 		{
-			Callback(arg);
+			return Callback(arg);
 		}
 
-		void Call(cli::array<System::Object^>^ args)
+		System::Object^ Call(cli::array<System::Object^>^ args)
 		{
-			Callback(args);
+			return Callback(args);
 		}
 
-		void CallUsingInvoker()
+		System::Object^ CallUsingInvoker()
 		{
-			Callback(invoker);
+			return Callback(invoker);
+		}
+
+		System::Object^ Invoke()
+		{
+			return CallUsingInvoker();
 		}
 
 		void DisposeSignal()
@@ -146,27 +167,57 @@ namespace Engine::Signals
 
 namespace Engine::Managers
 {
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	ref class SignalManager
 	{
 	private:
 		System::Collections::Generic::List<System::Object^>^ signals;
+		System::Collections::Generic::Dictionary<String^, Engine::Signals::ManagedSignal^>^ signalMap;
 
 	public:
 		SignalManager() 
 		{
+			signalMap = gcnew System::Collections::Generic::Dictionary<String^, Engine::Signals::ManagedSignal^>();
 			signals = gcnew System::Collections::Generic::List<System::Object^>();
 			Instance = this;
 		}
 
 	public:
-		generic <class T>
-		Engine::Signals::ManagedSignal<T>^ GetSignalByIndex(int index)
+		bool RegisterSignal(String^ id, Engine::Signals::ManagedSignal^ signal)
 		{
-			return (Engine::Signals::ManagedSignal<T>^)signals[index];
+			if (signalMap->ContainsKey(id))
+				return false;
+			else
+				(signalMap->Add(id, signal));
+
+			return true;
+		}
+
+	public:
+		Engine::Signals::ManagedSignal^ GetSignal(String^ id)
+		{
+			Engine::Signals::ManagedSignal^ outputSignal;
+
+			signalMap->TryGetValue(id, outputSignal);
+
+			return outputSignal;
+		}
+
+	public:
+		void UnregisterSignal(String^ signalId)
+		{
+			signalMap->Remove(signalId);
+		}
+
+	public:
+		generic <class T>
+		Engine::Signals::ManagedSignal^ GetSignalByIndex(int index)
+		{
+			return (Engine::Signals::ManagedSignal^)signals[index];
 		}
 
 		generic <class T>
-		int GetIndexBySignal(Engine::Signals::ManagedSignal<T>^ signal)
+		int GetIndexBySignal(Engine::Signals::ManagedSignal^ signal)
 		{
 			return signals->IndexOf(signal);
 		}
@@ -176,22 +227,21 @@ namespace Engine::Managers
 			return signals->Remove(signal);
 		}
 
-		generic <class T>
-		Engine::Signals::ManagedSignal<T>^ CreateSignal()
+		Engine::Signals::ManagedSignal^ CreateSignal()
 		{
-			auto signal = gcnew Engine::Signals::ManagedSignal<T>(this);
+			auto signal = gcnew Engine::Signals::ManagedSignal(this);
 			signals->Add(signal);
 			return signal;
 		}
 
 		generic <class T>
-		System::Tuple<Engine::Signals::ManagedSignal<T>^, int>^ CreateIndexedSignal()
+		System::Tuple<Engine::Signals::ManagedSignal^, int>^ CreateIndexedSignal()
 		{
 			int newIndex = signals->Count;
-			auto signal = gcnew Engine::Signals::ManagedSignal<T>(this);
+			auto signal = gcnew Engine::Signals::ManagedSignal(this);
 			signals->Insert(newIndex-1, signal);
 
-			return System::Tuple::Create<Engine::Signals::ManagedSignal<T>^, int>(signal, newIndex);
+			return System::Tuple::Create<Engine::Signals::ManagedSignal^, int>(signal, newIndex);
 		}
 
 		static SignalManager^ Instance;

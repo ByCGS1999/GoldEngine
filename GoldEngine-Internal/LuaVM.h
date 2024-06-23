@@ -4,6 +4,7 @@ using namespace MoonSharp::Interpreter;
 
 namespace Engine::Lua::VM
 {
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class LuaVM
 	{
 	public:
@@ -23,6 +24,12 @@ namespace Engine::Lua::VM
 			scriptState = gcnew MoonSharp::Interpreter::Script();
 
 			RegisterGlobalFunctions();
+		}
+
+	public:
+		auto GetGlobals()
+		{
+			return scriptState->Globals;
 		}
 
 	public:
@@ -286,6 +293,31 @@ namespace Engine::Lua::VM
 			}
 
 			return false;
+		}
+
+		System::Object^ InvokeFunctionO(MoonSharp::Interpreter::DynValue^ functionName)
+		{
+			try
+			{
+				return scriptState->Call(functionName);
+			}
+			catch (MoonSharp::Interpreter::ScriptRuntimeException^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->DecoratedMessage);
+			}
+			catch (MoonSharp::Interpreter::InterpreterException^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->DecoratedMessage);
+			}
+			catch (Exception^ ex)
+			{
+				printError(ex->Message);
+				printError(ex->StackTrace);
+			}
+
+			return nullptr;
 		}
 
 	private:

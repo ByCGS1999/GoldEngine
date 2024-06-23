@@ -66,6 +66,8 @@ namespace Engine::Management
 
 		bool sceneLoaded() { return sceneFinishedLoading; }
 
+		void flagSceneLoaded(bool value) { sceneFinishedLoading = value; }
+
 		static Scene^ getLoadedScene()
 		{
 			return singleton;
@@ -89,19 +91,21 @@ namespace Engine::Management
 
 			printConsole("All AssetsPacks have been unpacked and loaded into memory");
 
+			sceneFinishedLoading = true;
+
 			if(Directory::Exists("Data/tmp/"))
 				Directory::Delete("Data/tmp/", true);
 				
-			sceneFinishedLoading = true;
-
 			OnLoad();
 		}
 
 		void UnloadScene()
 		{
+			sceneFinishedLoading = false;
+
 			printConsole("Unloading scene");
 
-			//OnUnload();
+			OnUnload();
 			sceneObjects->Clear();
 			drawQueue->Clear();
 			DataPacks::singleton().FreeAll();

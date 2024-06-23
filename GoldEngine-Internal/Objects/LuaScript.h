@@ -6,10 +6,15 @@ namespace Engine::EngineObjects
 	public ref class LuaScript : public Engine::EngineObjects::Script
 	{
 	private:
-		Engine::Lua::VM::LuaVM^ virtualMachine;
 		String^ luaSource = "";
 	public:
+		[Newtonsoft::Json::JsonIgnoreAttribute]
+		Engine::Lua::VM::LuaVM^ virtualMachine;
+
 		String^ luaFilePath = "./";
+
+		[Newtonsoft::Json::JsonIgnoreAttribute]
+		Engine::Signals::ManagedSignal^ managedSignal;
 
 	private:
 		bool loadErrorCalledBack = false;
@@ -31,6 +36,8 @@ namespace Engine::EngineObjects
 		{
 			if (File::Exists(luaFilePath))
 			{
+				managedSignal = Engine::Managers::SignalManager::Instance->CreateSignal();
+
 				printWarning("Loading Lua binary: " + luaFilePath);
 				virtualMachine = gcnew Engine::Lua::VM::LuaVM();
 
@@ -39,6 +46,7 @@ namespace Engine::EngineObjects
 				virtualMachine->RegisterGlobal("script", this);
 				virtualMachine->RegisterGlobal("attributes", attributes);
 				virtualMachine->RegisterGlobal("SignalManager", Engine::Managers::SignalManager::Instance);
+				virtualMachine->RegisterGlobal("Globals", virtualMachine->GetGlobals());
 
 				virtualMachine->RegisterScript(luaSource);
 
