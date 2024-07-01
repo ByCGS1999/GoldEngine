@@ -238,6 +238,7 @@
     <ClInclude Include="imgui\Fonts\IconsFontAwesome4.h" />
     <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="LightweightSRP.h" />
     <ClInclude Include="LogFileReporter.h" />
     <ClInclude Include="LoggingAPI.h" />
     <ClInclude Include="LuaVM.h" />

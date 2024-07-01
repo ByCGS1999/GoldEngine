@@ -35,7 +35,11 @@ namespace EditorScripts
 		{
 			if (ImguiHook::ImGui_begin_window("Runtime Console", true))
 			{
-				if (ImguiHook::ImGui_begin_listbox("###LOGS"))
+				auto windowSize = ImguiHook::ImGui_get_windowsize();
+				windowSize->x -= 40;
+				windowSize->y -= 50;
+
+				if (ImguiHook::ImGui_begin_listbox("###LOGS", windowSize))
 				{
 					for each (Engine::Scripting::Log^ x in Engine::Scripting::Logging::getLogs())
 					{

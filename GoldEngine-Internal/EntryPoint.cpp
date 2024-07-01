@@ -58,6 +58,7 @@ unsigned int passwd = 0;
 #include "Objects/LuaScript.h"
 
 #include "Objects/Pipeline/ScriptableRenderPipeline.hpp"
+#include "LightweightSRP.h"
 
 using namespace Engine;
 using namespace Engine::EngineObjects;
@@ -142,6 +143,7 @@ private:
 	Engine::Lua::VM::LuaVM^ luaVM;
 	Engine::Editor::Gui::fileExplorer^ fileExplorer = gcnew Engine::Editor::Gui::fileExplorer(std::string("File Explorer"));
 	System::Collections::Generic::List<String^>^ loadedAssets;
+	ScriptableRenderPipeline^ renderPipeline;
 
 private:
 	void SaveEditorCode()
@@ -2384,8 +2386,14 @@ public:
 
 					if (reference->layerMask = cL)
 					{
+						if (renderPipeline != nullptr)
+							renderPipeline->PreRenderObject();
+
 						reference->Draw();
 						reference->DrawGizmo();
+
+						if (renderPipeline != nullptr)
+							renderPipeline->PostRenderObject();
 					}
 				}
 			}
@@ -2403,6 +2411,9 @@ public:
 	{
 		BeginDrawing();
 		{
+			if(renderPipeline != nullptr)
+				renderPipeline->PreRenderFrame();
+
 			BeginTextureMode(viewportTexture);
 
 			ClearBackground(GetColor(scene->skyColor));
@@ -2415,6 +2426,7 @@ public:
 			BeginMode3D((RAYLIB::Camera3D)*camera->get());
 
 			int currentLayer = 1;
+
 			render(currentLayer);
 
 			EndMode3D();
@@ -2447,6 +2459,9 @@ public:
 			DrawImGui();
 
 			rlImGuiEnd();
+
+			if (renderPipeline != nullptr)
+				renderPipeline->PostRenderFrame();
 		}
 		EndDrawing();
 	}
@@ -2665,6 +2680,8 @@ public:
 
 public ref class GameWindow : public Engine::Window
 {
+private:
+	bool initSettings = false;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scene^ scene;
 	DataPack^ packedData;
@@ -2674,13 +2691,18 @@ public:
 	{
 		//WinAPI::FreeCons();
 
-		dataPack = DataPacks();
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
+		dataPack = DataPacks();
 
 		assemblies->Add(gcnew EngineAssembly("Bin/Asm/GoldEngine_ScriptAssembly.dll"));
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
 
 		SceneManager::SetAssemblyManager(assemblies);
+
+		for each (EngineAssembly ^ assembly in assemblies)
+		{
+			assembly->ListAssemblyTypes();
+		}
 
 		Start();
 	}
@@ -2794,6 +2816,11 @@ private:
 public:
 	void Init() override
 	{
+		gcnew Scripting::ObjectManager(scene);
+
+		while (!scene->sceneLoaded())
+			WaitTime(1.0);
+
 		//Engine::Assets::Management::DataPack::SetSingletonReference(packedData);
 		create();
 
@@ -2830,9 +2857,22 @@ public:
 			}
 		}
 
-		gcnew Scripting::ObjectManager(scene);
-
 		Init();
+	}
+
+	void DrawImGui() override
+	{
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+
+		if (!initSettings)
+		{
+			ImGui::LoadIniSettingsFromDisk("imgui.ini");
+			WaitTime(2.5);
+			initSettings = true;
+		}
+
+		auto viewPort = ImGui::GetMainViewport();
+		ImGui::DockSpaceOverViewport(viewPort, ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
 	}
 
 	void render(int currentLayer)
@@ -2872,30 +2912,39 @@ public:
 	virtual void Draw() override
 	{
 		BeginDrawing();
-
-		ClearBackground(RAYLIB::BLACK);
-
-		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
-
-		if (camera == nullptr)
-			return;
-
-		BeginMode3D((RAYLIB::Camera3D)*camera->get());
-
-		int currentLayer = 0;
-
-		render(currentLayer);
-
-		EndMode3D();
-
-		rlImGuiBegin();
-
-		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
 		{
-			sceneObject->GetReference()->DrawImGUI();
-		}
+			ClearBackground(RAYLIB::BLACK);
 
-		rlImGuiEnd();
+			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
+
+			if (camera == nullptr)
+				return;
+
+			BeginMode3D((RAYLIB::Camera3D)*camera->get());
+
+			int currentLayer = 0;
+
+			render(currentLayer);
+
+			EndMode3D();
+
+			rlImGuiBegin();
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
+			{
+				if (obj != nullptr)
+				{
+					if (obj->GetReference() != nullptr)
+					{
+						obj->GetReference()->DrawImGUI();
+					}
+				}
+			}
+
+			DrawImGui();
+
+			rlImGuiEnd();
+		}
 
 		EndDrawing();
 	}

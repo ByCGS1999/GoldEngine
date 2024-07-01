@@ -217,6 +217,9 @@
     <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Scriptable">
       <UniqueIdentifier>{c4a424bb-123e-4a72-8b70-7944e4de2766}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\LightWeightSRP">
+      <UniqueIdentifier>{6829fe7f-948b-4d4f-81bf-af4135be0757}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -479,6 +482,9 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="LightweightSRP.h">
+      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\LightWeightSRP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -125,6 +125,8 @@ namespace Engine::Managers
 							{
 								if (assembly->hasType(script->assemblyReference))
 								{
+									Engine::Scripting::Logging::Log(String::Format("Loading assembly type {0}", script->assemblyReference));
+
 									auto obj = (Engine::Internal::Components::Object^)assembly->CastToType(sceneObject, script->assemblyReference);
 
 									obj->Init(script);
