@@ -359,6 +359,11 @@ namespace Engine::Assets::Management
 			return assetId;
 		}
 
+		void setFile(String^ fileName)
+		{
+			fileTarget = fileName;
+		}
+
 		String^ getFile()
 		{
 			return fileTarget;

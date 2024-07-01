@@ -31,5 +31,11 @@ namespace Engine::EngineObjects
 			
 			DrawCube(GetTransform()->position->toNative(), v3.x, v3.y, v3.z , c);
 		}
+
+	public:
+		void SetColor(unsigned int color)
+		{
+			this->color = color;
+		}
 	};
 }

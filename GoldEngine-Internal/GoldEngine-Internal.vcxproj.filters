@@ -214,6 +214,9 @@
     <Filter Include="Archivos de origen\Engine\Signals">
       <UniqueIdentifier>{741a851b-feff-416d-a254-c447b15545d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Scriptable">
+      <UniqueIdentifier>{c4a424bb-123e-4a72-8b70-7944e4de2766}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -470,6 +473,12 @@
     </ClInclude>
     <ClInclude Include="ManagedSignal.h">
       <Filter>Archivos de origen\Engine\Signals</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Pipeline\ScriptableRenderPipeline.hpp">
+      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Scriptable</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

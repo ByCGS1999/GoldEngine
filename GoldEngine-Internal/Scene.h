@@ -37,6 +37,8 @@ namespace Engine::Management
 	public:
 		Scene(String^ name, String^ sR, System::Collections::Generic::List<String^>^ assetP, System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneO, unsigned long skyTint, System::Collections::Generic::List<System::String^>^ assemblies, System::Collections::Generic::List<String^>^ preloadCode)
 		{
+			Singleton<Scene^>::Create(this);
+
 			singleton = this;
 
 			this->sceneName = name;
@@ -87,6 +89,7 @@ namespace Engine::Management
 				Engine::Assets::IO::FileManager::ReadCustomFileFormat(packRoute, "ThreadcallNull");
 			}
 
+			sceneDatapack->setFile(sceneRequirements);
 			sceneDatapack->ReadFromFile(sceneRequirements, password);
 
 			printConsole("All AssetsPacks have been unpacked and loaded into memory");

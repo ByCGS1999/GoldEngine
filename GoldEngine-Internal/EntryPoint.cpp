@@ -57,6 +57,8 @@ unsigned int passwd = 0;
 // lua script object
 #include "Objects/LuaScript.h"
 
+#include "Objects/Pipeline/ScriptableRenderPipeline.hpp"
+
 using namespace Engine;
 using namespace Engine::EngineObjects;
 using namespace Engine::EngineObjects::Native;
@@ -112,6 +114,18 @@ std::string codeEditorChunk;
 
 char fileName[] = "Level0";
 
+typedef enum assetDisplay
+{
+	ALL,
+	MODELS,
+	TEXTURES,
+	AUDIO
+};
+
+assetDisplay displayingAssets;
+
+int displayingAsset = 0;
+
 ref class EditorWindow : Engine::Window
 {
 private:
@@ -146,7 +160,7 @@ private:
 			array<String^>^ tmp = f->Split('/');
 			auto t = tmp[tmp->Length - 1] + "\n";
 
-			if (f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".vox")) // model types
+			if ((f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".vox")) && (displayingAssets == ALL || displayingAssets == MODELS)) // model types
 			{
 				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
 				{
@@ -192,12 +206,28 @@ private:
 				ImGui::SameLine();
 				ImGui::Text(CastStringToNative(t).c_str());
 			}
-			else if (f->Contains(".mat"))
-			{
-				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
-				{
 
+			if ((f->Contains(".png") || f->Contains(".jpg") || f->Contains(".bmp") || f->Contains(".hdr")) && (displayingAssets == ALL || displayingAssets == TEXTURES))
+			{
+				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &materialTexture))
+				{
+					unsigned int assetId = 0;
+					auto res = packedData->hasAsset(Engine::Assets::Management::assetType::_Texture2D, f);
+					if (!std::get<0>(res))
+					{
+						assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Texture2D);
+
+						packedData->AddTextures2D(assetId, f);
+
+						packedData->WriteToFile(packedData->getFile(), passwd);
+					}
+					else
+					{
+						assetId = std::get<1>(res);
+					}
 				}
+				ImGui::SameLine();
+				ImGui::Text(CastStringToNative(t).c_str());
 			}
 		}
 
@@ -215,6 +245,32 @@ private:
 
 			switch (type)
 			{
+			case ObjectType::CubeRenderer:
+			{
+				Engine::EngineObjects::CubeRenderer^ renderer = Cast::Dynamic<Engine::EngineObjects::CubeRenderer^>(object);
+
+				unsigned int tint = renderer->color;
+
+				auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(tint));
+
+				float rawData[4] =
+				{
+					float4.x,
+					float4.y,
+					float4.z,
+					float4.w
+				};
+
+				ImGui::Text("Tint Editor: ");
+				ImGui::SameLine();
+				if (ImGui::ColorPicker4("###TINT_SETTER", rawData))
+				{
+					renderer->SetColor(ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3])));
+				}
+
+			}
+			break;
+
 			case ObjectType::ModelRenderer: // MODEL RENDERER
 			{
 				Engine::EngineObjects::ModelRenderer^ renderer = Cast::Dynamic<Engine::EngineObjects::ModelRenderer^>(object);
@@ -646,6 +702,15 @@ private:
 						OpenFileExplorer("Save File", Engine::Editor::Gui::explorerMode::Save, (gcnew Engine::Editor::Gui::onFileSelected(this, &EditorWindow::SaveEditorContents)));
 					}
 					ImGui::Separator();
+					if (ImGui::MenuItem("Exit"))
+					{
+						codeEditorOpen = false;
+					}
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Compiler"))
+				{
 					if (ImGui::BeginMenu("Lua Compiler"))
 					{
 						if (ImGui::MenuItem("Save Lua Bytecode"))
@@ -657,14 +722,9 @@ private:
 
 						ImGui::EndMenu();
 					}
-					ImGui::Separator();
-					if (ImGui::MenuItem("Exit"))
-					{
-						codeEditorOpen = false;
-					}
+
 					ImGui::EndMenu();
 				}
-
 
 				if (ImGui::BeginMenu("Language"))
 				{
@@ -963,6 +1023,7 @@ public:
 		SetTraceLogLevel(LOG_DEBUG);
 		SetWindowFlags(FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
+
 		gcnew Engine::Managers::SignalManager();
 
 		if (File::Exists("./Data/Keys/secrets.dat"))
@@ -1008,6 +1069,7 @@ public:
 			Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 			gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
 		}
+
 		LayerManager::RegisterDefaultLayers();
 
 		Preload();
@@ -1633,7 +1695,31 @@ public:
 
 			ImVec2 size = ImGui::GetWindowSize();
 
-			ImGui::BeginListBox("###ASSETS", { size.x - 20, size.y - 55 });
+			const char* constData[] = { "ALL", "MODELS", "TEXTURES", "AUDIO" };
+			ImGui::Text("Display assets: ");
+			ImGui::SameLine();
+			if (ImGui::Combo("###Display assets: ", &displayingAsset, constData, IM_ARRAYSIZE(constData)))
+			{
+				switch (displayingAsset)
+				{
+				case 0:
+					displayingAssets = assetDisplay::ALL;
+					break;
+				case 1:
+					displayingAssets = assetDisplay::MODELS;
+					break;
+				case 2:
+					displayingAssets = assetDisplay::TEXTURES;
+					break;
+				case 3:
+					displayingAssets = assetDisplay::AUDIO;
+					break;
+				}
+			}
+
+			ImGui::Separator();
+
+			ImGui::BeginListBox("###ASSETS", { size.x - 20, size.y - 82 });
 
 			createAssetEntries("./Data/");
 
@@ -2610,6 +2696,8 @@ public:
 		SetWindowFlags(config->windowFlags);
 		OpenWindow(config->resolution->w, config->resolution->h, config->getWindowName().c_str());
 
+		gcnew Engine::Managers::SignalManager();
+
 		if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
 		{
 			if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
@@ -2630,14 +2718,91 @@ public:
 		Loop();
 	}
 
-	virtual void Init() override
+private:
+	void create()
 	{
-		//Engine::Assets::Management::DataPack::SetSingletonReference(packedData);
+		LightManager^ lightManager = nullptr;
+
+		scene->GetDatamodelMember("workspace");
+
+		if (!scene->ExistsMember("lighting"))
+		{
+			lightManager = gcnew LightManager("lighting",
+				gcnew Engine::Internal::Components::Transform(
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					0.0f,
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					nullptr
+				),
+				"Data/Engine/Shaders/rPBR/pbr.vert",
+				"Data/Engine/Shaders/rPBR/pbr.frag"
+			);
+
+			lightManager->protectMember();
+
+			scene->PushToRenderQueue(lightManager);
+			scene->AddObjectToScene(lightManager);
+		}
+		else
+		{
+			lightManager = scene->GetMember("lighting")->ToObjectType<LightManager^>();
+			lightManager->protectMember();
+		}
+
+
+		scene->GetDatamodelMember("editor only");
+		scene->GetDatamodelMember("gui");
+		auto daemonParent = scene->GetDatamodelMember("daemons");
+
+		if (ObjectManager::singleton()->GetChildrenOf(daemonParent)->Count <= 0)
+		{
+			auto lightdm = gcnew Engine::EngineObjects::Daemons::LightDaemon("lightdm",
+				gcnew Engine::Internal::Components::Transform(
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					0.0f,
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					nullptr
+				),
+				lightManager
+			);
+			lightdm->SetParent(daemonParent);
+			scene->PushToRenderQueue(lightdm);
+			scene->AddObjectToScene(lightdm);
+		}
+
+		if (ObjectManager::singleton()->GetGameObjectsByName("EditorCamera")->Count <= 0)
+		{
+
+			auto camera3D = gcnew Engine::EngineObjects::Camera("EditorCamera",
+				gcnew Engine::Internal::Components::Transform(
+					Engine::Components::Vector3::create({ 0,0,0 }),
+					Engine::Components::Vector3::create({ 0,0,0 }),
+					0.0f,
+					Engine::Components::Vector3::create({ 1,1,1 }),
+					nullptr
+				),
+				CAMERA_PERSPECTIVE
+			);
+
+			scene->PushToRenderQueue(camera3D);
+			scene->PushToRenderQueue(camera3D);
+		}
 	}
 
-	virtual void Preload() override
+public:
+	void Init() override
 	{
-		scene = SceneManager::CreateScene("GoldEngineBoot");
+		//Engine::Assets::Management::DataPack::SetSingletonReference(packedData);
+		create();
+
+		Logging::LogCustom("[GL Version]:", "Current OpenGL version is -> " + rlGetVersion() + ".");
+	}
+
+	void Preload() override
+	{
+		//scene = SceneManager::CreateScene("GoldEngineBoot");
 
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
 		scene->LoadScene();
@@ -2649,8 +2814,23 @@ public:
 
 		packedData = scene->getSceneDataPack();
 
-		gcnew Scripting::ObjectManager(scene);
+		for each (EngineAssembly ^ assm in assemblies)
+		{
+			for each (Type ^ asmType in assm->getPreloadScripts())
+			{
+				try
+				{
+					asmType->GetMethod("Preload")->Invoke(nullptr, nullptr);
+				}
+				catch (Exception^ ex)
+				{
+					printError(ex->Message);
+					printError(ex->StackTrace);
+				}
+			}
+		}
 
+		gcnew Scripting::ObjectManager(scene);
 
 		Init();
 	}
@@ -2695,7 +2875,7 @@ public:
 
 		ClearBackground(RAYLIB::BLACK);
 
-		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
+		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
 
 		if (camera == nullptr)
 			return;

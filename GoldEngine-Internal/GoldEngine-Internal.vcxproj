@@ -257,6 +257,7 @@
     <ClInclude Include="Objects\MeshRenderer.h" />
     <ClInclude Include="Objects\ModelRenderer.h" />
     <ClInclude Include="Objects\PBRModelRenderer.h" />
+    <ClInclude Include="Objects\Pipeline\ScriptableRenderPipeline.hpp" />
     <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\Skybox.h" />
     <ClInclude Include="Object\Color.h" />
@@ -277,6 +278,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="ShaderManager.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="VoxelMatrix.h" />
     <ClInclude Include="VoxelTypedefs.h" />
     <ClInclude Include="Voxel.h" />

@@ -160,6 +160,7 @@ namespace Engine::Lua::VM
 			RegisterGlobal("ObjectManager", Engine::Scripting::ObjectManager::singleton());
 			RegisterGlobal("Input", Engine::Scripting::InputManager::typeid);
 			RegisterGlobal("KeyCode", Engine::Scripting::KeyCodes::typeid);
+			RegisterGlobal("SharedInstance", SharedInstance::typeid);
 		}
 
 	public:

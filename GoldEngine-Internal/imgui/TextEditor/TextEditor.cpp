@@ -3373,6 +3373,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"KeyCode",
 			"Input",
 			"Logging",
+			"SignalManager",
 			"Attribute",
 			"attributes",
 			"script"
@@ -3396,7 +3397,15 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"DrawImGUI",
 			"DrawGizmos",
 			"Update",
-			"PhysicsUpdate"
+			"PhysicsUpdate",
+			"CreateSignal",
+			"CreateIndexedSignal",
+			"RemoveSignal",
+			"GetIndexBySignal",
+			"GetSignalByIndex",
+			"UnregisterSignal",
+			"RegisterSignal",
+			"GetSignal"
 		};
 
 		for (auto& k : identifiers)

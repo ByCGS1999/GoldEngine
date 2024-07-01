@@ -248,6 +248,8 @@ namespace Engine::EngineObjects
 	public:
 		LightManager(String^ name, Engine::Internal::Components::Transform^ t, String^ vs, String^ fs) : Engine::EngineObjects::Script(name, t)
 		{
+			Singleton<LightManager^>::Create(this);
+
 			lightdm = this;
 			lightSources = gcnew System::Collections::Generic::List<Engine::EngineObjects::LightSource^>();
 			ambientColor = 0xFFFFFFFF;
