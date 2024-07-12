@@ -15,6 +15,7 @@ Release/
 ./GoldEngine-Internal/Binaries/*
 ./GoldEngine-Internal/x64/*
 ./GoldEngine-Internal/x64/**
+./GoldEngine-Internal/x64/*
 ./GoldEngine-Internal/Win32/*
 ./GoldEngine_Internal/Release/*
 ./GoldEngine_Editor/x64/*
@@ -24,4 +25,4 @@ Release/
 ./Build/**
 **/Build
 Build
-./GoldEngine-Internal/x64/
+./GoldEngine-Internal/x64/*

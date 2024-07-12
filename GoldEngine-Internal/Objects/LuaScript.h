@@ -40,7 +40,7 @@ namespace Engine::EngineObjects
 
 				virtualMachine->RegisterGlobal("script", this);
 				virtualMachine->RegisterGlobal("attributes", attributes);
-				virtualMachine->RegisterGlobal("SignalManager", Engine::Managers::SignalManager::Instance);
+				virtualMachine->RegisterGlobal("SignalManager", Singleton<Engine::Managers::SignalManager^>::Instance);
 				virtualMachine->RegisterGlobal("Globals", virtualMachine->GetGlobals());
 
 				virtualMachine->RegisterScript(luaSource);

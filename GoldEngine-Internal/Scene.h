@@ -12,6 +12,8 @@ using namespace Engine::Assets::Management;
 
 namespace Engine::Management
 {
+	public delegate void OnSceneLoaded();
+
 	public ref class Scene
 	{
 		// Privates
@@ -22,6 +24,7 @@ namespace Engine::Management
 		bool sceneFinishedLoading;
 		unsigned int password;
 		static Scene^ singleton;
+		event OnSceneLoaded^ onLoadedScene;
 
 		// Properties
 	public:
@@ -30,12 +33,11 @@ namespace Engine::Management
 		System::String^ sceneRequirements;
 		unsigned long skyColor;
 		System::Collections::Generic::List<System::String^>^ scene_assemblies;
-		System::Collections::Generic::List<System::String^>^ preload_scripts;
 		System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneObjects; // Managed storage + object parsing.
 
 		// Constructors
 	public:
-		Scene(String^ name, String^ sR, System::Collections::Generic::List<String^>^ assetP, System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneO, unsigned long skyTint, System::Collections::Generic::List<System::String^>^ assemblies, System::Collections::Generic::List<String^>^ preloadCode)
+		Scene(String^ name, String^ sR, System::Collections::Generic::List<String^>^ assetP, System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>^ sceneO, unsigned long skyTint, System::Collections::Generic::List<System::String^>^ assemblies)
 		{
 			Singleton<Scene^>::Create(this);
 
@@ -45,7 +47,6 @@ namespace Engine::Management
 			this->assetPacks = assetP;
 			this->sceneRequirements = sR;
 			this->sceneObjects = sceneO;
-			this->preload_scripts = preloadCode;
 			this->skyColor = skyTint;
 			scene_assemblies = assemblies;
 			this->sceneDatapack = gcnew DataPack(sceneRequirements);
@@ -96,10 +97,11 @@ namespace Engine::Management
 
 			sceneFinishedLoading = true;
 
-			if(Directory::Exists("Data/tmp/"))
-				Directory::Delete("Data/tmp/", true);
+			if(Directory::Exists("Data/unpacked/"))
+				Directory::Delete("Data/unpacked/", true);
 				
 			OnLoad();
+
 		}
 
 		void UnloadScene()
@@ -234,7 +236,10 @@ namespace Engine::Management
 					object,
 					""));
 
-				object->Start(); // call start method (otherwise by serialization it won't be called.)
+				if (!sceneFinishedLoading)
+					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::Object::Start);
+				else
+					object->Start();
 			}
 			l->release();
 		}
@@ -246,7 +251,10 @@ namespace Engine::Management
 			{
 				drawQueue->Add(object);
 
-				object->GetReference()->Start(); // call start method (otherwise by serialization it won't be called.)
+				if (!sceneFinishedLoading)
+					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::Object::Start);
+				else
+					object->GetReference()->Start(); // call start method (otherwise by serialization it won't be called.)
 			}
 			l->release();
 		}
@@ -282,6 +290,12 @@ namespace Engine::Management
 				Engine::Internal::Components::ObjectType::Datamodel, "", Engine::Scripting::LayerManager::GetLayerFromId(1));
 		}
 
+	public:
+		void HookSceneInit()
+		{
+			onLoadedScene();
+		}
+
 		// VMethods
 	public:
 		virtual void OnUnload()
@@ -292,6 +306,7 @@ namespace Engine::Management
 		{
 
 		}
+
 		virtual void Draw()
 		{
 
@@ -304,27 +319,34 @@ namespace Engine::Management
 		{
 
 		}
-		virtual void Preload()
+		virtual void Preload(List<EngineAssembly^>^ asms)
 		{
+			assemblies = asms;
+
 			for each (auto t in scene_assemblies)
 			{
 				auto newAssembly = gcnew EngineAssembly(t);
 				assemblies->Add(newAssembly);
 			}
 
-			/*
-			for each (auto p in preload_scripts)
+			for each (EngineAssembly ^ assm in assemblies)
 			{
-				for each (auto a in assemblies)
+				for each (Type ^ asmType in assm->getPreloadScripts())
 				{
-					if (a->hasType(p))
+					try
 					{
-						auto newInst = a->Create<Engine::Preload::PreloadScript^>(p);
-						newInst->Preload();
+						if (((String^)asmType->GetMethod("GetTarget")->Invoke(nullptr, nullptr))->Equals(this->sceneName))
+						{
+							asmType->GetMethod("Preload")->Invoke(nullptr, nullptr);
+						}
+					}
+					catch (Exception^ ex)
+					{
+						printError(ex->Message);
+						printError(ex->StackTrace);
 					}
 				}
 			}
-			*/
 
 			LoadScene();
 		}

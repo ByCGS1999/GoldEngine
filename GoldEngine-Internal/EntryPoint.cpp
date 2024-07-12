@@ -58,7 +58,9 @@ unsigned int passwd = 0;
 #include "Objects/LuaScript.h"
 
 #include "Objects/Pipeline/ScriptableRenderPipeline.hpp"
-#include "LightweightSRP.h"
+#include "RenderPipelines/LitPBR_SRP.h"
+#include "RenderPipelines/RaymarchSRP.h"
+#include "RenderPipelines/LightweightSRP.h"
 
 using namespace Engine;
 using namespace Engine::EngineObjects;
@@ -105,6 +107,7 @@ bool fileDialogOpen = false;
 int tmp1;
 char* password = new char[512];
 char* packDataFileName = new char[64];
+int positionSelector = 0;
 
 // error handling
 char* errorReason;
@@ -139,11 +142,10 @@ private:
 	int selectedObjectIndex;
 	Engine::Internal::Components::Object^ reparentObject;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
-	Scripting::ObjectManager^ objectManager;
 	Engine::Lua::VM::LuaVM^ luaVM;
 	Engine::Editor::Gui::fileExplorer^ fileExplorer = gcnew Engine::Editor::Gui::fileExplorer(std::string("File Explorer"));
 	System::Collections::Generic::List<String^>^ loadedAssets;
-	ScriptableRenderPipeline^ renderPipeline;
+	Engine::Render::ScriptableRenderPipeline^ renderPipeline;
 
 private:
 	void SaveEditorCode()
@@ -355,9 +357,9 @@ private:
 				}
 
 				float intensity = light->intensity;
-				ImGui::Text("Intensity:");
+				ImGui::Text("Radius:");
 				ImGui::SameLine();
-				if (ImGui::InputFloat("###LIGHT_INTENSITY", &intensity, 0.1f, 1.0f, "%.1f"))
+				if (ImGui::DragFloat("###LIGHT_INTENSITY", &intensity, 0.25f, 0.1f, float::MaxValue, "%.1f"))
 				{
 					light->intensity = intensity;
 				}
@@ -371,9 +373,10 @@ private:
 
 
 				float lightPower = light->lightPower;
-				ImGui::Text("Light Power:");
+				ImGui::Text("Light Intensity:");
 				ImGui::SameLine();
-				if (ImGui::InputFloat("###LIGHT_POWER", &lightPower, 100.0f, 1000.0f, "%.1f"))
+
+				if (ImGui::DragFloat("###LIGHT_POWER", &lightPower, 100.0f, float::MinValue, float::MaxValue, "%.1f"))
 				{
 					light->lightPower = lightPower;
 				}
@@ -386,7 +389,7 @@ private:
 
 					ImGui::Text("Target: ");
 					ImGui::SameLine();
-					if (ImGui::InputFloat2("###LIGHT_TARGET", nativeVector, "%.3f"))
+					if (ImGui::DragFloat2("###LIGHT_TARGET", nativeVector, 1.0f, float::MinValue, float::MaxValue, "%.3f"))
 					{
 						light->target = gcnew Engine::Components::Vector3(nativeVector[0], nativeVector[1], nativeVector[2]);
 					}
@@ -397,7 +400,7 @@ private:
 					float cutoff = light->cutoff;
 					ImGui::Text("Cutoff:");
 					ImGui::SameLine();
-					if (ImGui::InputFloat("###LIGHT_CUTOFF", &cutoff, 0.1f, 1.0f, "%.1f"))
+					if (ImGui::DragFloat("###LIGHT_CUTOFF", &cutoff, 0.5f, 0.1f, float::MaxValue, "%.1f"))
 					{
 						light->cutoff = cutoff;
 					}
@@ -406,7 +409,7 @@ private:
 					float outercutoff = light->outerCutoff;
 					ImGui::Text("Outer Cutoff:");
 					ImGui::SameLine();
-					if (ImGui::InputFloat("###LIGHT_OUTERCUTOFF", &outercutoff, 0.1f, 1.0f, "%.1f"))
+					if (ImGui::DragFloat("###LIGHT_OUTERCUTOFF", &outercutoff, 0.5f, 0.1f, float::MaxValue, "%.1f"))
 					{
 						light->outerCutoff = outercutoff;
 					}
@@ -944,8 +947,8 @@ end
 		if (scene->sceneLoaded())
 		{
 			Engine::Internal::Components::Object^ modelRenderer = (Engine::Internal::Components::Object^)object;
-			modelRenderer->Draw();
-			modelRenderer->DrawGizmo();
+			modelRenderer->GameDraw();
+			modelRenderer->GameDrawGizmos();
 		}
 	}
 
@@ -1006,8 +1009,15 @@ public:
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
 
-		assemblies->Add(gcnew EngineAssembly("Bin/Asm/GoldEngine_ScriptAssembly.dll"));
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
+
+		for each (String^ fileName in Directory::GetFiles("Bin/Asm/"))
+		{
+			if (fileName->Contains(".goldasm") || fileName->Contains(".dll"))
+			{
+				assemblies->Add(gcnew EngineAssembly(fileName));
+			}
+		}
 
 		SceneManager::SetAssemblyManager(assemblies);
 
@@ -1205,6 +1215,29 @@ public:
 				{
 
 				}
+				ImGui::SeparatorText("Render Pipelines");
+				
+				if (ImGui::BeginMenu("Pipelines"))
+				{
+					for each (EngineAssembly^ assembly in assemblies)
+					{
+						auto types = assembly->GetTypesOf(Engine::Render::ScriptableRenderPipeline::typeid);
+
+						for each (System::Type ^ pipeline in types)
+						{
+							if (ImGui::MenuItem(CastStringToNative(pipeline->Name).c_str()))
+							{
+								if (renderPipeline != nullptr)
+									renderPipeline->OnUnloadPipeline();
+
+								renderPipeline = (Engine::Render::ScriptableRenderPipeline^)assembly->CreateSimple(pipeline);
+							}
+						}
+					}
+
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenu();
 			}
 
@@ -1618,16 +1651,36 @@ public:
 				ImGui::SeparatorText("Transform");
 
 				{
-					// position
-					float pos[3] = {
-						selectedObject->GetTransform()->position->x,
-						selectedObject->GetTransform()->position->y,
-						selectedObject->GetTransform()->position->z
-					};
+					const char* opts[2] = { "World", "Local" };
 
-					if (ImGui::DragFloat3("Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+					ImGui::Combo("###POSITION_SELECTOR", &positionSelector, opts, IM_ARRAYSIZE(opts));
+					if (positionSelector == 0)
 					{
-						selectedObject->GetTransform()->position = gcnew Engine::Components::Vector3(pos[0], pos[1], pos[2]);
+						// position
+						float pos[3] = {
+							selectedObject->GetTransform()->position->x,
+							selectedObject->GetTransform()->position->y,
+							selectedObject->GetTransform()->position->z
+						};
+
+						if (ImGui::DragFloat3("Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+						{
+							selectedObject->GetTransform()->position = gcnew Engine::Components::Vector3(pos[0], pos[1], pos[2]);
+						}
+					}
+					else
+					{
+						// local position
+						float pos[3] = {
+							selectedObject->GetTransform()->localPosition->x,
+							selectedObject->GetTransform()->localPosition->y,
+							selectedObject->GetTransform()->localPosition->z
+						};
+
+						if (ImGui::DragFloat3("Local Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
+						{
+							selectedObject->GetTransform()->UpdateLocalPosition(gcnew Engine::Components::Vector3(pos[0], pos[1], pos[2]));
+						}
 					}
 
 					// rotation
@@ -2297,7 +2350,7 @@ public:
 			{
 				SceneManager::UnloadScene(scene);
 				scene = SceneManager::LoadSceneFromFile(gcnew System::String(fileName), scene, passwd);
-				scene->LoadScene();
+				//scene->LoadScene();
 				create();
 				ImGui::CloseCurrentPopup();
 				b3 = false;
@@ -2367,9 +2420,12 @@ public:
 		exit(0);
 	}
 
-	void render(int currentLayer)
+	void render(int currentLayer) override
 	{
 		ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
+
+		if (renderPipeline != nullptr)
+			renderPipeline->PreRenderObjects();
 
 		while (currentLayer != LayerManager::getHigherLayer())
 		{
@@ -2387,7 +2443,7 @@ public:
 					if (reference->layerMask = cL)
 					{
 						if (renderPipeline != nullptr)
-							renderPipeline->PreRenderObject();
+							renderPipeline->PreRenderObject(reference);
 
 						reference->Draw();
 						reference->DrawGizmo();
@@ -2405,18 +2461,29 @@ public:
 			else
 				break;
 		}
+
+		if (renderPipeline != nullptr)
+			renderPipeline->PostRenderObjects();
 	}
 
 	void Draw() override
 	{
+		if (renderPipeline != nullptr)
+		{
+			renderPipeline->PreFirstPassRender(this);
+		}
+
 		BeginDrawing();
 		{
-			if(renderPipeline != nullptr)
-				renderPipeline->PreRenderFrame();
-
 			BeginTextureMode(viewportTexture);
 
+			if (renderPipeline != nullptr)
+				renderPipeline->OnRenderBegin();
+
 			ClearBackground(GetColor(scene->skyColor));
+
+			if (renderPipeline != nullptr)
+				renderPipeline->PreRenderFrame();
 
 			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
 
@@ -2430,6 +2497,9 @@ public:
 			render(currentLayer);
 
 			EndMode3D();
+
+			if (renderPipeline != nullptr)
+				renderPipeline->OnRenderEnd();
 
 			DrawFPS(0, 0);
 
@@ -2451,7 +2521,7 @@ public:
 				{
 					if (obj->GetReference() != nullptr)
 					{
-						obj->GetReference()->DrawImGUI();
+						obj->GetReference()->GameDrawImGUI();
 					}
 				}
 			}
@@ -2460,10 +2530,11 @@ public:
 
 			rlImGuiEnd();
 
-			if (renderPipeline != nullptr)
-				renderPipeline->PostRenderFrame();
 		}
 		EndDrawing();
+
+		if (renderPipeline != nullptr)
+			renderPipeline->PostRenderFrame();
 	}
 
 private:
@@ -2545,8 +2616,6 @@ public:
 
 		cameraPosition = gcnew Engine::Components::Vector3(0, 0, 0);
 
-		objectManager = gcnew Scripting::ObjectManager(scene);
-
 		while (!scene->sceneLoaded())
 			WaitTime(1.0);
 
@@ -2567,6 +2636,8 @@ public:
 		SetExitKey(KEY_NULL);
 		viewportTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 
+		renderPipeline = gcnew Engine::Render::Pipelines::LitPBR_SRP();
+
 		//scene = SceneManager::CreateScene("GoldEngineBoot");
 
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
@@ -2577,22 +2648,6 @@ public:
 		}
 
 		packedData = scene->getSceneDataPack();
-
-		for each (EngineAssembly ^ assm in assemblies)
-		{
-			for each (Type ^ asmType in assm->getPreloadScripts())
-			{
-				try
-				{
-					asmType->GetMethod("Preload")->Invoke(nullptr, nullptr);
-				}
-				catch (Exception^ ex)
-				{
-					printError(ex->Message);
-					printError(ex->StackTrace);
-				}
-			}
-		}
 
 		// initialize editor assets
 
@@ -2655,7 +2710,7 @@ public:
 		{
 			if (obj->GetReference() != nullptr)
 			{
-				obj->GetReference()->Update();
+				obj->GetReference()->GameUpdate();
 			}
 		}
 
@@ -2694,8 +2749,15 @@ public:
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
 
-		assemblies->Add(gcnew EngineAssembly("Bin/Asm/GoldEngine_ScriptAssembly.dll"));
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
+
+		for each (String ^ fileName in Directory::GetFiles("Bin/Asm/"))
+		{
+			if (fileName->Contains(".goldasm") || fileName->Contains(".dll"))
+			{
+				assemblies->Add(gcnew EngineAssembly(fileName));
+			}
+		}
 
 		SceneManager::SetAssemblyManager(assemblies);
 
@@ -2816,8 +2878,6 @@ private:
 public:
 	void Init() override
 	{
-		gcnew Scripting::ObjectManager(scene);
-
 		while (!scene->sceneLoaded())
 			WaitTime(1.0);
 
@@ -2832,7 +2892,7 @@ public:
 		//scene = SceneManager::CreateScene("GoldEngineBoot");
 
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
-		scene->LoadScene();
+		//scene->LoadScene();
 
 		while (!scene->sceneLoaded())
 		{
@@ -2840,22 +2900,6 @@ public:
 		}
 
 		packedData = scene->getSceneDataPack();
-
-		for each (EngineAssembly ^ assm in assemblies)
-		{
-			for each (Type ^ asmType in assm->getPreloadScripts())
-			{
-				try
-				{
-					asmType->GetMethod("Preload")->Invoke(nullptr, nullptr);
-				}
-				catch (Exception^ ex)
-				{
-					printError(ex->Message);
-					printError(ex->StackTrace);
-				}
-			}
-		}
 
 		Init();
 	}
@@ -2875,9 +2919,12 @@ public:
 		ImGui::DockSpaceOverViewport(viewPort, ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
 	}
 
-	void render(int currentLayer)
+	void render(int currentLayer) override
 	{
 		ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
+
+		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
+			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreRenderObjects();
 
 		while (currentLayer != LayerManager::getHigherLayer())
 		{
@@ -2894,8 +2941,13 @@ public:
 
 					if (reference->layerMask = cL)
 					{
-						reference->Draw();
-						reference->DrawGizmo();
+						if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
+							Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreRenderObject(reference);
+
+						reference->GameDraw();
+
+						if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
+							Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PostRenderObject();
 					}
 				}
 			}
@@ -2907,28 +2959,47 @@ public:
 			else
 				break;
 		}
+
+		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
+			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PostRenderObjects();
 	}
 
 	virtual void Draw() override
 	{
+		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
+			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreFirstPassRender(this);
+
 		BeginDrawing();
 		{
-			ClearBackground(RAYLIB::BLACK);
+			if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
+				Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreRenderFrame();
 
-			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
+			ClearBackground(GetColor(scene->skyColor));
+
+			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
 
 			if (camera == nullptr)
 				return;
 
 			BeginMode3D((RAYLIB::Camera3D)*camera->get());
 
-			int currentLayer = 0;
+			int currentLayer = 1;
 
 			render(currentLayer);
 
 			EndMode3D();
 
+			DrawFPS(0, 0);
+
 			rlImGuiBegin();
+
+			ImGui::Begin("DemoVer", (bool*)true, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking);
+			{
+				ImGui::SetWindowSize(ImVec2(285, 20), 0);
+				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight() - 25), 0);
+				ImGui::TextColored(ImVec4(255, 255, 255, 255), ENGINE_VERSION);
+				ImGui::End();
+			}
 
 			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 			{
@@ -2936,7 +3007,7 @@ public:
 				{
 					if (obj->GetReference() != nullptr)
 					{
-						obj->GetReference()->DrawImGUI();
+						obj->GetReference()->GameDrawImGUI();
 					}
 				}
 			}
@@ -2944,16 +3015,19 @@ public:
 			DrawImGui();
 
 			rlImGuiEnd();
-		}
 
+		}
 		EndDrawing();
+
+		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
+			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PostRenderFrame();
 	}
 
 	virtual void Update() override
 	{
 		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 		{
-			obj->GetReference()->Update();
+			obj->GetReference()->GameUpdate();
 		}
 	}
 

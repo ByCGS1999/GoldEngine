@@ -88,6 +88,11 @@ namespace Engine::Signals
 			bindedSignal = signal;
 		}
 
+		void Bind(System::Delegate^ signal)
+		{
+			bindedSignal = signal;
+		}
+
 		generic <typename T>
 		void Bind(SignalWithArg<T>^ signal)
 		{
@@ -129,6 +134,11 @@ namespace Engine::Signals
 			}
 		}
 
+		void SetInvoker(System::Object^ invoker)
+		{
+			this->invoker = invoker;
+		}
+
 		// call fucntions (to call the binded signals)
 		System::Object^ Call() 
 		{
@@ -168,7 +178,7 @@ namespace Engine::Signals
 namespace Engine::Managers
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	ref class SignalManager
+	public ref class SignalManager
 	{
 	private:
 		System::Collections::Generic::List<System::Object^>^ signals;
@@ -179,7 +189,7 @@ namespace Engine::Managers
 		{
 			signalMap = gcnew System::Collections::Generic::Dictionary<String^, Engine::Signals::ManagedSignal^>();
 			signals = gcnew System::Collections::Generic::List<System::Object^>();
-			Instance = this;
+			Singleton<SignalManager^>::Create(this);
 		}
 
 	public:
@@ -239,11 +249,9 @@ namespace Engine::Managers
 		{
 			int newIndex = signals->Count;
 			auto signal = gcnew Engine::Signals::ManagedSignal(this);
-			signals->Insert(newIndex-1, signal);
+			signals->Insert(newIndex, signal);
 
 			return System::Tuple::Create<Engine::Signals::ManagedSignal^, int>(signal, newIndex);
 		}
-
-		static SignalManager^ Instance;
 	};
 }

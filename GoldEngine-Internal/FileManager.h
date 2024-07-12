@@ -54,10 +54,10 @@ namespace Engine::Assets::IO
 					auto deflateStream = gcnew Compression::DeflateStream(file, Compression::CompressionMode::Decompress);
 					stream = gcnew BinaryReader(deflateStream);
 
-					if(!Directory::Exists("Data/tmp/"))
-						Directory::CreateDirectory("Data/tmp/");
+					if(!Directory::Exists("Data/unpacked/"))
+						Directory::CreateDirectory("Data/unpacked/");
 
-					WinAPI::SetAttribute("Data/tmp/", 1);
+					WinAPI::SetAttribute("Data/unpacked/", 1);
 					int assets = stream->ReadInt32();
 
 					for (int x = 0; x < assets; x++)
@@ -65,8 +65,8 @@ namespace Engine::Assets::IO
 						String^ fN = stream->ReadString();
 						unsigned long length = stream->ReadInt32();
 						auto fC = stream->ReadBytes(length);
-						Directory::CreateDirectory(Path::GetDirectoryName("Data/tmp/" + fN));
-						auto fS = File::Open("Data/tmp/" + fN, FileMode::OpenOrCreate);
+						Directory::CreateDirectory(Path::GetDirectoryName("Data/unpacked/" + fN));
+						auto fS = File::Open("Data/unpacked/" + fN, FileMode::OpenOrCreate);
 						auto bW = gcnew BinaryWriter(fS);
 						bW->Flush();
 						bW->Write(

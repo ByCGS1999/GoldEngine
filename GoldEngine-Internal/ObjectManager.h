@@ -47,6 +47,8 @@ namespace Engine::Scripting
 				this->sceneObjects = this->loadedScene->GetRenderQueue();
 			}
 
+			Singleton<ObjectManager^>::Create(this);
+
 			self = this;
 		}
 
@@ -189,6 +191,22 @@ namespace Engine::Scripting
 				if (t->objectType == type)
 				{
 					objects->Add(t->GetReference());
+				}
+			}
+
+			return objects;
+		}
+
+		generic <class T>
+		List<T>^ GetObjectsOfType()
+		{
+			auto objects = gcnew List<T>();
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if (t->GetType() == T::typeid)
+				{
+					objects->Add(t->GetReference()->ToObjectType<T>());
 				}
 			}
 

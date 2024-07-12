@@ -75,6 +75,12 @@ namespace Engine::Internal::Components
 			}
 		}
 
+	public:
+		void UpdateLocalPosition(Engine::Components::Vector3^ newLocalPosition)
+		{
+			position = localPosition - newLocalPosition;
+		}
+
 		Object^ getGameObject()
 		{
 			return this->gameObject;
@@ -145,6 +151,15 @@ namespace Engine::Internal::Components
 			delete tag;
 		}
 
+		void UpdateLocalPosition()
+		{
+			if (transform->parent != nullptr)
+			{
+				Engine::Components::Vector3^ diff = (transform->parent->position - transform->position);
+				transform->localPosition = transform->position+diff;
+			}
+		}
+
 	public:
 		// vmethods
 		// init functions (used by reflector & scene loader).
@@ -156,10 +171,37 @@ namespace Engine::Internal::Components
 		// object methods
 		virtual void Start() {}
 		virtual void PhysicsUpdate() {}
-		virtual void Update() {}
+		virtual void Update() { }
 		virtual void Draw() {}
 		virtual void DrawGizmo() {}
 		virtual void DrawImGUI() {}
+
+		// engine methods
+
+	public:
+		void GameUpdate()
+		{
+			UpdateLocalPosition();
+			Update();
+		}
+
+	public:
+		void GameDraw()
+		{
+			Draw();
+		}
+
+	public:
+		void GameDrawGizmos()
+		{
+			DrawGizmo();
+		}
+
+	public:
+		void GameDrawImGUI()
+		{
+			DrawImGUI();
+		}
 
 		// defined
 	public:

@@ -63,6 +63,28 @@ public:
 	}
 
 public:
+	System::Collections::Generic::List<System::Type^>^ GetTypesOf(System::Type^ parentType)
+	{
+		System::Collections::Generic::List<System::Type^>^ types = gcnew System::Collections::Generic::List<System::Type^>();
+
+		if (loadedAssembly != nullptr)
+		{
+			for each (Type ^ t in loadedAssembly->GetTypes())
+			{
+				if (!t->Namespace->IsNullOrEmpty(t->Namespace))
+				{
+					if (t->IsSubclassOf(parentType))
+					{
+						types->Add(t);
+					}
+				}
+			}
+		}
+
+		return types;
+	}
+
+public:
 	System::Collections::Generic::List<System::Type^>^ GetAssemblyTypes()
 	{
 		System::Collections::Generic::List<System::Type^>^ types = gcnew System::Collections::Generic::List<System::Type^>();
@@ -193,6 +215,17 @@ public:
 		}
 
 		return types;
+	}
+
+	auto CreateSimple(Type^ targetType)
+	{
+		if (loadedAssembly != nullptr)
+		{
+			auto params = gcnew System::Collections::Generic::List<System::Object^>();
+
+			if (targetType != nullptr)
+				return System::Convert::ChangeType(System::Activator::CreateInstance(targetType, params->ToArray()), targetType);
+		}
 	}
 
 	auto Create(Type^ targetType, String^ str)

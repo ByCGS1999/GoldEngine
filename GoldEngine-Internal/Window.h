@@ -24,6 +24,9 @@ namespace Engine
 	public:
 		bool FirstTimeBoot()
 		{
+			HarmonyLib::Harmony^ harmony = gcnew HarmonyLib::Harmony("HarmonyInstance");
+			Singleton<HarmonyLib::Harmony^>::Create(harmony);
+
 			return !System::IO::File::Exists("./Data/UserData/firstInit.asset");
 		}
 
@@ -87,6 +90,8 @@ namespace Engine
 			CloseAudioDevice();
 			CloseWindow();
 		}
+
+		virtual void render(int currentLayer) {}
 
 		// vmethods
 		virtual void Preload() { } // loading assets

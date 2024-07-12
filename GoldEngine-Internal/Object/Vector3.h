@@ -86,5 +86,27 @@ namespace Engine::Components
 		{
 			return ((this->x == value->x) && (this->y == value->y) && (this->z == value->z));
 		}
+
+
+		Engine::Components::Vector3^ operator+(Vector3^ other)
+		{
+			return Vector3::add(this, other);
+		}
+
+		Engine::Components::Vector3^ operator-(Vector3^ other)
+		{
+			return Vector3::sub(this, other);
+		}
+
+		Engine::Components::Vector3^ operator*(Vector3^ other)
+		{
+			return Vector3::multiply(this, other);
+		}
+
+		Engine::Components::Vector3^ operator/(Vector3^ other)
+		{
+			return Vector3::divide(this, other);
+		}
 	};
+
 }

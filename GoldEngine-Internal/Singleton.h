@@ -8,6 +8,9 @@ public:
 public:
 	static void Create(T inst)
 	{
+		if (Singleton<T>::Instantiated)
+			Singleton<T>::Release();
+
 		Instance = inst;
 		Instantiated = true;
 	}
@@ -44,7 +47,7 @@ public:
 };
 
 [MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-public ref class SharedInstance 
+public ref class SharedInstance
 {
 public:
 	System::Object^ Instance;
@@ -75,7 +78,13 @@ public:
 public:
 	static System::Object^ Get(System::String^ name)
 	{
-		return Instances[name];
+		return Instances[name]->Instance;
+	}
+
+	generic <typename T>
+	static T Get(System::String^ name)
+	{
+		return safe_cast<T>(Instances[name]->Instance);
 	}
 
 public:

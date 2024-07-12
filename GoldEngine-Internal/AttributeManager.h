@@ -14,23 +14,23 @@ namespace Engine::Scripting
 			attributes = gcnew List<Attribute^>();
 		}
 
-	private:
 		bool hasAttribute(String^ attribute)
 		{
 			for each (Attribute ^ attrib in attributes)
 			{
-				if (attrib->name == attribute)
+				if (attrib != nullptr && attrib->name == attribute)
 					return true;
 			}
 
 			return false;
 		}
 
+	private:
 		Attribute^ GetAttribute(String^ attribute)
 		{
 			for each (Attribute ^ attrib in attributes)
 			{
-				if (attrib->name == attribute)
+				if (attrib != nullptr && attrib->name == attribute)
 					return attrib;
 			}
 

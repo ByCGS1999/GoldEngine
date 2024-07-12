@@ -110,7 +110,11 @@ namespace Engine::EngineObjects
 
 		}
 
-		void Update() override {}
+		void Update() override 
+		{
+
+		}
+
 		void PhysicsUpdate() override {}
 		void Start() override {}
 

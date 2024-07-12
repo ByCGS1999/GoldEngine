@@ -10,5 +10,6 @@ namespace Engine::Preload
 	{
 	public:
 		static void Preload() {}
+		static String^ GetTarget() { return ""; }
 	};
 }
