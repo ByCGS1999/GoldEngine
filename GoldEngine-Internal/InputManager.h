@@ -3,6 +3,19 @@
 namespace Engine::Scripting
 {
     [MoonSharp::Interpreter::MoonSharpUserDataAttribute]
+    public ref class MouseButtons
+    {
+    public:
+        static int const MOUSE_BUTTON_LEFT = 0;
+        static int const MOUSE_BUTTON_RIGHT = 1;
+        static int const MOUSE_BUTTON_MIDDLE = 2;
+        static int const MOUSE_BUTTON_SIDE = 3;
+        static int const MOUSE_BUTTON_EXTRA = 4;
+        static int const MOUSE_BUTTON_FORWARD = 5;
+        static int const MOUSE_BUTTON_BACK = 6;
+    };
+
+    [MoonSharp::Interpreter::MoonSharpUserDataAttribute]
     public ref class KeyCodes
     {
     public:
@@ -147,39 +160,54 @@ namespace Engine::Scripting
 			return ::IsKeyPressedRepeat(key_id);
 		}
 
+        static bool IsMouseButtonUp(int button_press)
+        {
+            return ::IsMouseButtonUp(button_press);
+        }
+
+        static bool IsMouseButtonDown(int button_press)
+        {
+            return ::IsMouseButtonDown(button_press);
+        }
+
+        static bool IsMouseButtonPressed(int button_press)
+        {
+            return ::IsMouseButtonPressed(button_press);
+        }
+
 		static Engine::Components::Vector2^ GetMousePosition()
 		{
 			return gcnew Engine::Components::Vector2(GetMousePosition()->x, GetMousePosition()->y);
 		}
 
-		static bool MouseButton1Up()
+		static bool IsMouseButton1Up()
 		{
-			return IsMouseButtonUp(MOUSE_BUTTON_LEFT);
+			return ::IsMouseButtonUp(MOUSE_BUTTON_LEFT);
 		}
 
-		static bool MouseButton2Up()
+		static bool IsMouseButton2Up()
 		{
-			return IsMouseButtonUp(MOUSE_BUTTON_RIGHT);
+			return ::IsMouseButtonUp(MOUSE_BUTTON_RIGHT);
 		}
 
-		static bool MouseButton1Down()
+		static bool IsMouseButton1Down()
 		{
-			return IsMouseButtonDown(MOUSE_BUTTON_LEFT);
+			return ::IsMouseButtonDown(MOUSE_BUTTON_LEFT);
 		}
 
-		static bool MouseButton2Down()
+		static bool IsMouseButton2Down()
 		{
-			return IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
+			return ::IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
 		}
 
-		static bool MouseButton1Pressed()
+		static bool IsMouseButton1Pressed()
 		{
-			return IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+			return ::IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 		}
 
-		static bool MouseButton2Pressed()
+		static bool IsMouseButton2Pressed()
 		{
-			return IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
+			return ::IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
 		}
 	};
 }

@@ -1333,9 +1333,96 @@ public:
 
 				if (ImGui::BeginMenu("Lighting"))
 				{
-					if (ImGui::MenuItem("LightSource"))
+					if (ImGui::MenuItem("Point Light"))
 					{
+						auto meshRenderer = gcnew Engine::EngineObjects::LightSource(
+							"Point Light",
+							gcnew Engine::Internal::Components::Transform(
+								gcnew Engine::Components::Vector3(0, 0, 0),
+								gcnew Engine::Components::Vector3(0, 0, 0),
+								0.0f,
+								gcnew Engine::Components::Vector3(1, 1, 1),
+								nullptr
+							),
+							0xFF0000FF,
+							rPBR::LightType::LIGHT_POINT,
+							gcnew Engine::Components::Vector3(1.0f, 1.0f, 1.0f),
+							1.0f,
+							1
+						);
+						meshRenderer->SetParent(lightManager);
+						lightManager->AddLight(meshRenderer, 1);
+						scene->AddObjectToScene(meshRenderer);
+						scene->PushToRenderQueue(meshRenderer);
+					}
 
+					if (ImGui::MenuItem("Dirrectional Light"))
+					{
+						auto meshRenderer = gcnew Engine::EngineObjects::LightSource(
+							"Directional Light",
+							gcnew Engine::Internal::Components::Transform(
+								gcnew Engine::Components::Vector3(0, 0, 0),
+								gcnew Engine::Components::Vector3(0, 0, 0),
+								0.0f,
+								gcnew Engine::Components::Vector3(1, 1, 1),
+								nullptr
+							),
+							0xFF0000FF,
+							rPBR::LightType::LIGHT_DIRECTIONAL,
+							gcnew Engine::Components::Vector3(1.0f, 1.0f, 1.0f),
+							1.0f,
+							1
+						);
+						meshRenderer->SetParent(lightManager);
+						lightManager->AddLight(meshRenderer, 1);
+						scene->AddObjectToScene(meshRenderer);
+						scene->PushToRenderQueue(meshRenderer);
+					}
+
+					if (ImGui::MenuItem("Spot Light"))
+					{
+						auto meshRenderer = gcnew Engine::EngineObjects::LightSource(
+							"Spot Light",
+							gcnew Engine::Internal::Components::Transform(
+								gcnew Engine::Components::Vector3(0, 0, 0),
+								gcnew Engine::Components::Vector3(0, 0, 0),
+								0.0f,
+								gcnew Engine::Components::Vector3(1, 1, 1),
+								nullptr
+							),
+							0xFF0000FF,
+							rPBR::LightType::LIGHT_SPOT,
+							gcnew Engine::Components::Vector3(1.0f, 1.0f, 1.0f),
+							1.0f,
+							1
+						);
+						meshRenderer->SetParent(lightManager);
+						lightManager->AddLight(meshRenderer, 1);
+						scene->AddObjectToScene(meshRenderer);
+						scene->PushToRenderQueue(meshRenderer);
+					}
+
+					ImGui::EndMenu();
+				}
+
+				ImGui::Separator();
+
+				if (ImGui::BeginMenu("User Scripts"))
+				{
+					for each (auto assembly in assemblies)
+					{
+						if (!assembly->getLoadedAssembly()->Equals(System::Reflection::Assembly::GetExecutingAssembly()))
+						{
+							for each (auto T in assembly->GetAssemblyTypes())
+							{
+								if (ImGui::MenuItem(CastToNative(T->Name)))
+								{
+									Engine::EngineObjects::Script^ retn = assembly->Create<Engine::EngineObjects::Script^>(T->FullName);
+									scene->PushToRenderQueue(retn);
+									scene->AddObjectToScene(retn);
+								}
+							}
+						}
 					}
 
 					ImGui::EndMenu();
@@ -2033,14 +2120,16 @@ public:
 			{
 				for each (auto assembly in assemblies)
 				{
-					for each (auto T in assembly->GetAssemblyTypes())
+					if (!assembly->getLoadedAssembly()->Equals(System::Reflection::Assembly::GetExecutingAssembly()))
 					{
-						if (ImGui::Button(CastToNative(T->Name)))
+						for each (auto T in assembly->GetAssemblyTypes())
 						{
-							Engine::EngineObjects::Script^ retn = assembly->Create<Engine::EngineObjects::Script^>(T->FullName);
-							scene->PushToRenderQueue(retn);
-							scene->AddObjectToScene(retn);
-							//WinAPI::MBOX((void*)GetWindowHandle(), "NOT IMPLEMENTED YET", "Gold Editor", 0x00000040L | 0x00000000L);
+							if (ImGui::Button(CastToNative(T->Name)))
+							{
+								Engine::EngineObjects::Script^ retn = assembly->Create<Engine::EngineObjects::Script^>(T->FullName);
+								scene->PushToRenderQueue(retn);
+								scene->AddObjectToScene(retn);
+							}
 						}
 					}
 				}

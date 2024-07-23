@@ -66,13 +66,12 @@ public:
 	{
 		if (!Instances->ContainsKey(name))
 		{
-
+			Instances->Add(name, gcnew SharedInstance(i));
 		}
 		else
 		{
 			Instances[name]->Instance = i;
 		}
-		Instances->Add(name, gcnew SharedInstance(i));
 	}
 
 public:

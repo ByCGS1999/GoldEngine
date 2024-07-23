@@ -130,7 +130,7 @@ vec3 ComputePBR()
         }
         else if(lights[i].type == LIGHT_DIRECTIONAL)
         {
-            L = -normalize(lights[i].target - lights[i].position);
+            L = normalize(lights[i].position - lights[i].target);
         }
         else if(lights[i].type == LIGHT_SPOT)
         {

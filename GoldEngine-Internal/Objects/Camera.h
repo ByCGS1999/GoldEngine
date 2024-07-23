@@ -40,6 +40,12 @@ namespace Engine::EngineObjects
 			{
 				camera->position = nativeVector;
 			}
+			
+		public:
+			void setCameraTarget(RAYLIB::Vector3 nativeVector)
+			{
+				camera->target = nativeVector;
+			}
 
 		};
 	}
@@ -69,6 +75,11 @@ namespace Engine::EngineObjects
 			{
 				isMainCamera = attributes->getAttribute("IsMainCamera")->getValue<bool>();
 			}
+		}
+
+		void SetCameraTarget(Engine::Components::Vector3^ target)
+		{
+			nativeCamera->setCameraTarget(target->toNative());
 		}
 
 		void Update() override
