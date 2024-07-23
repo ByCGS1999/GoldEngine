@@ -30,3 +30,5 @@ Build
 ./Utils/WineBootstrap/WineBootstrapper/Release/
 ./Utils/WineBootstrap/WineBootstrapper/Debug/
 ./Utils/WineBootstrap/WineBootstrapper/.vs/
+/Utils/WineBootstrap/bin/bootstrapper
+/Utils/WineBootstrap/WineBootstrapper/.vs/WineBootstrapper/v17
