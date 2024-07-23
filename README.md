@@ -25,15 +25,16 @@ Features:</br>
 Requirements:</br>
   C++ MSCLR.</br>
   VS2022 or higher. (2019 might work aswell)</br>
-  .NET Framework 4.8. (4.7.2 might work aswell)</br>
+  .NET Framework 4.8. (version can be tweaked)</br>
   A brain. (NOT OPTIONAL)</br>
 
 Supported Platforms:</br>
     Windows [x]</br>
-    Linux [] - not tested, probably would work fine with wine64.</br>
+    Linux [X] - Tested with wine32 and a x86 copy of the engine. (Bootstrapper in development.) </br>
     MacOS [] ^ same</br>
     Android [] - if you want to make a game for android with this you must be drunk or smth tbh.</br>
 
 About Projects:</br>
     GoldEngine-Internal -> Entire game engine, from window management to low level asset management.</br>
     GoldEngine-Editor -> Example of scripts using the Scripting API. (Docs might come soon, idk.)</br>
+    Util/WineBootstrap -> Tool that manages and automates wine bootstrapping and installation.

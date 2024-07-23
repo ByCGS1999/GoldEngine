@@ -1,28 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Archivos de origen">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Archivos de encabezado">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine">
-      <UniqueIdentifier>{567555c0-9e92-49a1-994e-c8bdb8b75e4a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Marshaller">
-      <UniqueIdentifier>{84639636-2dd0-4fda-95a1-d80dc406fbbe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{e2134739-ab52-4e6d-8f9a-b334b34c6107}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\ObjectManagement">
-      <UniqueIdentifier>{734d2dff-1260-4726-b83d-00d76a1f3524}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\HLAPI">
-      <UniqueIdentifier>{9b437e7d-5295-4f14-bd28-6d61f0a38f22}</UniqueIdentifier>
     </Filter>
     <Filter Include="Data">
       <UniqueIdentifier>{e7126ab7-7b3f-4014-b94d-ded0fd000284}</UniqueIdentifier>
@@ -36,93 +16,14 @@
     <Filter Include="Data\Engine\Shaders">
       <UniqueIdentifier>{8fa2b00a-7351-4f12-8cfb-b1d2607511e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\ObjectManagement\Cameras">
-      <UniqueIdentifier>{a3fa7e6a-969f-4537-a4b6-1cfe482a567c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data\Engine\Skybox">
       <UniqueIdentifier>{1070ff0d-9188-4b99-b659-0ea96259eefa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\ObjectManagement\Materials">
-      <UniqueIdentifier>{badbfa6e-2c37-4397-86b4-e6ba2a95b259}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Object">
-      <UniqueIdentifier>{f2217650-8e69-4976-9732-9887b5cf1e03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Management">
-      <UniqueIdentifier>{bb63e44a-1dbe-4beb-ba51-7054d1f23afe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Management\Instance">
-      <UniqueIdentifier>{ce3f0087-9198-422e-b5d6-e765e465fb60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Encryption">
-      <UniqueIdentifier>{7cc418b0-5231-4f9b-a467-cf98afcde18b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Data\Engine\Shaders\rPBR">
       <UniqueIdentifier>{218bc461-b0bd-480e-834f-3892711e9045}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects">
-      <UniqueIdentifier>{51b6938c-f7b4-4ebc-b8c9-b7db1c25a7b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\ModelRenderer">
-      <UniqueIdentifier>{92b2e4ff-c689-440a-b479-e71dc85ba637}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Skybox">
-      <UniqueIdentifier>{b8173c9a-bfdd-4e66-90a9-ad1c6b994373}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data\Engine\Shaders\Textured">
       <UniqueIdentifier>{9cbabd75-5d40-4746-bb2e-0ffb651801fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Windows">
-      <UniqueIdentifier>{eaefb023-df10-41a1-a6b8-7316371dfeaf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\PBR">
-      <UniqueIdentifier>{bf3d51b6-a8c1-4740-9bb4-9464f1fa50c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\PBR\PBRModelRenderer">
-      <UniqueIdentifier>{1caeaa6b-8ee3-40e8-94d6-b081916f8d25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Management\MiddleLevel">
-      <UniqueIdentifier>{539ae321-1426-4428-90f7-5bb797a2fb37}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Archivos de recursos">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Script">
-      <UniqueIdentifier>{baa9c9f2-4cbd-485c-aac6-39300e73a3c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines">
-      <UniqueIdentifier>{8cd565ea-b573-41fb-ac22-1833499cbb34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\RTBR">
-      <UniqueIdentifier>{2fdfb2aa-f8d5-466e-bdb5-6ad801abfad6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR">
-      <UniqueIdentifier>{495424b5-1e59-4996-b963-1dd85699c192}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel">
-      <UniqueIdentifier>{fbe6c539-35ab-4a90-abb1-37cdc22137b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs">
-      <UniqueIdentifier>{fa234a6f-8b88-4072-80f6-22a397997e23}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\BasicGeometry">
-      <UniqueIdentifier>{386a6d34-ef1f-4138-a991-277bd5a30896}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\ScriptingAPI">
-      <UniqueIdentifier>{62ca2674-a016-44ad-88bd-ee0cd47abe5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\EngineTools">
-      <UniqueIdentifier>{6d13b602-baec-4651-bcfb-eea23e4403db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Lighting">
-      <UniqueIdentifier>{d66d5953-30f7-41ef-a9b8-2c3af8bab6d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\BasicGeometry\Bounding">
-      <UniqueIdentifier>{543f12c8-fedf-4946-9e1f-3190a4b5974c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Preload">
-      <UniqueIdentifier>{01657b83-b3e8-46b8-b76f-01e55e991879}</UniqueIdentifier>
     </Filter>
     <Filter Include="Binaries">
       <UniqueIdentifier>{b1b4b331-1638-4172-bb5c-b7cd6337f6a0}</UniqueIdentifier>
@@ -136,20 +37,8 @@
     <Filter Include="Data\Engine\Textures">
       <UniqueIdentifier>{4906a301-d328-4c2e-b0fd-8f75ea6b5098}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\Native">
-      <UniqueIdentifier>{de4e4d3d-9b5c-43dd-861e-e98c5aeb001d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Editor">
-      <UniqueIdentifier>{a3986d25-1246-4e1c-b842-df40194a65d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data\EditorAssets">
       <UniqueIdentifier>{363e5041-ea71-49a0-86a4-165b28ddbc77}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\ObjectManagement\Types">
-      <UniqueIdentifier>{014d52e1-2403-456a-898e-daa5e640d34b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\ScriptingAPI\Lua">
-      <UniqueIdentifier>{3eeb32de-0fc6-4579-b348-f8ef91848f9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="imgui\FileExplorer">
       <UniqueIdentifier>{4b25e3d2-b7f0-47a1-a619-5d87a8925f4d}</UniqueIdentifier>
@@ -157,29 +46,11 @@
     <Filter Include="imgui\Fonts">
       <UniqueIdentifier>{5b48b030-99b1-4bfd-b657-828ab59b7f87}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\Utils">
-      <UniqueIdentifier>{1394687c-b10e-48e6-8430-d5caf21711a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Configuration">
-      <UniqueIdentifier>{74ef52fb-c3dd-415f-90d8-5990dff4cd5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Object\Enums">
-      <UniqueIdentifier>{a461a0a5-f22a-44ee-a4da-ce99eee107d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Object\Source">
-      <UniqueIdentifier>{122918f0-ebc8-49b2-8a46-ea7dc70140d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\Object\Header">
-      <UniqueIdentifier>{962bd13e-e425-430b-b66a-de85ffb23b81}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data\EditorAssets\Icons">
       <UniqueIdentifier>{0133aeaf-9e76-4e5b-b09e-d933b0b9e6c7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Data\EditorAssets\Fonts">
       <UniqueIdentifier>{a14989d7-3f94-4d63-9bab-965872423dcc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Camera">
-      <UniqueIdentifier>{391a5c0d-ce77-41cc-a18f-35618cbdd95c}</UniqueIdentifier>
     </Filter>
     <Filter Include="raylib">
       <UniqueIdentifier>{92919462-bb7f-4617-8aea-0ec992ea0d3b}</UniqueIdentifier>
@@ -211,25 +82,151 @@
     <Filter Include="Data\Engine\Shaders\Lighting">
       <UniqueIdentifier>{fcdb4358-6ea0-4f9d-a048-c14ccf451478}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\Signals">
-      <UniqueIdentifier>{741a851b-feff-416d-a254-c447b15545d4}</UniqueIdentifier>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Scriptable">
+    <Filter Include="Source\Engine">
+      <UniqueIdentifier>{567555c0-9e92-49a1-994e-c8bdb8b75e4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Marshaller">
+      <UniqueIdentifier>{84639636-2dd0-4fda-95a1-d80dc406fbbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ObjectManagement">
+      <UniqueIdentifier>{734d2dff-1260-4726-b83d-00d76a1f3524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ObjectManagement\Cameras">
+      <UniqueIdentifier>{a3fa7e6a-969f-4537-a4b6-1cfe482a567c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ObjectManagement\Materials">
+      <UniqueIdentifier>{badbfa6e-2c37-4397-86b4-e6ba2a95b259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ObjectManagement\Types">
+      <UniqueIdentifier>{014d52e1-2403-456a-898e-daa5e640d34b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\HLAPI">
+      <UniqueIdentifier>{9b437e7d-5295-4f14-bd28-6d61f0a38f22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Object">
+      <UniqueIdentifier>{f2217650-8e69-4976-9732-9887b5cf1e03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Object\Enums">
+      <UniqueIdentifier>{a461a0a5-f22a-44ee-a4da-ce99eee107d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Object\Source">
+      <UniqueIdentifier>{122918f0-ebc8-49b2-8a46-ea7dc70140d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Object\Header">
+      <UniqueIdentifier>{962bd13e-e425-430b-b66a-de85ffb23b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Management">
+      <UniqueIdentifier>{bb63e44a-1dbe-4beb-ba51-7054d1f23afe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Management\Instance">
+      <UniqueIdentifier>{ce3f0087-9198-422e-b5d6-e765e465fb60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Management\MiddleLevel">
+      <UniqueIdentifier>{539ae321-1426-4428-90f7-5bb797a2fb37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Encryption">
+      <UniqueIdentifier>{7cc418b0-5231-4f9b-a467-cf98afcde18b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects">
+      <UniqueIdentifier>{51b6938c-f7b4-4ebc-b8c9-b7db1c25a7b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\ModelRenderer">
+      <UniqueIdentifier>{92b2e4ff-c689-440a-b479-e71dc85ba637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Skybox">
+      <UniqueIdentifier>{b8173c9a-bfdd-4e66-90a9-ad1c6b994373}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\PBR">
+      <UniqueIdentifier>{bf3d51b6-a8c1-4740-9bb4-9464f1fa50c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\PBR\PBRModelRenderer">
+      <UniqueIdentifier>{1caeaa6b-8ee3-40e8-94d6-b081916f8d25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Script">
+      <UniqueIdentifier>{baa9c9f2-4cbd-485c-aac6-39300e73a3c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines">
+      <UniqueIdentifier>{8cd565ea-b573-41fb-ac22-1833499cbb34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines\RTBR">
+      <UniqueIdentifier>{2fdfb2aa-f8d5-466e-bdb5-6ad801abfad6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines\VXBR">
+      <UniqueIdentifier>{495424b5-1e59-4996-b963-1dd85699c192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel">
+      <UniqueIdentifier>{fbe6c539-35ab-4a90-abb1-37cdc22137b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs">
+      <UniqueIdentifier>{fa234a6f-8b88-4072-80f6-22a397997e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines\Scriptable">
       <UniqueIdentifier>{c4a424bb-123e-4a72-8b70-7944e4de2766}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Pipelines">
+    <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines\Pipelines">
       <UniqueIdentifier>{6829fe7f-948b-4d4f-81bf-af4135be0757}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\BasicGeometry">
+      <UniqueIdentifier>{386a6d34-ef1f-4138-a991-277bd5a30896}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\BasicGeometry\Bounding">
+      <UniqueIdentifier>{543f12c8-fedf-4946-9e1f-3190a4b5974c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Lighting">
+      <UniqueIdentifier>{d66d5953-30f7-41ef-a9b8-2c3af8bab6d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Camera">
+      <UniqueIdentifier>{391a5c0d-ce77-41cc-a18f-35618cbdd95c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Windows">
+      <UniqueIdentifier>{eaefb023-df10-41a1-a6b8-7316371dfeaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI">
+      <UniqueIdentifier>{62ca2674-a016-44ad-88bd-ee0cd47abe5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\Lua">
+      <UniqueIdentifier>{3eeb32de-0fc6-4579-b348-f8ef91848f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Preload">
+      <UniqueIdentifier>{01657b83-b3e8-46b8-b76f-01e55e991879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Native">
+      <UniqueIdentifier>{de4e4d3d-9b5c-43dd-861e-e98c5aeb001d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Editor">
+      <UniqueIdentifier>{a3986d25-1246-4e1c-b842-df40194a65d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Utils">
+      <UniqueIdentifier>{1394687c-b10e-48e6-8430-d5caf21711a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Configuration">
+      <UniqueIdentifier>{74ef52fb-c3dd-415f-90d8-5990dff4cd5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Signals">
+      <UniqueIdentifier>{741a851b-feff-416d-a254-c447b15545d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source\EngineTools">
+      <UniqueIdentifier>{6d13b602-baec-4651-bcfb-eea23e4403db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes.h">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="CastToNative.h">
-      <Filter>Archivos de origen\Engine\Marshaller</Filter>
+      <Filter>Source\Engine\Marshaller</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui.h">
       <Filter>imgui</Filter>
@@ -250,193 +247,190 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="DataManager.h">
-      <Filter>Archivos de origen\Engine\HLAPI</Filter>
+      <Filter>Source\Engine\HLAPI</Filter>
     </ClInclude>
     <ClInclude Include="DataPacks.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
+      <Filter>Source\Engine\ObjectManagement</Filter>
     </ClInclude>
     <ClInclude Include="CameraPack.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement\Cameras</Filter>
+      <Filter>Source\Engine\ObjectManagement\Cameras</Filter>
     </ClInclude>
     <ClInclude Include="MaterialPack.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement\Materials</Filter>
+      <Filter>Source\Engine\ObjectManagement\Materials</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
-      <Filter>Archivos de origen\Engine</Filter>
+      <Filter>Source\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Archivos de origen\Engine\Management\Instance</Filter>
+      <Filter>Source\Engine\Management\Instance</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Archivos de origen\Engine\Management</Filter>
+      <Filter>Source\Engine\Management</Filter>
     </ClInclude>
     <ClInclude Include="CypherLib.h">
-      <Filter>Archivos de origen\Engine\Encryption</Filter>
-    </ClInclude>
-    <ClInclude Include="Macros.h">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Source\Engine\Encryption</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Archivos de origen\Engine</Filter>
     </ClInclude>
     <ClInclude Include="DataPack.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
+      <Filter>Source\Engine\ObjectManagement</Filter>
     </ClInclude>
     <ClInclude Include="WinAPI.h">
-      <Filter>Archivos de origen\Engine\Windows</Filter>
+      <Filter>Source\Engine\Windows</Filter>
     </ClInclude>
     <ClInclude Include="FileManager.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement</Filter>
+      <Filter>Source\Engine\ObjectManagement</Filter>
     </ClInclude>
     <ClInclude Include="SceneObject.h">
-      <Filter>Archivos de origen\Engine\Management\MiddleLevel</Filter>
+      <Filter>Source\Engine\Management\MiddleLevel</Filter>
     </ClInclude>
     <ClInclude Include="Cast.h">
-      <Filter>Archivos de origen\Engine\Marshaller</Filter>
+      <Filter>Source\Engine\Marshaller</Filter>
     </ClInclude>
     <ClInclude Include="Voxel.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel</Filter>
     </ClInclude>
     <ClInclude Include="VoxelRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\VXBR</Filter>
     </ClInclude>
     <ClInclude Include="VoxelTypedefs.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
     </ClInclude>
     <ClInclude Include="Chunk.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel</Filter>
     </ClInclude>
     <ClInclude Include="VoxelMatrix.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
     </ClInclude>
     <ClInclude Include="AsmLoader.h">
-      <Filter>Archivos de origen\Engine</Filter>
+      <Filter>Source\Engine</Filter>
     </ClInclude>
     <ClInclude Include="EngineIncludes.h">
-      <Filter>Archivos de origen\Engine</Filter>
+      <Filter>Source\Engine</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="GlIncludes.h">
-      <Filter>Archivos de origen\Engine</Filter>
+      <Filter>Source\Engine</Filter>
     </ClInclude>
     <ClInclude Include="PreloadScript.h">
-      <Filter>Archivos de origen\Engine\Preload</Filter>
+      <Filter>Source\Engine\Preload</Filter>
     </ClInclude>
     <ClInclude Include="Objects\BoundingBoxRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry\Bounding</Filter>
+      <Filter>Source\Engine\EngineObjects\BasicGeometry\Bounding</Filter>
     </ClInclude>
     <ClInclude Include="Objects\GridRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
+      <Filter>Source\Engine\EngineObjects\BasicGeometry</Filter>
     </ClInclude>
     <ClInclude Include="Objects\CubeRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\BasicGeometry</Filter>
+      <Filter>Source\Engine\EngineObjects\BasicGeometry</Filter>
     </ClInclude>
     <ClInclude Include="Objects\LightDm.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Lighting</Filter>
+      <Filter>Source\Engine\EngineObjects\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="Objects\LightManager.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Lighting</Filter>
+      <Filter>Source\Engine\EngineObjects\Lighting</Filter>
     </ClInclude>
     <ClInclude Include="Objects\ModelRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
+      <Filter>Source\Engine\EngineObjects\ModelRenderer</Filter>
     </ClInclude>
     <ClInclude Include="Objects\PBRModelRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\PBR\PBRModelRenderer</Filter>
+      <Filter>Source\Engine\EngineObjects\PBR\PBRModelRenderer</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Script.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Script</Filter>
+      <Filter>Source\Engine\EngineObjects\Script</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Skybox.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Skybox</Filter>
+      <Filter>Source\Engine\EngineObjects\Skybox</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Daemon.h">
-      <Filter>Archivos de origen\Engine\EngineObjects</Filter>
+      <Filter>Source\Engine\EngineObjects</Filter>
     </ClInclude>
     <ClInclude Include="ImguiHook.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="imgui\TextEditor\TextEditor.h">
       <Filter>imgui\TextEditor</Filter>
     </ClInclude>
     <ClInclude Include="native\json.hpp">
-      <Filter>Archivos de origen\Engine\Native</Filter>
+      <Filter>Source\Engine\Native</Filter>
     </ClInclude>
     <ClInclude Include="imguistyleserializer.h">
-      <Filter>Archivos de origen\Engine\Editor</Filter>
+      <Filter>Source\Engine\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Packs.h">
-      <Filter>Archivos de origen\Engine\ObjectManagement\Types</Filter>
+      <Filter>Source\Engine\ObjectManagement\Types</Filter>
     </ClInclude>
     <ClInclude Include="LoggingAPI.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="ShaderManager.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="LuaVM.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI\Lua</Filter>
+      <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClInclude>
     <ClInclude Include="imgui\FileExplorer\filedialog.h">
       <Filter>imgui\FileExplorer</Filter>
     </ClInclude>
     <ClInclude Include="Objects\LuaScript.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Script</Filter>
+      <Filter>Source\Engine\EngineObjects\Script</Filter>
     </ClInclude>
     <ClInclude Include="imgui\Fonts\IconsFontAwesome4.h">
       <Filter>imgui\Fonts</Filter>
     </ClInclude>
     <ClInclude Include="Attribute.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI\Lua</Filter>
+      <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClInclude>
     <ClInclude Include="AttributeManager.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI\Lua</Filter>
+      <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClInclude>
     <ClInclude Include="LogFileReporter.h">
-      <Filter>Archivos de origen\Engine\Utils</Filter>
+      <Filter>Source\Engine\Utils</Filter>
     </ClInclude>
     <ClInclude Include="EngineConfig.h">
-      <Filter>Archivos de origen\Engine\Configuration</Filter>
+      <Filter>Source\Engine\Configuration</Filter>
     </ClInclude>
     <ClInclude Include="Objects\MeshRenderer.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\ModelRenderer</Filter>
+      <Filter>Source\Engine\EngineObjects\ModelRenderer</Filter>
     </ClInclude>
     <ClInclude Include="Object\ObjectType.h">
-      <Filter>Archivos de origen\Engine\Object\Enums</Filter>
+      <Filter>Source\Engine\Object\Enums</Filter>
     </ClInclude>
     <ClInclude Include="Object\Layer.h">
-      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+      <Filter>Source\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Object\Transform.h">
-      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+      <Filter>Source\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Object\Vector2.h">
-      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+      <Filter>Source\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Object\Vector3.h">
-      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+      <Filter>Source\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Object\ViewSpace.h">
-      <Filter>Archivos de origen\Engine\Object\Enums</Filter>
+      <Filter>Source\Engine\Object\Enums</Filter>
     </ClInclude>
     <ClInclude Include="Object\Quaternion.h">
-      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+      <Filter>Source\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Camera.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Camera</Filter>
+      <Filter>Source\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Camera3D.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Camera</Filter>
+      <Filter>Source\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Object\Color.h">
-      <Filter>Archivos de origen\Engine\Object\Header</Filter>
+      <Filter>Source\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Object\LayerManager.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h">
       <Filter>raylib\include\ext</Filter>
@@ -475,30 +469,36 @@
       <Filter>raylib\include</Filter>
     </ClInclude>
     <ClInclude Include="ManagedSignal.h">
-      <Filter>Archivos de origen\Engine\Signals</Filter>
+      <Filter>Source\Engine\Signals</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Pipeline\ScriptableRenderPipeline.hpp">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Scriptable</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Scriptable</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
-      <Filter>Archivos de origen\Engine\ScriptingAPI</Filter>
+      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="RenderPipelines\LightweightSRP.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Pipelines</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="RenderPipelines\LitPBR_SRP.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Pipelines</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Pipelines</Filter>
     </ClInclude>
     <ClInclude Include="RenderPipelines\RaymarchSRP.h">
-      <Filter>Archivos de origen\Engine\EngineObjects\Renderer Pipelines\Pipelines</Filter>
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Pipelines</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Macros.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="CastToNative.cpp">
-      <Filter>Archivos de origen\Engine\Marshaller</Filter>
+      <Filter>Source\Engine\Marshaller</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>imgui</Filter>
@@ -516,50 +516,50 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="WinAPI.cpp">
-      <Filter>Archivos de origen\Engine\Windows</Filter>
+      <Filter>Source\Engine\Windows</Filter>
     </ClCompile>
     <ClCompile Include="EntryPoint.cpp">
-      <Filter>Archivos de origen\EngineTools</Filter>
+      <Filter>Source\EngineTools</Filter>
     </ClCompile>
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp">
       <Filter>imgui\TextEditor</Filter>
     </ClCompile>
     <ClCompile Include="imguistyleserializer.cpp">
-      <Filter>Archivos de origen\Engine\Editor</Filter>
+      <Filter>Source\Engine\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Object\Layer.cpp">
-      <Filter>Archivos de origen\Engine\Object\Source</Filter>
+      <Filter>Source\Engine\Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Object\Vector2.cpp">
-      <Filter>Archivos de origen\Engine\Object\Source</Filter>
+      <Filter>Source\Engine\Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Object\Vector3.cpp">
-      <Filter>Archivos de origen\Engine\Object\Source</Filter>
+      <Filter>Source\Engine\Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Object\Quaternion.cpp">
-      <Filter>Archivos de origen\Engine\Object\Source</Filter>
+      <Filter>Source\Engine\Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Packs.cpp">
-      <Filter>Archivos de origen\Engine\ObjectManagement\Types</Filter>
+      <Filter>Source\Engine\ObjectManagement\Types</Filter>
     </ClCompile>
     <ClCompile Include="Object\Color.cpp">
-      <Filter>Archivos de origen\Engine\Object\Source</Filter>
+      <Filter>Source\Engine\Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Raylib\include\rlImGui.cpp">
       <Filter>raylib\include\impls\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Attribute.cpp">
-      <Filter>Archivos de origen\Engine\ScriptingAPI\Lua</Filter>
+      <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
-      <Filter>Archivos de origen\Archivos de recursos</Filter>
+      <Filter>Source\Archivos de recursos</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
-      <Filter>Archivos de origen\Archivos de recursos</Filter>
+      <Filter>Source\Archivos de recursos</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

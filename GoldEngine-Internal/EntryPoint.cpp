@@ -3042,7 +3042,7 @@ public:
 
 #endif
 
-int main()
+int main(array<System::String^>^ args)
 {
 	passwd = CypherLib::GetPasswordBytes(gcnew String(ENCRYPTION_PASSWORD));
 
