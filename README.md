@@ -30,11 +30,11 @@ Requirements:</br>
 
 Supported Platforms:</br>
     Windows [x]</br>
-    Linux [X] - Tested with wine32 and a x86 copy of the engine. (Bootstrapper in development.) </br>
-    MacOS [] ^ same</br>
+    Linux [X] - Tested with wine, works fine by using the WineBootstrapper application in this project. </br>
+    MacOS [] ^ same, i guess.</br>
     Android [] - if you want to make a game for android with this you must be drunk or smth tbh.</br>
 
 About Projects:</br>
     GoldEngine-Internal -> Entire game engine, from window management to low level asset management.</br>
     GoldEngine-Editor -> Example of scripts using the Scripting API. (Docs might come soon, idk.)</br>
-    Util/WineBootstrap -> Tool that manages and automates wine bootstrapping and installation.
+    Utils/WineBootstrap/WineBootstrapper -> Tool that manages and automates wine bootstrapping and installation.
