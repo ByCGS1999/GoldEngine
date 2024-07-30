@@ -158,6 +158,7 @@ namespace Engine::Internal::Components
 		virtual void Init() {}
 		virtual void Init(array<System::Object^>^ params) {}
 		virtual void Init(System::Object^ object) {}
+		virtual void Setup() {}
 
 		// object methods
 		virtual void Start() {}

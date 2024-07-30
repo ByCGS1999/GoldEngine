@@ -130,8 +130,6 @@ namespace Engine::Managers
 
 									auto obj = (Engine::Internal::Components::Object^)assembly->CastToType(sceneObject, script->assemblyReference);
 
-									obj->Init(script);
-
 									sceneObject->SetReference(obj);
 								}
 							}

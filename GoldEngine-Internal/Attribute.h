@@ -98,6 +98,24 @@ namespace Engine::Scripting
 			}
 		}
 
+		void resetType()
+		{
+			try
+			{
+#ifdef LOGAPI_IMPL
+				printConsole("Converting from " + userData->GetType()->Name + " To -> " + userDataType->Name);
+#endif
+				userData = System::Convert::ChangeType(userData, userDataType);
+			}
+			catch (Exception^ ex)
+			{
+#ifdef LOGAPI_IMPL
+				printError(ex->Message);
+				printError(ex->StackTrace);
+#endif
+			}
+		}
+
 
 	public:
 		static Attribute^ create(String^ name, System::Object^ data, Type^ type)

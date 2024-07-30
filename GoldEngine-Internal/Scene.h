@@ -255,9 +255,17 @@ namespace Engine::Management
 					""));
 
 				if (!sceneFinishedLoading)
+				{
+					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::Object::Setup);
+					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::Object::Init);
 					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::Object::Start);
+				}
 				else
+				{
+					object->Setup();
+					object->Init();
 					object->Start();
+				}
 			}
 			l->release();
 		}
@@ -270,9 +278,17 @@ namespace Engine::Management
 				drawQueue->Add(object);
 
 				if (!sceneFinishedLoading)
+				{
+					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::Object::Setup);
+					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::Object::Init);
 					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::Object::Start);
+				}
 				else
+				{
+					object->GetReference()->Setup();
+					object->GetReference()->Init();
 					object->GetReference()->Start(); // call start method (otherwise by serialization it won't be called.)
+				}
 			}
 			l->release();
 		}

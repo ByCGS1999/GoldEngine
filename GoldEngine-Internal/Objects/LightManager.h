@@ -443,7 +443,7 @@ namespace Engine::EngineObjects
 			}
 			else
 			{
-				ambientColor = attributes->getAttribute("ambientColor")->getValue<Newtonsoft::Json::Linq::JObject^>()->ToObject<Engine::Components::Color^>()->toHex();
+				ambientColor = attributes->getAttribute("ambientColor")->getValue<Engine::Components::Color^>()->toHex();
 			}
 
 			if (!attributes->getAttribute("ambientIntensity"))
@@ -457,7 +457,7 @@ namespace Engine::EngineObjects
 			}
 			else
 			{
-				attributes->getAttribute("shaderId")->setType(attributes->getAttribute("shaderId")->userDataType);
+				attributes->getAttribute("shaderId")->setType(UInt32::typeid);
 			}
 
 			if (!attributes->getAttribute("vertexShader"))
@@ -466,7 +466,7 @@ namespace Engine::EngineObjects
 				attributes->setAttribute(Engine::Scripting::Attribute::create("fragmentShader", fs, String::typeid));
 			}
 
-			shaderId = (unsigned int)attributes->getAttribute("shaderId")->getValue();
+			shaderId = (unsigned int)attributes->getAttribute("shaderId")->getValue<UInt32>();
 			ShaderUpdate();
 
 			rlCheckErrors();
