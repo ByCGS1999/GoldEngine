@@ -32,3 +32,4 @@ Build
 ./Utils/WineBootstrap/WineBootstrapper/.vs/
 /Utils/WineBootstrap/bin/bootstrapper
 /Utils/WineBootstrap/WineBootstrapper/.vs/WineBootstrapper/v17
+.workspace
