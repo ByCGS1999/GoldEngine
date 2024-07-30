@@ -18,5 +18,11 @@ namespace Engine::EngineObjects
 			attributes->DeserializeAttributes();
 		}
 
+
+		virtual void Start() override
+		{
+			attributes->DeserializeAttributes();
+		}
+
 	};
 }

@@ -43,6 +43,7 @@ namespace Engine::Scripting
 		{
 			for each (auto x in attributes)
 			{
+				printConsole("Deserializing Attribute -> " + x->name);
 				x->setValue(x->DeserializeAttribute(), true);
 			}
 		}

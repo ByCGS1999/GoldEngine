@@ -19,7 +19,7 @@ namespace Engine::EngineObjects
 
 		void Update() override
 		{
-			if (!attributes->getAttribute("camera direction"))
+ 			if (!attributes->getAttribute("camera direction"))
 			{
 				attributes->addAttribute("camera direction", gcnew Engine::Components::Vector3(0, 0, 1));
 			}
@@ -29,7 +29,7 @@ namespace Engine::EngineObjects
 			
 			#if !defined(PRODUCTION_BUILD)
 				nativeCamera->getCameraPtr()->position = transform->position->toNative();
-				UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
+				UpdateCamera(nativeCamera->getCameraPtr(), CAMERA_CUSTOM);
 			#else
 				nativeCamera->getCameraPtr()->position = transform->position->toNative();
 				UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
