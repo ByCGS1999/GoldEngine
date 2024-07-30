@@ -7,54 +7,53 @@ namespace Engine::EngineObjects
 {
 	namespace Native
 	{
-		private class NativeCamera
+		public class NativeCamera3D
 		{
 		private:
-			RAYLIB::Camera* camera;
+			RAYLIB::Camera camera;
 
 		public:
 			RAYLIB::Camera* getCameraPtr()
 			{
+				return &this->camera;
+			}
+
+			RAYLIB::Camera& get()
+			{
 				return this->camera;
 			}
 
-			RAYLIB::Camera get()
-			{
-				return *this->camera;
-			}
-
 		public:
-			NativeCamera(CameraProjection projection)
+			NativeCamera3D(CameraProjection projection)
 			{
 				printf("Creating camera\n");
-				this->camera = new RAYLIB::Camera();
-				this->camera->projection = projection;
-				this->camera->fovy = 90;
-				this->camera->position = { 0,0,0 };
-				this->camera->target = { 0, 0, 1 };
-				this->camera->up = { 0, 1, 0 };
+				this->camera = RAYLIB::Camera();
+				this->camera.projection = projection;
+				this->camera.fovy = 90;
+				this->camera.position = { 0,0,0 };
+				this->camera.target = { 0, 0, 1 };
+				this->camera.up = { 0, 1, 0 };
 			}
 
 		public:
 			void setCameraPosition(RAYLIB::Vector3 nativeVector)
 			{
-				camera->position = nativeVector;
+				camera.position = nativeVector;
 			}
 			
 		public:
 			void setCameraTarget(RAYLIB::Vector3 nativeVector)
 			{
-				camera->target = nativeVector;
+				camera.target = nativeVector;
 			}
 
 		};
 	}
 
-	public ref class Camera : public Engine::EngineObjects::Script
+	public ref class Camera abstract : public Engine::EngineObjects::Script
 	{
 	public:
 		[Newtonsoft::Json::JsonIgnoreAttribute]
-		Native::NativeCamera* nativeCamera;
 		CameraProjection cameraProjection;
 
 	private:
@@ -65,21 +64,22 @@ namespace Engine::EngineObjects
 		{
 			cameraProjection = projection;
 
-			nativeCamera = new Native::NativeCamera(cameraProjection);
-
 			if (!attributes->getAttribute("IsMainCamera"))
 			{
-				attributes->addAttribute(Engine::Scripting::Attribute::create("IsMainCamera", false, bool::typeid));
+				if (!SharedInstance::ExistsInstance("CameraExists"))
+				{
+					attributes->addAttribute(Engine::Scripting::Attribute::create("IsMainCamera", true, bool::typeid));
+					SharedInstance::Create("CameraExists", true);
+				}
+				else
+				{
+					attributes->addAttribute(Engine::Scripting::Attribute::create("IsMainCamera", false, bool::typeid));
+				}
 			}
 			else
 			{
 				isMainCamera = attributes->getAttribute("IsMainCamera")->getValue<bool>();
 			}
-		}
-
-		void SetCameraTarget(Engine::Components::Vector3^ target)
-		{
-			nativeCamera->setCameraTarget(target->toNative());
 		}
 
 		void Update() override
@@ -94,9 +94,8 @@ namespace Engine::EngineObjects
 			DrawLine3D(transform->position->toNative(), fwd->toNative(), GetColor(0xFF0000FF));
 		}
 
-		RAYLIB::Camera* get()
-		{
-			return nativeCamera->getCameraPtr();
-		}
+	public:
+		virtual bool is3DCamera() abstract;
+		virtual void* get() abstract;
 	};
 }

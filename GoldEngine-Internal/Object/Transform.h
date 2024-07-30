@@ -151,15 +151,6 @@ namespace Engine::Internal::Components
 			delete tag;
 		}
 
-		void UpdateLocalPosition()
-		{
-			if (transform->parent != nullptr)
-			{
-				Engine::Components::Vector3^ diff = (transform->parent->position - transform->position);
-				transform->localPosition = transform->position+diff;
-			}
-		}
-
 	public:
 		// vmethods
 		// init functions (used by reflector & scene loader).
@@ -178,10 +169,32 @@ namespace Engine::Internal::Components
 
 		// engine methods
 
+	private:
+		void UpdateLocalPosition()
+		{
+			if (transform->parent != nullptr)
+			{
+				Engine::Components::Vector3^ diff = (transform->parent->position - transform->position);
+				transform->localPosition = transform->position + diff;
+			}
+		}
+
+		void UpdatePosition()
+		{
+			if (transform->parent != nullptr)
+			{
+				Engine::Components::Vector3^ diff = (transform->parent->position - transform->position);
+				transform->position = transform->localPosition - diff;
+			}
+		}
+
+
 	public:
 		void GameUpdate()
 		{
 			UpdateLocalPosition();
+			UpdatePosition();
+
 			Update();
 		}
 
@@ -250,6 +263,16 @@ namespace Engine::Internal::Components
 		virtual void Destroy()
 		{
 			delete this;
+		}
+
+		auto ToDerivate()
+		{
+			return Convert::ChangeType(this, this->GetType());
+		}
+
+		System::Type^ GetRuntimeType()
+		{
+			return this->GetType();
 		}
 
 		/*

@@ -251,6 +251,7 @@
     <ClInclude Include="Objects\Camera3D.h" />
     <ClInclude Include="Objects\CubeRenderer.h" />
     <ClInclude Include="Objects\Daemon.h" />
+    <ClInclude Include="Objects\EditorCamera.h" />
     <ClInclude Include="Objects\GridRenderer.h" />
     <ClInclude Include="Objects\LightDm.h" />
     <ClInclude Include="Objects\LightManager.h" />

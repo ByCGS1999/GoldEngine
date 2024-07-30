@@ -190,5 +190,5 @@ namespace Engine::EngineObjects
 		{
 			Object::Destroy();
 		}
-	};
+};
 }

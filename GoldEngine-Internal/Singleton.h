@@ -75,6 +75,12 @@ public:
 	}
 
 public:
+	static bool ExistsInstance(System::String^ name)
+	{
+		return Instances->ContainsKey(name);
+	}
+
+public:
 	static System::Object^ Get(System::String^ name)
 	{
 		return Instances[name]->Instance;
@@ -87,7 +93,7 @@ public:
 	}
 
 public:
-    void Release()
+	void Release()
 	{
 		Instance = nullptr;
 	}

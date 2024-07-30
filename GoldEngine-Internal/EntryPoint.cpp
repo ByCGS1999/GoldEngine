@@ -109,6 +109,8 @@ char* password = new char[512];
 char* packDataFileName = new char[64];
 int positionSelector = 0;
 
+bool gameViewMode = false;
+
 // error handling
 char* errorReason;
 
@@ -488,6 +490,17 @@ private:
 
 								}
 								delete data;
+							}
+							else if (attrib->userData->GetType()->Equals(Engine::Components::Vector3::typeid))
+							{
+								Engine::Components::Vector3^ vector = (Engine::Components::Vector3^)attrib->userData;
+
+								float data[3] = { vector->x, vector->y, vector->z };
+
+								if (ImGui::DragFloat3(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), data, 1.0f, -INFINITY, INFINITY, "%.2f"))
+								{
+									attrib->setValue(Engine::Components::Vector3::create(data));
+								}
 							}
 							else if (attrib->userData->GetType()->Equals(UInt32::typeid))
 							{
@@ -1010,12 +1023,15 @@ public:
 		dataPack = DataPacks();
 
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
-
-		for each (String^ fileName in Directory::GetFiles("Bin/Asm/"))
+		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetCallingAssembly()));
+		
+		for each (String^ fileName in Directory::GetFiles("Bin\\Asm\\"))
 		{
 			if (fileName->Contains(".goldasm") || fileName->Contains(".dll"))
 			{
-				assemblies->Add(gcnew EngineAssembly(fileName));
+				String^ path = Directory::GetCurrentDirectory() + "\\" + fileName;
+
+				assemblies->Add(gcnew EngineAssembly(path));
 			}
 		}
 
@@ -2574,18 +2590,25 @@ public:
 			if (renderPipeline != nullptr)
 				renderPipeline->PreRenderFrame();
 
-			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
+			
+			{
+				Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
 
-			if (camera == nullptr)
-				return;
+				if (camera == nullptr)
+					return;
 
-			BeginMode3D((RAYLIB::Camera3D)*camera->get());
+				bool is3DCamera = camera->is3DCamera();
 
-			int currentLayer = 1;
+				if (is3DCamera)
+					BeginMode3D(((NativeCamera3D*)camera->get())->get());
 
-			render(currentLayer);
+				int currentLayer = 1;
 
-			EndMode3D();
+				render(currentLayer);
+
+				if (is3DCamera)
+					EndMode3D();
+			}
 
 			if (renderPipeline != nullptr)
 				renderPipeline->OnRenderEnd();
@@ -2678,19 +2701,18 @@ private:
 			scene->AddObjectToScene(lightdm);
 		}
 
-		if(ObjectManager::singleton()->GetGameObjectsByName("EditorCamera")->Count<=0)
+		if(ObjectManager::singleton()->GetObjectsByName("EditorCamera")->Count<=0)
 		{
-
-			auto camera3D = gcnew Engine::EngineObjects::Camera("EditorCamera",
+			auto camera3D = gcnew Engine::EngineObjects::EditorCamera("EditorCamera",
 				gcnew Engine::Internal::Components::Transform(
 					Engine::Components::Vector3::create({ 0,0,0 }),
 					Engine::Components::Vector3::create({ 0,0,0 }),
 					0.0f,
 					Engine::Components::Vector3::create({ 1,1,1 }),
 					nullptr
-				),
-				CAMERA_PERSPECTIVE
+				)
 			);
+			//camera3D->SetParent(Singleton<ObjectManager^>::Instance->GetDatamodel("workspace"));
 
 			scene->PushToRenderQueue(camera3D);
 			scene->PushToRenderQueue(camera3D);
@@ -2778,13 +2800,18 @@ public:
 
 	void Update() override
 	{
-		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
+		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
 
 		if (camera == nullptr)
 			return;
 
+		auto projectionMode = camera->cameraProjection;
+		bool is3DCamera = (projectionMode == CameraProjection::CAMERA_PERSPECTIVE);
+
+		void* cameraLocal = camera->get();
+
 		if (showCursor)
-			UpdateCamera(camera->get(), CAMERA_FREE);
+			UpdateCamera(((NativeCamera3D*)cameraLocal)->getCameraPtr(), CAMERA_FREE);
 
 		if (fpsCap)
 		{
@@ -3065,23 +3092,34 @@ public:
 
 			ClearBackground(GetColor(scene->skyColor));
 
-			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
+			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
+
+			auto projectionMode = camera->cameraProjection;
+
+			bool is3DCamera = (projectionMode == CameraProjection::CAMERA_PERSPECTIVE);
 
 			if (camera == nullptr)
 				return;
 
-			BeginMode3D((RAYLIB::Camera3D)*camera->get());
+			if (is3DCamera)
+				BeginMode3D(((NativeCamera*)camera->get())->get());
+			else
+				BeginMode3D(((NativeCamera*)camera->get())->get());
 
 			int currentLayer = 1;
 
 			render(currentLayer);
 
-			EndMode3D();
+			if (is3DCamera)
+				EndMode3D();
+			else
+				EndMode2D();
 
 			DrawFPS(0, 0);
 
 			rlImGuiBegin();
 
+			/*
 			ImGui::Begin("DemoVer", (bool*)true, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking);
 			{
 				ImGui::SetWindowSize(ImVec2(285, 20), 0);
@@ -3089,6 +3127,7 @@ public:
 				ImGui::TextColored(ImVec4(255, 255, 255, 255), ENGINE_VERSION);
 				ImGui::End();
 			}
+			*/
 
 			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 			{

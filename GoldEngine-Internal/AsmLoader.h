@@ -21,7 +21,7 @@ public:
 private:
 	void LoadAssemblyFromFile(System::String^ fileName)
 	{
-		loadedAssembly = loadedAssembly->LoadFrom(fileName);
+		loadedAssembly = loadedAssembly->LoadFile(fileName);
 	}
 	
 	void LoadAssemblyFromRawAssembly(System::Reflection::Assembly^ assembly)

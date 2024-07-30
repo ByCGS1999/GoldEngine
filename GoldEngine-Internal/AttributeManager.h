@@ -39,6 +39,14 @@ namespace Engine::Scripting
 
 
 	public:
+		void DeserializeAttributes()
+		{
+			for each (auto x in attributes)
+			{
+				x->setValue(x->DeserializeAttribute(), true);
+			}
+		}
+		
 		void removeAttribute(Attribute^ attrib)
 		{
 			attributes->Remove(attrib);

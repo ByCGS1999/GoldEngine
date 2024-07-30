@@ -137,13 +137,25 @@ namespace Engine::Render::Pipelines
 
             Engine::EngineObjects::Camera^ camera = Singleton<ObjectManager^>::Instance->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
 
-            float camDist = (1.0f/(tanf(camera->get()->fovy*0.5f*DEG2RAD)));
+            if (camera->is3DCamera())
+            {
+                auto newCamera = (Engine::EngineObjects::Camera3D^)camera;
 
-            cameraPosition = camera->get()->position;
-            cameraDirection = Vector3Scale(Vector3Normalize(Vector3Subtract(camera->get()->target, camera->get()->position)), camDist);
+                float camDist = (1.0f / (tanf(
+                    ((Engine::EngineObjects::Native::NativeCamera3D*)newCamera->get())->get().fovy * 0.5f * DEG2RAD)));
 
-            SetShaderValue(raymarchShader, marchLocs.camPos, &cameraPosition, RL_SHADER_UNIFORM_VEC3);
-            SetShaderValue(raymarchShader, marchLocs.camDir, &cameraDirection, RL_SHADER_UNIFORM_VEC3);
+                cameraPosition =
+                    ((Engine::EngineObjects::Native::NativeCamera3D*)newCamera->get())
+                    ->get().position;
+                cameraDirection = Vector3Scale(Vector3Normalize(Vector3Subtract(
+                    ((Engine::EngineObjects::Native::NativeCamera3D*)newCamera->get())
+                    ->get().target,
+                    ((Engine::EngineObjects::Native::NativeCamera3D*)newCamera->get())
+                    ->get().position)), camDist);
+
+                SetShaderValue(raymarchShader, marchLocs.camPos, &cameraPosition, RL_SHADER_UNIFORM_VEC3);
+                SetShaderValue(raymarchShader, marchLocs.camDir, &cameraDirection, RL_SHADER_UNIFORM_VEC3);
+            }
         }
 
         void OnRenderEnd() override

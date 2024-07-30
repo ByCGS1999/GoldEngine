@@ -14,6 +14,8 @@ namespace Engine::EngineObjects
 		{
 			attributes = gcnew Engine::Scripting::AttributeManager();
 			assemblyReference = GetType()->FullName->ToString();
+
+			attributes->DeserializeAttributes();
 		}
 
 	};

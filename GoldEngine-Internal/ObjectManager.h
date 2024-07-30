@@ -134,7 +134,17 @@ namespace Engine::Scripting
 			return loadedScene;
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetGameObjectsFromDatamodel(System::String^ datamodel)
+		System::Object^ GetDatamodel(String^ dataModelName)
+		{
+			return loadedScene->GetDatamodelMember(dataModelName, false);
+		}
+
+		System::Object^ GetDatamodel(String^ dataModelName, bool createDataModel)
+		{
+			return loadedScene->GetDatamodelMember(dataModelName, createDataModel);
+		}
+
+		List<Engine::Internal::Components::Object^>^ GetObjectsFromDatamodel(System::String^ datamodel)
 		{
 			auto objects = gcnew List<Engine::Internal::Components::Object^>();
 
@@ -149,7 +159,7 @@ namespace Engine::Scripting
 			return objects;
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetGameObjectsByTag(System::String^ tag)
+		List<Engine::Internal::Components::Object^>^ GetObjectsByTag(System::String^ tag)
 		{
 			auto objects = gcnew List<Engine::Internal::Components::Object^>();
 
@@ -164,7 +174,7 @@ namespace Engine::Scripting
 			return objects;
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetGameObjectsByName(System::String^ name)
+		List<Engine::Internal::Components::Object^>^ GetObjectsByName(System::String^ name)
 		{
 			auto objects = gcnew List<Engine::Internal::Components::Object^>();
 
@@ -311,7 +321,7 @@ namespace Engine::Scripting
 			return newList;
 		}
 
-		Engine::Internal::Components::Object^ GetGameObjectByUid(System::String^ uid)
+		Engine::Internal::Components::Object^ GetObjectByUid(System::String^ uid)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{

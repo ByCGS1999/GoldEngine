@@ -202,7 +202,25 @@ namespace Engine::Management
 				}
 			}
 
-			if (retn == nullptr)
+			return retn;
+		}
+
+
+		Engine::Internal::Components::Object^ GetDatamodelMember(System::String^ datamodel, bool create)
+		{
+			Engine::Internal::Components::Object^ retn = nullptr;
+			for each (auto objects in drawQueue)
+			{
+				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
+
+				if (sceneObject->objectType == Engine::Internal::Components::ObjectType::Datamodel)
+				{
+					if (sceneObject->GetReference()->name == datamodel)
+						return sceneObject->GetReference();
+				}
+			}
+
+			if (retn == nullptr && create)
 			{
 				auto newMember = AddDatamodelMember(datamodel);
 				auto newObject = gcnew Engine::Management::MiddleLevel::SceneObject(Engine::Internal::Components::ObjectType::Datamodel, newMember, "");
@@ -335,7 +353,7 @@ namespace Engine::Management
 				{
 					try
 					{
-						if (((String^)asmType->GetMethod("GetTarget")->Invoke(nullptr, nullptr))->Equals(this->sceneName))
+						if (((String^)asmType->GetMethod("GetTarget")->Invoke(nullptr, nullptr))->Equals(this->sceneName) || asmType->GetMethod("GetTarget")->Invoke(nullptr, nullptr)->Equals("*"))
 						{
 							asmType->GetMethod("Preload")->Invoke(nullptr, nullptr);
 						}

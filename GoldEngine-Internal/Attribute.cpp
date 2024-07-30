@@ -11,8 +11,16 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 	}
 
 	this->name = str;
-	userData = data;
 	userDataType = data->GetType();
+
+	if (data == Newtonsoft::Json::Linq::JObject::typeid)
+	{
+		userData = ((Newtonsoft::Json::Linq::JObject^)data)->ToObject<System::Object^>();
+	}
+	else
+	{
+		userData = data;
+	}
 }
 
 [Newtonsoft::Json::JsonConstructorAttribute]
@@ -25,8 +33,16 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 	}
 
 	this->name = str;
-	userData = data;
 	userDataType = dT;
+
+	if (data == Newtonsoft::Json::Linq::JObject::typeid)
+	{
+		userData = ((Newtonsoft::Json::Linq::JObject^)data)->ToObject<Object^>();
+	}
+	else
+	{
+		userData = data;
+	}
 
 	setType(userDataType); // For consistency
 }

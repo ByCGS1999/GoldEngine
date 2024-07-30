@@ -5,6 +5,37 @@ using namespace MoonSharp::Interpreter;
 namespace Engine::Lua::VM
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
+	public ref class TypeWrapper // Lua Wrapper for System::Type^
+	{
+	public:
+		static System::Type^ GetRuntimeType(System::Object^ object)
+		{
+			return object->GetType();
+		}
+
+		static String^ GetFullName(System::Type^ type)
+		{
+			return type->FullName;
+		}
+
+		static void PrintType(System::Object^ object)
+		{
+			Logging::Log(object->GetType()->FullName);
+		}
+
+		static System::Object^ ToDerivate(System::Object^ object)
+		{
+			Logging::Log("Changing object type");
+			return System::Convert::ChangeType(object, object->GetType());
+		}
+
+		static System::Object^ ToDerivate(System::Object^ object, System::Type^ targetType)
+		{
+			return System::Convert::ChangeType(object, targetType);
+		}
+	};
+
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class LuaVM
 	{
 	public:
@@ -21,7 +52,7 @@ namespace Engine::Lua::VM
 		LuaVM()
 		{
 			tempBuffer = "";
-			scriptState = gcnew MoonSharp::Interpreter::Script();
+			scriptState = gcnew MoonSharp::Interpreter::Script(CoreModules::Preset_Complete);
 
 			RegisterGlobalFunctions();
 		}
@@ -152,8 +183,15 @@ namespace Engine::Lua::VM
 	private:
 		void RegisterGlobalFunctions()
 		{
-			UserData::RegisterAssembly(System::Reflection::Assembly::GetCallingAssembly(), true);
+			auto appDomain = AppDomain::CurrentDomain;
 
+			//UserData::RegisterAssembly(assembly, true);
+
+			for each (auto asms in appDomain->GetAssemblies())
+			{
+				UserData::RegisterAssembly(asms, true);
+			}
+			
 			RegisterGlobal("Logging", Engine::Scripting::Logging::typeid);
 			RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
 			RegisterGlobal("DataManager", Engine::Internal::DataManager::typeid);
@@ -161,6 +199,7 @@ namespace Engine::Lua::VM
 			RegisterGlobal("Input", Engine::Scripting::InputManager::typeid);
 			RegisterGlobal("KeyCode", Engine::Scripting::KeyCodes::typeid);
 			RegisterGlobal("SharedInstance", SharedInstance::typeid);
+			RegisterGlobal("TypeWrapper", TypeWrapper::typeid);
 		}
 
 	public:

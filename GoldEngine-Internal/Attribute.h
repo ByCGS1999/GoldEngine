@@ -3,7 +3,7 @@
 namespace Engine::Scripting
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class Attribute
+		public ref class Attribute
 	{
 	public:
 		String^ name;
@@ -31,6 +31,11 @@ namespace Engine::Scripting
 		T getValueFromJObject()
 		{
 			return (T)(getValue<Newtonsoft::Json::Linq::JObject^>()->ToObject<T>());
+		}
+
+		bool isJObject()
+		{
+			return userData->GetType() == Newtonsoft::Json::Linq::JObject::typeid;
 		}
 
 		System::Object^ getValue()

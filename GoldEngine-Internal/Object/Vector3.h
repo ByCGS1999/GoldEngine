@@ -82,11 +82,15 @@ namespace Engine::Components
 			return gcnew Vector3(vec.x, vec.y, vec.z);
 		}
 
+		static Vector3^ create(float* vec)
+		{
+			return gcnew Vector3(vec[0], vec[1], vec[2]);
+		}
+
 		bool Equals(Vector3^ value) override
 		{
 			return ((this->x == value->x) && (this->y == value->y) && (this->z == value->z));
 		}
-
 
 		Engine::Components::Vector3^ operator+(Vector3^ other)
 		{

@@ -42,9 +42,7 @@ namespace Engine
 
 		void OpenWindow(int width, int height, System::String^ name)
 		{
-			InitWindow(width, height, CastToNative(name));
-			rlglInit(width, height);
-			rlImGuiSetup(true);
+			OpenWindow(width, height, CastToNative(name));
 		}
 
 		void OpenWindow(int width, int height, const char* name)
