@@ -108,12 +108,15 @@ namespace Engine::Internal::Components
 		{
 			return (T)gameObject;
 		}
+
 	};
 
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Object : IDisposable
 	{
 	public:
+		bool active;
+
 		String^ name;
 		initonly ObjectType type;
 		Transform^ transform;
@@ -129,6 +132,7 @@ namespace Engine::Internal::Components
 		[[JsonConstructorAttribute]]
 		Object(System::String^ n, Transform^ transform, ObjectType t, String^ tag, Layer^ layer)
 		{
+			this->active = true;
 			this->memberIsProtected = false;
 			this->name = n;
 			this->transform = transform;
@@ -138,7 +142,10 @@ namespace Engine::Internal::Components
 
 			if (tag == nullptr)
 				tag = "";
-			
+
+			if(this->transform != nullptr)
+				this->transform->SetReference(this);
+
 			this->tag = tag;
 		}
 
@@ -189,10 +196,12 @@ namespace Engine::Internal::Components
 			}
 		}
 
-
 	public:
 		void GameUpdate()
 		{
+			if (!active)
+				return;
+
 			UpdateLocalPosition();
 			UpdatePosition();
 
@@ -202,18 +211,27 @@ namespace Engine::Internal::Components
 	public:
 		void GameDraw()
 		{
+			if (!active)
+				return;
+
 			Draw();
 		}
 
 	public:
 		void GameDrawGizmos()
 		{
+			if (!active)
+				return;
+
 			DrawGizmo();
 		}
 
 	public:
 		void GameDrawImGUI()
 		{
+			if (!active)
+				return;
+
 			DrawImGUI();
 		}
 

@@ -89,8 +89,6 @@ namespace Engine
 			CloseWindow();
 		}
 
-		virtual void render(int currentLayer) {}
-
 		// vmethods
 		virtual void Preload() { } // loading assets
 		virtual void Init() {} // Initialization (spawning objects, scene loading, whatever.)

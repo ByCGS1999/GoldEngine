@@ -10,6 +10,7 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 		return;
 	}
 
+	this->accessLevel = AccessLevel::Public;
 	this->name = str;
 	userDataType = data->GetType();
 
@@ -24,7 +25,7 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 }
 
 [Newtonsoft::Json::JsonConstructorAttribute]
-inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data, System::Type^ dT)
+inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, System::Object^ data, System::Type^ dT)
 {
 	if (data == nullptr)
 	{
@@ -32,6 +33,7 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 		return;
 	}
 
+	this->accessLevel = level;
 	this->name = str;
 	userDataType = dT;
 
@@ -49,14 +51,35 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 
 inline void Engine::Scripting::Attribute::setValue(System::Object^ object)
 {
+	if (accessLevel == AccessLevel::ReadOnly)
+		return;
+
 	userData = object;
 	userDataType = object->GetType();
 }
 
 inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool overrideType)
 {
+	if (accessLevel == AccessLevel::ReadOnly)
+		return;
+
 	userData = object;
 
 	if (overrideType)
 		userDataType = object->GetType();
+}
+
+inline void Engine::Scripting::Attribute::lockRead()
+{
+	accessLevel = AccessLevel::WriteOnly;
+}
+
+inline void Engine::Scripting::Attribute::lockWrite()
+{
+	accessLevel = AccessLevel::ReadOnly;
+}
+
+inline void Engine::Scripting::Attribute::unlock()
+{
+	accessLevel = AccessLevel::Public;
 }

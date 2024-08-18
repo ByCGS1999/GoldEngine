@@ -363,7 +363,7 @@ namespace Engine::EngineObjects
 
 				TraceLog(LOG_INFO, "Lights %d", _light.size());
 
-				if (&DataPacks::singleton().GetShader(shaderId) == nullptr)
+				if (&DataPacks::singleton().GetShader_Unsafe(shaderId) == nullptr)
 				{
 					DataPacks::singleton().AddShader(shaderId, s);
 				}

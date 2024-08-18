@@ -5,7 +5,7 @@ using namespace MoonSharp::Interpreter;
 namespace Engine::Lua::VM
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class TypeWrapper // Lua Wrapper for System::Type^
+	public ref class VMWrapper // Lua Wrapper for System::Type^
 	{
 	public:
 		static System::Type^ GetRuntimeType(System::Object^ object)
@@ -32,6 +32,18 @@ namespace Engine::Lua::VM
 		static System::Object^ ToDerivate(System::Object^ object, System::Type^ targetType)
 		{
 			return System::Convert::ChangeType(object, targetType);
+		}
+
+		static void DerivateVMGlobal(MoonSharp::Interpreter::Script^& vm, String^ globalName)
+		{
+			System::Object^ object = vm->Globals[globalName];
+
+			vm->Globals[globalName] = System::Convert::ChangeType(object, object->GetType());
+		}
+
+		static void UpdateVMGlobal(MoonSharp::Interpreter::Script^& vm, String^ globalName, Object^ newObject)
+		{
+			vm->Globals[globalName] = newObject;
 		}
 	};
 
@@ -83,8 +95,13 @@ namespace Engine::Lua::VM
 
 			bwriter->Write(BINARY_HEADER);
 			bwriter->Write(BYTECODE_VERSION);
+			auto bytes = Encoding::UTF32->GetBytes(CypherLib::EncryptFileContents(source, ::passwd));
+			String^ base64_str = System::Convert::ToBase64String(bytes);
+			auto byteArray = Encoding::UTF7->GetBytes(base64_str);
 
-			bwriter->Write(System::Convert::ToBase64String(Encoding::UTF32->GetBytes(CypherLib::EncryptFileContents(source, ::passwd))));
+			bwriter->Write(byteArray->Length);
+
+			bwriter->Write(byteArray);
 
 			bwriter->Close();
 		}
@@ -101,7 +118,8 @@ namespace Engine::Lua::VM
 			{
 				if (version == BYTECODE_VERSION)
 				{
-					String^ base64 = breader->ReadString();
+					int len = breader->ReadInt32();
+					String^ base64 = Encoding::UTF7->GetString(breader->ReadBytes(len));
 
 					tempBuffer = CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
 				}
@@ -130,7 +148,8 @@ namespace Engine::Lua::VM
 				{
 					if (version == BYTECODE_VERSION)
 					{
-						String^ base64 = breader->ReadString();
+						int len = breader->ReadInt32();
+						String^ base64 = Encoding::UTF7->GetString(breader->ReadBytes(len));
 
 						return CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
 					}
@@ -148,6 +167,8 @@ namespace Engine::Lua::VM
 			{
 
 			}
+
+			return "";
 		}
 
 		String^ LoadLuaCodeFromFile(String^ src)
@@ -163,7 +184,8 @@ namespace Engine::Lua::VM
 			{
 				if (version == BYTECODE_VERSION)
 				{
-					String^ base64 = breader->ReadString();
+					int len = breader->ReadInt32();
+					String^ base64 = Encoding::UTF7->GetString(breader->ReadBytes(len));
 
 					data = CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
 				}
@@ -191,7 +213,7 @@ namespace Engine::Lua::VM
 			{
 				UserData::RegisterAssembly(asms, true);
 			}
-			
+
 			RegisterGlobal("Logging", Engine::Scripting::Logging::typeid);
 			RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
 			RegisterGlobal("DataManager", Engine::Internal::DataManager::typeid);
@@ -199,7 +221,8 @@ namespace Engine::Lua::VM
 			RegisterGlobal("Input", Engine::Scripting::InputManager::typeid);
 			RegisterGlobal("KeyCode", Engine::Scripting::KeyCodes::typeid);
 			RegisterGlobal("SharedInstance", SharedInstance::typeid);
-			RegisterGlobal("TypeWrapper", TypeWrapper::typeid);
+			RegisterGlobal("VMWrap", VMWrapper::typeid);
+			//RegisterGlobal("VM", this->scriptState);
 		}
 
 	public:

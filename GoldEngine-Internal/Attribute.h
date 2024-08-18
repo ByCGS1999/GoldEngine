@@ -2,10 +2,20 @@
 
 namespace Engine::Scripting
 {
+
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-		public ref class Attribute
+	public ref class Attribute
 	{
+	public: 
+		enum class AccessLevel
+		{
+			Public,
+			ReadOnly,
+			WriteOnly
+		};
+
 	public:
+		AccessLevel accessLevel;
 		String^ name;
 		System::Object^ userData;
 		System::Type^ userDataType;
@@ -13,7 +23,7 @@ namespace Engine::Scripting
 	public:
 		Attribute(String^ str, System::Object^ data);
 		[Newtonsoft::Json::JsonConstructorAttribute]
-		Attribute(String^ str, System::Object^ data, System::Type^ dT);
+		Attribute(AccessLevel level, String^ str, System::Object^ data, System::Type^ dT);
 
 	public:
 		void setValue(System::Object^ object);
@@ -24,12 +34,18 @@ namespace Engine::Scripting
 		generic <class T>
 		T getValue()
 		{
+			if (accessLevel == AccessLevel::WriteOnly)
+				return { };
+
 			return (T)userData;
 		}
 
 		generic <class T>
 		T getValueFromJObject()
 		{
+			if (accessLevel == AccessLevel::WriteOnly)
+				return { };
+
 			return (T)(getValue<Newtonsoft::Json::Linq::JObject^>()->ToObject<T>());
 		}
 
@@ -40,11 +56,17 @@ namespace Engine::Scripting
 
 		System::Object^ getValue()
 		{
+			if (accessLevel == AccessLevel::WriteOnly)
+				return { };
+
 			return userData;
 		}
 
 		auto getValueAuto()
 		{
+			if (accessLevel == AccessLevel::WriteOnly)
+				return gcnew System::Object();
+
 			return Convert::ChangeType(userData, userDataType);
 		}
 
@@ -57,6 +79,10 @@ namespace Engine::Scripting
 		{
 			return this->userData->GetType();
 		}
+
+		void lockRead();
+		void lockWrite();
+		void unlock();
 
 	public:
 		System::Object^ DeserializeAttribute()
@@ -120,28 +146,38 @@ namespace Engine::Scripting
 	public:
 		static Attribute^ create(String^ name, System::Object^ data, Type^ type)
 		{
-			return New(name, data, type);
+			return New(AccessLevel::Public, name, data, type);
+		}
+
+		static Attribute^ create(AccessLevel accessLevel, String^ name, System::Object^ data, Type^ type)
+		{
+			return New(accessLevel, name, data, type);
 		}
 
 		static Attribute^ create(String^ name, System::Object^ data)
 		{
-			return New(name, data);
+			return New(AccessLevel::Public, name, data);
 		}
 
-		static Attribute^ New(String^ name, System::Object^ data)
+		static Attribute^ create(AccessLevel accessLevel, String^ name, System::Object^ data)
+		{
+			return New(accessLevel, name, data);
+		}
+
+		static Attribute^ New(AccessLevel level, String^ name, System::Object^ data)
 		{
 			if (data == nullptr)
 				return nullptr;
 
-			return gcnew Attribute(name, data, data->GetType());
+			return gcnew Attribute(level, name, data, data->GetType());
 		}
 
-		static Attribute^ New(String^ name, System::Object^ data, Type^ type)
+		static Attribute^ New(AccessLevel level, String^ name, System::Object^ data, Type^ type)
 		{
 			if (data == nullptr)
 				return nullptr;
 
-			return gcnew Attribute(name, data, type);
+			return gcnew Attribute(level, name, data, type);
 		}
 	};
 }

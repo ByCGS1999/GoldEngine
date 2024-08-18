@@ -94,6 +94,7 @@ bool readonlyLock = false;
 bool fpsCap = true;
 bool fpsCheck = true;
 bool reparentLock = false;
+
 TextEditor* codeEditor = new TextEditor();
 ImVec2 codeEditorSize;
 auto language = TextEditor::LanguageDefinition::CPlusPlus();
@@ -132,6 +133,55 @@ assetDisplay displayingAssets;
 
 int displayingAsset = 0;
 
+void render(int currentLayer, Engine::Render::ScriptableRenderPipeline^ renderPipeline, Engine::Management::Scene^ scene)
+{
+	ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
+
+	if (renderPipeline != nullptr)
+		renderPipeline->PreRenderObjects();
+
+	while (currentLayer != LayerManager::getHigherLayer())
+	{
+		Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+
+		if (cL == nullptr)
+			break;
+
+		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+		{
+			if (scene->sceneLoaded())
+			{
+				Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
+
+				if (reference->layerMask = cL)
+				{
+					if (renderPipeline != nullptr)
+						renderPipeline->PreRenderObject(reference);
+
+					reference->GameDraw();
+
+				#if PRODUCTION_BUILD == FALSE
+					reference->GameDrawGizmos();
+				#endif
+
+					if (renderPipeline != nullptr)
+						renderPipeline->PostRenderObject();
+				}
+			}
+		}
+
+		Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+
+		if (nextLayer != nullptr)
+			currentLayer = nextLayer->layerMask;
+		else
+			break;
+	}
+
+	if (renderPipeline != nullptr)
+		renderPipeline->PostRenderObjects();
+}
+
 ref class EditorWindow : Engine::Window
 {
 private:
@@ -142,6 +192,9 @@ private:
 	Engine::Components::Vector3^ cameraPosition;
 	Engine::Internal::Components::Object^ selectedObject;
 	int selectedObjectIndex;
+	bool selectionLock = false;
+	Engine::Internal::Components::Object^ selectionObject;
+
 	Engine::Internal::Components::Object^ reparentObject;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Engine::Lua::VM::LuaVM^ luaVM;
@@ -156,6 +209,22 @@ private:
 		{
 			File::WriteAllText(gcnew String(codeEditorFile.c_str()), gcnew String(codeEditor->GetText().c_str()));
 		}
+	}
+
+	String^ GetParentRoute(Engine::Internal::Components::Transform^ transform)
+	{
+		if (transform != nullptr && transform->parent != nullptr)
+		{
+			auto parentInstance = Singleton<ObjectManager^>::Instance->GetObjectByUid(transform->parent->GetUID());
+			return GetParentRoute(parentInstance->transform) + "/" + parentInstance->name;
+		}
+		else
+			return "World";
+	}
+
+	String^ GetAccessRoute(Engine::Internal::Components::Object^ object)
+	{
+		return GetParentRoute(object->transform) + "/" + object->name;
 	}
 
 	void createAssetEntries(String^ path)
@@ -489,7 +558,7 @@ private:
 									attrib->setValue(gcnew String(data));
 
 								}
-								delete data;
+								delete[] data;
 							}
 							else if (attrib->userData->GetType()->Equals(Engine::Components::Vector3::typeid))
 							{
@@ -500,6 +569,17 @@ private:
 								if (ImGui::DragFloat3(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), data, 1.0f, -INFINITY, INFINITY, "%.2f"))
 								{
 									attrib->setValue(Engine::Components::Vector3::create(data));
+								}
+							}
+							else if (attrib->userData->GetType()->Equals(Engine::Components::Vector2::typeid))
+							{
+								Engine::Components::Vector2^ vector = (Engine::Components::Vector2^)attrib->userData;
+
+								float data[2] = { vector->x, vector->y };
+
+								if (ImGui::DragFloat2(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), data, 1.0f, -INFINITY, INFINITY, "%.2f"))
+								{
+									attrib->setValue(Engine::Components::Vector2::create(data));
 								}
 							}
 							else if (attrib->userData->GetType()->Equals(UInt32::typeid))
@@ -556,6 +636,27 @@ private:
 								{
 									attrib->setValue(value, false);
 									attrib->setType(float::typeid);
+								}
+							}
+							else if (attrib->userData->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attrib->userData->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid))
+							{
+								Engine::Internal::Components::Object^ value = (Engine::Internal::Components::Object^)attrib->userData;
+
+								std::string temp = std::string("");
+								if (value == nullptr)
+									temp = CastStringToNative("NOT ASSIGNED - (NULL)");
+								else
+									temp = CastStringToNative(value->name + " - (" + GetAccessRoute(value) + ")");
+
+								if (ImGui::Button(temp.c_str()))
+								{
+									if (!selectionLock)
+										selectionLock = true;
+									else
+									{
+										selectionLock = false;
+										attrib->setValue(selectionObject, false);
+									}
 								}
 							}
 							else if (attrib->userData->GetType()->Equals(Double::typeid))
@@ -919,6 +1020,7 @@ end
 					}
 					
 					refName += _reference->name;
+					refName += (_reference->active == true) ? "" : "(INACTIVE)";
 
 					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager || _reference->isProtected())
 					{
@@ -926,6 +1028,8 @@ end
 						{
 							if (reparentLock)
 								reparentObject = _reference;
+							else if (selectionLock)
+								selectionObject = _reference;
 							else
 							{
 								readonlyLock = true;
@@ -940,6 +1044,8 @@ end
 						{
 							if (reparentLock)
 								reparentObject = _reference;
+							else if (selectionLock)
+								selectionObject = _reference;
 							else
 							{
 								readonlyLock = false;
@@ -1016,6 +1122,10 @@ end
 public:
 	EditorWindow()
 	{
+#if HIDE_CONSOLE == true
+		WinAPI::FreeCons();
+#endif
+
 		strcpy(password, ENCRYPTION_PASSWORD);
 
 		luaVM = gcnew Engine::Lua::VM::LuaVM();
@@ -1023,7 +1133,6 @@ public:
 		dataPack = DataPacks();
 
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
-		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetCallingAssembly()));
 		
 		for each (String^ fileName in Directory::GetFiles("Bin\\Asm\\"))
 		{
@@ -1047,7 +1156,6 @@ public:
 
 	void Start()
 	{
-		//WinAPI::FreeCons();
 		SetTraceLogLevel(LOG_DEBUG);
 		SetWindowFlags(FLAG_INTERLACED_HINT | FLAG_WINDOW_RESIZABLE | FLAG_WINDOW_ALWAYS_RUN);
 		OpenWindow(1280, 720, (const char*)EDITOR_VERSION);
@@ -1135,7 +1243,7 @@ public:
 				{
 					if (ImGui::InputText("###PASSWORD_SETTER", password, 512))
 					{
-						passwd = CypherLib::GetPasswordBytes(gcnew String(password));
+						passwd = CypherLib::GetPasswordBytes(gcnew String(Engine::Config::EngineSecrets::singleton()->encryptionPassword));
 					}
 
 					ImGui::EndMenu();
@@ -1167,9 +1275,19 @@ public:
 
 				ImGui::SeparatorText("Project");
 
-				if (ImGui::MenuItem("Generate project"))
+				if (ImGui::BeginMenu("Generate project"))
 				{
+					if (ImGui::MenuItem("C++ Template"))
+					{
 
+					}
+
+					if (ImGui::MenuItem("C# Template"))
+					{
+
+					}
+
+					ImGui::EndMenu();
 				}
 
 				if (ImGui::MenuItem("Build Settings"))
@@ -1322,7 +1440,17 @@ public:
 					}
 					if (ImGui::MenuItem("Camera2D"))
 					{
+						Engine::EngineObjects::Camera^ newCamera = gcnew Engine::EngineObjects::Camera2D("Camera",
+							gcnew Engine::Internal::Components::Transform(
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								0.0f,
+								Engine::Components::Vector3::create({ 1,1,1 }),
+								nullptr
+							));
 
+						scene->AddObjectToScene(newCamera);
+						scene->PushToRenderQueue(newCamera);
 					}
 
 					ImGui::EndMenu();
@@ -1330,16 +1458,43 @@ public:
 
 				ImGui::Separator();
 
-				if (ImGui::BeginMenu("Models"))
+				if (ImGui::BeginMenu("2D/3D"))
 				{
-					if (ImGui::MenuItem("ModelRenderer"))
+					if (ImGui::BeginMenu("2D"))
 					{
+						if (ImGui::MenuItem("Sprite"))
+						{
+							auto sprite = gcnew Engine::EngineObjects::Sprite(
+								"Sprite",
+								gcnew Engine::Internal::Components::Transform(
+									gcnew Engine::Components::Vector3(0, 0, 0),
+									gcnew Engine::Components::Vector3(0, 0, 0),
+									0,
+									gcnew Engine::Components::Vector3(1, 1, 1),
+									scene->GetDatamodelMember("workspace")->GetTransform()
+								)
+							);
 
+							scene->AddObjectToScene(sprite);
+							scene->PushToRenderQueue(sprite);
+						}
+
+						ImGui::EndMenu();
 					}
 
-					if (ImGui::MenuItem("MeshRenderer"))
+					if (ImGui::BeginMenu("3D"))
 					{
+						if (ImGui::MenuItem("ModelRenderer"))
+						{
 
+						}
+
+						if (ImGui::MenuItem("MeshRenderer"))
+						{
+
+						}
+
+						ImGui::EndMenu();
 					}
 
 					ImGui::EndMenu();
@@ -1522,12 +1677,17 @@ public:
 					if (reference->GetTransform()->parent != nullptr)
 						continue;
 
+					String^ refName = reference->name;
+					refName += (reference->active == true) ? "" : " (INACTIVE)";
+
 					if (type == ObjectType::Datamodel || type == ObjectType::LightManager || reference->isProtected())
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (ENGINE PROTECTED)" + "###" + reference->GetTransform()->GetUID())))
+						if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)" + "###" + reference->GetTransform()->GetUID())))
 						{
 							if (reparentLock)
 								reparentObject = reference;
+							else if (selectionLock)
+								selectionObject = reference;
 							else
 							{
 								readonlyLock = true;
@@ -1538,10 +1698,12 @@ public:
 					}
 					else if (reference->GetTransform()->parent == nullptr)
 					{
-						if (ImGui::Selectable(CastToNative(reference->name + " (UNPARENTED)" + "###" + reference->GetTransform()->GetUID())))
+						if (ImGui::Selectable(CastToNative(refName + " (UNPARENTED)" + "###" + reference->GetTransform()->GetUID())))
 						{
 							if (reparentLock)
 								reparentObject = reference;
+							else if (selectionLock)
+								selectionObject = reference;
 							else
 							{
 								readonlyLock = false;
@@ -1574,26 +1736,21 @@ public:
 				{
 					if (ImGui::BeginMenu("Instance Actions"))
 					{
-
-						if (ImGui::MenuItem("Destroy Object"))
+						if (ImGui::BeginMenu("Active"))
 						{
-							ObjectManager::singleton()->Destroy(selectedObject);
-							selectedObject = nullptr;
+							if (ImGui::MenuItem("Set Active"))
+							{
+								selectedObject->active = true;
+							}
+
+							if (ImGui::MenuItem("Set Inactive"))
+							{
+								selectedObject->active = false;
+							}
 
 							ImGui::EndMenu();
-
-							ImGui::End();
-
-							return;
 						}
 
-						ImGui::EndMenu();
-					}
-
-					ImGui::Separator();
-
-					if (ImGui::BeginMenu("Instance Status"))
-					{
 						if (ImGui::BeginMenu("Rendering"))
 						{
 							{
@@ -1627,7 +1784,7 @@ public:
 									}
 								}
 							}
-							
+
 							{
 								std::string layer = "";
 
@@ -1680,24 +1837,13 @@ public:
 									ImGui::EndCombo();
 								}
 
-								if(l!=nullptr)
+								if (l != nullptr)
 									selectedObject->layerMask = l;
 
 								l = nullptr;
 							}
 
 							ImGui::EndMenu();
-						}
-
-						ImGui::EndMenu();
-					}
-
-					if (ImGui::BeginMenu("Instance Properties"))
-					{
-						if (ImGui::MenuItem("Change Parent"))
-						{
-							if (!readonlyLock)
-								reparentLock = true;
 						}
 
 						if (ImGui::BeginMenu("Tagging"))
@@ -1719,6 +1865,31 @@ public:
 						ImGui::EndMenu();
 					}
 
+					if (ImGui::BeginMenu("Instance Properties"))
+					{
+						if (ImGui::MenuItem("Change Parent"))
+						{
+							if (!readonlyLock)
+								reparentLock = true;
+						}
+
+						ImGui::Separator();
+
+						if (ImGui::MenuItem("Destroy Object"))
+						{
+							ObjectManager::singleton()->Destroy(selectedObject);
+							selectedObject = nullptr;
+
+							ImGui::EndMenu();
+
+							ImGui::End();
+
+							return;
+						}
+
+						ImGui::EndMenu();
+					}
+
 					if (ImGui::BeginMenu("Class"))
 					{
 						if (ImGui::MenuItem("Protect Member"))
@@ -1728,7 +1899,7 @@ public:
 
 						if (ImGui::MenuItem("Unprotect Member"))
 						{
-							if (selectedObject->type == ObjectType::Datamodel || selectedObject->type == ObjectType::Datamodel || selectedObject->type == ObjectType::LightManager)
+							if (selectedObject->type == ObjectType::Datamodel || selectedObject->type == ObjectType::LightManager)
 								return;
 
 							selectedObject->unprotectMember();
@@ -2262,7 +2433,7 @@ public:
 			for (int x = 0; x < loadedAssets->Count; x++)
 			{
 				if (buffer != "")
-					delete buffer;
+					delete[] buffer;
 
 				buffer = new char[512];
 				strcpy(buffer, CastToNative(loadedAssets[x]));
@@ -2295,7 +2466,7 @@ public:
 			{
 				OpenFileExplorer("Select output file", Engine::Editor::Gui::explorerMode::Save, gcnew Engine::Editor::Gui::onFileSelected(this, &EditorWindow::PackData));
 
-				delete buffer;
+				delete[] buffer;
 
 				b5 = false;
 
@@ -2325,6 +2496,9 @@ public:
 			{
 				Engine::Config::EngineConfiguration::singleton()->windowName = gcnew String(buff);
 			}
+
+
+			
 
 			if (ImGui::Button("Close"))
 			{
@@ -2370,7 +2544,7 @@ public:
 				ImGui::CloseCurrentPopup();
 			}
 
-			delete tmp;
+			delete[] tmp;
 
 			ImGui::EndPopup();
 		}
@@ -2475,7 +2649,7 @@ public:
 			for (int x = 0; x < scene->assetPacks->Count; x++)
 			{
 				if (data != "")
-					free(data);
+					delete[] data;
 
 				data = new char[512];
 				strcpy(data, CastToNative(scene->assetPacks[x]));
@@ -2525,52 +2699,6 @@ public:
 		exit(0);
 	}
 
-	void render(int currentLayer) override
-	{
-		ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
-
-		if (renderPipeline != nullptr)
-			renderPipeline->PreRenderObjects();
-
-		while (currentLayer != LayerManager::getHigherLayer())
-		{
-			Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
-
-			if (cL == nullptr)
-				break;
-
-			for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
-			{
-				if (scene->sceneLoaded())
-				{
-					Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
-
-					if (reference->layerMask = cL)
-					{
-						if (renderPipeline != nullptr)
-							renderPipeline->PreRenderObject(reference);
-
-						reference->Draw();
-						reference->DrawGizmo();
-
-						if (renderPipeline != nullptr)
-							renderPipeline->PostRenderObject();
-					}
-				}
-			}
-
-			Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
-
-			if (nextLayer != nullptr)
-				currentLayer = nextLayer->layerMask;
-			else
-				break;
-		}
-
-		if (renderPipeline != nullptr)
-			renderPipeline->PostRenderObjects();
-	}
-
 	void Draw() override
 	{
 		if (renderPipeline != nullptr)
@@ -2604,7 +2732,7 @@ public:
 
 				int currentLayer = 1;
 
-				render(currentLayer);
+				render(currentLayer, renderPipeline, scene);
 
 				if (is3DCamera)
 					EndMode3D();
@@ -2860,18 +2988,23 @@ private:
 public:
 	GameWindow()
 	{
-		//WinAPI::FreeCons();
+#if HIDE_CONSOLE == true
+		WinAPI::FreeCons();
+#endif
 
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
 
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
+		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetCallingAssembly()));
 
-		for each (String ^ fileName in Directory::GetFiles("Bin/Asm/"))
+		for each (String ^ fileName in Directory::GetFiles("Bin\\Asm\\"))
 		{
 			if (fileName->Contains(".goldasm") || fileName->Contains(".dll"))
 			{
-				assemblies->Add(gcnew EngineAssembly(fileName));
+				String^ path = Directory::GetCurrentDirectory() + "\\" + fileName;
+
+				assemblies->Add(gcnew EngineAssembly(path));
 			}
 		}
 
@@ -2971,24 +3104,6 @@ private:
 			scene->PushToRenderQueue(lightdm);
 			scene->AddObjectToScene(lightdm);
 		}
-
-		if (ObjectManager::singleton()->GetGameObjectsByName("EditorCamera")->Count <= 0)
-		{
-
-			auto camera3D = gcnew Engine::EngineObjects::Camera("EditorCamera",
-				gcnew Engine::Internal::Components::Transform(
-					Engine::Components::Vector3::create({ 0,0,0 }),
-					Engine::Components::Vector3::create({ 0,0,0 }),
-					0.0f,
-					Engine::Components::Vector3::create({ 1,1,1 }),
-					nullptr
-				),
-				CAMERA_PERSPECTIVE
-			);
-
-			scene->PushToRenderQueue(camera3D);
-			scene->PushToRenderQueue(camera3D);
-		}
 	}
 
 public:
@@ -3035,51 +3150,6 @@ public:
 		ImGui::DockSpaceOverViewport(viewPort, ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
 	}
 
-	void render(int currentLayer) override
-	{
-		ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
-
-		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
-			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreRenderObjects();
-
-		while (currentLayer != LayerManager::getHigherLayer())
-		{
-			Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
-
-			if (cL == nullptr)
-				break;
-
-			for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
-			{
-				if (scene->sceneLoaded())
-				{
-					Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
-
-					if (reference->layerMask = cL)
-					{
-						if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
-							Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreRenderObject(reference);
-
-						reference->GameDraw();
-
-						if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
-							Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PostRenderObject();
-					}
-				}
-			}
-
-			Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
-
-			if (nextLayer != nullptr)
-				currentLayer = nextLayer->layerMask;
-			else
-				break;
-		}
-
-		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
-			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PostRenderObjects();
-	}
-
 	virtual void Draw() override
 	{
 		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
@@ -3102,24 +3172,23 @@ public:
 				return;
 
 			if (is3DCamera)
-				BeginMode3D(((NativeCamera*)camera->get())->get());
+				BeginMode3D(((Engine::EngineObjects::Native::NativeCamera3D*)camera->get())->get());
 			else
-				BeginMode3D(((NativeCamera*)camera->get())->get());
+				BeginMode3D(((Engine::EngineObjects::Native::NativeCamera3D*)camera->get())->get());
 
 			int currentLayer = 1;
 
-			render(currentLayer);
+			render(currentLayer, renderPipeline, scene);
 
 			if (is3DCamera)
 				EndMode3D();
 			else
-				EndMode2D();
+				EndMode3D();
 
 			DrawFPS(0, 0);
 
 			rlImGuiBegin();
 
-			/*
 			ImGui::Begin("DemoVer", (bool*)true, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking);
 			{
 				ImGui::SetWindowSize(ImVec2(285, 20), 0);
@@ -3127,7 +3196,6 @@ public:
 				ImGui::TextColored(ImVec4(255, 255, 255, 255), ENGINE_VERSION);
 				ImGui::End();
 			}
-			*/
 
 			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 			{

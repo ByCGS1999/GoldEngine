@@ -74,11 +74,28 @@ namespace Engine::Scripting
 			setAttribute(name, data);
 		}
 
+		void addAttribute(Attribute::AccessLevel level, String^ name, System::Object^ data)
+		{
+			setAttribute(level, name, data);
+		}
+
 		void setAttribute(String^ name, System::Object^ data)
 		{
 			if (!hasAttribute(name))
 			{
-				attributes->Add(Attribute::New(name, data));
+				attributes->Add(Attribute::New(Attribute::AccessLevel::Public, name, data));
+			}
+			else
+			{
+				printError("Attribute name is duplicate");
+			}
+		}
+
+		void setAttribute(Attribute::AccessLevel level, String^ name, System::Object^ data)
+		{
+			if (!hasAttribute(name))
+			{
+				attributes->Add(Attribute::New(level, name, data));
 			}
 			else
 			{
@@ -90,7 +107,6 @@ namespace Engine::Scripting
 		{
 			if (newAttrib == nullptr)
 				return;
-
 
 			if (!hasAttribute(newAttrib->name))
 			{

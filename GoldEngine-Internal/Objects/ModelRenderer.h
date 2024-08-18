@@ -140,7 +140,7 @@ namespace Engine::EngineObjects
 			m.materials[0].shader = DataPacks::singleton().GetShader(shader);
 			*/
 
-			if (modelManager == nullptr || &modelManager->getModel() == nullptr)
+			if (modelManager == nullptr)
 				return;
 
 			RAYLIB::Vector2 baseVctr = { 0.5f, 0.5f };

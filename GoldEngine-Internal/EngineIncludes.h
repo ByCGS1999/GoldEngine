@@ -30,5 +30,7 @@
 
 #include "Objects/Daemon.h"
 #include "Objects/Camera.h"
+#include "Objects/Camera2D.h"
 #include "Objects/Camera3D.h"
 #include "Objects/EditorCamera.h"
+#include "Objects/Sprite.h"

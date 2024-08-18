@@ -8,6 +8,7 @@
 #include <inttypes.h>
 #include <fstream>
 #include <bit>
+#include <thread>
 #include <map>
 #include <msclr/gcroot.h>
 #include <msclr/lock.h>

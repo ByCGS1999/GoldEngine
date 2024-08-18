@@ -209,16 +209,19 @@
     <Filter Include="Source\Engine\Signals">
       <UniqueIdentifier>{741a851b-feff-416d-a254-c447b15545d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Archivos de recursos">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Source\EngineTools">
       <UniqueIdentifier>{6d13b602-baec-4651-bcfb-eea23e4403db}</UniqueIdentifier>
     </Filter>
     <Filter Include="Headers">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\2D">
+      <UniqueIdentifier>{3d889251-e8ef-4e90-afb5-0daa528c9c5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -495,6 +498,12 @@
     <ClInclude Include="Objects\EditorCamera.h">
       <Filter>Source\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Camera2D.h">
+      <Filter>Source\Engine\EngineObjects\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Sprite.h">
+      <Filter>Source\Engine\EngineObjects\2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -554,15 +563,18 @@
     <ClCompile Include="Attribute.cpp">
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClCompile>
+    <ClCompile Include="CypherLib.cpp">
+      <Filter>Source\Engine\Encryption</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
-      <Filter>Source\Archivos de recursos</Filter>
+      <Filter>Source\Resources</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
-      <Filter>Source\Archivos de recursos</Filter>
+      <Filter>Source\Resources</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

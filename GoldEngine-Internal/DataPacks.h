@@ -313,6 +313,32 @@ namespace Engine::Assets::Storage
 			return shader;
 		}
 
+		Shader GetShader_Unsafe(unsigned int shaderId)
+		{
+			Shader shader;
+
+			bool hasShader = false;
+
+			for (int x = 0; x < nativePacks->shaders.size(); x++)
+			{
+				auto sP = &nativePacks->shaders[x];
+
+				if (sP->getId() == shaderId)
+				{
+					return sP->getResource();
+				}
+			}
+
+			if (!hasShader)
+			{
+				printError(String::Format("Shader {0} does not exist, falling back on default", shaderId));
+				shader = LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/base.fs");
+				AddShader(shaderId, shader);
+			}
+
+			return shader;
+		}
+
 		Shader* GetShaderPtr(unsigned int shaderId)
 		{
 			Shader* shader;

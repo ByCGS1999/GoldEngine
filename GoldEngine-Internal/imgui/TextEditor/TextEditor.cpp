@@ -3376,7 +3376,9 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"SignalManager",
 			"Attribute",
 			"attributes",
-			"script"
+			"script",
+			"VM",
+			"VMWrap"
 		};
 
 		static const char* customAttributes[] = {
@@ -3540,6 +3542,12 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"IsMouseButtonUp",
 			"IsMouseButtonPressed",
 			"IsMouseButtonDown",
+			"GetRuntimeType",
+			"GetFullName",
+			"PrintType",
+			"ToDerivate",
+			"DerivateVMGlobal",
+			"UpdateVMGlobal"
 		};
 
 		for (auto& k : identifiers)

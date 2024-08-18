@@ -9,9 +9,9 @@ namespace Engine::EngineObjects
 	public:
 		MeshRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, List<unsigned int>^ mats, unsigned int tint) : Script(name, trans)
 		{
-			attributes->addAttribute(Engine::Scripting::Attribute::New("model", model, UInt32::typeid));
-			attributes->addAttribute(Engine::Scripting::Attribute::New("materials", mats, List<UInt32>::typeid));
-			attributes->addAttribute(Engine::Scripting::Attribute::New("tint", gcnew Engine::Components::Color(tint), Engine::Components::Color::typeid));
+			attributes->addAttribute(Engine::Scripting::Attribute::New(Engine::Scripting::Attribute::AccessLevel::Public, "model", model, UInt32::typeid));
+			attributes->addAttribute(Engine::Scripting::Attribute::New(Engine::Scripting::Attribute::AccessLevel::Public, "materials", mats, List<UInt32>::typeid));
+			attributes->addAttribute(Engine::Scripting::Attribute::New(Engine::Scripting::Attribute::AccessLevel::Public, "tint", gcnew Engine::Components::Color(tint), Engine::Components::Color::typeid));
 		}
 
 		void Init(unsigned int model, List<unsigned int>^ mats, unsigned int tint)

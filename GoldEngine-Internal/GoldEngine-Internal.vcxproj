@@ -248,6 +248,7 @@
     <ClInclude Include="Macros.h" />
     <ClInclude Include="Objects\BoundingBoxRenderer.h" />
     <ClInclude Include="Objects\Camera.h" />
+    <ClInclude Include="Objects\Camera2D.h" />
     <ClInclude Include="Objects\Camera3D.h" />
     <ClInclude Include="Objects\CubeRenderer.h" />
     <ClInclude Include="Objects\Daemon.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Objects\Pipeline\ScriptableRenderPipeline.hpp" />
     <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\Skybox.h" />
+    <ClInclude Include="Objects\Sprite.h" />
     <ClInclude Include="Object\Color.h" />
     <ClInclude Include="Object\Layer.h" />
     <ClInclude Include="Object\LayerManager.h" />
@@ -313,6 +315,7 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="CastToNative.cpp" />
+    <ClCompile Include="CypherLib.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="imguistyleserializer.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
