@@ -118,7 +118,7 @@ namespace Engine::Managers
 							deserializedData
 						);
 						
-						Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)sceneObject->GetReference();
+						Engine::EngineObjects::ScriptBehaviour^ script = (Engine::EngineObjects::ScriptBehaviour^)sceneObject->GetReference();
 						
 						for each (auto assembly in assemblyManager)
 						{

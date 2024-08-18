@@ -55,6 +55,7 @@ unsigned int passwd = 0;
 #include "LuaVM.h"
 #include "ManagedSignal.h"
 // lua script object
+#include "Objects/Script.h"
 #include "Objects/LuaScript.h"
 
 #include "Objects/Pipeline/ScriptableRenderPipeline.hpp"
@@ -508,7 +509,7 @@ private:
 
 			case ObjectType::Script: 
 			{
-				Engine::EngineObjects::Script^ script = (Engine::EngineObjects::Script^)object;
+				Engine::EngineObjects::ScriptBehaviour^ script = (Engine::EngineObjects::ScriptBehaviour^)object;
 
 				if (script->assemblyReference->Contains("LuaScript"))
 				{
@@ -1588,7 +1589,7 @@ public:
 							{
 								if (ImGui::MenuItem(CastToNative(T->Name)))
 								{
-									Engine::EngineObjects::Script^ retn = assembly->Create<Engine::EngineObjects::Script^>(T->FullName);
+									Engine::EngineObjects::ScriptBehaviour^ retn = assembly->Create<Engine::EngineObjects::ScriptBehaviour^>(T->FullName);
 									scene->PushToRenderQueue(retn);
 									scene->AddObjectToScene(retn);
 								}
@@ -2313,7 +2314,7 @@ public:
 						{
 							if (ImGui::Button(CastToNative(T->Name)))
 							{
-								Engine::EngineObjects::Script^ retn = assembly->Create<Engine::EngineObjects::Script^>(T->FullName);
+								Engine::EngineObjects::ScriptBehaviour^ retn = assembly->Create<Engine::EngineObjects::ScriptBehaviour^>(T->FullName);
 								scene->PushToRenderQueue(retn);
 								scene->AddObjectToScene(retn);
 							}

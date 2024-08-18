@@ -211,7 +211,15 @@ namespace Engine::Lua::VM
 
 			for each (auto asms in appDomain->GetAssemblies())
 			{
-				UserData::RegisterAssembly(asms, true);
+				try 
+				{
+					UserData::RegisterAssembly(asms, true);
+				}
+				catch (Exception^ ex)
+				{
+					printError(ex->Message);
+					printError(ex->StackTrace);
+				}
 			}
 
 			RegisterGlobal("Logging", Engine::Scripting::Logging::typeid);

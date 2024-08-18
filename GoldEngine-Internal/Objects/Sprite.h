@@ -2,10 +2,10 @@
 
 namespace Engine::EngineObjects
 {
-	public ref class Sprite : Engine::EngineObjects::Script
+	public ref class Sprite : Engine::EngineObjects::ScriptBehaviour
 	{
 	public:
-		Sprite(String^ name, Engine::Internal::Components::Transform^ transform) : Engine::EngineObjects::Script(name, transform)
+		Sprite(String^ name, Engine::Internal::Components::Transform^ transform) : Engine::EngineObjects::ScriptBehaviour(name, transform)
 		{
 			if (!attributes->getAttribute("Texture ID"))
 			{

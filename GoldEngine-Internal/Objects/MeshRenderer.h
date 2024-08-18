@@ -4,10 +4,10 @@ using namespace Engine::Assets::Storage;
 
 namespace Engine::EngineObjects
 {
-	public ref class MeshRenderer : public Engine::EngineObjects::Script
+	public ref class MeshRenderer : public Engine::EngineObjects::ScriptBehaviour
 	{
 	public:
-		MeshRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, List<unsigned int>^ mats, unsigned int tint) : Script(name, trans)
+		MeshRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, List<unsigned int>^ mats, unsigned int tint) : ScriptBehaviour(name, trans)
 		{
 			attributes->addAttribute(Engine::Scripting::Attribute::New(Engine::Scripting::Attribute::AccessLevel::Public, "model", model, UInt32::typeid));
 			attributes->addAttribute(Engine::Scripting::Attribute::New(Engine::Scripting::Attribute::AccessLevel::Public, "materials", mats, List<UInt32>::typeid));

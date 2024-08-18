@@ -294,6 +294,11 @@ namespace Engine::Internal::Components
 			return this->GetType();
 		}
 
+		void SetActive(bool active)
+		{
+			this->active = active;
+		}
+
 		/*
 
 #pragma region IConvertible_Implementation

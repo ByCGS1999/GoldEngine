@@ -227,7 +227,7 @@ namespace Engine::EngineObjects
 		}
 	};
 
-	public ref class LightManager : public Engine::EngineObjects::Script
+	public ref class LightManager : public Engine::EngineObjects::ScriptBehaviour
 	{
 	private:
 		System::Collections::Generic::List<Engine::EngineObjects::LightSource^>^ lightSources;
@@ -246,7 +246,7 @@ namespace Engine::EngineObjects
 		String^ fs;
 
 	public:
-		LightManager(String^ name, Engine::Internal::Components::Transform^ t, String^ vs, String^ fs) : Engine::EngineObjects::Script(name, t)
+		LightManager(String^ name, Engine::Internal::Components::Transform^ t, String^ vs, String^ fs) : Engine::EngineObjects::ScriptBehaviour(name, t)
 		{
 			Singleton<LightManager^>::Create(this);
 

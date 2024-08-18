@@ -24,7 +24,7 @@
 #include "Attribute.h"
 #include "AttributeManager.h"
 
-#include "Objects/Script.h"
+#include "Objects/ScriptBehaviour.h"
 #include "Objects/LightManager.h"
 #include "Objects/MeshRenderer.h"
 

@@ -113,7 +113,7 @@ namespace Engine::Management::MiddleLevel
 
 			case Engine::Internal::Components::ObjectType::Script:
 			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Script^>(deserializedData);
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::ScriptBehaviour^>(deserializedData);
 				break;
 			}
 
@@ -131,7 +131,7 @@ namespace Engine::Management::MiddleLevel
 
 			default:
 			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Script^>(deserializedData);
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::ScriptBehaviour^>(deserializedData);
 				break;
 			}
 			}
@@ -219,7 +219,7 @@ namespace Engine::Management::MiddleLevel
 
 			default:
 			{
-				Engine::EngineObjects::Script^ genericType = (Engine::EngineObjects::Script^)reference;
+				Engine::EngineObjects::ScriptBehaviour^ genericType = (Engine::EngineObjects::ScriptBehaviour^)reference;
 				deserializedData = Serialize(genericType);
 				break;
 			}

@@ -253,6 +253,7 @@
     <ClInclude Include="Objects\CubeRenderer.h" />
     <ClInclude Include="Objects\Daemon.h" />
     <ClInclude Include="Objects\EditorCamera.h" />
+    <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\GridRenderer.h" />
     <ClInclude Include="Objects\LightDm.h" />
     <ClInclude Include="Objects\LightManager.h" />
@@ -261,7 +262,7 @@
     <ClInclude Include="Objects\ModelRenderer.h" />
     <ClInclude Include="Objects\PBRModelRenderer.h" />
     <ClInclude Include="Objects\Pipeline\ScriptableRenderPipeline.hpp" />
-    <ClInclude Include="Objects\Script.h" />
+    <ClInclude Include="Objects\ScriptBehaviour.h" />
     <ClInclude Include="Objects\Skybox.h" />
     <ClInclude Include="Objects\Sprite.h" />
     <ClInclude Include="Object\Color.h" />
@@ -315,7 +316,6 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="CastToNative.cpp" />
-    <ClCompile Include="CypherLib.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="imguistyleserializer.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />

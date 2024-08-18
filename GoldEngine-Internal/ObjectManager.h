@@ -252,7 +252,7 @@ namespace Engine::Scripting
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
-				if (t->GetValue<Engine::EngineObjects::Script^>()->assemblyReference == assemblyType)
+				if (t->GetValue<Engine::EngineObjects::ScriptBehaviour^>()->assemblyReference == assemblyType)
 				{
 					return t->GetReference();
 				}
@@ -396,5 +396,25 @@ namespace Engine::Scripting
 				}
 			}
 		}
+
+
+		// patching attributes
+
+
+	public:
+		void PatchAttributeObject(Attribute^ attribute)
+		{
+			if (attribute != nullptr && (attribute->userData->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attribute->userData->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid)))
+			{
+				String^ uid = ((Engine::Internal::Components::Object^)attribute->userData)->GetTransform()->GetUID();
+
+				attribute->setValue(GetObjectByUid(uid), false);
+			}
+			else
+			{
+
+			}
+		}
+
 	};
 }

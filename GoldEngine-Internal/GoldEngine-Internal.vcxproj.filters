@@ -345,7 +345,7 @@
     <ClInclude Include="Objects\PBRModelRenderer.h">
       <Filter>Source\Engine\EngineObjects\PBR\PBRModelRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Script.h">
+    <ClInclude Include="Objects\ScriptBehaviour.h">
       <Filter>Source\Engine\EngineObjects\Script</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Skybox.h">
@@ -504,6 +504,9 @@
     <ClInclude Include="Objects\Sprite.h">
       <Filter>Source\Engine\EngineObjects\2D</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Script.h">
+      <Filter>Source\Engine\EngineObjects\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -562,9 +565,6 @@
     </ClCompile>
     <ClCompile Include="Attribute.cpp">
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="CypherLib.cpp">
-      <Filter>Source\Engine\Encryption</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

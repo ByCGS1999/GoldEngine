@@ -45,7 +45,7 @@ public:
 			{
 				if (!type->Namespace->IsNullOrEmpty(type->Namespace))
 				{
-					if (type->IsSubclassOf(Engine::EngineObjects::Script::typeid) || type->IsSubclassOf(Engine::Internal::Components::Object::typeid))
+					if (type->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || type->IsSubclassOf(Engine::Internal::Components::Object::typeid))
 					{
 						Console::WriteLine("Type Found: " + type->FullName);
 					}
@@ -95,7 +95,7 @@ public:
 			{
 				if (!t->Namespace->IsNullOrEmpty(t->Namespace))
 				{
-					if (t->IsSubclassOf(Engine::EngineObjects::Script::typeid) || t->IsSubclassOf(Engine::Internal::Components::Object::typeid))
+					if (t->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || t->IsSubclassOf(Engine::Internal::Components::Object::typeid))
 					{
 						types->Add(t);
 					}

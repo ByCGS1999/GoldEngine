@@ -50,7 +50,7 @@ namespace Engine::EngineObjects
 		};
 	}
 
-	public ref class Camera abstract : public Engine::EngineObjects::Script
+	public ref class Camera abstract : public Engine::EngineObjects::ScriptBehaviour
 	{
 	public:
 		[Newtonsoft::Json::JsonIgnoreAttribute]
@@ -60,7 +60,7 @@ namespace Engine::EngineObjects
 		bool isMainCamera;
 
 	public:
-		Camera(String^ name, Engine::Internal::Components::Transform^ trans, CameraProjection projection) : Engine::EngineObjects::Script(name, trans)
+		Camera(String^ name, Engine::Internal::Components::Transform^ trans, CameraProjection projection) : Engine::EngineObjects::ScriptBehaviour(name, trans)
 		{
 			cameraProjection = projection;
 

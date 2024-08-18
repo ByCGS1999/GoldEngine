@@ -2,30 +2,35 @@
 
 namespace Engine::EngineObjects
 {
-	public ref class Script : public Engine::Internal::Components::Object
+	public ref class Script : public Engine::EngineObjects::ScriptBehaviour
 	{
 	public:
-		System::String^ assemblyReference;
-	public:
-		Engine::Scripting::AttributeManager^ attributes;
-
-	public:
-		Script(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Script, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		Script(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::EngineObjects::ScriptBehaviour(name, transform)
 		{
-			attributes = gcnew Engine::Scripting::AttributeManager();
-			assemblyReference = GetType()->FullName->ToString();
-
-			attributes->DeserializeAttributes();
+			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
+			{
+				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+			}
 		}
 
 		virtual void Init() override
 		{
-			attributes->DeserializeAttributes();
+			Engine::EngineObjects::ScriptBehaviour::Init();
+
+			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
+			{
+				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+			}
 		}
 
 		virtual void Setup() override
 		{
-			attributes->DeserializeAttributes();
+			Engine::EngineObjects::ScriptBehaviour::Setup();
+
+			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
+			{
+				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+			}
 		}
 	};
 }
