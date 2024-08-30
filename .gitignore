@@ -22,7 +22,6 @@ Release/
 ./Build/**
 **/Build
 Build
-./GoldEngine-Internal/x64/*
 ./Utils/WineBootstrap/bin/**
 ./Utils/WineBootstrap/WineBootstrapper/Release/
 ./Utils/WineBootstrap/WineBootstrapper/Debug/
