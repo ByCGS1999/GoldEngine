@@ -233,6 +233,7 @@
     <ClInclude Include="EngineIncludes.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
+    <ClInclude Include="GraphicsWrapper.h" />
     <ClInclude Include="ImguiHook.h" />
     <ClInclude Include="imguistyleserializer.h" />
     <ClInclude Include="imgui\FileExplorer\filedialog.h" />
@@ -317,6 +318,7 @@
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="CastToNative.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="GraphicsWrapper.cpp" />
     <ClCompile Include="imguistyleserializer.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />

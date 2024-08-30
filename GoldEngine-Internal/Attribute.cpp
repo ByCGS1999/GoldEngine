@@ -4,15 +4,17 @@ using namespace System;
 
 inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data)
 {
+	/*
 	if (data == nullptr)
 	{
 		delete this; // clean memory, fuck off
 		return;
 	}
-
+	*/
 	this->accessLevel = AccessLevel::Public;
 	this->name = str;
-	userDataType = data->GetType();
+	if(data != nullptr)
+		userDataType = data->GetType();
 
 	if (data == Newtonsoft::Json::Linq::JObject::typeid)
 	{
@@ -27,15 +29,17 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 [Newtonsoft::Json::JsonConstructorAttribute]
 inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, System::Object^ data, System::Type^ dT)
 {
+	/*
 	if (data == nullptr)
 	{
 		delete this; // clean memory, fuck off
 		return;
 	}
-
+	*/
 	this->accessLevel = level;
 	this->name = str;
-	userDataType = dT;
+	if (data != nullptr)
+		userDataType = dT;
 
 	if (data == Newtonsoft::Json::Linq::JObject::typeid)
 	{

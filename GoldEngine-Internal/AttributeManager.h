@@ -118,6 +118,18 @@ namespace Engine::Scripting
 			}
 		}
 
+
+		void setAttribute_suppressed(Attribute^ newAttrib) // this one doesnt trigger duplicate attrib names output, perfect for silent operations
+		{
+			if (newAttrib == nullptr)
+				return;
+
+			if (!hasAttribute(newAttrib->name))
+			{
+				attributes->Add(newAttrib);
+			}
+		}
+
 		Attribute^ getAttribute(String^ name)
 		{
 			if (hasAttribute(name))

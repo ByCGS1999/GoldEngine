@@ -21,6 +21,8 @@ namespace Engine::EngineObjects
 			{
 				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
 			}
+
+			GC::Collect();
 		}
 
 		virtual void Setup() override
@@ -31,6 +33,8 @@ namespace Engine::EngineObjects
 			{
 				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
 			}
+
+			GC::Collect();
 		}
 	};
 }

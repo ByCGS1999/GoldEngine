@@ -104,7 +104,7 @@ namespace Engine::Render
 		virtual void OnRenderEnd() abstract;
 
 		// FirstPass Rendering
-		virtual void PreFirstPassRender(Window^) abstract;
+		virtual void PreFirstPassRender(Engine::Management::Scene^) abstract;
 		virtual void PostFirstPassRender() abstract;
 
 		// For freeing resources and memory

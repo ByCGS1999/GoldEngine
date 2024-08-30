@@ -54,7 +54,7 @@ namespace Engine::Render::Pipelines
 
         }
 
-        void PreFirstPassRender(Window^ handle) override
+        void PreFirstPassRender(Engine::Management::Scene^ handle) override
         {
 
         }

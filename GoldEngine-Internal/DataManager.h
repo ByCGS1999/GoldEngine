@@ -18,6 +18,10 @@ namespace Engine::Internal
 	public ref class DataManager abstract
 	{
 	public:
+		inline static void* GetShader(unsigned int shader_id)
+		{
+			return (void*)&Engine::Assets::Storage::DataPacks::singleton().GetShader(shader_id);
+		}
 		// -- MASTER
 		inline static void HL_BeginRendering()
 		{
@@ -169,7 +173,7 @@ namespace Engine::Internal
 		inline static void HL_CreateCamera(unsigned int cameraId, Engine::Components::Vector2^ position, Engine::Internal::Components::CameraType cameraType)
 		{
 			RAYLIB::Vector2 rlib_position;
-			Camera2D camera;
+			RAYLIB::Camera2D camera;
 			rlib_position.x = position->x;
 			rlib_position.y = position->y;
 			camera.target = rlib_position;
@@ -257,7 +261,7 @@ namespace Engine::Internal
 
 		inline static void HL_Begin2DMode(unsigned int cameraId)
 		{
-			Camera2D c = (Camera2D)Engine::Assets::Storage::DataPacks::singleton().GetCamera2D(cameraId);
+			RAYLIB::Camera2D c = (RAYLIB::Camera2D)Engine::Assets::Storage::DataPacks::singleton().GetCamera2D(cameraId);
 			BeginMode2D(c);
 		}
 
@@ -286,7 +290,7 @@ namespace Engine::Internal
 			switch (camType)
 			{
 			case Engine::Internal::Components::CameraType::C2D:
-				Camera2D cam2d = Engine::Assets::Storage::DataPacks::singleton().GetCamera2D(cameraId);
+				RAYLIB::Camera2D cam2d = Engine::Assets::Storage::DataPacks::singleton().GetCamera2D(cameraId);
 				UpdateCamera((RAYLIB::Camera*)&cam2d, (CameraMode)mode);
 				break;
 			case Engine::Internal::Components::CameraType::C3D:

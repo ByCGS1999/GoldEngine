@@ -39,6 +39,7 @@ unsigned int passwd = 0;
 #include "ShaderManager.h"
 #include "LogFileReporter.h"
 #include "AsmLoader.h"
+#include "GraphicsWrapper.h"
 
 // Daemons (Daemons are tasks that are ran mandatory by the engine, these cannot be displayed by the hierarchy)
 
@@ -74,6 +75,56 @@ using namespace Engine::Managers;
 using namespace Engine::Scripting;
 
 DataPacks dataPack;
+
+void render(int currentLayer, Engine::Render::ScriptableRenderPipeline^ renderPipeline, Engine::Management::Scene^ scene)
+{
+	ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
+
+	if (renderPipeline != nullptr)
+		renderPipeline->PreRenderObjects();
+
+	while (currentLayer != LayerManager::getHigherLayer())
+	{
+		Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+
+		if (cL == nullptr)
+			break;
+
+		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+		{
+			if (scene->sceneLoaded())
+			{
+				Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
+
+				if (reference->layerMask = cL)
+				{
+					if (renderPipeline != nullptr)
+						renderPipeline->PreRenderObject(reference);
+
+					reference->GameDraw();
+
+#if PRODUCTION_BUILD == FALSE
+					reference->GameDrawGizmos();
+#endif
+
+					if (renderPipeline != nullptr)
+						renderPipeline->PostRenderObject();
+				}
+			}
+		}
+
+		Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+
+		if (nextLayer != nullptr)
+			currentLayer = nextLayer->layerMask;
+		else
+			break;
+	}
+
+	if (renderPipeline != nullptr)
+		renderPipeline->PostRenderObjects();
+}
+
 
 #if !defined(PRODUCTION_BUILD)
 
@@ -134,54 +185,6 @@ assetDisplay displayingAssets;
 
 int displayingAsset = 0;
 
-void render(int currentLayer, Engine::Render::ScriptableRenderPipeline^ renderPipeline, Engine::Management::Scene^ scene)
-{
-	ObjectManager::singleton()->GetFirstObjectOfType<LightManager^>()->LightUpdate();
-
-	if (renderPipeline != nullptr)
-		renderPipeline->PreRenderObjects();
-
-	while (currentLayer != LayerManager::getHigherLayer())
-	{
-		Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
-
-		if (cL == nullptr)
-			break;
-
-		for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
-		{
-			if (scene->sceneLoaded())
-			{
-				Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
-
-				if (reference->layerMask = cL)
-				{
-					if (renderPipeline != nullptr)
-						renderPipeline->PreRenderObject(reference);
-
-					reference->GameDraw();
-
-				#if PRODUCTION_BUILD == FALSE
-					reference->GameDrawGizmos();
-				#endif
-
-					if (renderPipeline != nullptr)
-						renderPipeline->PostRenderObject();
-				}
-			}
-		}
-
-		Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
-
-		if (nextLayer != nullptr)
-			currentLayer = nextLayer->layerMask;
-		else
-			break;
-	}
-
-	if (renderPipeline != nullptr)
-		renderPipeline->PostRenderObjects();
-}
 
 ref class EditorWindow : Engine::Window
 {
@@ -507,7 +510,7 @@ private:
 			}
 			break;
 
-			case ObjectType::Script: 
+			case ObjectType::Script:
 			{
 				Engine::EngineObjects::ScriptBehaviour^ script = (Engine::EngineObjects::ScriptBehaviour^)object;
 
@@ -521,11 +524,11 @@ private:
 					ImGui::SameLine();
 
 					std::string nativePath = CastStringToNative(scr->luaFilePath);
-					
+
 					char* data = nativePath.data();
 
 					if (ImGui::InputText("###LUA_LINKEDSOURCE",
-						data, scr->luaFilePath->Length + (8*32), ImGuiInputTextFlags_None))
+						data, scr->luaFilePath->Length + (8 * 32), ImGuiInputTextFlags_None))
 					{
 						scr->luaFilePath = gcnew String(data);
 					}
@@ -538,7 +541,7 @@ private:
 
 				ImGui::SeparatorText("Attributes");
 
-				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX", { ImGui::GetWindowWidth()-25, 300}))
+				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX", { ImGui::GetWindowWidth() - 25, 300 }))
 				{
 					for each (Engine::Scripting::Attribute ^ attrib in script->attributes->attributes)
 					{
@@ -553,7 +556,7 @@ private:
 
 								strcpy(data, CastStringToNative(value).c_str());
 
-								ImGui::SetNextItemWidth(ImGui::GetWindowWidth()-25);
+								ImGui::SetNextItemWidth(ImGui::GetWindowWidth() - 25);
 								if (ImGui::InputText(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), data, valueLen * 8))
 								{
 									attrib->setValue(gcnew String(data));
@@ -639,7 +642,7 @@ private:
 									attrib->setType(float::typeid);
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attrib->userData->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid))
+							else if (attrib->userData->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attrib->userData->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid) || attrib->userData->GetType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || attrib->userData->GetType()->IsSubclassOf(Engine::EngineObjects::Script::typeid))
 							{
 								Engine::Internal::Components::Object^ value = (Engine::Internal::Components::Object^)attrib->userData;
 
@@ -1019,7 +1022,7 @@ end
 					{
 						refName += "\t";
 					}
-					
+
 					refName += _reference->name;
 					refName += (_reference->active == true) ? "" : "(INACTIVE)";
 
@@ -1134,8 +1137,8 @@ public:
 		dataPack = DataPacks();
 
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
-		
-		for each (String^ fileName in Directory::GetFiles("Bin\\Asm\\"))
+
+		for each (String ^ fileName in Directory::GetFiles("Bin\\Asm\\"))
 		{
 			if (fileName->Contains(".goldasm") || fileName->Contains(".dll"))
 			{
@@ -1214,7 +1217,7 @@ public:
 		Loop();
 	}
 
-	#pragma region EditorGUI
+#pragma region EditorGUI
 
 	void ShowError()
 	{
@@ -1351,10 +1354,10 @@ public:
 
 				}
 				ImGui::SeparatorText("Render Pipelines");
-				
+
 				if (ImGui::BeginMenu("Pipelines"))
 				{
-					for each (EngineAssembly^ assembly in assemblies)
+					for each (EngineAssembly ^ assembly in assemblies)
 					{
 						auto types = assembly->GetTypesOf(Engine::Render::ScriptableRenderPipeline::typeid);
 
@@ -1382,16 +1385,16 @@ public:
 			{
 				if (ImGui::MenuItem("Empty Object"))
 				{
-					Engine::Internal::Components::Object^ newObject = gcnew Engine::Internal::Components::Object("Empty Object", 
+					Engine::Internal::Components::Object^ newObject = gcnew Engine::Internal::Components::Object("Empty Object",
 						gcnew Engine::Internal::Components::Transform(
-						Engine::Components::Vector3::create({ 0,0,0 }),
-						Engine::Components::Vector3::create({ 0,0,0 }),
-						0.0f,
-						Engine::Components::Vector3::create({ 1,1,1 }),
-						scene->GetDatamodelMember("workspace")->GetTransform()
-						), 
-						ObjectType::Script, 
-						"", 
+							Engine::Components::Vector3::create({ 0,0,0 }),
+							Engine::Components::Vector3::create({ 0,0,0 }),
+							0.0f,
+							Engine::Components::Vector3::create({ 1,1,1 }),
+							scene->GetDatamodelMember("workspace")->GetTransform()
+						),
+						ObjectType::Script,
+						"",
 						LayerManager::GetLayerFromId(1)
 					);
 
@@ -2060,7 +2063,7 @@ public:
 		}
 	}
 
-	#pragma endregion
+#pragma endregion
 
 	void DrawImGui() override
 	{
@@ -2314,7 +2317,7 @@ public:
 						{
 							if (ImGui::Button(CastToNative(T->Name)))
 							{
-								Engine::EngineObjects::ScriptBehaviour^ retn = assembly->Create<Engine::EngineObjects::ScriptBehaviour^>(T->FullName);
+								Engine::Internal::Components::Object^ retn = assembly->Create<Engine::Internal::Components::Object^>(T->FullName);
 								scene->PushToRenderQueue(retn);
 								scene->AddObjectToScene(retn);
 							}
@@ -2403,7 +2406,7 @@ public:
 		{
 			ImGui::OpenPopup("Engine Configuration");
 		}
-		
+
 		if (visualizeError)
 		{
 			ImGui::OpenPopup("Unexpected Error");
@@ -2456,7 +2459,7 @@ public:
 				{
 					if (loadedAssets->Count >= 1)
 					{
-						loadedAssets->RemoveAt(loadedAssets->Count-1);
+						loadedAssets->RemoveAt(loadedAssets->Count - 1);
 					}
 				}
 			}
@@ -2485,7 +2488,7 @@ public:
 
 		if (ImGui::BeginPopupModal("Engine Configuration", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
 		{
-			char* buff = new char[8*512];
+			char* buff = new char[8 * 512];
 
 			auto config = Engine::Config::EngineConfiguration::singleton();
 
@@ -2499,7 +2502,7 @@ public:
 			}
 
 
-			
+
 
 			if (ImGui::Button("Close"))
 			{
@@ -2672,7 +2675,7 @@ public:
 				{
 					if (scene->assetPacks->Count >= 1)
 					{
-						scene->assetPacks->RemoveAt(scene->assetPacks->Count-1);
+						scene->assetPacks->RemoveAt(scene->assetPacks->Count - 1);
 					}
 				}
 			}
@@ -2686,7 +2689,7 @@ public:
 
 			ImGui::EndPopup();
 		}
-	
+
 
 		ShowError();
 
@@ -2704,7 +2707,7 @@ public:
 	{
 		if (renderPipeline != nullptr)
 		{
-			renderPipeline->PreFirstPassRender(this);
+			renderPipeline->PreFirstPassRender(scene);
 		}
 
 		BeginDrawing();
@@ -2719,7 +2722,7 @@ public:
 			if (renderPipeline != nullptr)
 				renderPipeline->PreRenderFrame();
 
-			
+
 			{
 				Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
 
@@ -2830,7 +2833,7 @@ private:
 			scene->AddObjectToScene(lightdm);
 		}
 
-		if(ObjectManager::singleton()->GetObjectsByName("EditorCamera")->Count<=0)
+		if (ObjectManager::singleton()->GetObjectsByName("EditorCamera")->Count <= 0)
 		{
 			auto camera3D = gcnew Engine::EngineObjects::EditorCamera("EditorCamera",
 				gcnew Engine::Internal::Components::Transform(
@@ -3154,7 +3157,7 @@ public:
 	virtual void Draw() override
 	{
 		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
-			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreFirstPassRender(this);
+			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreFirstPassRender(scene);
 
 		BeginDrawing();
 		{
@@ -3179,7 +3182,7 @@ public:
 
 			int currentLayer = 1;
 
-			render(currentLayer, renderPipeline, scene);
+			render(currentLayer, Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance, scene);
 
 			if (is3DCamera)
 				EndMode3D();

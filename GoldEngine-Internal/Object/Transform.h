@@ -199,11 +199,11 @@ namespace Engine::Internal::Components
 	public:
 		void GameUpdate()
 		{
-			if (!active)
-				return;
-
 			UpdateLocalPosition();
 			UpdatePosition();
+
+			if (!active)
+				return;
 
 			Update();
 		}

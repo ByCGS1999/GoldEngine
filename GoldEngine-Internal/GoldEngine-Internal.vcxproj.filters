@@ -223,6 +223,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source\Engine\ObjectManagement\GraphicsWrapper">
+      <UniqueIdentifier>{5dd1dd43-b8d3-48fe-b378-b8c0d3012447}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -507,6 +510,9 @@
     <ClInclude Include="Objects\Script.h">
       <Filter>Source\Engine\EngineObjects\Script</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsWrapper.h">
+      <Filter>Source\Engine\ObjectManagement\GraphicsWrapper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -565,6 +571,9 @@
     </ClCompile>
     <ClCompile Include="Attribute.cpp">
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsWrapper.cpp">
+      <Filter>Source\Engine\ObjectManagement\GraphicsWrapper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,6 @@
 
 namespace Engine::Scripting
 {
-
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Attribute
 	{
@@ -178,6 +177,26 @@ namespace Engine::Scripting
 				return nullptr;
 
 			return gcnew Attribute(level, name, data, type);
+		}
+	};
+
+	public ref class PropertyAttribute : System::Attribute
+	{
+	public:
+		Engine::Scripting::Attribute::AccessLevel accessLevel;
+		String^ attributeName;
+
+	public:
+		PropertyAttribute(Engine::Scripting::Attribute::AccessLevel level, String^ name)
+		{
+			this->accessLevel = level;
+			this->attributeName = name;
+		}
+
+		PropertyAttribute(Engine::Scripting::Attribute::AccessLevel level)
+		{
+			this->accessLevel = level;
+			this->attributeName = "";
 		}
 	};
 }
