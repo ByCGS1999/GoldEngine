@@ -404,9 +404,9 @@ namespace Engine::Scripting
 	public:
 		void PatchAttributeObject(Attribute^ attribute)
 		{
-			if (attribute != nullptr && (attribute->userData->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attribute->userData->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid)))
+			if (attribute != nullptr && (attribute->getValue()->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attribute->getValue()->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid)))
 			{
-				String^ uid = ((Engine::Internal::Components::Object^)attribute->userData)->GetTransform()->GetUID();
+				String^ uid = ((Engine::Internal::Components::Object^)attribute->getValue())->GetTransform()->GetUID();
 
 				attribute->setValue(GetObjectByUid(uid), false);
 			}

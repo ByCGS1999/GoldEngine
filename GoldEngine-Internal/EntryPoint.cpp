@@ -263,7 +263,6 @@ private:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
@@ -547,8 +546,8 @@ private:
 					{
 						if (attrib != nullptr)
 						{
-							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->userDataType->Name + ")").c_str());
-							if (attrib->userData->GetType()->Equals(String::typeid))
+							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->getValue()->GetType()->Name + ")").c_str());
+							if (attrib->getValue()->GetType()->Equals(String::typeid))
 							{
 								String^ value = (String^)attrib->getValue();
 								int valueLen = value->Length;
@@ -564,9 +563,9 @@ private:
 								}
 								delete[] data;
 							}
-							else if (attrib->userData->GetType()->Equals(Engine::Components::Vector3::typeid))
+							else if (attrib->getValue()->GetType()->Equals(Engine::Components::Vector3::typeid))
 							{
-								Engine::Components::Vector3^ vector = (Engine::Components::Vector3^)attrib->userData;
+								Engine::Components::Vector3^ vector = (Engine::Components::Vector3^)attrib->getValue();
 
 								float data[3] = { vector->x, vector->y, vector->z };
 
@@ -575,9 +574,9 @@ private:
 									attrib->setValue(Engine::Components::Vector3::create(data));
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(Engine::Components::Vector2::typeid))
+							else if (attrib->getValue()->GetType()->Equals(Engine::Components::Vector2::typeid))
 							{
-								Engine::Components::Vector2^ vector = (Engine::Components::Vector2^)attrib->userData;
+								Engine::Components::Vector2^ vector = (Engine::Components::Vector2^)attrib->getValue();
 
 								float data[2] = { vector->x, vector->y };
 
@@ -586,9 +585,9 @@ private:
 									attrib->setValue(Engine::Components::Vector2::create(data));
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(UInt32::typeid))
+							else if (attrib->getValue()->GetType()->Equals(UInt32::typeid))
 							{
-								int value = (unsigned int)attrib->userData;
+								int value = (unsigned int)attrib->getValue();
 
 								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
 								{
@@ -596,9 +595,9 @@ private:
 									attrib->setType(UInt32::typeid);
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(Int32::typeid))
+							else if (attrib->getValue()->GetType()->Equals(Int32::typeid))
 							{
-								int value = (int)attrib->userData;
+								int value = (int)attrib->getValue();
 
 								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
 								{
@@ -606,9 +605,9 @@ private:
 									attrib->setType(Int32::typeid);
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(Int64::typeid))
+							else if (attrib->getValue()->GetType()->Equals(Int64::typeid))
 							{
-								long long tmp = (Int64)attrib->userData;
+								long long tmp = (Int64)attrib->getValue();
 
 								int value = (int)tmp;
 
@@ -618,9 +617,9 @@ private:
 									attrib->setType(Int64::typeid);
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(float::typeid))
+							else if (attrib->getValue()->GetType()->Equals(float::typeid))
 							{
-								float tmp = (float)attrib->userData;
+								float tmp = (float)attrib->getValue();
 
 								float value = (float)tmp;
 
@@ -630,9 +629,9 @@ private:
 									attrib->setType(float::typeid);
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(Single::typeid))
+							else if (attrib->getValue()->GetType()->Equals(Single::typeid))
 							{
-								float tmp = (float)attrib->userData;
+								float tmp = (float)attrib->getValue();
 
 								float value = (float)tmp;
 
@@ -642,9 +641,9 @@ private:
 									attrib->setType(float::typeid);
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attrib->userData->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid) || attrib->userData->GetType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || attrib->userData->GetType()->IsSubclassOf(Engine::EngineObjects::Script::typeid))
+							else if (attrib->getValue()->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attrib->getValue()->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid) || attrib->getValue()->GetType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || attrib->getValue()->GetType()->IsSubclassOf(Engine::EngineObjects::Script::typeid))
 							{
-								Engine::Internal::Components::Object^ value = (Engine::Internal::Components::Object^)attrib->userData;
+								Engine::Internal::Components::Object^ value = (Engine::Internal::Components::Object^)attrib->getValue();
 
 								std::string temp = std::string("");
 								if (value == nullptr)
@@ -663,9 +662,9 @@ private:
 									}
 								}
 							}
-							else if (attrib->userData->GetType()->Equals(Double::typeid))
+							else if (attrib->getValue()->GetType()->Equals(Double::typeid))
 							{
-								float tmp = (double)attrib->userData;
+								float tmp = (double)attrib->getValue();
 
 								float value = (double)tmp;
 
@@ -677,7 +676,7 @@ private:
 							}
 							else if (attrib->getValueType()->Equals(bool::typeid))
 							{
-								bool tmp = (bool)attrib->userData;
+								bool tmp = (bool)attrib->getValue();
 
 								bool value = (bool)tmp;
 
@@ -1389,7 +1388,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							Engine::Components::Vector3::create({ 0,0,0 }),
 							Engine::Components::Vector3::create({ 0,0,0 }),
-							0.0f,
 							Engine::Components::Vector3::create({ 1,1,1 }),
 							scene->GetDatamodelMember("workspace")->GetTransform()
 						),
@@ -1412,7 +1410,6 @@ public:
 							gcnew Engine::Internal::Components::Transform(
 								Engine::Components::Vector3::create({ 0,0,0 }),
 								Engine::Components::Vector3::create({ 0,0,0 }),
-								0.0f,
 								Engine::Components::Vector3::create({ 1,1,1 }),
 								scene->GetDatamodelMember("workspace")->GetTransform()
 							), 0xFFFFFFFF);
@@ -1434,7 +1431,6 @@ public:
 							gcnew Engine::Internal::Components::Transform(
 								Engine::Components::Vector3::create({ 0,0,0 }),
 								Engine::Components::Vector3::create({ 0,0,0 }),
-								0.0f,
 								Engine::Components::Vector3::create({ 1,1,1 }),
 								nullptr
 							));
@@ -1448,7 +1444,6 @@ public:
 							gcnew Engine::Internal::Components::Transform(
 								Engine::Components::Vector3::create({ 0,0,0 }),
 								Engine::Components::Vector3::create({ 0,0,0 }),
-								0.0f,
 								Engine::Components::Vector3::create({ 1,1,1 }),
 								nullptr
 							));
@@ -1473,7 +1468,6 @@ public:
 								gcnew Engine::Internal::Components::Transform(
 									gcnew Engine::Components::Vector3(0, 0, 0),
 									gcnew Engine::Components::Vector3(0, 0, 0),
-									0,
 									gcnew Engine::Components::Vector3(1, 1, 1),
 									scene->GetDatamodelMember("workspace")->GetTransform()
 								)
@@ -1515,7 +1509,6 @@ public:
 							gcnew Engine::Internal::Components::Transform(
 								gcnew Engine::Components::Vector3(0, 0, 0),
 								gcnew Engine::Components::Vector3(0, 0, 0),
-								0.0f,
 								gcnew Engine::Components::Vector3(1, 1, 1),
 								nullptr
 							),
@@ -1538,7 +1531,6 @@ public:
 							gcnew Engine::Internal::Components::Transform(
 								gcnew Engine::Components::Vector3(0, 0, 0),
 								gcnew Engine::Components::Vector3(0, 0, 0),
-								0.0f,
 								gcnew Engine::Components::Vector3(1, 1, 1),
 								nullptr
 							),
@@ -1561,7 +1553,6 @@ public:
 							gcnew Engine::Internal::Components::Transform(
 								gcnew Engine::Components::Vector3(0, 0, 0),
 								gcnew Engine::Components::Vector3(0, 0, 0),
-								0.0f,
 								gcnew Engine::Components::Vector3(1, 1, 1),
 								nullptr
 							),
@@ -1738,7 +1729,7 @@ public:
 			{
 				if (ImGui::BeginMenuBar())
 				{
-					if (ImGui::BeginMenu("Instance Actions"))
+					if (ImGui::BeginMenu("Instance Properties"))
 					{
 						if (ImGui::BeginMenu("Active"))
 						{
@@ -1869,7 +1860,7 @@ public:
 						ImGui::EndMenu();
 					}
 
-					if (ImGui::BeginMenu("Instance Properties"))
+					if (ImGui::BeginMenu("Instance Actions"))
 					{
 						if (ImGui::MenuItem("Change Parent"))
 						{
@@ -1971,13 +1962,6 @@ public:
 					if (ImGui::DragFloat3("Rotation", rot, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 					{
 						selectedObject->GetTransform()->rotation = gcnew Engine::Components::Vector3(rot[0], rot[1], rot[2]);
-					}
-
-					float rot_angle = selectedObject->GetTransform()->rotationValue;
-
-					if (ImGui::DragFloat("Rotation Value", &rot_angle, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
-					{
-						selectedObject->GetTransform()->rotationValue = rot_angle;
 					}
 
 					// scale
@@ -2138,7 +2122,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
@@ -2159,7 +2142,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
@@ -2182,7 +2164,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						)
@@ -2199,7 +2180,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
@@ -2219,7 +2199,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
@@ -2237,7 +2216,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
@@ -2255,7 +2233,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							nullptr
 						),
@@ -2274,7 +2251,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							scene->GetDatamodelMember("workspace")->GetTransform()
 						)
@@ -2290,7 +2266,6 @@ public:
 						gcnew Engine::Internal::Components::Transform(
 							gcnew Engine::Components::Vector3(0, 0, 0),
 							gcnew Engine::Components::Vector3(0, 0, 0),
-							0.0f,
 							gcnew Engine::Components::Vector3(1, 1, 1),
 							scene->GetDatamodelMember("workspace")->GetTransform()
 						),
@@ -2792,7 +2767,6 @@ private:
 				gcnew Engine::Internal::Components::Transform(
 					gcnew Engine::Components::Vector3(0, 0, 0),
 					gcnew Engine::Components::Vector3(0, 0, 0),
-					0.0f,
 					gcnew Engine::Components::Vector3(0, 0, 0),
 					nullptr
 				),
@@ -2822,7 +2796,6 @@ private:
 				gcnew Engine::Internal::Components::Transform(
 					gcnew Engine::Components::Vector3(0, 0, 0),
 					gcnew Engine::Components::Vector3(0, 0, 0),
-					0.0f,
 					gcnew Engine::Components::Vector3(0, 0, 0),
 					nullptr
 				),
@@ -2839,7 +2812,6 @@ private:
 				gcnew Engine::Internal::Components::Transform(
 					Engine::Components::Vector3::create({ 0,0,0 }),
 					Engine::Components::Vector3::create({ 0,0,0 }),
-					0.0f,
 					Engine::Components::Vector3::create({ 1,1,1 }),
 					nullptr
 				)

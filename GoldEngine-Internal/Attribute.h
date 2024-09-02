@@ -16,9 +16,11 @@ namespace Engine::Scripting
 	public:
 		AccessLevel accessLevel;
 		String^ name;
-		System::Object^ userData;
 		System::Type^ userDataType;
-
+		System::Object^ userData;
+		System::Reflection::PropertyInfo^ descriptor;
+		System::Object^ rootObject;
+		
 	public:
 		Attribute(String^ str, System::Object^ data);
 		[Newtonsoft::Json::JsonConstructorAttribute]
@@ -26,12 +28,29 @@ namespace Engine::Scripting
 
 	public:
 		void setValue(System::Object^ object);
-
 		void setValue(System::Object^ object, bool overrideType);
+		void setPropertyDescriptor(System::Reflection::PropertyInfo^ descriptor, System::Object^ rootDescriptor);
 
 	public:
+		System::Object^ getValue()
+		{
+			if (accessLevel == AccessLevel::WriteOnly)
+				return nullptr;
+
+			return userData;
+		}
+
 		generic <class T>
 		T getValue()
+		{
+			if (accessLevel == AccessLevel::WriteOnly)
+				return { };
+
+			return (T)userData;
+		}
+
+		generic <class T>
+		T getValueAs()
 		{
 			if (accessLevel == AccessLevel::WriteOnly)
 				return { };
@@ -45,20 +64,12 @@ namespace Engine::Scripting
 			if (accessLevel == AccessLevel::WriteOnly)
 				return { };
 
-			return (T)(getValue<Newtonsoft::Json::Linq::JObject^>()->ToObject<T>());
+			return (T)(getValueAs<Newtonsoft::Json::Linq::JObject^>()->ToObject<T>());
 		}
 
 		bool isJObject()
 		{
 			return userData->GetType() == Newtonsoft::Json::Linq::JObject::typeid;
-		}
-
-		System::Object^ getValue()
-		{
-			if (accessLevel == AccessLevel::WriteOnly)
-				return { };
-
-			return userData;
 		}
 
 		auto getValueAuto()
@@ -86,6 +97,9 @@ namespace Engine::Scripting
 	public:
 		System::Object^ DeserializeAttribute()
 		{
+			if (userData->GetType() != Newtonsoft::Json::Linq::JObject::typeid)
+				return userData;
+
 			try
 			{
 				Newtonsoft::Json::Linq::JObject^ sonObject = (Newtonsoft::Json::Linq::JObject^)userData;
@@ -105,6 +119,12 @@ namespace Engine::Scripting
 
 		void setType(System::Type^ type)
 		{
+			if (userData == nullptr)
+				return;
+
+			if (userData->GetType() == type)
+				return;
+
 			try 
 			{
 			#ifdef LOGAPI_IMPL
@@ -117,8 +137,7 @@ namespace Engine::Scripting
 			catch (Exception^ ex)
 			{
 			#ifdef LOGAPI_IMPL
-				printError(ex->Message);
-				printError(ex->StackTrace);
+
 			#endif
 			}
 		}
@@ -135,8 +154,7 @@ namespace Engine::Scripting
 			catch (Exception^ ex)
 			{
 #ifdef LOGAPI_IMPL
-				printError(ex->Message);
-				printError(ex->StackTrace);
+
 #endif
 			}
 		}

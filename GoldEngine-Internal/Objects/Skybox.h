@@ -46,7 +46,14 @@ namespace Engine::EngineObjects
 		void Draw() override
 		{
 			auto t = GetTransform();
-			DrawModelEx(*nativeSkybox->model, t->position->toNative(), t->rotation->toNative(), t->rotationValue , t->scale->toNative(), GetColor(0xFFFFFFFF));
+
+			nativeSkybox->model->transform = MatrixRotateXYZ({
+				DEG2RAD * this->transform->scale->x,
+				DEG2RAD * this->transform->scale->y,
+				DEG2RAD * this->transform->scale->z
+			});
+
+			DrawModelEx(*nativeSkybox->model, t->position->toNative(), {0,0,0}, 0.0f, t->scale->toNative(), GetColor(0xFFFFFFFF));
 		}
 
 		void DrawGizmo() override

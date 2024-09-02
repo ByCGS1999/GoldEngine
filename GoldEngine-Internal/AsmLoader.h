@@ -245,7 +245,6 @@ public:
 			auto transform = gcnew Engine::Internal::Components::Transform(
 				gcnew Engine::Components::Vector3(0, 0, 0),
 				gcnew Engine::Components::Vector3(0, 0, 0),
-				0.0f,
 				gcnew Engine::Components::Vector3(1, 1, 1),
 				nullptr
 			);
@@ -278,7 +277,6 @@ public:
 			auto transform = gcnew Engine::Internal::Components::Transform(
 				gcnew Engine::Components::Vector3(0, 0, 0),
 				gcnew Engine::Components::Vector3(0, 0, 0),
-				0.0f,
 				gcnew Engine::Components::Vector3(1, 1, 1),
 				nullptr
 			);

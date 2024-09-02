@@ -1,5 +1,9 @@
 using namespace System;
 
+#include "Includes.h"
+#include "GlIncludes.h"
+#include "CastToNative.h"
+#include "LoggingAPI.h"
 #include "Attribute.h"
 
 inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data)
@@ -13,6 +17,7 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 	*/
 	this->accessLevel = AccessLevel::Public;
 	this->name = str;
+
 	if(data != nullptr)
 		userDataType = data->GetType();
 
@@ -38,6 +43,7 @@ inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, S
 	*/
 	this->accessLevel = level;
 	this->name = str;
+
 	if (data != nullptr)
 		userDataType = dT;
 
@@ -53,6 +59,12 @@ inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, S
 	setType(userDataType); // For consistency
 }
 
+inline void Engine::Scripting::Attribute::setPropertyDescriptor(System::Reflection::PropertyInfo^ descriptor, System::Object^ rootDescriptor)
+{
+	this->descriptor = descriptor;
+	this->rootObject = rootDescriptor;
+}
+
 inline void Engine::Scripting::Attribute::setValue(System::Object^ object)
 {
 	if (accessLevel == AccessLevel::ReadOnly)
@@ -60,6 +72,9 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object)
 
 	userData = object;
 	userDataType = object->GetType();
+
+	if (descriptor != nullptr)
+		descriptor->SetValue(rootObject, object);
 }
 
 inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool overrideType)
@@ -68,6 +83,9 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool 
 		return;
 
 	userData = object;
+	
+	if (descriptor != nullptr)
+		descriptor->SetValue(rootObject, object);
 
 	if (overrideType)
 		userDataType = object->GetType();

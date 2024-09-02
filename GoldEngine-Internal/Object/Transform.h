@@ -28,7 +28,6 @@ namespace Engine::Internal::Components
 		// worldspace
 		Engine::Components::Vector3^ position;
 		Engine::Components::Vector3^ rotation;
-		float rotationValue;
 		Engine::Components::Vector3^ scale;
 		// localspace
 		Engine::Components::Vector3^ localPosition;
@@ -51,13 +50,12 @@ namespace Engine::Internal::Components
 		Object^ gameObject;
 
 	public:
-		Transform(Engine::Components::Vector3^ position, Engine::Components::Vector3^ rotation, float rotationValue, Engine::Components::Vector3^ scale, Transform^ parent)
+		Transform(Engine::Components::Vector3^ position, Engine::Components::Vector3^ rotation, Engine::Components::Vector3^ scale, Transform^ parent)
 		{
 			this->uid = System::Guid::NewGuid().ToString();
 			this->localPosition = position;
 			this->localRotation = rotation;
 			this->scale = scale;
-			this->rotationValue = rotationValue;
 			this->gameObject = gameObject;
 
 			if (parent != nullptr)
@@ -174,6 +172,10 @@ namespace Engine::Internal::Components
 		virtual void Draw() {}
 		virtual void DrawGizmo() {}
 		virtual void DrawImGUI() {}
+		
+		// internal methods
+	protected:
+		virtual void HookUpdate() {}
 
 		// engine methods
 
@@ -205,6 +207,7 @@ namespace Engine::Internal::Components
 			if (!active)
 				return;
 
+			HookUpdate();
 			Update();
 		}
 

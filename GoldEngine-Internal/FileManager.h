@@ -9,6 +9,51 @@ namespace Engine::Assets::IO
 		static String^ fileHeader = "GOLD ";
 		static short int fileVersion = 100;
 
+	private:
+		static void concat(List<String^>^% array1, List<String^>^ array2)
+		{
+			for each (String ^ v2 in array2)
+			{
+				array1->Add(v2);
+			}
+		}
+
+	private:
+		static List<String^>^ getDescendants(String^ inPath)
+		{
+			List<String^>^ listedData = gcnew List<String^>();
+
+			if (Directory::Exists(inPath))
+			{
+				for each (String^ childNode in Directory::GetFileSystemEntries(inPath))
+				{
+					if (Directory::Exists(childNode))
+					{
+						concat(listedData, getDescendants(childNode));
+					}
+					else
+					{
+						listedData->Add(childNode);
+					}
+				}
+			}
+
+			return listedData;
+		}
+
+	private:
+		static array<String^>^ hasWildcards(String^ inFile)
+		{
+			if (inFile->Contains(R"(*)"))
+			{
+				String^ routeAccessPath = inFile->Substring(0, inFile->Length - 1);
+
+				return getDescendants(routeAccessPath)->ToArray();
+			}
+
+			return nullptr;
+		}
+
 	public:
 		static void WriteToCustomFile(String^ fileName, String^ password, array<String^>^ inFile)
 		{
@@ -22,14 +67,41 @@ namespace Engine::Assets::IO
 			auto deflateStream = gcnew Compression::DeflateStream(file, Compression::CompressionMode::Compress);
 			stream = gcnew BinaryWriter(deflateStream);
 
-			stream->Write(inFile->Length); // assets in file
+			int assetCount = inFile->Length;
+
+			for each (String^ str in inFile)
+			{
+				auto wildcards = hasWildcards("Data/" + str);
+
+				if (wildcards != nullptr)
+				{
+					assetCount += wildcards->Length;
+				}
+			}
+
+			stream->Write(assetCount); // assets in file
 			for (int x = 0; x < inFile->Length; x++)
 			{
 				auto fileName = inFile[x];
-				stream->Write(fileName); // write model name
-				auto contents = File::ReadAllBytes("Data/" + inFile[x]);
-				stream->Write(contents->Length);
-				stream->Write(contents);
+				auto wildcards = hasWildcards("Data/" + fileName);
+
+				if (wildcards != nullptr)
+				{
+					for each(String^ file in wildcards)
+					{
+						stream->Write(file); // write model name
+						auto contents = File::ReadAllBytes(file);
+						stream->Write(contents->Length);
+						stream->Write(contents);
+					}
+				}
+				else
+				{
+					stream->Write(fileName); // write model name
+					auto contents = File::ReadAllBytes("Data/" + inFile[x]);
+					stream->Write(contents->Length);
+					stream->Write(contents);
+				}
 			}
 
 			stream->Close();

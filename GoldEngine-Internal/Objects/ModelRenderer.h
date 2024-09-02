@@ -157,11 +157,19 @@ namespace Engine::EngineObjects
 
 			rlCheckErrors();
 
+			Model& m = modelManager->getModel();
+
+			m.transform = MatrixRotateXYZ({
+				DEG2RAD*this->transform->rotation->x,
+				DEG2RAD* this->transform->rotation->y,
+				DEG2RAD* this->transform->rotation->z
+			});
+
 			DrawModelEx(
-				modelManager->getModel(),
+				m,
 				{ t->position->x,t->position->y, t->position->z },
-				t->rotation->toNative(),
-				t->rotationValue,
+				{0,0,0},
+				0.0f,
 				t->scale->toNative(),
 				c
 			);
