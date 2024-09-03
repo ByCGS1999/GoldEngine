@@ -52,5 +52,8 @@ namespace Engine::Internal
 		static void GL_SetShaderValue(void*, int, void*, UniformType);
         static void GL_SetShaderValue(void*, ShaderLocs, void*, UniformType);
         static int GL_GetShaderLoc(void*, const char*);
+
+        static Model GL_LoadModel(String^);
+        static void* GL_GetDepthTexture(int, int);
 	};
 }

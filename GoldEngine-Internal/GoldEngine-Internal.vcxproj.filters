@@ -223,8 +223,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source\Engine\ObjectManagement\GraphicsWrapper">
+    <Filter Include="Source\Engine\ScriptingAPI\Hooks">
+      <UniqueIdentifier>{55cef652-b892-42af-9675-5bf4599b5aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\Managers">
+      <UniqueIdentifier>{3d99b295-e380-45fe-a44a-3bde6f6f4c9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\Wrappers">
+      <UniqueIdentifier>{53a433c9-19f7-4f5e-99c5-ea01fef1a667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\Wrappers\GraphicsWrapper">
       <UniqueIdentifier>{5dd1dd43-b8d3-48fe-b378-b8c0d3012447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\Wrappers\TimeWrapper">
+      <UniqueIdentifier>{88128305-5072-464d-be0b-575a0d18f476}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -315,12 +327,6 @@
     <ClInclude Include="EngineIncludes.h">
       <Filter>Source\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>Source\Engine\ScriptingAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Source\Engine\ScriptingAPI</Filter>
-    </ClInclude>
     <ClInclude Include="GlIncludes.h">
       <Filter>Source\Engine</Filter>
     </ClInclude>
@@ -357,9 +363,6 @@
     <ClInclude Include="Objects\Daemon.h">
       <Filter>Source\Engine\EngineObjects</Filter>
     </ClInclude>
-    <ClInclude Include="ImguiHook.h">
-      <Filter>Source\Engine\ScriptingAPI</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\TextEditor\TextEditor.h">
       <Filter>imgui\TextEditor</Filter>
     </ClInclude>
@@ -373,9 +376,6 @@
       <Filter>Source\Engine\ObjectManagement\Types</Filter>
     </ClInclude>
     <ClInclude Include="LoggingAPI.h">
-      <Filter>Source\Engine\ScriptingAPI</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderManager.h">
       <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="LuaVM.h">
@@ -434,9 +434,6 @@
     </ClInclude>
     <ClInclude Include="Object\Color.h">
       <Filter>Source\Engine\Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\LayerManager.h">
-      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h">
       <Filter>raylib\include\ext</Filter>
@@ -511,7 +508,25 @@
       <Filter>Source\Engine\EngineObjects\Script</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsWrapper.h">
-      <Filter>Source\Engine\ObjectManagement\GraphicsWrapper</Filter>
+      <Filter>Source\Engine\ScriptingAPI\Wrappers\GraphicsWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="ImguiHook.h">
+      <Filter>Source\Engine\ScriptingAPI\Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Source\Engine\ScriptingAPI\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\LayerManager.h">
+      <Filter>Source\Engine\ScriptingAPI\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
+      <Filter>Source\Engine\ScriptingAPI\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Source\Engine\ScriptingAPI\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Source\Engine\ScriptingAPI\Wrappers\TimeWrapper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -573,7 +588,10 @@
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsWrapper.cpp">
-      <Filter>Source\Engine\ObjectManagement\GraphicsWrapper</Filter>
+      <Filter>Source\Engine\ScriptingAPI\Wrappers\GraphicsWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source\Engine\ScriptingAPI\Wrappers\TimeWrapper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

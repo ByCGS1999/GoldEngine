@@ -2,22 +2,23 @@
 
 namespace Engine::Scripting
 {
+	public enum class AccessLevel
+	{
+		Public,
+		ReadOnly,
+		WriteOnly
+	};
+
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Attribute
 	{
-	public: 
-		enum class AccessLevel
-		{
-			Public,
-			ReadOnly,
-			WriteOnly
-		};
-
 	public:
 		AccessLevel accessLevel;
 		String^ name;
 		System::Type^ userDataType;
 		System::Object^ userData;
+
+	private:
 		System::Reflection::PropertyInfo^ descriptor;
 		System::Object^ rootObject;
 		
@@ -201,17 +202,17 @@ namespace Engine::Scripting
 	public ref class PropertyAttribute : System::Attribute
 	{
 	public:
-		Engine::Scripting::Attribute::AccessLevel accessLevel;
+		Engine::Scripting::AccessLevel accessLevel;
 		String^ attributeName;
 
 	public:
-		PropertyAttribute(Engine::Scripting::Attribute::AccessLevel level, String^ name)
+		PropertyAttribute(Engine::Scripting::AccessLevel level, String^ name)
 		{
 			this->accessLevel = level;
 			this->attributeName = name;
 		}
 
-		PropertyAttribute(Engine::Scripting::Attribute::AccessLevel level)
+		PropertyAttribute(Engine::Scripting::AccessLevel level)
 		{
 			this->accessLevel = level;
 			this->attributeName = "";

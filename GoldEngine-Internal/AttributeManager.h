@@ -74,7 +74,7 @@ namespace Engine::Scripting
 			setAttribute(name, data);
 		}
 
-		void addAttribute(Attribute::AccessLevel level, String^ name, System::Object^ data)
+		void addAttribute(AccessLevel level, String^ name, System::Object^ data)
 		{
 			setAttribute(level, name, data);
 		}
@@ -83,7 +83,7 @@ namespace Engine::Scripting
 		{
 			if (!hasAttribute(name))
 			{
-				attributes->Add(Attribute::New(Attribute::AccessLevel::Public, name, data));
+				attributes->Add(Attribute::New(AccessLevel::Public, name, data));
 			}
 			else
 			{
@@ -91,7 +91,7 @@ namespace Engine::Scripting
 			}
 		}
 
-		void setAttribute(Attribute::AccessLevel level, String^ name, System::Object^ data)
+		void setAttribute(AccessLevel level, String^ name, System::Object^ data)
 		{
 			if (!hasAttribute(name))
 			{

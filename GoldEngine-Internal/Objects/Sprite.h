@@ -9,12 +9,12 @@ namespace Engine::EngineObjects
 		{
 			if (!attributes->getAttribute("Texture ID"))
 			{
-				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::Attribute::AccessLevel::Public, "Texture ID", 0, System::UInt32::typeid));
+				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::AccessLevel::Public, "Texture ID", 0, System::UInt32::typeid));
 			}
 
 			if (!attributes->getAttribute("Sprite Tint"))
 			{
-				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::Attribute::AccessLevel::Public, "Sprite Tint", gcnew Engine::Components::Color(0xFFFFFFFF)));
+				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::AccessLevel::Public, "Sprite Tint", gcnew Engine::Components::Color(0xFFFFFFFF)));
 			}
 		}
 
@@ -23,12 +23,12 @@ namespace Engine::EngineObjects
 		{
 			if (!attributes->getAttribute("Texture ID"))
 			{
-				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::Attribute::AccessLevel::Public, "Texture ID", 0, System::UInt32::typeid));
+				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::AccessLevel::Public, "Texture ID", 0, System::UInt32::typeid));
 			}
 
 			if (!attributes->getAttribute("Sprite Tint"))
 			{
-				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::Attribute::AccessLevel::Public, "Sprite Tint", gcnew Engine::Components::Color(0xFFFFFFFF)));
+				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::AccessLevel::Public, "Sprite Tint", gcnew Engine::Components::Color(0xFFFFFFFF)));
 			}
 		}
 

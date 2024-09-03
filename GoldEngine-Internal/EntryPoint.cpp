@@ -33,6 +33,7 @@ unsigned int passwd = 0;
 
 // last but not least, the assembly loader.
 
+#include "Time.h"
 #include "ImguiHook.h"
 #include "InputManager.h"
 #include "ObjectManager.h"

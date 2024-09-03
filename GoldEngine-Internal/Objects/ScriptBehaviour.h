@@ -56,11 +56,16 @@ namespace Engine::EngineObjects
 					auto attributes = prop->GetCustomAttributes(Engine::Scripting::PropertyAttribute::typeid, true);
 					for each (Engine::Scripting::PropertyAttribute ^ attrib in attributes)
 					{
-						if (attrib->attributeName == "")
+						String^ attributeName = attrib->attributeName;
+
+						if (attributeName == "")
+							attributeName = prop->Name;
+
+						if (!this->attributes->hasAttribute(attributeName))
 						{
-							Engine::Scripting::Attribute^ attribv = Engine::Scripting::Attribute::create(
+							auto attribv = Engine::Scripting::Attribute::create(
 								attrib->accessLevel,
-								prop->Name,
+								attributeName,
 								prop->GetValue(this),
 								prop->PropertyType
 							);
@@ -69,32 +74,19 @@ namespace Engine::EngineObjects
 								attribv
 							);
 
-							this->attributes->getAttribute(prop->Name)->setPropertyDescriptor(prop, this);
+							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
 						}
 						else
 						{
-							Engine::Scripting::Attribute^ attribv = Engine::Scripting::Attribute::create(
-								attrib->accessLevel,
-								attrib->attributeName,
-								prop->GetValue(this),
-								prop->PropertyType
-							);
-
-							this->attributes->setAttribute_suppressed(
-								attribv
-							);
-
-							this->attributes->getAttribute(prop->Name)->setPropertyDescriptor(prop, this);
+							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
 						}
 					}
 				}
-
 			}
 			catch (Exception^ ex)
 			{
 
 			}
-
 		}
 
 		virtual void Setup() override
@@ -108,11 +100,16 @@ namespace Engine::EngineObjects
 					auto attributes = prop->GetCustomAttributes(Engine::Scripting::PropertyAttribute::typeid, true);
 					for each (Engine::Scripting::PropertyAttribute ^ attrib in attributes)
 					{
-						if (attrib->attributeName == "")
+						String^ attributeName = attrib->attributeName;
+
+						if (attributeName == "")
+							attributeName = prop->Name;
+
+						if (!this->attributes->hasAttribute(attributeName))
 						{
-							Engine::Scripting::Attribute^ attribv = Engine::Scripting::Attribute::create(
+							auto attribv = Engine::Scripting::Attribute::create(
 								attrib->accessLevel,
-								prop->Name,
+								attributeName,
 								prop->GetValue(this),
 								prop->PropertyType
 							);
@@ -121,26 +118,14 @@ namespace Engine::EngineObjects
 								attribv
 							);
 
-							this->attributes->getAttribute(prop->Name)->setPropertyDescriptor(prop, this);
+							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
 						}
 						else
 						{
-							Engine::Scripting::Attribute^ attribv = Engine::Scripting::Attribute::create(
-								attrib->accessLevel,
-								attrib->attributeName,
-								prop->GetValue(this),
-								prop->PropertyType
-							);
-
-							this->attributes->setAttribute_suppressed(
-								attribv
-							);
-
-							this->attributes->getAttribute(prop->Name)->setPropertyDescriptor(prop, this);
+							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
 						}
 					}
 				}
-
 			}
 			catch (Exception^ ex)
 			{

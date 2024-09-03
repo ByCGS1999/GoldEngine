@@ -288,6 +288,7 @@
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="VoxelMatrix.h" />
     <ClInclude Include="VoxelTypedefs.h" />
     <ClInclude Include="Voxel.h" />
@@ -333,6 +334,7 @@
     <ClCompile Include="Object\Vector3.cpp" />
     <ClCompile Include="Packs.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
