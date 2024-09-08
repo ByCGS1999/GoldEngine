@@ -11,6 +11,7 @@ namespace Engine::Components
 	public:
 		[[JsonConstructorAttribute]]
 		Vector2(float x, float y);
+		Vector2();
 
 		RAYLIB::Vector2 toNative();
 

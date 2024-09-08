@@ -46,7 +46,7 @@ namespace Engine::Render::Pipelines
 
         void PreRenderObject(Engine::Internal::Components::Object^ engineObject) override
         {
-
+            engineObject->GameDraw();
         }
 
         void PostRenderObject() override

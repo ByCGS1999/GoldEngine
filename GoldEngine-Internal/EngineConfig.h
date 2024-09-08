@@ -38,6 +38,19 @@ namespace Engine::Config
 			this->encryptionPassword = password;
 		}
 
+	private:
+		static long long convertToInt(String^ data)
+		{
+			long long value = 0;
+
+			for each (auto c in data->ToCharArray())
+			{
+				value += (short)c;
+			}
+
+			return value;
+		}
+
 	public:
 		std::string getPassword()
 		{
@@ -54,7 +67,7 @@ namespace Engine::Config
 			File::WriteAllText(fN, Convert::ToBase64String(
 				Encoding::UTF8->GetBytes
 					(
-						CypherLib::EncryptFileContents(encryptionPassword, int::Parse(File::ReadAllText("./Data/Keys/map.iv")))
+						CypherLib::EncryptFileContents(encryptionPassword, convertToInt(File::ReadAllText("./Data/Keys/map.iv")))
 					)
 				)
 			);
@@ -67,10 +80,7 @@ namespace Engine::Config
 				String^ encodedData = File::ReadAllText(fN);
 				String^ decodedData = Encoding::UTF8->GetString(Convert::FromBase64String(encodedData));
 
-				String^ password = CypherLib::DecryptFileContents(decodedData, 
-					int::Parse(File::ReadAllText("./Data/Keys/map.iv")
-					)
-				);
+				String^ password = CypherLib::DecryptFileContents(decodedData, convertToInt(File::ReadAllText("./Data/Keys/map.iv")));
 
 				return gcnew EngineSecrets(password);
 			}

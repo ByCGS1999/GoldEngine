@@ -1,5 +1,8 @@
 #pragma once
 
+#using <mscorlib.dll>
+#using <System.Core.dll>
+
 using namespace MoonSharp::Interpreter;
 
 namespace Engine::Lua::VM
@@ -44,6 +47,41 @@ namespace Engine::Lua::VM
 		static void UpdateVMGlobal(MoonSharp::Interpreter::Script^& vm, String^ globalName, Object^ newObject)
 		{
 			vm->Globals[globalName] = newObject;
+		}
+
+		static bool HasProperty(Engine::Internal::Components::Object^ object, String^ propertyName)
+		{
+			if (object->GetType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid))
+			{
+				AttributeManager^ attribs = ((Engine::EngineObjects::ScriptBehaviour^)object)->attributes;
+
+				if (attribs->hasAttribute(propertyName))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		static AttributeManager^ GetAttributeManager(Engine::Internal::Components::Object^ object)
+		{
+			if (object->GetType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid))
+			{
+				AttributeManager^ attribs = ((Engine::EngineObjects::ScriptBehaviour^)object)->attributes;
+				return attribs;
+			}
+
+			return nullptr;
+		}
+
+		static void SetProperty(Engine::Internal::Components::Object^ object, String^ propertyName, System::Object^ newValue)
+		{
+			if (HasProperty(object, propertyName))
+			{
+				AttributeManager^ attribs = ((Engine::EngineObjects::ScriptBehaviour^)object)->attributes;
+				attribs->getAttribute(propertyName)->setValue(newValue);
+			}
 		}
 	};
 
@@ -221,7 +259,7 @@ namespace Engine::Lua::VM
 					printError(ex->StackTrace);
 				}
 			}
-
+			
 			RegisterGlobal("Logging", Engine::Scripting::Logging::typeid);
 			RegisterGlobal("Attribute", Engine::Scripting::Attribute::typeid);
 			RegisterGlobal("DataManager", Engine::Internal::DataManager::typeid);
@@ -230,6 +268,16 @@ namespace Engine::Lua::VM
 			RegisterGlobal("KeyCode", Engine::Scripting::KeyCodes::typeid);
 			RegisterGlobal("SharedInstance", SharedInstance::typeid);
 			RegisterGlobal("VMWrap", VMWrapper::typeid);
+
+
+			RegisterGlobal("print", gcnew System::Action<String^>(&Logging::Log));
+			RegisterGlobal("warn", gcnew System::Action<String^>(&Logging::LogWarning));
+			RegisterGlobal("error", gcnew System::Action<String^>(&Logging::LogError));
+			RegisterGlobal("info", gcnew System::Action<String^>(&Logging::LogDebug));
+			RegisterGlobal("log", gcnew System::Action<String^, String^>(&Logging::LogCustom));
+			RegisterGlobal("HasProperty", gcnew System::Func<Engine::Internal::Components::Object^, String^, bool>(&VMWrapper::HasProperty));
+			RegisterGlobal("GetAttributes", gcnew System::Func<Engine::Internal::Components::Object^, AttributeManager^>(&VMWrapper::GetAttributeManager));
+			RegisterGlobal("SetProperty", gcnew System::Action<Engine::Internal::Components::Object^, String^, Object^>(&VMWrapper::SetProperty));
 			//RegisterGlobal("VM", this->scriptState);
 		}
 

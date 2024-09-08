@@ -30,6 +30,7 @@ namespace Engine::Scripting
 	public:
 		void setValue(System::Object^ object);
 		void setValue(System::Object^ object, bool overrideType);
+		void synchronizeDescriptor();
 		void setPropertyDescriptor(System::Reflection::PropertyInfo^ descriptor, System::Object^ rootDescriptor);
 
 	public:
@@ -98,6 +99,9 @@ namespace Engine::Scripting
 	public:
 		System::Object^ DeserializeAttribute()
 		{
+			if (userData == nullptr)
+				return userData;
+
 			if (userData->GetType() != Newtonsoft::Json::Linq::JObject::typeid)
 				return userData;
 
@@ -147,6 +151,9 @@ namespace Engine::Scripting
 		{
 			try
 			{
+				if (userData == nullptr)
+					return;
+
 #ifdef LOGAPI_IMPL
 				printConsole("Converting from " + userData->GetType()->Name + " To -> " + userDataType->Name);
 #endif
@@ -184,17 +191,11 @@ namespace Engine::Scripting
 
 		static Attribute^ New(AccessLevel level, String^ name, System::Object^ data)
 		{
-			if (data == nullptr)
-				return nullptr;
-
 			return gcnew Attribute(level, name, data, data->GetType());
 		}
 
 		static Attribute^ New(AccessLevel level, String^ name, System::Object^ data, Type^ type)
 		{
-			if (data == nullptr)
-				return nullptr;
-
 			return gcnew Attribute(level, name, data, type);
 		}
 	};

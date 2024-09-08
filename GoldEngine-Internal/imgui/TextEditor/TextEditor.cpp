@@ -3356,7 +3356,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			langDef.mKeywords.insert(k);
 
 		static const char* const identifiers[] = {
-			"assert", "collectgarbage", "dofile", "error", "getmetatable", "ipairs", "loadfile", "load", "loadstring",  "next",  "pairs",  "pcall",  "print",  "rawequal",  "rawlen",  "rawget",  "rawset",
+			"assert", "collectgarbage", "dofile", "error", "warn", "info", "getmetatable", "ipairs", "loadfile", "load", "loadstring",  "next",  "pairs",  "pcall",  "print",  "rawequal",  "rawlen",  "rawget",  "rawset",
 			"select",  "setmetatable",  "tonumber",  "tostring",  "type",  "xpcall",  "_G",  "_VERSION","arshift", "band", "bnot", "bor", "bxor", "btest", "extract", "lrotate", "lshift", "replace",
 			"rrotate", "rshift", "create", "resume", "running", "status", "wrap", "yield", "isyieldable", "debug","getuservalue", "gethook", "getinfo", "getlocal", "getregistry", "getmetatable",
 			"getupvalue", "upvaluejoin", "upvalueid", "setuservalue", "sethook", "setlocal", "setmetatable", "setupvalue", "traceback", "close", "flush", "input", "lines", "open", "output", "popen",
@@ -3374,10 +3374,12 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"Input",
 			"Logging",
 			"SignalManager",
+			"ObjectManager",
+			"DataManager",
+			"SharedInstance",
 			"Attribute",
 			"attributes",
 			"script",
-			"VM",
 			"VMWrap"
 		};
 
@@ -3547,7 +3549,26 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"PrintType",
 			"ToDerivate",
 			"DerivateVMGlobal",
-			"UpdateVMGlobal"
+			"UpdateVMGlobal",
+			"GetLoadedScene",
+			"GetDatamodel",
+			"GetObjectsFromDatamodel",
+			"GetObjectsByTag",
+			"GetObjectsByName",
+			"GetObjectsByType",
+			"GetObjectsOfType",
+			"GetFirstObjectByTag",
+			"GetFirstObjectOfName",
+			"GetFirstObjectOfType",
+			"GetChildrenOf",
+			"GetObjectByUid",
+			"GetObjectFromTransform",
+			"GetMainCamera",
+			"Instantiate",
+			"Destroy",
+			"HasProperty",
+			"GetAttributes",
+			"SetProperty"
 		};
 
 		for (auto& k : identifiers)
@@ -3603,7 +3624,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			};
 
 		langDef.mCommentStart = "--[[";
-		langDef.mCommentEnd = "]]";
+		langDef.mCommentEnd = "--]]";
 		langDef.mSingleLineComment = "--";
 
 		langDef.mCaseSensitive = true;

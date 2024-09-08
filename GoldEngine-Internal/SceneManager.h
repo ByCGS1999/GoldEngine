@@ -223,9 +223,10 @@ namespace Engine::Managers
 			else
 			{
 				auto assetPacks = gcnew System::Collections::Generic::List<String^>();
-				assetPacks->Add("Data/engineassets.gold");
+				//assetPacks->Add("Data/engineassets.gold");
 				loadedScene = gcnew Engine::Management::Scene(fN, "Assets_" + fN, assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>());
 			}
+
 			if (loadedScene == nullptr)
 				TraceLog(LOG_FATAL, "FAILED OPENING SCENE");
 
@@ -240,7 +241,7 @@ namespace Engine::Managers
 		static Engine::Management::Scene^ CreateScene(System::String^ sceneName)
 		{
 			auto assetPacks = gcnew System::Collections::Generic::List<String^>();
-			assetPacks->Add("Data/engineassets.gold");
+			//assetPacks->Add("Data/engineassets.gold");
 
 			if (sceneName->Equals(""))
 				return gcnew Engine::Management::Scene("Level0", "Assets_Level0", assetPacks, gcnew System::Collections::Generic::List<Engine::Management::MiddleLevel::SceneObject^>(), 0x000000FF, gcnew System::Collections::Generic::List<System::String^>());

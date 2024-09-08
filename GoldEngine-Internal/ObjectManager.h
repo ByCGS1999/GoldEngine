@@ -404,15 +404,21 @@ namespace Engine::Scripting
 	public:
 		void PatchAttributeObject(Attribute^ attribute)
 		{
-			if (attribute != nullptr && (attribute->getValue()->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attribute->getValue()->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid)))
-			{
-				String^ uid = ((Engine::Internal::Components::Object^)attribute->getValue())->GetTransform()->GetUID();
+			if (attribute == nullptr)
+				return;
 
-				attribute->setValue(GetObjectByUid(uid), false);
+			if (attribute->getValue() != nullptr)
+			{
+				if ((attribute->getValue()->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attribute->getValue()->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid)))
+				{
+					String^ uid = ((Engine::Internal::Components::Object^)attribute->getValue())->GetTransform()->GetUID();
+
+					attribute->setValue(GetObjectByUid(uid), false);
+				}
 			}
 			else
 			{
-
+				attribute->setValue(nullptr, false);
 			}
 		}
 

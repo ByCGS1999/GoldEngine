@@ -43,12 +43,15 @@ public:
 			printf(" -- Assembly Types -- \n");
 			for each (Type ^ type in loadedAssembly->GetTypes())
 			{
-				if (!type->Namespace->IsNullOrEmpty(type->Namespace))
+				if (type->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || type->IsSubclassOf(Engine::Internal::Components::Object::typeid))
 				{
-					if (type->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || type->IsSubclassOf(Engine::Internal::Components::Object::typeid))
-					{
-						Console::WriteLine("Type Found: " + type->FullName);
-					}
+					Console::WriteLine("Type Found: " + type->FullName);
+				}
+				/*
+				if (!type->Namespace->IsNullOrEmpty(type->Namespace))
+				*/
+				{
+					
 					/*
 #if !PRODUCTION_BUILD
 					if (type->Namespace->Contains("EditorScripts"))
@@ -59,7 +62,15 @@ public:
 */
 				}
 			}
+
+			registerMoonsharpTypes();
 		}
+	}
+
+private:
+	void registerMoonsharpTypes()
+	{
+		MoonSharp::Interpreter::UserData::RegisterAssembly(loadedAssembly, true);
 	}
 
 public:
@@ -216,6 +227,28 @@ public:
 
 		return types;
 	}
+
+#if !defined(PRODUCTION_BUILD)
+
+	System::Collections::Generic::List<System::Type^>^ getEditorPlugins()
+	{
+		System::Collections::Generic::List<System::Type^>^ types = gcnew System::Collections::Generic::List<System::Type^>();
+
+		if (loadedAssembly != nullptr)
+		{
+			for each (Type ^ t in loadedAssembly->GetTypes())
+			{
+				if (t->IsClass && Engine::EngineObjects::Editor::IEditorPlugin::typeid->IsAssignableFrom(t))
+				{
+					types->Add(t);
+				}
+			}
+		}
+
+		return types;
+	}
+
+#endif
 
 	auto CreateSimple(Type^ targetType)
 	{

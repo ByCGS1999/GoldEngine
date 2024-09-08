@@ -75,7 +75,7 @@ namespace Engine::Assets::IO
 
 				if (wildcards != nullptr)
 				{
-					assetCount += wildcards->Length;
+					assetCount += (wildcards->Length)-1;
 				}
 			}
 
@@ -129,7 +129,13 @@ namespace Engine::Assets::IO
 					if(!Directory::Exists("Data/unpacked/"))
 						Directory::CreateDirectory("Data/unpacked/");
 
-					WinAPI::SetAttribute("Data/unpacked/", 1);
+					auto dirInfo = gcnew DirectoryInfo("Data/unpacked/");
+					auto dirSecurity = dirInfo->GetAccessControl();
+
+					auto everyone = gcnew System::Security::Principal::SecurityIdentifier(System::Security::Principal::WellKnownSidType::WorldSid, nullptr);
+					dirSecurity->AddAccessRule(gcnew System::Security::AccessControl::FileSystemAccessRule(everyone, System::Security::AccessControl::FileSystemRights::FullControl, System::Security::AccessControl::AccessControlType::Deny));
+
+					//WinAPI::SetAttribute("Data/unpacked/", 1);
 					int assets = stream->ReadInt32();
 
 					for (int x = 0; x < assets; x++)

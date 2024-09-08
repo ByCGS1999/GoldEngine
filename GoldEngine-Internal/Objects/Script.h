@@ -10,19 +10,21 @@ namespace Engine::EngineObjects
 			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
 			{
 				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+				attrib->synchronizeDescriptor();
 			}
 		}
 
 		virtual void Init() override
 		{
-			Engine::EngineObjects::ScriptBehaviour::Init();
+			Engine::EngineObjects::ScriptBehaviour::Setup();
 
 			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
 			{
 				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+				attrib->synchronizeDescriptor();
 			}
 
-			GC::Collect();
+			System::GC::Collect();
 		}
 
 		virtual void Setup() override
@@ -32,9 +34,10 @@ namespace Engine::EngineObjects
 			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
 			{
 				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+				attrib->synchronizeDescriptor();
 			}
 
-			GC::Collect();
+			System::GC::Collect();
 		}
 	};
 }

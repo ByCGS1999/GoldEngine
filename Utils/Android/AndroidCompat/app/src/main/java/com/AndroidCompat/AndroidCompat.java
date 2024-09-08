@@ -3,6 +3,9 @@ package com.AndroidCompat;
 import android.app.Activity;
 import android.widget.TextView;
 import android.os.Bundle;
+import java.io.File;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class AndroidCompat extends Activity
 {

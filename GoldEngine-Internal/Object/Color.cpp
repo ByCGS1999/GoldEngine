@@ -14,6 +14,11 @@ unsigned int Engine::Components::Color::toHex()
 	return hexColor;
 }
 
+RAYLIB::Color Engine::Components::Color::toNativeAlt()
+{
+	return RAYLIB::GetColor(hexColor);
+}
+
 RAYLIB::Color Engine::Components::Color::toNative()
 {
 	__int8 rByte;

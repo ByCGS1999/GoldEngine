@@ -14,6 +14,7 @@ namespace Engine::Components
 		[Newtonsoft::Json::JsonConstructorAttribute]
 		Color(unsigned int colorHex);
 		unsigned int toHex();
+		RAYLIB::Color toNativeAlt();
 		RAYLIB::Color toNative();
 		RAYLIB::Vector3 toNativeVector3();
 		float* toFloat();

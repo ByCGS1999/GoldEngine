@@ -1,6 +1,8 @@
 #pragma once
 
-namespace Engine::EngineObjects
+#if !defined(PRODUCTION_BUILD)
+
+namespace Engine::EngineObjects::Editor
 {
 	public ref class EditorCamera : public Engine::EngineObjects::Camera3D
 	{
@@ -22,3 +24,5 @@ namespace Engine::EngineObjects
 		}
 	};
 }
+
+#endif

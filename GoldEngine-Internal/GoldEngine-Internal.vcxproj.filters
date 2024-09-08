@@ -238,6 +238,12 @@
     <Filter Include="Source\Engine\ScriptingAPI\Wrappers\TimeWrapper">
       <UniqueIdentifier>{88128305-5072-464d-be0b-575a0d18f476}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Engine\GarbageCollector">
+      <UniqueIdentifier>{f5c83e96-8249-4400-b93f-73ba01f9601e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Editor">
+      <UniqueIdentifier>{fc964e2e-ab08-40fc-a673-cdb4b39fa34d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -495,9 +501,6 @@
     <ClInclude Include="Macros.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\EditorCamera.h">
-      <Filter>Source\Engine\EngineObjects\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\Camera2D.h">
       <Filter>Source\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
@@ -527,6 +530,15 @@
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Source\Engine\ScriptingAPI\Wrappers\TimeWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGC.h">
+      <Filter>Source\Engine\GarbageCollector</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\EditorCamera.h">
+      <Filter>Source\Engine\EngineObjects\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\EditorPlugin.h">
+      <Filter>Source\Engine\EngineObjects\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -593,6 +605,9 @@
     <ClCompile Include="Time.cpp">
       <Filter>Source\Engine\ScriptingAPI\Wrappers\TimeWrapper</Filter>
     </ClCompile>
+    <ClCompile Include="EngineGC.cpp">
+      <Filter>Source\Engine\GarbageCollector</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -632,19 +647,19 @@
     <CopyFileToFolders Include="Data\Engine\Textures\Error.png">
       <Filter>Data\Engine\Textures</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Icons\Material.png">
+    <CopyFileToFolders Include="EditorAssets\Icons\Material.png">
       <Filter>Data\EditorAssets\Icons</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Icons\Model.png">
+    <CopyFileToFolders Include="EditorAssets\Icons\Model.png">
       <Filter>Data\EditorAssets\Icons</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Icons\Run.png">
+    <CopyFileToFolders Include="EditorAssets\Icons\Run.png">
       <Filter>Data\EditorAssets\Icons</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Icons\Stop.png">
+    <CopyFileToFolders Include="EditorAssets\Icons\Stop.png">
       <Filter>Data\EditorAssets\Icons</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Fonts\fontawesome-webfont.ttf">
+    <CopyFileToFolders Include="EditorAssets\Fonts\fontawesome-webfont.ttf">
       <Filter>Data\EditorAssets\Fonts</Filter>
     </CopyFileToFolders>
   </ItemGroup>

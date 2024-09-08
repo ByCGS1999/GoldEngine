@@ -19,7 +19,7 @@ namespace Engine::EngineObjects
 	public:
 		LuaScript(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::EngineObjects::Script(name, transform)
 		{
-			initVM();
+
 		}
 
 	public:

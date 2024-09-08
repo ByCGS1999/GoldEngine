@@ -10,7 +10,8 @@ namespace Engine::Components
 
 	public:
 		[[JsonConstructorAttribute]]
-		Vector3(float x, float y, float z);
+		Vector3(float, float, float);
+		Vector3();
 
 		Engine::Components::Vector2^ toVector2()
 		{
@@ -85,6 +86,16 @@ namespace Engine::Components
 		static Vector3^ create(float* vec)
 		{
 			return gcnew Vector3(vec[0], vec[1], vec[2]);
+		}
+
+		static float Dot(Vector3^ left, Vector3^ right)
+		{
+			return (Vector3DotProduct(left->toNative(), right->toNative()));
+		}
+
+		static float Distance(Vector3^ left, Vector3^ right)
+		{
+			return Vector3Distance(left->toNative(), right->toNative());
 		}
 
 		bool Equals(Vector3^ value) override

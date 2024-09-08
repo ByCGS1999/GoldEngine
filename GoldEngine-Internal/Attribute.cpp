@@ -59,6 +59,12 @@ inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, S
 	setType(userDataType); // For consistency
 }
 
+inline void Engine::Scripting::Attribute::synchronizeDescriptor()
+{
+	if(descriptor != nullptr && rootObject != nullptr)
+		descriptor->SetValue(rootObject, userData);
+}
+
 inline void Engine::Scripting::Attribute::setPropertyDescriptor(System::Reflection::PropertyInfo^ descriptor, System::Object^ rootDescriptor)
 {
 	this->descriptor = descriptor;

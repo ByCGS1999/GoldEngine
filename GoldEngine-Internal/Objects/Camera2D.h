@@ -51,7 +51,7 @@ namespace Engine::EngineObjects
 
 		bool is3DCamera() override
 		{
-			return true;
+			return false;
 		}
 	};
 }

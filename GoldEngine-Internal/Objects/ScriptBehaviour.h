@@ -75,13 +75,18 @@ namespace Engine::EngineObjects
 							);
 
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
+							this->attributes->getAttribute(attributeName)->userDataType = prop->PropertyType;
 						}
 						else
 						{
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
+							this->attributes->getAttribute(attributeName)->userDataType = prop->PropertyType;
 						}
 					}
 				}
+
+				attributes->DeserializeAttributes();
+				HookUpdate();
 			}
 			catch (Exception^ ex)
 			{
@@ -119,13 +124,18 @@ namespace Engine::EngineObjects
 							);
 
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
+							this->attributes->getAttribute(attributeName)->userDataType = prop->PropertyType;
 						}
 						else
 						{
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
+							this->attributes->getAttribute(attributeName)->userDataType = prop->PropertyType;
 						}
 					}
 				}
+
+				attributes->DeserializeAttributes();
+				HookUpdate();
 			}
 			catch (Exception^ ex)
 			{

@@ -93,8 +93,9 @@ public:
 	}
 
 public:
-	void Release()
+	static void Release(System::String^ name)
 	{
-		Instance = nullptr;
+		Instances[name]->Instance = nullptr;
+		Instances->Remove(name);
 	}
 };

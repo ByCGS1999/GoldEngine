@@ -302,6 +302,12 @@ namespace Engine::Internal::Components
 			this->active = active;
 		}
 
+
+		void SetLayerMask(Layer^ layerMask)
+		{
+			this->layerMask = layerMask;
+		}
+
 		/*
 
 #pragma region IConvertible_Implementation

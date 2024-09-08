@@ -230,6 +230,7 @@
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="EngineConfig.h" />
+    <ClInclude Include="EngineGC.h" />
     <ClInclude Include="EngineIncludes.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
@@ -254,6 +255,7 @@
     <ClInclude Include="Objects\CubeRenderer.h" />
     <ClInclude Include="Objects\Daemon.h" />
     <ClInclude Include="Objects\EditorCamera.h" />
+    <ClInclude Include="Objects\EditorPlugin.h" />
     <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\GridRenderer.h" />
     <ClInclude Include="Objects\LightDm.h" />
@@ -318,6 +320,7 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="CastToNative.cpp" />
+    <ClCompile Include="EngineGC.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
     <ClCompile Include="GraphicsWrapper.cpp" />
     <ClCompile Include="imguistyleserializer.cpp" />
@@ -350,28 +353,28 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Icons\Material.png">
+    <CopyFileToFolders Include="EditorAssets\Icons\Material.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Icons\Model.png">
+    <CopyFileToFolders Include="EditorAssets\Icons\Model.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Icons\Run.png">
+    <CopyFileToFolders Include="EditorAssets\Icons\Run.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Data\EditorAssets\Icons\Stop.png">
+    <CopyFileToFolders Include="EditorAssets\Icons\Stop.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
@@ -480,11 +483,11 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Data\EditorAssets\Fonts\fontawesome-webfont.ttf">
+    <CopyFileToFolders Include="EditorAssets\Fonts\fontawesome-webfont.ttf">
       <FileType>Document</FileType>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
