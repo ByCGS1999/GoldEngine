@@ -23,6 +23,7 @@
 
 #include "Attribute.h"
 #include "AttributeManager.h"
+#include "Event.h"
 
 #include "Objects/ScriptBehaviour.h"
 #include "Objects/LightManager.h"
@@ -37,3 +38,4 @@
 #include "Objects/EditorPlugin.h"
 #endif
 #include "Objects/Sprite.h"
+#include "Objects/UI/Button.h"

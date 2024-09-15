@@ -533,12 +533,12 @@ private:
 							{
 								String^ value = (String^)attrib->getValue();
 								int valueLen = value->Length;
-								char* data = new char[valueLen * 8];
+								char* data = new char[valueLen+1 * 8];
 
 								strcpy(data, CastStringToNative(value).c_str());
 
 								ImGui::SetNextItemWidth(ImGui::GetWindowWidth() - 25);
-								if (ImGui::InputText(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), data, valueLen * 8))
+								if (ImGui::InputText(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), data, valueLen+1 * 8))
 								{
 									attrib->setValue(gcnew String(data));
 
@@ -1128,7 +1128,6 @@ public:
 
 		engine_bootstrap();
 
-		luaVM = gcnew Engine::Lua::VM::LuaVM();
 		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
 
@@ -1145,6 +1144,7 @@ public:
 		}
 
 		SceneManager::SetAssemblyManager(assemblies);
+		luaVM = gcnew Engine::Lua::VM::LuaVM();
 
 		for each (EngineAssembly ^ assembly in assemblies)
 		{
@@ -1577,6 +1577,39 @@ public:
 						scene->PushToRenderQueue(meshRenderer);
 					}
 
+					ImGui::EndMenu();
+				}
+
+
+				ImGui::Separator();
+
+				if (ImGui::BeginMenu("UI"))
+				{
+					// Text, Labels, Images.
+					if (ImGui::BeginMenu("Static"))
+					{
+
+						ImGui::EndMenu();
+					}
+
+					// Buttons, Text Fields
+					if (ImGui::BeginMenu("Interactables"))
+					{
+						if (ImGui::MenuItem("Button"))
+						{
+							auto button = gcnew Engine::EngineObjects::UI::Button("Button", gcnew Engine::Internal::Components::Transform(
+								gcnew Engine::Components::Vector3(),
+								gcnew Engine::Components::Vector3(),
+								gcnew Engine::Components::Vector3(1,1,1),
+								scene->GetDatamodelMember("gui")->GetTransform()
+							));
+
+							scene->AddObjectToScene(button);
+							scene->PushToRenderQueue(button);
+						}
+
+						ImGui::EndMenu();
+					}
 					ImGui::EndMenu();
 				}
 

@@ -29,3 +29,5 @@ Build
 /Utils/WineBootstrap/bin/bootstrapper
 /Utils/WineBootstrap/WineBootstrapper/.vs/WineBootstrapper/v17
 .workspace
+./Libs
+./Libs/*

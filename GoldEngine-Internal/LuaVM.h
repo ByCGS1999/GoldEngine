@@ -11,6 +11,12 @@ namespace Engine::Lua::VM
 	public ref class VMWrapper // Lua Wrapper for System::Type^
 	{
 	public:
+		static cli::array<EngineAssembly^>^ GetAssemblies()
+		{
+			return Engine::Managers::SceneManager::GetAssemblyManager()->ToArray();
+		}
+
+	public:
 		static System::Type^ GetRuntimeType(System::Object^ object)
 		{
 			return object->GetType();
@@ -26,15 +32,36 @@ namespace Engine::Lua::VM
 			Logging::Log(object->GetType()->FullName);
 		}
 
-		static System::Object^ ToDerivate(System::Object^ object)
+		static System::Object^ ToDerivate(System::Object^ object, System::String^ targetType)
 		{
-			Logging::Log("Changing object type");
-			return System::Convert::ChangeType(object, object->GetType());
+			System::Type^ toType = GetTypeByName(targetType);
+
+			if (toType == nullptr)
+				return DynValue::Nil;
+
+			auto convertedType = System::Convert::ChangeType(object, toType);
+
+			return UserData::Create(convertedType);
 		}
 
-		static System::Object^ ToDerivate(System::Object^ object, System::Type^ targetType)
+		static System::Object^ ToDerivate(System::Object^ object)
 		{
-			return System::Convert::ChangeType(object, targetType);
+			if (object == nullptr)
+				return DynValue::Nil;
+
+			System::Type^ toType = object->GetType();
+
+			if (toType == nullptr)
+				return DynValue::Nil;
+
+			auto convertedType = System::Convert::ChangeType(object, toType);
+
+			return UserData::Create(convertedType);
+		}
+
+		static void AlterVMGlobals(MoonSharp::Interpreter::Table^ globals, String^ globalName, Object^ newObject)
+		{
+			globals[globalName] = newObject;
 		}
 
 		static void DerivateVMGlobal(MoonSharp::Interpreter::Script^& vm, String^ globalName)
@@ -47,6 +74,27 @@ namespace Engine::Lua::VM
 		static void UpdateVMGlobal(MoonSharp::Interpreter::Script^& vm, String^ globalName, Object^ newObject)
 		{
 			vm->Globals[globalName] = newObject;
+		}
+
+		static System::Type^ GetTypeByName(System::String^ typeName)
+		{
+			auto asms = GetAssemblies();
+			System::Type^ currentType = nullptr;
+			
+			for each (auto assembly in asms)
+			{
+				currentType = assembly->GetTypeByName(typeName);
+
+				if (currentType != nullptr)
+					break;
+			}
+
+			return currentType;
+		}
+
+		static DynValue^ Derivate(System::Object^ object)
+		{
+			return UserData::Create(System::Convert::ChangeType(object, object->GetType()));
 		}
 
 		static bool HasProperty(Engine::Internal::Components::Object^ object, String^ propertyName)
@@ -243,15 +291,11 @@ namespace Engine::Lua::VM
 	private:
 		void RegisterGlobalFunctions()
 		{
-			auto appDomain = AppDomain::CurrentDomain;
-
-			//UserData::RegisterAssembly(assembly, true);
-
-			for each (auto asms in appDomain->GetAssemblies())
+			for each (auto asms in VMWrapper::GetAssemblies())
 			{
 				try 
 				{
-					UserData::RegisterAssembly(asms, true);
+					UserData::RegisterAssembly(asms->getLoadedAssembly(), true);
 				}
 				catch (Exception^ ex)
 				{
@@ -278,6 +322,8 @@ namespace Engine::Lua::VM
 			RegisterGlobal("HasProperty", gcnew System::Func<Engine::Internal::Components::Object^, String^, bool>(&VMWrapper::HasProperty));
 			RegisterGlobal("GetAttributes", gcnew System::Func<Engine::Internal::Components::Object^, AttributeManager^>(&VMWrapper::GetAttributeManager));
 			RegisterGlobal("SetProperty", gcnew System::Action<Engine::Internal::Components::Object^, String^, Object^>(&VMWrapper::SetProperty));
+			RegisterGlobal("CastToClass", gcnew System::Func<System::Object^, System::String^, System::Object^>(&VMWrapper::ToDerivate));
+			RegisterGlobal("ToDerivate", gcnew System::Func<System::Object^, System::Object^>(&VMWrapper::ToDerivate));
 			//RegisterGlobal("VM", this->scriptState);
 		}
 

@@ -15,6 +15,9 @@ const char* CastToNative(System::String^ value)
 
 std::string CastStringToNative(System::String^ value)
 {
+	if (value == "")
+		return std::string("");
+
 	System::Text::Encoding^ u8 = System::Text::Encoding::UTF8;
 	array<unsigned char>^ bytes = u8->GetBytes(value);
 	pin_ptr<unsigned char> pinnedPtr = &bytes[0];

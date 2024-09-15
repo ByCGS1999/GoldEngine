@@ -292,6 +292,26 @@ public:
 		}
 	}
 
+	System::Type^ GetTypeByName(System::String^ typeName)
+	{
+		if (loadedAssembly != nullptr)
+		{
+			Type^ storedType = nullptr;
+
+			for each (Type ^ type in loadedAssembly->GetTypes())
+			{
+				if (type->FullName->Equals(typeName))
+				{
+					storedType = type;
+				}
+			}
+
+			return storedType;
+		}
+
+		return nullptr;
+	}
+
 	template <class T>
 	T Create(String^ str)
 	{

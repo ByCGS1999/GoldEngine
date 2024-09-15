@@ -18,6 +18,11 @@ namespace Engine::Managers
 			assemblyManager = manager;
 		}
 
+		static System::Collections::Generic::List<EngineAssembly^>^ GetAssemblyManager()
+		{
+			return assemblyManager;
+		}
+
 	public:
 		static bool AssetExists(System::String^ fN)
 		{

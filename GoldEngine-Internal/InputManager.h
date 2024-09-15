@@ -141,38 +141,38 @@ namespace Engine::Scripting
 	public:
 		static bool IsKeyPressed(int key_id)
 		{
-			return ::IsKeyPressed(key_id);
+			return RAYLIB::IsKeyPressed(key_id);
 		}
 
 		static bool IsKeyDown(int key_id)
 		{
 			
-			return ::IsKeyDown(key_id);
+			return RAYLIB::IsKeyDown(key_id);
 		}
 
 		static bool IsKeyReleased(int key_id)
 		{
-			return ::IsKeyReleased(key_id);
+			return RAYLIB::IsKeyReleased(key_id);
 		}
 
 		static bool IsKeyPressedRepeat(int key_id)
 		{
-			return ::IsKeyPressedRepeat(key_id);
+			return RAYLIB::IsKeyPressedRepeat(key_id);
 		}
 
         static bool IsMouseButtonUp(int button_press)
         {
-            return ::IsMouseButtonUp(button_press);
+            return RAYLIB::IsMouseButtonUp(button_press);
         }
 
         static bool IsMouseButtonDown(int button_press)
         {
-            return ::IsMouseButtonDown(button_press);
+            return RAYLIB::IsMouseButtonDown(button_press);
         }
 
         static bool IsMouseButtonPressed(int button_press)
         {
-            return ::IsMouseButtonPressed(button_press);
+            return RAYLIB::IsMouseButtonPressed(button_press);
         }
 
 		static Engine::Components::Vector2^ GetMousePosition()
@@ -182,32 +182,32 @@ namespace Engine::Scripting
 
 		static bool IsMouseButton1Up()
 		{
-			return ::IsMouseButtonUp(MOUSE_BUTTON_LEFT);
+			return RAYLIB::IsMouseButtonUp(MOUSE_BUTTON_LEFT);
 		}
 
 		static bool IsMouseButton2Up()
 		{
-			return ::IsMouseButtonUp(MOUSE_BUTTON_RIGHT);
+			return RAYLIB::IsMouseButtonUp(MOUSE_BUTTON_RIGHT);
 		}
 
 		static bool IsMouseButton1Down()
 		{
-			return ::IsMouseButtonDown(MOUSE_BUTTON_LEFT);
+			return RAYLIB::IsMouseButtonDown(MOUSE_BUTTON_LEFT);
 		}
 
 		static bool IsMouseButton2Down()
 		{
-			return ::IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
+			return RAYLIB::IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
 		}
 
 		static bool IsMouseButton1Pressed()
 		{
-			return ::IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+			return RAYLIB::IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 		}
 
 		static bool IsMouseButton2Pressed()
 		{
-			return ::IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
+			return RAYLIB::IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
 		}
 	};
 }

@@ -244,6 +244,12 @@
     <Filter Include="Source\Engine\EngineObjects\Editor">
       <UniqueIdentifier>{fc964e2e-ab08-40fc-a673-cdb4b39fa34d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Engine\EngineObjects\UI">
+      <UniqueIdentifier>{1eefa2aa-1563-41e2-a423-92fadf8d55ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Events">
+      <UniqueIdentifier>{b25df8fd-c01b-4a23-a60e-fa9218564b41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -540,6 +546,12 @@
     <ClInclude Include="Objects\EditorPlugin.h">
       <Filter>Source\Engine\EngineObjects\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\UI\Button.h">
+      <Filter>Source\Engine\EngineObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Source\Engine\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -607,6 +619,9 @@
     </ClCompile>
     <ClCompile Include="EngineGC.cpp">
       <Filter>Source\Engine\GarbageCollector</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source\Engine\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

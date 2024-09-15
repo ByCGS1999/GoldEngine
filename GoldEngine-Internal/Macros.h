@@ -41,4 +41,18 @@
 #define EDITOR_VERSION "GoldEngine Editor Ver: 0.6a"
 #define RUNTIME_VERSION "GoldEngine Runtime Prev-Ver: 0.1a"
 
+// PHYSICS SYSTEM
+
+#define USE_BULLET_PHYS
+
+#ifdef USE_BULLET_PHYS
+
+#ifdef _WIN64
+#pragma comment(lib, "../Libs/x64/Bullet3Common.lib");
+
+#endif
+
+#endif
+
+
 #pragma endregion

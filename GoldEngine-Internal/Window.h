@@ -14,7 +14,6 @@ namespace Engine
 	public ref class Window
 	{
 	private:
-
 		int tickRate = 0;
 		int physicsTick = 60;
 		int targetFPS = 60;
@@ -24,6 +23,7 @@ namespace Engine
 	public:
 		bool FirstTimeBoot()
 		{
+			Singleton<Window^>::Create(this);
 			HarmonyLib::Harmony^ harmony = gcnew HarmonyLib::Harmony("HarmonyInstance");
 			Singleton<HarmonyLib::Harmony^>::Create(harmony);
 

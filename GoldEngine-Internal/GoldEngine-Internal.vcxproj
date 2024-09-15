@@ -32,7 +32,7 @@
     <ProjectGuid>{564D6646-9C1F-4294-A506-05FF2ADF9A18}</ProjectGuid>
     <Keyword>NetFrameworkCProj</Keyword>
     <RootNamespace>GoldEngineInternal</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
     <TargetFramework>v4.7.2</TargetFramework>
     <WindowsTargetPlatformMinVersion>7.0</WindowsTargetPlatformMinVersion>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -172,7 +172,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">
@@ -200,7 +200,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">
@@ -232,6 +232,7 @@
     <ClInclude Include="EngineConfig.h" />
     <ClInclude Include="EngineGC.h" />
     <ClInclude Include="EngineIncludes.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
     <ClInclude Include="GraphicsWrapper.h" />
@@ -268,6 +269,7 @@
     <ClInclude Include="Objects\ScriptBehaviour.h" />
     <ClInclude Include="Objects\Skybox.h" />
     <ClInclude Include="Objects\Sprite.h" />
+    <ClInclude Include="Objects\UI\Button.h" />
     <ClInclude Include="Object\Color.h" />
     <ClInclude Include="Object\Layer.h" />
     <ClInclude Include="Object\LayerManager.h" />
@@ -322,6 +324,7 @@
     <ClCompile Include="CastToNative.cpp" />
     <ClCompile Include="EngineGC.cpp" />
     <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="GraphicsWrapper.cpp" />
     <ClCompile Include="imguistyleserializer.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />

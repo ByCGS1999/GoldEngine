@@ -152,3 +152,18 @@ void GraphicsWrapper::GL_ClearBackground(Engine::Components::Color^ color)
 {
 	RAYLIB::ClearBackground(color->toNative());
 }
+
+void GraphicsWrapper::GL_DrawFPS(Engine::Components::Vector2^ position)
+{
+	RAYLIB::DrawFPS(position->x, position->y);
+}
+
+void GraphicsWrapper::GL_BeginBlendMode(rlWrapper::BlendMode mode)
+{
+	RAYLIB::BeginBlendMode((int)mode);
+}
+
+void GraphicsWrapper::GL_EndBlendMode()
+{
+	RAYLIB::EndBlendMode();
+}
