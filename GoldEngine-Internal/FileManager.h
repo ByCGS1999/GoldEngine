@@ -10,7 +10,7 @@ namespace Engine::Assets::IO
 		static short int fileVersion = 100;
 
 	private:
-		static void concat(List<String^>^% array1, List<String^>^ array2)
+		static void concat(System::Collections::Generic::List<String^>^% array1, System::Collections::Generic::List<String^>^ array2)
 		{
 			for each (String ^ v2 in array2)
 			{
@@ -19,9 +19,9 @@ namespace Engine::Assets::IO
 		}
 
 	private:
-		static List<String^>^ getDescendants(String^ inPath)
+		static System::Collections::Generic::List<String^>^ getDescendants(String^ inPath)
 		{
-			List<String^>^ listedData = gcnew List<String^>();
+			System::Collections::Generic::List<String^>^ listedData = gcnew System::Collections::Generic::List<String^>();
 
 			if (Directory::Exists(inPath))
 			{
@@ -130,11 +130,13 @@ namespace Engine::Assets::IO
 						Directory::CreateDirectory("Data/unpacked/");
 
 					auto dirInfo = gcnew DirectoryInfo("Data/unpacked/");
+
+					/*
 					auto dirSecurity = dirInfo->GetAccessControl();
 
 					auto everyone = gcnew System::Security::Principal::SecurityIdentifier(System::Security::Principal::WellKnownSidType::WorldSid, nullptr);
 					dirSecurity->AddAccessRule(gcnew System::Security::AccessControl::FileSystemAccessRule(everyone, System::Security::AccessControl::FileSystemRights::FullControl, System::Security::AccessControl::AccessControlType::Deny));
-
+					*/
 					//WinAPI::SetAttribute("Data/unpacked/", 1);
 					int assets = stream->ReadInt32();
 

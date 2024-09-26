@@ -25,7 +25,7 @@ Features:</br>
 Requirements:</br>
   C++ MSCLR.</br>
   VS2022 or higher. (2019 might work aswell)</br>
-  .NET Framework 4.8. (version can be tweaked)</br>
+  .NET 8.0. (version can be tweaked)</br>
   A brain. (NOT OPTIONAL)</br>
 
 Supported Platforms:</br>

@@ -32,11 +32,14 @@
     <ProjectGuid>{564D6646-9C1F-4294-A506-05FF2ADF9A18}</ProjectGuid>
     <Keyword>NetFrameworkCProj</Keyword>
     <RootNamespace>GoldEngineInternal</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
-    <TargetFramework>v4.7.2</TargetFramework>
-    <WindowsTargetPlatformMinVersion>7.0</WindowsTargetPlatformMinVersion>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <TargetFramework>net8.0</TargetFramework>
     <ProjectName>GoldEngine-Internal</ProjectName>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <GenerateDepsFile>false</GenerateDepsFile>
+    <WindowsTargetPlatformMinVersion>7.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -47,38 +50,37 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CLRSupport>true</CLRSupport>
-    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>NetCore</CLRSupport>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CLRSupport>true</CLRSupport>
+    <CLRSupport>NetCore</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CLRSupport>true</CLRSupport>
-    <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>NetCore</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CLRSupport>true</CLRSupport>
+    <CLRSupport>NetCore</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -144,7 +146,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -200,7 +202,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">
@@ -236,10 +238,14 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
     <ClInclude Include="GraphicsWrapper.h" />
-    <ClInclude Include="ImguiHook.h" />
+    <ClInclude Include="ImGuiHook.h" />
     <ClInclude Include="imguistyleserializer.h" />
+    <ClInclude Include="imgui\cimgui.h" />
     <ClInclude Include="imgui\FileExplorer\filedialog.h" />
     <ClInclude Include="imgui\Fonts\IconsFontAwesome4.h" />
+    <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="imgui\misc\single_file\imgui_single_file.h" />
     <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogFileReporter.h" />
@@ -323,15 +329,17 @@
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="CastToNative.cpp" />
     <ClCompile Include="EngineGC.cpp" />
-    <ClCompile Include="EntryPoint.cpp" />
+    <ClCompile Include="GoldEngine.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="GraphicsWrapper.cpp" />
     <ClCompile Include="imguistyleserializer.cpp" />
+    <ClCompile Include="imgui\cimgui.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp" />
     <ClCompile Include="Object\Color.cpp" />
     <ClCompile Include="Object\Layer.cpp" />
@@ -339,6 +347,7 @@
     <ClCompile Include="Object\Vector2.cpp" />
     <ClCompile Include="Object\Vector3.cpp" />
     <ClCompile Include="Packs.cpp" />
+    <ClCompile Include="Raylib\craylib\craylib.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="WinAPI.cpp" />
@@ -361,24 +370,28 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Icons\%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="EditorAssets\Icons\Model.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Icons\%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="EditorAssets\Icons\Run.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Icons\%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="EditorAssets\Icons\Stop.png">
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Icons\%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -465,6 +478,9 @@
     <Reference Include="0Harmony">
       <HintPath>..\netasm\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="ImGui.NET">
+      <HintPath>..\netasm\ImGui.NET.dll</HintPath>
+    </Reference>
     <Reference Include="MoonSharp.Interpreter">
       <HintPath>..\netasm\MoonSharp.Interpreter.dll</HintPath>
       <Private>true</Private>
@@ -477,13 +493,9 @@
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Numerics" />
+    <Reference Include="Raylib-cs">
+      <HintPath>..\netasm\Raylib-cs.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="EditorAssets\Fonts\fontawesome-webfont.ttf">
@@ -492,19 +504,19 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Fonts/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Fonts\%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <None Include="Bin\FBX2glTF.exe" />
     <None Include="Data\Engine\Shaders\Lighting\rlights.frag" />
     <None Include="Data\Engine\Shaders\Lighting\rlights.vert" />
+    <None Include="imgui\misc\debuggers\imgui.gdb" />
+    <None Include="imgui\misc\debuggers\imgui.natstepfilter" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Solutions\API\raylib\build\x64\raylib\external\glfw\src\glfw.vcxproj">
       <Project>{c91df341-6aba-37da-a77f-5c7366f8b376}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Solutions\API\raylib\build\x64\raylib\raylib.vcxproj">
-      <Project>{32b999c1-4bc6-3235-b369-6e75f1590f28}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Solutions\API\raylib\build\x86\raylib\external\glfw\src\glfw.vcxproj">
       <Project>{bc9b5eb3-da41-317c-80c3-02d41eb178f7}</Project>
@@ -512,6 +524,20 @@
     <ProjectReference Include="..\Solutions\API\raylib\build\x86\raylib\raylib.vcxproj">
       <Project>{f9b3c4ed-8979-33ea-bf8f-f8408abdd508}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="imgui\misc\README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="imgui\misc\debuggers\imgui.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="imgui\misc\fonts\Cousine-Regular.ttf" />
+    <Font Include="imgui\misc\fonts\DroidSans.ttf" />
+    <Font Include="imgui\misc\fonts\Karla-Regular.ttf" />
+    <Font Include="imgui\misc\fonts\ProggyClean.ttf" />
+    <Font Include="imgui\misc\fonts\ProggyTiny.ttf" />
+    <Font Include="imgui\misc\fonts\Roboto-Medium.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -22,6 +22,15 @@ namespace Engine::EngineObjects
 
 		}
 
+		void Destroy() override
+		{
+			if (virtualMachine != nullptr)
+			{
+				delete virtualMachine;
+				virtualMachine = nullptr;
+			}
+		}
+
 	public:
 		void Reset()
 		{
@@ -34,7 +43,10 @@ namespace Engine::EngineObjects
 			if (File::Exists(luaFilePath))
 			{
 				printWarning("Loading Lua binary: " + luaFilePath);
+				
+				MoonSharp::Interpreter::Script::DefaultOptions->CheckThreadAccess = false;
 				virtualMachine = gcnew Engine::Lua::VM::LuaVM();
+				virtualMachine->GetScriptState()->Options->CheckThreadAccess = false;
 
 				luaSource = virtualMachine->ReadFromFile(luaFilePath);
 

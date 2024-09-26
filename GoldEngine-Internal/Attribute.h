@@ -19,7 +19,7 @@ namespace Engine::Scripting
 		System::Object^ userData;
 
 	private:
-		System::Reflection::PropertyInfo^ descriptor;
+		System::Reflection::MemberInfo^ descriptor;
 		System::Object^ rootObject;
 		
 	public:
@@ -31,7 +31,7 @@ namespace Engine::Scripting
 		void setValue(System::Object^ object);
 		void setValue(System::Object^ object, bool overrideType);
 		void synchronizeDescriptor();
-		void setPropertyDescriptor(System::Reflection::PropertyInfo^ descriptor, System::Object^ rootDescriptor);
+		void setPropertyDescriptor(System::Reflection::MemberInfo^ descriptor, System::Object^ rootDescriptor);
 
 	public:
 		System::Object^ getValue()

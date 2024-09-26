@@ -18,5 +18,10 @@ namespace Engine::Components
 		RAYLIB::Color toNative();
 		RAYLIB::Vector3 toNativeVector3();
 		float* toFloat();
+
+		static Color^ New(unsigned int hexColor)
+		{
+			return gcnew Color(hexColor);
+		}
 	};
 }

@@ -3,7 +3,7 @@
 namespace Engine::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-		public ref class Vector2
+	public ref class Vector2
 	{
 	public:
 		float x, y;
@@ -29,6 +29,11 @@ namespace Engine::Components
 			return gcnew Vector2(0, 0);
 		}
 
+		System::Numerics::Vector2^ toNumericsVector2()
+		{
+			return gcnew System::Numerics::Vector2(this->x, this->y);
+		}
+
 		static Vector2^ create(RAYLIB::Vector2 vector)
 		{
 			return gcnew Engine::Components::Vector2(vector.x, vector.y);
@@ -37,6 +42,11 @@ namespace Engine::Components
 		static Vector2^ create(float* vector)
 		{
 			return gcnew Engine::Components::Vector2(vector[0], vector[1]);
+		}
+
+		static Vector2^ New(float x, float y)
+		{
+			return gcnew Vector2(x, y);
 		}
 
 		bool Equals(Vector2^ value) override

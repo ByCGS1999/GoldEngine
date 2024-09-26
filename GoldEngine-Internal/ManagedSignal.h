@@ -20,6 +20,8 @@ namespace Engine::Signals
 
 	public delegate System::Object^ LuaSignal_V2(DynValue^);
 
+	public delegate System::Object^ LuaSignal_V3(cli::array<DynValue^>^);
+
 	generic<typename T>
 	public delegate T SignalWithArgs(cli::array<System::Object^>^);
 
@@ -33,13 +35,16 @@ namespace Engine::Signals
 	public ref class ManagedSignal
 	{
 	private:
-		System::Delegate^ bindedSignal;
+		System::Object^ bindedSignal;
 
 		System::Object^ Callback()
 		{
 			if (bindedSignal != nullptr)
 			{
-				return bindedSignal->DynamicInvoke();
+				if(bindedSignal->GetType() == System::Delegate::typeid)
+					return ((System::Delegate^)bindedSignal)->DynamicInvoke();
+				else
+					return ((MoonSharp::Interpreter::Closure^)bindedSignal)->Call();
 			}
 
 			return nullptr;
@@ -49,7 +54,10 @@ namespace Engine::Signals
 		{
 			if (bindedSignal != nullptr)
 			{
-				return bindedSignal->DynamicInvoke(arg);
+				if (bindedSignal->GetType() == System::Delegate::typeid)
+					return ((System::Delegate^)bindedSignal)->DynamicInvoke(arg);
+				else
+					return ((MoonSharp::Interpreter::Closure^)bindedSignal)->Call(arg);
 			}
 
 			return nullptr;
@@ -59,7 +67,10 @@ namespace Engine::Signals
 		{
 			if (bindedSignal != nullptr)
 			{
-				return bindedSignal->DynamicInvoke(args);
+				if (bindedSignal->GetType() == System::Delegate::typeid)
+					return ((System::Delegate^)bindedSignal)->DynamicInvoke(args);
+				else
+					return ((MoonSharp::Interpreter::Closure^)bindedSignal)->Call(args);
 			}
 
 			return nullptr;
@@ -131,6 +142,22 @@ namespace Engine::Signals
 			{
 				LuaSignal_V2^ signal = gcnew LuaSignal_V2(vmInstance, &Engine::Lua::VM::LuaVM::InvokeFunctionO);
 				bindedSignal = signal;
+			}
+		}
+
+		void Bind(MoonSharp::Interpreter::Closure^ closure)
+		{
+			invoker = nullptr;
+			bindedSignal = closure;
+		}
+
+		void Bind(MoonSharp::Interpreter::DynValue^ value)
+		{
+			invoker = nullptr;
+
+			if (value->Type == DataType::Function)
+			{
+				bindedSignal = value->Function;
 			}
 		}
 

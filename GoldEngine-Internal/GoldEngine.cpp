@@ -427,7 +427,6 @@ private:
 					light->shaderId = shaderId;
 				}
 
-
 				float lightPower = light->lightPower;
 				ImGui::Text("Light Intensity:");
 				ImGui::SameLine();
@@ -1673,6 +1672,12 @@ public:
 				{
 					codeEditorOpen = !codeEditorOpen;
 				}
+
+				if (ImGui::MenuItem("Generate Lua Bindings"))
+				{
+					Engine::Lua::VM::LuaVM::GenerateLuaBindings();
+				}
+
 				ImGui::EndMenu();
 			}
 
@@ -1931,10 +1936,6 @@ public:
 							ObjectManager::singleton()->Destroy(selectedObject);
 							selectedObject = nullptr;
 
-							ImGui::EndMenu();
-
-							ImGui::End();
-
 							return;
 						}
 
@@ -2092,12 +2093,12 @@ public:
 
 			ImGui::Separator();
 
-			ImGui::BeginListBox("###ASSETS", { size.x - 20, size.y - 82 });
+			if (ImGui::BeginListBox("###ASSETS", { size.x - 20, size.y - 82 }))
+			{
+				createAssetEntries("./Data/");
 
-			createAssetEntries("./Data/");
-
-			ImGui::EndListBox();
-
+				ImGui::EndListBox();
+			}
 
 			ImGui::End();
 		}
@@ -2156,8 +2157,6 @@ public:
 
 	void DrawImGui() override
 	{
-		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
-
 		if (!initSettings)
 		{
 			ImGui::LoadIniSettingsFromDisk("imgui.ini");
@@ -2166,7 +2165,7 @@ public:
 		}
 
 		auto viewPort = ImGui::GetMainViewport();
-		ImGui::DockSpaceOverViewport(viewPort, ImGuiDockNodeFlags_None);
+		ImGui::DockSpaceOverViewport(viewPort->ID, viewPort, ImGuiDockNodeFlags_None);
 
 		DrawMainMenuBar();
 
@@ -2872,7 +2871,9 @@ private:
 			scene->AddObjectToScene(lightdm);
 		}
 
-		if (ObjectManager::singleton()->GetObjectsByName("EditorCamera")->Count <= 0)
+		auto editorCamera = ObjectManager::singleton()->GetFirstObjectOfType(Engine::EngineObjects::Editor::EditorCamera::typeid);
+
+		if (editorCamera == nullptr)
 		{
 			auto camera3D = gcnew Engine::EngineObjects::Editor::EditorCamera("EditorCamera",
 				gcnew Engine::Internal::Components::Transform(
@@ -2903,6 +2904,8 @@ public:
 		create();
 
 		Logging::LogCustom("[GL Version]:", "Current OpenGL version is -> " + rlGetVersion() + ".");
+
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
 	}
 
 	void Preload() override
@@ -2982,7 +2985,7 @@ public:
 
 		void* cameraLocal = camera->get();
 
-		if (showCursor)
+		if (showCursor && camera->GetType() == Engine::EngineObjects::Editor::EditorCamera::typeid)
 			UpdateCamera(((NativeCamera3D*)cameraLocal)->getCameraPtr(), CAMERA_FREE);
 
 		if (fpsCap)
@@ -3286,13 +3289,38 @@ public:
 
 #endif
 
-int main(array<System::String^>^ args)
+
+/*
+BOOTSTRAPS
+1. C++ COM ITEROP
+2. C++/CLI NATIVE
+*/
+
+extern "C"
 {
-	passwd = CypherLib::GetPasswordBytes(gcnew String(ENCRYPTION_PASSWORD));
+	__declspec(dllexport) void InitializeGoldEngine()
+	{
+		passwd = CypherLib::GetPasswordBytes(gcnew String(ENCRYPTION_PASSWORD));
 
 #if PRODUCTION_BUILD
-	gcnew GameWindow();
+		gcnew GameWindow();
 #else
-	gcnew EditorWindow();
+		gcnew EditorWindow();
 #endif
+	}
 }
+
+public ref class Bootstrap
+{
+public:
+	static void InitializeGoldEngine()
+	{
+		passwd = CypherLib::GetPasswordBytes(gcnew String(ENCRYPTION_PASSWORD));
+
+#if PRODUCTION_BUILD
+		gcnew GameWindow();
+#else
+		gcnew EditorWindow();
+#endif
+	}
+};

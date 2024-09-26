@@ -167,3 +167,23 @@ void GraphicsWrapper::GL_EndBlendMode()
 {
 	RAYLIB::EndBlendMode();
 }
+
+void GraphicsWrapper::GL_DrawRectangleLines(Engine::Components::Vector2^ position, Engine::Components::Vector2^ scale, Engine::Components::Color^ color)
+{
+	RAYLIB::DrawRectangleLines(position->x, position->y, scale->x, scale->y, color->toNative());
+}
+
+void GraphicsWrapper::GL_DrawRectangle(int x, int y, int width, int height, Engine::Components::Color^ color)
+{
+	RAYLIB::DrawRectangle(x, y, width, height, color->toNative());
+}
+
+void GraphicsWrapper::GL_DrawRectangleV(Engine::Components::Vector2^ position, Engine::Components::Vector2^ scale, Engine::Components::Color^ color)
+{
+	RAYLIB::DrawRectangleV(position->toNative(), scale->toNative(), color->toNative());
+}
+
+void GraphicsWrapper::GL_DrawLine(Engine::Components::Vector2^ origin, Engine::Components::Vector2^ dest, Engine::Components::Color^ color)
+{
+	RAYLIB::DrawLine(origin->x, origin->y, dest->x, dest->y, color->toNative());
+}

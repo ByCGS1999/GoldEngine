@@ -17,6 +17,7 @@ namespace Engine::Utils
 		TextWriter^ fileStream;
 		List<Log^>^ lifetimeLogs;
 		Threading::Thread^ newThread;
+		static bool exitCodeCalled = false;
 
 
 	public:
@@ -45,6 +46,9 @@ namespace Engine::Utils
 		{
 			while (true)
 			{
+				if (exitCodeCalled)
+					break;
+
 				if (Logging::getLogs() == nullptr)
 					continue;
 
@@ -84,8 +88,10 @@ namespace Engine::Utils
 	public:
 		void CloseThread()
 		{
+			exitCodeCalled = true;
+
 			if (newThread != nullptr)
-				newThread->Abort();
+				newThread->Join();
 
 			fileStream->Close();
 		}

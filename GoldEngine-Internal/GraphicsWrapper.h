@@ -380,6 +380,7 @@ namespace Engine::Internal
 	/// This class its not memory safe.
     /// All the methods are raw and the user is expected to manage the memory by its own. Allocating and deallocating resources when needed.
 	/// </summary>
+    [MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class GraphicsWrapper abstract
 	{
 	public:
@@ -417,6 +418,10 @@ namespace Engine::Internal
 
         /* -- GRAPHICS -- */
 
+        static void GL_DrawLine(Engine::Components::Vector2^, Engine::Components::Vector2^, Engine::Components::Color^);
+        static void GL_DrawRectangleLines(Engine::Components::Vector2^, Engine::Components::Vector2^, Engine::Components::Color^);
+        static void GL_DrawRectangle(int, int, int, int, Engine::Components::Color^);
+        static void GL_DrawRectangleV(Engine::Components::Vector2^, Engine::Components::Vector2^, Engine::Components::Color^);
         static void GL_ClearBackground(Engine::Components::Color^);
         static void GL_DrawModel(RAYLIB::Model, Engine::Components::Vector3^, float, Engine::Components::Color^);
         static void GL_DrawTexture(RAYLIB::Texture, Engine::Components::Vector2^, Engine::Components::Color^);

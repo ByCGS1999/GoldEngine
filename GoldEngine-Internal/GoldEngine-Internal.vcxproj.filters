@@ -250,6 +250,30 @@
     <Filter Include="Source\Engine\Events">
       <UniqueIdentifier>{b25df8fd-c01b-4a23-a60e-fa9218564b41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="imgui\cimgui">
+      <UniqueIdentifier>{8522c647-b2e4-40aa-88a8-d7565fd0c39f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\misc">
+      <UniqueIdentifier>{cbc7d2d7-1207-49a7-bc59-d85acf69b88f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\misc\freetype">
+      <UniqueIdentifier>{a2daa8db-e3fa-4b8d-833e-7b26f7ad09cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\misc\fonts">
+      <UniqueIdentifier>{4a232296-a2ab-4d0d-9439-fd5950f4dab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\misc\debuggers">
+      <UniqueIdentifier>{0aaab7ca-dac4-4fbc-b8e9-6210bf69d067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\misc\cpp">
+      <UniqueIdentifier>{0bf50258-b86c-47b3-aecb-849570869212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\misc\single_file">
+      <UniqueIdentifier>{8dfab3b0-9882-4737-8b3f-7a70eba0da54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="raylib\include\wrapper">
+      <UniqueIdentifier>{e56c7419-1ea2-497e-ad13-fb2dc2d37e2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -519,7 +543,7 @@
     <ClInclude Include="GraphicsWrapper.h">
       <Filter>Source\Engine\ScriptingAPI\Wrappers\GraphicsWrapper</Filter>
     </ClInclude>
-    <ClInclude Include="ImguiHook.h">
+    <ClInclude Include="ImGuiHook.h">
       <Filter>Source\Engine\ScriptingAPI\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
@@ -552,6 +576,18 @@
     <ClInclude Include="Event.h">
       <Filter>Source\Engine\Events</Filter>
     </ClInclude>
+    <ClInclude Include="imgui\cimgui.h">
+      <Filter>imgui\cimgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h">
+      <Filter>imgui\misc\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\misc\freetype\imgui_freetype.h">
+      <Filter>imgui\misc\freetype</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\misc\single_file\imgui_single_file.h">
+      <Filter>imgui\misc\single_file</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -578,7 +614,7 @@
     <ClCompile Include="WinAPI.cpp">
       <Filter>Source\Engine\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="EntryPoint.cpp">
+    <ClCompile Include="GoldEngine.cpp">
       <Filter>Source\EngineTools</Filter>
     </ClCompile>
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp">
@@ -622,6 +658,15 @@
     </ClCompile>
     <ClCompile Include="Event.cpp">
       <Filter>Source\Engine\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\cimgui.cpp">
+      <Filter>imgui\cimgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>imgui\misc\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="Raylib\craylib\craylib.cpp">
+      <Filter>raylib\include\wrapper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -688,5 +733,41 @@
     <None Include="Bin\FBX2glTF.exe">
       <Filter>Binaries\fbx2gltf</Filter>
     </None>
+    <None Include="imgui\misc\debuggers\imgui.gdb">
+      <Filter>imgui\misc\debuggers</Filter>
+    </None>
+    <None Include="imgui\misc\debuggers\imgui.natstepfilter">
+      <Filter>imgui\misc\debuggers</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="imgui\misc\README.txt">
+      <Filter>imgui\misc</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="imgui\misc\debuggers\imgui.natvis">
+      <Filter>imgui\misc\debuggers</Filter>
+    </Natvis>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="imgui\misc\fonts\Cousine-Regular.ttf">
+      <Filter>imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="imgui\misc\fonts\DroidSans.ttf">
+      <Filter>imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="imgui\misc\fonts\Karla-Regular.ttf">
+      <Filter>imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="imgui\misc\fonts\ProggyClean.ttf">
+      <Filter>imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="imgui\misc\fonts\ProggyTiny.ttf">
+      <Filter>imgui\misc\fonts</Filter>
+    </Font>
+    <Font Include="imgui\misc\fonts\Roboto-Medium.ttf">
+      <Filter>imgui\misc\fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

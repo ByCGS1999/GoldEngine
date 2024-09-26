@@ -28,11 +28,11 @@ namespace Engine::EngineObjects
 				nativeCamera->get().target = ((Engine::Components::Vector3^)attributes->getAttribute("camera direction")->getValue())->toNative();
 			
 			#if !defined(PRODUCTION_BUILD)
-				nativeCamera->getCameraPtr()->position = transform->position->toNative();
-				UpdateCamera(nativeCamera->getCameraPtr(), CAMERA_CUSTOM);
+			nativeCamera->getCameraPtr()->position = transform->position->toNative();
+			UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
 			#else
-				nativeCamera->getCameraPtr()->position = transform->position->toNative();
-				UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
+			nativeCamera->getCameraPtr()->position = transform->position->toNative();
+			UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
 			#endif
 		}
 

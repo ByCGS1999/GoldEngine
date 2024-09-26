@@ -2,6 +2,7 @@
 
 namespace Engine::EngineObjects
 {
+	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 	public ref class Script : public Engine::EngineObjects::ScriptBehaviour
 	{
 	public:

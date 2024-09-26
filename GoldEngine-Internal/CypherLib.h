@@ -69,6 +69,7 @@ public:
 
 	static String^ EncryptString(String^ message, String^ passwd)
 	{
+		/*
 		RijndaelManaged^ cryptMethod = gcnew RijndaelManaged();
 		cryptMethod->BlockSize = 256;
 		cryptMethod->KeySize = 128;
@@ -80,10 +81,14 @@ public:
 		auto plainText = Encoding::UTF8->GetBytes(message);
 
 		return Convert::ToBase64String(cryptoBro->TransformFinalBlock(plainText, 0, plainText->Length));
+		*/
+
+		return "";
 	}
 
 	static String^ DecryptString(String^ message, String^ passwd)
 	{
+		/*
 		RijndaelManaged^ cryptMethod = gcnew RijndaelManaged();
 		cryptMethod->BlockSize = 256;
 		cryptMethod->KeySize = 128;
@@ -95,5 +100,8 @@ public:
 		auto plainText = Convert::FromBase64CharArray(message->ToCharArray(), 0, message->Length);
 
 		return Encoding::UTF8->GetString(cryptoBro->TransformFinalBlock(plainText, 0, plainText->Length));
+		*/
+
+		return "";
 	}
 };

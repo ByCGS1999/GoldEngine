@@ -32,6 +32,18 @@ namespace Engine::Lua::VM
 			Logging::Log(object->GetType()->FullName);
 		}
 
+		static System::Object^ ToObject(DynValue^ userData)
+		{
+			DataType dataType = userData->Type;
+
+			if (userData == nullptr || dataType == DataType::Function)
+				return nullptr;
+
+			System::Object^ defaultObject = userData->ToObject<System::Object^>();
+
+			return userData->ToObject<System::Object^>();
+		}
+
 		static System::Object^ ToDerivate(System::Object^ object, System::String^ targetType)
 		{
 			System::Type^ toType = GetTypeByName(targetType);
@@ -150,7 +162,10 @@ namespace Engine::Lua::VM
 		LuaVM()
 		{
 			tempBuffer = "";
+			MoonSharp::Interpreter::Script::DefaultOptions->CheckThreadAccess = false;
+
 			scriptState = gcnew MoonSharp::Interpreter::Script(CoreModules::Preset_Complete);
+			scriptState->Options->CheckThreadAccess = false;
 
 			RegisterGlobalFunctions();
 		}
@@ -312,6 +327,12 @@ namespace Engine::Lua::VM
 			RegisterGlobal("KeyCode", Engine::Scripting::KeyCodes::typeid);
 			RegisterGlobal("SharedInstance", SharedInstance::typeid);
 			RegisterGlobal("VMWrap", VMWrapper::typeid);
+			RegisterGlobal("Time", Engine::Scripting::Time::typeid);
+			RegisterGlobal("Graphics", Engine::Internal::GraphicsWrapper::typeid);
+			RegisterGlobal("Vector2", Engine::Components::Vector2::typeid);
+			RegisterGlobal("Vector3", Engine::Components::Vector3::typeid);
+			RegisterGlobal("Color", Engine::Components::Color::typeid);
+			RegisterGlobal("Event", Engine::Scripting::Events::Event::typeid);
 
 
 			RegisterGlobal("print", gcnew System::Action<String^>(&Logging::Log));
@@ -327,12 +348,96 @@ namespace Engine::Lua::VM
 			//RegisterGlobal("VM", this->scriptState);
 		}
 
+		static System::Collections::Generic::List<Type^>^ GetMoonSharpTypes(System::Reflection::Assembly^ a)
+		{
+			List<Type^>^ result = gcnew System::Collections::Generic::List<Type^>();
+
+			for each(Type^ t in a->GetTypes())
+			{
+				if (t->GetCustomAttributes(MoonSharp::Interpreter::MoonSharpUserDataAttribute::typeid, false)->Length > 0)
+				{
+					result->Add(t);
+				}
+			}
+
+			return result;
+		}
+
 	public:
+		static void GenerateLuaBindings()
+		{
+			for each (auto asms in VMWrapper::GetAssemblies())
+			{
+				try
+				{
+					List<Type^>^ lua_proxy_types = GetMoonSharpTypes(asms->getLoadedAssembly());
+
+					String^ luaSrcFile = "--[[ GoldVM Binding Generator : Work In Progress ]]--\n\n";
+
+					for each (Type ^ type in lua_proxy_types)
+					{
+						String^ fullName = type->Name;
+
+						if (fullName->Contains("Proxy"))
+							continue;
+
+						luaSrcFile += fullName + "={}\n";
+
+						auto members = type->GetMembers();
+						for each(auto member in members)
+						{
+							if (member)
+							{
+								luaSrcFile += fullName + "." + member->Name + " = nil\n";
+							}
+						}
+
+						auto methods = type->GetMethods();
+						for each (auto method in methods)
+						{
+							if (method->IsPublic)
+							{
+								luaSrcFile += "function " + fullName + "." + method->Name + "(";
+
+								auto params = method->GetParameters();
+								int length = params->Length;
+								for (int x = 0; x < length; x++)
+								{
+									auto param = params[x];
+									if (x < length-1)
+									{
+										luaSrcFile += param->Name + "__" + param->ParameterType->Name + ",";
+									}
+									else
+									{
+										luaSrcFile += param->Name + "__" + param->ParameterType->Name + "";
+									}
+								}
+
+								luaSrcFile += ")end\n";
+							}
+						}
+					}
+
+					File::WriteAllText("Bindings/Lua/GoldEngineBindings.lua", luaSrcFile);
+				}
+				catch (Exception^ ex)
+				{
+					printError(ex->Message);
+					printError(ex->StackTrace);
+				}
+			}
+		}
+
 		void RegisterGlobal(String^ functionName, System::Type^ userData)
 		{
 			scriptState->Globals[functionName] = userData;
 		}
 
+		void RegisterTable(String^ tableName, MoonSharp::Interpreter::Table^ table)
+		{
+			scriptState->Globals[tableName] = table;
+		}
 
 		void RegisterGlobal(String^ functionName, System::Object^ userData)
 		{
@@ -381,12 +486,10 @@ namespace Engine::Lua::VM
 			}
 			catch (MoonSharp::Interpreter::ScriptRuntimeException^ ex)
 			{
-				printError(ex->Message);
 				printError(ex->DecoratedMessage);
 			}
 			catch (MoonSharp::Interpreter::InterpreterException^ ex)
 			{
-				printError(ex->Message);
 				printError(ex->DecoratedMessage);
 			}
 			catch (Exception^ ex)
@@ -407,12 +510,10 @@ namespace Engine::Lua::VM
 			}
 			catch (MoonSharp::Interpreter::ScriptRuntimeException^ ex)
 			{
-				printError(ex->Message);
 				printError(ex->DecoratedMessage);
 			}
 			catch (MoonSharp::Interpreter::InterpreterException^ ex)
 			{
-				printError(ex->Message);
 				printError(ex->DecoratedMessage);
 			}
 			catch (Exception^ ex)
@@ -468,12 +569,10 @@ namespace Engine::Lua::VM
 			}
 			catch (MoonSharp::Interpreter::ScriptRuntimeException^ ex)
 			{
-				printError(ex->Message);
 				printError(ex->DecoratedMessage);
 			}
 			catch (MoonSharp::Interpreter::InterpreterException^ ex)
 			{
-				printError(ex->Message);
 				printError(ex->DecoratedMessage);
 			}
 			catch (Exception^ ex)

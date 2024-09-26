@@ -89,6 +89,8 @@ namespace Engine::Render
 
 					BeginMode3D(((Engine::EngineObjects::Native::NativeCamera3D*)camera->get())->get());
 
+					
+
 					int currentLayer = 1;
 
 					render(currentLayer, scene);

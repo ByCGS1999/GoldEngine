@@ -30,7 +30,7 @@ void Event::connect(MoonSharp::Interpreter::DynValue^ function)
 {
 	if (function->Type == MoonSharp::Interpreter::DataType::Function)
 	{
-		this->pInvokable = function->Function;
+		this->pInvokable = function->Function->GetDelegate();
 		this->isLuaFunction = true;
 		this->isAction = false;
 		this->isDelegate = false;
@@ -45,15 +45,16 @@ void Event::disconnect()
 	this->isDelegate = false;
 }
 
-void Event::invoke()
+System::Object^ Event::invoke()
 {
 	if (pInvokable == nullptr)
-		return;
+		return nullptr;
 
 	if (isLuaFunction)
 	{
-		MoonSharp::Interpreter::Closure^ closure = (MoonSharp::Interpreter::Closure^)pInvokable;
-		closure->Call();
+		MoonSharp::Interpreter::ScriptFunctionDelegate^ delegate = (MoonSharp::Interpreter::ScriptFunctionDelegate^)pInvokable;
+
+		delegate->Invoke();
 	}
 	else if (isDelegate)
 	{
@@ -69,50 +70,32 @@ void Event::invoke()
 	}
 }
 
-void Event::invoke(cli::array<System::Object^>^ objects)
+System::Object^ Event::invoke(cli::array<System::Object^>^ objects)
 {
 	if (pInvokable == nullptr)
-		return;
+		return nullptr;
 
 	if (isLuaFunction)
 	{
-		MoonSharp::Interpreter::Closure^ closure = (MoonSharp::Interpreter::Closure^)pInvokable;
-		closure->Call(objects);
+		MoonSharp::Interpreter::ScriptFunctionDelegate^ delegate = (MoonSharp::Interpreter::ScriptFunctionDelegate^)pInvokable;
+
+		return delegate->Invoke(objects);
 	}
 	else if(isDelegate)
 	{
 		System::Delegate^ delegate = (System::Delegate^)pInvokable;
 
-		delegate->DynamicInvoke(objects);
+		return delegate->DynamicInvoke(objects);
 	}
 	else if (isAction)
 	{
 		System::Action^ delegate = (System::Action^)pInvokable;
 
-		delegate->DynamicInvoke(objects);
+		return delegate->DynamicInvoke(objects);
 	}
 }
 
-void Event::raiseExecution(cli::array<System::Object^>^ objects)
+System::Object^ Event::raiseExecution(cli::array<System::Object^>^ objects)
 {
-	if (pInvokable == nullptr)
-		return;
-
-	if (isLuaFunction)
-	{
-		MoonSharp::Interpreter::Closure^ closure = (MoonSharp::Interpreter::Closure^)pInvokable;
-		closure->Call(objects);
-	}
-	else if(isDelegate)
-	{
-		System::Delegate^ delegate = (System::Delegate^)pInvokable;
-
-		delegate->DynamicInvoke(objects);
-	}
-	else if (isAction)
-	{
-		System::Action^ delegate = (System::Action^)pInvokable;
-
-		delegate->DynamicInvoke(objects);
-	}
+	return invoke(objects);
 }

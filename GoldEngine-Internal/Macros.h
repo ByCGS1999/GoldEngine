@@ -48,7 +48,7 @@
 #ifdef USE_BULLET_PHYS
 
 #ifdef _WIN64
-#pragma comment(lib, "../Libs/x64/Bullet3Common.lib");
+#pragma comment(lib, "../Libs/x64/Bullet3Common.lib")
 
 #endif
 

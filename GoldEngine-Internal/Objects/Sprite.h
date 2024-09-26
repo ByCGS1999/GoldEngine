@@ -16,6 +16,11 @@ namespace Engine::EngineObjects
 			{
 				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::AccessLevel::Public, "Sprite Tint", gcnew Engine::Components::Color(0xFFFFFFFF)));
 			}
+
+			if (!attributes->getAttribute("Sprite Rotation"))
+			{
+				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::AccessLevel::Public, "Sprite Rotation", 0.0f, System::Single::typeid));
+			}
 		}
 
 	public:
@@ -30,6 +35,11 @@ namespace Engine::EngineObjects
 			{
 				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::AccessLevel::Public, "Sprite Tint", gcnew Engine::Components::Color(0xFFFFFFFF)));
 			}
+
+			if (!attributes->getAttribute("Sprite Rotation"))
+			{
+				attributes->addAttribute(Engine::Scripting::Attribute::create(Engine::Scripting::AccessLevel::Public, "Sprite Rotation", 0.0f, System::Single::typeid));
+			}
 		}
 
 		void Update() override
@@ -40,13 +50,28 @@ namespace Engine::EngineObjects
 		void Draw() override
 		{
 			Engine::Components::Vector2^ transformedVector = this->transform->position->toVector2();
+			RAYLIB::Texture texture = DataPacks::singleton().GetTexture2D((unsigned int)attributes->getAttribute("Texture ID")->getValueAuto());
 
-			DrawTexture(
-				DataPacks::singleton().GetTexture2D(
-					(unsigned int)attributes->getAttribute("Texture ID")->getValueAuto()
-				), 
-				(int)transformedVector->x, 
-				(int)transformedVector->y, 
+			RAYLIB::Rectangle outRectangle;
+
+			outRectangle.x = 0;
+			outRectangle.y = 0;
+			outRectangle.width = this->transform->scale->x;
+			outRectangle.height = this->transform->scale->y;
+
+			RAYLIB::Rectangle inRectangle;
+
+			inRectangle.x = 0;
+			inRectangle.y = 0;
+			inRectangle.width = texture.width;
+			inRectangle.height = texture.height;
+
+			DrawTexturePro(
+				texture,
+				inRectangle,
+				outRectangle,
+				transformedVector->toNative(),
+				attributes->getAttribute("Sprite Rotation")->getValue<float>(),
 				attributes->getAttribute("Sprite Tint")->getValue<Engine::Components::Color^>()->toNative()
 			);
 		}

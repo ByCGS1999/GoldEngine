@@ -15,7 +15,7 @@ const char* CastToNative(System::String^ value)
 
 std::string CastStringToNative(System::String^ value)
 {
-	if (value == "")
+	if (value == "" || System::String::IsNullOrEmpty(value))
 		return std::string("");
 
 	System::Text::Encoding^ u8 = System::Text::Encoding::UTF8;

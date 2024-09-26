@@ -18,6 +18,11 @@ namespace Engine::Components
 			return gcnew Engine::Components::Vector2(x, y);
 		}
 
+		System::Numerics::Vector3^ toNumericsVector3()
+		{
+			return gcnew System::Numerics::Vector3(this->x, this->y, this->z);
+		}
+
 		void Set(float x, float y, float z);
 
 		void Set(float* v);
@@ -81,6 +86,11 @@ namespace Engine::Components
 		static Vector3^ create(RAYLIB::Vector3 vec)
 		{
 			return gcnew Vector3(vec.x, vec.y, vec.z);
+		}
+
+		static Vector3^ New(float x, float y, float z)
+		{
+			return gcnew Vector3(x, y, z);
 		}
 
 		static Vector3^ create(float* vec)

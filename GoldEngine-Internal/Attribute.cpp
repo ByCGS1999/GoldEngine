@@ -62,10 +62,13 @@ inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, S
 inline void Engine::Scripting::Attribute::synchronizeDescriptor()
 {
 	if(descriptor != nullptr && rootObject != nullptr)
-		descriptor->SetValue(rootObject, userData);
+		if(descriptor->GetType() == System::Reflection::FieldInfo::typeid)
+			((System::Reflection::FieldInfo^)descriptor)->SetValue(rootObject, userData);
+		else
+			((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);
 }
 
-inline void Engine::Scripting::Attribute::setPropertyDescriptor(System::Reflection::PropertyInfo^ descriptor, System::Object^ rootDescriptor)
+inline void Engine::Scripting::Attribute::setPropertyDescriptor(System::Reflection::MemberInfo^ descriptor, System::Object^ rootDescriptor)
 {
 	this->descriptor = descriptor;
 	this->rootObject = rootDescriptor;
@@ -80,7 +83,10 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object)
 	userDataType = object->GetType();
 
 	if (descriptor != nullptr)
-		descriptor->SetValue(rootObject, object);
+		if (descriptor->GetType() == System::Reflection::FieldInfo::typeid)
+			((System::Reflection::FieldInfo^)descriptor)->SetValue(rootObject, userData);
+		else
+			((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);
 }
 
 inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool overrideType)
@@ -91,7 +97,10 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool 
 	userData = object;
 	
 	if (descriptor != nullptr)
-		descriptor->SetValue(rootObject, object);
+		if (descriptor->GetType() == System::Reflection::FieldInfo::typeid)
+			((System::Reflection::FieldInfo^)descriptor)->SetValue(rootObject, userData);
+		else
+			((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);
 
 	if (overrideType)
 		userDataType = object->GetType();

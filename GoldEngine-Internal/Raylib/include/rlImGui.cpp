@@ -31,7 +31,6 @@
 
 #include "imgui_impl_raylib.h"
 
-
 #include "../../Raylib/include/x64/raylib.h"
 #include "../../Raylib/include/x64/rlgl.h"
 

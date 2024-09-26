@@ -83,6 +83,9 @@ public:
 public:
 	static System::Object^ Get(System::String^ name)
 	{
+		if (!ExistsInstance(name))
+			return nullptr;
+
 		return Instances[name]->Instance;
 	}
 
