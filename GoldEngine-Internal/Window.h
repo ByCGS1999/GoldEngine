@@ -89,6 +89,10 @@ namespace Engine
 			CloseWindow();
 		}
 
+		// stubmethods
+
+		virtual System::Object^ GetSelectedObject() { return nullptr; }
+
 		// vmethods
 		virtual void Preload() { } // loading assets
 		virtual void Init() {} // Initialization (spawning objects, scene loading, whatever.)

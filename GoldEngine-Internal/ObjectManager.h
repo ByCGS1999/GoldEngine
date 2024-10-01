@@ -129,6 +129,14 @@ namespace Engine::Scripting
 		}
 
 	public:
+
+	#ifndef PRODUCTION_BUILD
+		System::Object^ GetSelectedObject()
+		{
+			return Singleton<Window^>::Instance->GetSelectedObject();
+		}
+	#endif
+
 		Engine::Management::Scene^ GetLoadedScene()
 		{
 			return loadedScene;

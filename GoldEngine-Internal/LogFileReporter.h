@@ -25,7 +25,11 @@ namespace Engine::Utils
 		{
 			singleton = this;
 
-			fileStream = File::CreateText(fileName);
+			String^ GUID = System::Guid::NewGuid().ToString();
+
+			String^ name = GUID->Substring(0, GUID->IndexOf('-'));
+
+			fileStream = File::CreateText(fileName + "/" + name + ".log");
 			lifetimeLogs = gcnew System::Collections::Generic::List<Log^>();
 
 			fileStream->Flush();

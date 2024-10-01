@@ -167,7 +167,6 @@ assetDisplay displayingAssets;
 
 int displayingAsset = 0;
 
-
 ref class EditorWindow : Engine::Window
 {
 private:
@@ -187,6 +186,9 @@ private:
 	Engine::Editor::Gui::fileExplorer^ fileExplorer = gcnew Engine::Editor::Gui::fileExplorer(std::string("File Explorer"));
 	System::Collections::Generic::List<String^>^ loadedAssets;
 	Engine::Render::ScriptableRenderPipeline^ renderPipeline;
+
+public:
+	System::Object^ GetSelectedObject() override { return this->selectedObject; }
 
 private:
 	void SaveEditorCode()
@@ -1169,17 +1171,11 @@ public:
 
 			auto config = Engine::Config::EngineConfiguration::ImportConfig("./Data/appinfo.dat");
 
-			if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
+			if (!Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
 			{
-				if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
-				{
-					File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
-				}
-
-				Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+				Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 			}
 
-			Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 			gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
 		}
 		else
@@ -1191,17 +1187,11 @@ public:
 			auto config = gcnew Engine::Config::EngineConfiguration();
 			config->ExportConfig("./Data/appinfo.dat");
 
-			if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
+			if (!Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
 			{
-				if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
-				{
-					File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
-				}
-
-				Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+				Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 			}
 
-			Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 			gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
 		}
 
@@ -1638,11 +1628,28 @@ public:
 						{
 							for each (auto T in assembly->GetAssemblyTypes())
 							{
-								if (ImGui::MenuItem(CastToNative(T->Name)))
+								if (!T->Namespace->Equals(""))
 								{
-									Engine::EngineObjects::ScriptBehaviour^ retn = assembly->Create<Engine::EngineObjects::ScriptBehaviour^>(T->FullName);
-									scene->PushToRenderQueue(retn);
-									scene->AddObjectToScene(retn);
+									if (ImGui::BeginMenu(CastToNative(T->Namespace)))
+									{
+										if (ImGui::MenuItem(CastToNative(T->Name)))
+										{
+											Engine::EngineObjects::ScriptBehaviour^ retn = assembly->Create<Engine::EngineObjects::ScriptBehaviour^>(T->FullName);
+											scene->PushToRenderQueue(retn);
+											scene->AddObjectToScene(retn);
+										}
+
+										ImGui::EndMenu();
+									}
+								}
+								else
+								{
+									if (ImGui::MenuItem(CastToNative(T->Name)))
+									{
+										Engine::EngineObjects::ScriptBehaviour^ retn = assembly->Create<Engine::EngineObjects::ScriptBehaviour^>(T->FullName);
+										scene->PushToRenderQueue(retn);
+										scene->AddObjectToScene(retn);
+									}
 								}
 							}
 						}
@@ -3073,17 +3080,11 @@ public:
 
 		gcnew Engine::Managers::SignalManager();
 
-		if (Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
+		if (!Directory::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/'))))
 		{
-			if (File::Exists(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath))
-			{
-				File::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
-			}
-
-			Directory::Delete(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
+			Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 		}
 
-		Directory::CreateDirectory(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath->Substring(0, config->logPath->IndexOf('/')));
 		gcnew Engine::Utils::LogReporter(System::Environment::GetFolderPath(Environment::SpecialFolder::ApplicationData) + "/../LocalLow/" + config->logPath);
 
 		LayerManager::RegisterDefaultLayers();

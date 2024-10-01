@@ -102,7 +102,7 @@ namespace Engine::Config
 		static EngineConfiguration^ self;
 
 	public:
-		initonly static EngineConfiguration^ defaultConfiguration = gcnew EngineConfiguration("Gold Engine Window", gcnew Resolution(0, 0, 1280, 720), "GoldEngine/main.log", 0);
+		initonly static EngineConfiguration^ defaultConfiguration = gcnew EngineConfiguration("Gold Engine Window", gcnew Resolution(0, 0, 1280, 720), "GoldEngine/", 0);
 
 	public:
 		[[JsonConstructorAttribute]]
