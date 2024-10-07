@@ -139,6 +139,7 @@ namespace Engine::Managers
 								}
 							}
 						}
+						script->Init();
 
 						loadedScene->PushToRenderQueue(sceneObject);
 					}

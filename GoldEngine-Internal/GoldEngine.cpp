@@ -1,5 +1,4 @@
 ﻿#include "Macros.h"
-
 int max_lights = 4;
 unsigned int passwd = 0;
 
@@ -13,6 +12,7 @@ unsigned int passwd = 0;
 #include "EngineConfig.h"
 #include "Object/Transform.h"
 #include "CypherLib.h"
+#include "Reflection/ReflectedType.h"
 #include "SceneObject.h"
 #include "Scene.h"
 #include "SceneManager.h"
@@ -66,6 +66,7 @@ unsigned int passwd = 0;
 #include "RenderPipelines/RaymarchSRP.h"
 #include "RenderPipelines/LightweightSRP.h"
 
+
 using namespace Engine;
 using namespace Engine::EngineObjects;
 using namespace Engine::EngineObjects::Native;
@@ -80,6 +81,10 @@ DataPacks dataPack;
 
 void engine_bootstrap()
 {
+	auto serializerSettings = gcnew Newtonsoft::Json::JsonSerializerSettings();
+	serializerSettings->Converters->Add(gcnew Newtonsoft::Json::Converters::StringEnumConverter());
+	serializerSettings->TypeNameHandling = Newtonsoft::Json::TypeNameHandling::None;
+
 	if (!Directory::Exists("Bin/"))
 		Directory::CreateDirectory("Bin");
 
@@ -111,6 +116,10 @@ void engine_bootstrap()
 #if !defined(PRODUCTION_BUILD)
 
 #pragma region EDITOR ENGINE
+
+// EDITOR UI
+
+#include "EditorGUI.h"
 
 Model mod;
 float cameraSpeed = 1.25f;
@@ -213,90 +222,6 @@ private:
 	String^ GetAccessRoute(Engine::Internal::Components::Object^ object)
 	{
 		return GetParentRoute(object->transform) + "/" + object->name;
-	}
-
-	void createAssetEntries(String^ path)
-	{
-		for each (String ^ f in Directory::GetFiles(path))
-		{
-			f = f->Replace(R"(\)", "/");
-			array<String^>^ tmp = f->Split('/');
-			auto t = tmp[tmp->Length - 1] + "\n";
-
-			if ((f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".vox")) && (displayingAssets == ALL || displayingAssets == MODELS)) // model types
-			{
-				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
-				{
-					unsigned int assetId = 0;
-					auto res = packedData->hasAsset(Engine::Assets::Management::assetType::_Model, f);
-					if (!std::get<0>(res))
-					{
-						assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Model);
-
-						packedData->AddModel(assetId, f);
-
-						packedData->WriteToFile(packedData->getFile(), passwd);
-					}
-					else
-					{
-						assetId = std::get<1>(res);
-					}
-
-					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
-						"ModelRenderer",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							nullptr
-						),
-						assetId,
-						1,
-						0,
-						0xFFFFFFFF
-					);
-					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
-					scene->AddObjectToScene(meshRenderer);
-					scene->GetRenderQueue()->Add(
-						gcnew Engine::Management::MiddleLevel::SceneObject(
-							meshRenderer->type,
-							meshRenderer,
-							""
-						)
-					);
-				}
-				ImGui::SameLine();
-				ImGui::Text(CastStringToNative(t).c_str());
-			}
-
-			if ((f->Contains(".png") || f->Contains(".jpg") || f->Contains(".bmp") || f->Contains(".hdr")) && (displayingAssets == ALL || displayingAssets == TEXTURES))
-			{
-				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &materialTexture))
-				{
-					unsigned int assetId = 0;
-					auto res = packedData->hasAsset(Engine::Assets::Management::assetType::_Texture2D, f);
-					if (!std::get<0>(res))
-					{
-						assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Texture2D);
-
-						packedData->AddTextures2D(assetId, f);
-
-						packedData->WriteToFile(packedData->getFile(), passwd);
-					}
-					else
-					{
-						assetId = std::get<1>(res);
-					}
-				}
-				ImGui::SameLine();
-				ImGui::Text(CastStringToNative(t).c_str());
-			}
-		}
-
-		for each (String ^ dir in Directory::GetDirectories(path))
-		{
-			createAssetEntries(dir);
-		}
 	}
 
 	void SpecializedPropertyEditor(Engine::Internal::Components::Object^ object)
@@ -522,29 +447,23 @@ private:
 				}
 
 				ImGui::SeparatorText("Attributes");
-
 				if (ImGui::BeginListBox("###ATTRIBUTE_LISTBOX", { ImGui::GetWindowWidth() - 20, ImGui::GetWindowHeight() - 240 }))
 				{
 					for each (Engine::Scripting::Attribute ^ attrib in script->attributes->attributes)
 					{
 						if (attrib != nullptr)
 						{
+							if (attrib->getValueType() == nullptr)
+								continue;
+
 							ImGui::Text(CastStringToNative(attrib->name + " (" + attrib->getValueType()->Name + ")").c_str());
 							if (attrib->getValueType()->Equals(String::typeid))
 							{
-								String^ value = (String^)attrib->getValue();
-								int valueLen = value->Length;
-								char* data = new char[valueLen+1 * 8];
-
-								strcpy(data, CastStringToNative(value).c_str());
-
-								ImGui::SetNextItemWidth(ImGui::GetWindowWidth() - 25);
-								if (ImGui::InputText(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), data, valueLen+1 * 8))
-								{
-									attrib->setValue(gcnew String(data));
-
-								}
-								delete[] data;
+								StringEditor(attrib);
+							}
+							else if (attrib->getValueType()->Equals(System::Enum::typeid) || attrib->getValueType()->IsSubclassOf(System::Enum::typeid))
+							{
+								EnumEditor(attrib);
 							}
 							else if (attrib->getValueType()->Equals(Engine::Components::Vector3::typeid))
 							{
@@ -580,13 +499,7 @@ private:
 							}
 							else if (attrib->getValueType()->Equals(Int32::typeid))
 							{
-								int value = (int)attrib->getValue();
-
-								if (ImGui::InputInt(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value, 1, 1))
-								{
-									attrib->setValue(gcnew Int32(value), false);
-									attrib->setType(Int32::typeid);
-								}
+								IntegerEditor(attrib);
 							}
 							else if (attrib->getValueType()->Equals(Int64::typeid))
 							{
@@ -671,45 +584,11 @@ private:
 							}
 							else if (attrib->getValueType()->Equals(bool::typeid))
 							{
-								bool tmp = (bool)attrib->getValue();
-
-								bool value = (bool)tmp;
-
-								if (ImGui::Checkbox(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), &value))
-								{
-									attrib->setValue(value, false);
-									attrib->setType(bool::typeid);
-								}
+								BoolEditor(attrib);
 							}
 							else if (attrib->getValueType()->Equals(Engine::Components::Color::typeid))
 							{
-								Engine::Components::Color^ value = nullptr;
-
-								if (attrib->getValue()->GetType() == Newtonsoft::Json::Linq::JObject::typeid)
-								{
-									auto v = (Newtonsoft::Json::Linq::JObject^)attrib->getValue();
-									value = v->ToObject<Engine::Components::Color^>();
-								}
-								else
-								{
-									value = (Engine::Components::Color^)attrib->getValue();
-								}
-
-
-								auto float4 = ImGui::ColorConvertU32ToFloat4(ImU32(value->toHex()));
-
-								float rawData[4] =
-								{
-									float4.x,
-									float4.y,
-									float4.z,
-									float4.w
-								};
-
-								if (ImGui::ColorEdit4(CastStringToNative("###PROPERTY_EDITOR_##" + attrib->name).c_str(), rawData))
-								{
-									attrib->setValue(gcnew Engine::Components::Color(ImGui::ColorConvertFloat4ToU32(ImVec4(rawData[0], rawData[1], rawData[2], rawData[3]))), false);
-								}
+								ColorEditor(attrib);
 							}
 
 							ImGui::Separator();
@@ -723,6 +602,90 @@ private:
 			break;
 
 			}
+		}
+	}
+
+	void createAssetEntries(String^ path)
+	{
+		for each (String ^ f in Directory::GetFiles(path))
+		{
+			f = f->Replace(R"(\)", "/");
+			array<String^>^ tmp = f->Split('/');
+			auto t = tmp[tmp->Length - 1] + "\n";
+
+			if ((f->Contains(".obj") || f->Contains(".glb") || f->Contains(".gltf") || f->Contains(".vox")) && (displayingAssets == ALL || displayingAssets == MODELS)) // model types
+			{
+				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
+				{
+					unsigned int assetId = 0;
+					auto res = packedData->hasAsset(Engine::Assets::Management::assetType::_Model, f);
+					if (!std::get<0>(res))
+					{
+						assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Model);
+
+						packedData->AddModel(assetId, f);
+
+						packedData->WriteToFile(packedData->getFile(), passwd);
+					}
+					else
+					{
+						assetId = std::get<1>(res);
+					}
+
+					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
+						"ModelRenderer",
+						gcnew Engine::Internal::Components::Transform(
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(0, 0, 0),
+							gcnew Engine::Components::Vector3(1, 1, 1),
+							nullptr
+						),
+						assetId,
+						1,
+						0,
+						0xFFFFFFFF
+					);
+					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
+					scene->AddObjectToScene(meshRenderer);
+					scene->GetRenderQueue()->Add(
+						gcnew Engine::Management::MiddleLevel::SceneObject(
+							meshRenderer->type,
+							meshRenderer,
+							""
+						)
+					);
+				}
+				ImGui::SameLine();
+				ImGui::Text(CastStringToNative(t).c_str());
+			}
+
+			if ((f->Contains(".png") || f->Contains(".jpg") || f->Contains(".bmp") || f->Contains(".hdr")) && (displayingAssets == ALL || displayingAssets == TEXTURES))
+			{
+				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &materialTexture))
+				{
+					unsigned int assetId = 0;
+					auto res = packedData->hasAsset(Engine::Assets::Management::assetType::_Texture2D, f);
+					if (!std::get<0>(res))
+					{
+						assetId = packedData->GetAssetID(Engine::Assets::Management::assetType::_Texture2D);
+
+						packedData->AddTextures2D(assetId, f);
+
+						packedData->WriteToFile(packedData->getFile(), passwd);
+					}
+					else
+					{
+						assetId = std::get<1>(res);
+					}
+				}
+				ImGui::SameLine();
+				ImGui::Text(CastStringToNative(t).c_str());
+			}
+		}
+
+		for each (String ^ dir in Directory::GetDirectories(path))
+		{
+			createAssetEntries(dir);
 		}
 	}
 
@@ -993,6 +956,57 @@ end
 			ImGui::End();
 		}
 	}
+
+
+	void DrawConsole()
+	{
+		if (ImGui::Begin("Console", &isOpen))
+		{
+			if (ImGui::Button("Clear"))
+			{
+				Engine::Scripting::Logging::clearLogs();
+			}
+
+			const ImVec2 windowSize = ImGui::GetWindowSize();
+
+			if (ImGui::BeginListBox("###CONSOLE_OUTPUT", { windowSize.x - 20, windowSize.y - 80 }))
+			{
+				for each (Engine::Scripting::Log ^ log in Engine::Scripting::Logging::getLogs())
+				{
+					switch (log->logType)
+					{
+					case TraceLogLevel::LOG_INFO:
+						ImGui::TextColored({ 1.0f,1.0f, 1.0f, 1.0f }, CastStringToNative(log->message).c_str());
+						break;
+					case TraceLogLevel::LOG_DEBUG:
+						ImGui::TextColored({ 0.141f, 0.851f, 0.929f, 1.0f }, CastStringToNative(log->message).c_str());
+						break;
+					case TraceLogLevel::LOG_FATAL:
+						ImGui::TextColored({ 0,0,0,1.0f }, CastStringToNative(log->message).c_str());
+						break;
+					case TraceLogLevel::LOG_ERROR:
+						ImGui::TextColored({ 1.0f,0,0,1.0f }, CastStringToNative(log->message).c_str());
+						break;
+					case TraceLogLevel::LOG_WARNING:
+						ImGui::TextColored({ 1.0f, 0.533f, 0.0f, 1.0f }, CastStringToNative(log->message).c_str());
+						break;
+					}
+				}
+
+				ImGui::EndListBox();
+			}
+
+			ImGui::Text("Console Commands:");
+			ImGui::SameLine();
+			if (ImGui::InputText("###CONSOLE_COMMANDS", consoleBufferData, IM_ARRAYSIZE(consoleBufferData), ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				ThrowUIError("Console commands not implemented yet!");
+			}
+
+			ImGui::End();
+		}
+	}
+
 
 	void DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::Object^ parent, int depth)
 	{
@@ -2111,54 +2125,7 @@ public:
 		}
 	}
 
-	void DrawConsole()
-	{
-		if (ImGui::Begin("Console", &isOpen))
-		{
-			if (ImGui::Button("Clear"))
-			{
-				Engine::Scripting::Logging::clearLogs();
-			}
-
-			const ImVec2 windowSize = ImGui::GetWindowSize();
-
-			if (ImGui::BeginListBox("###CONSOLE_OUTPUT", { windowSize.x - 20, windowSize.y - 80 }))
-			{
-				for each (Engine::Scripting::Log ^ log in Engine::Scripting::Logging::getLogs())
-				{
-					switch (log->logType)
-					{
-					case TraceLogLevel::LOG_INFO:
-						ImGui::TextColored({ 1.0f,1.0f, 1.0f, 1.0f }, CastStringToNative(log->message).c_str());
-						break;
-					case TraceLogLevel::LOG_DEBUG:
-						ImGui::TextColored({ 0.141f, 0.851f, 0.929f, 1.0f }, CastStringToNative(log->message).c_str());
-						break;
-					case TraceLogLevel::LOG_FATAL:
-						ImGui::TextColored({ 0,0,0,1.0f }, CastStringToNative(log->message).c_str());
-						break;
-					case TraceLogLevel::LOG_ERROR:
-						ImGui::TextColored({ 1.0f,0,0,1.0f }, CastStringToNative(log->message).c_str());
-						break;
-					case TraceLogLevel::LOG_WARNING:
-						ImGui::TextColored({ 1.0f, 0.533f, 0.0f, 1.0f }, CastStringToNative(log->message).c_str());
-						break;
-					}
-				}
-
-				ImGui::EndListBox();
-			}
-
-			ImGui::Text("Console Commands:");
-			ImGui::SameLine();
-			if (ImGui::InputText("###CONSOLE_COMMANDS", consoleBufferData, IM_ARRAYSIZE(consoleBufferData), ImGuiInputTextFlags_EnterReturnsTrue))
-			{
-				ThrowUIError("Console commands not implemented yet!");
-			}
-
-			ImGui::End();
-		}
-	}
+	
 
 #pragma endregion
 

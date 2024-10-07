@@ -274,6 +274,12 @@
     <Filter Include="raylib\include\wrapper">
       <UniqueIdentifier>{e56c7419-1ea2-497e-ad13-fb2dc2d37e2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\EngineTools\Editor">
+      <UniqueIdentifier>{ebd769a8-5af6-411d-b164-ec6af0c45d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\Reflection">
+      <UniqueIdentifier>{b2e9df82-1d73-4a53-88e0-75579e196b3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -588,6 +594,12 @@
     <ClInclude Include="imgui\misc\single_file\imgui_single_file.h">
       <Filter>imgui\misc\single_file</Filter>
     </ClInclude>
+    <ClInclude Include="EditorGUI.h">
+      <Filter>Source\EngineTools\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\ReflectedType.h">
+      <Filter>Source\Engine\Reflection</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -667,6 +679,9 @@
     </ClCompile>
     <ClCompile Include="Raylib\craylib\craylib.cpp">
       <Filter>raylib\include\wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="Reflection\ReflectedType.cpp">
+      <Filter>Source\Engine\Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

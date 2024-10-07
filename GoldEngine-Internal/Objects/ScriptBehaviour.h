@@ -91,12 +91,12 @@ namespace Engine::EngineObjects
 							);
 
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
-							this->attributes->getAttribute(attributeName)->userDataType = prop->PropertyType;
+							this->attributes->getAttribute(attributeName)->userDataType = gcnew Engine::Reflectable::ReflectableType(prop->PropertyType);
 						}
 						else
 						{
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
-							this->attributes->getAttribute(attributeName)->userDataType = prop->PropertyType;
+							this->attributes->getAttribute(attributeName)->userDataType = gcnew Engine::Reflectable::ReflectableType(prop->PropertyType);
 						}
 					}
 				}
@@ -125,12 +125,12 @@ namespace Engine::EngineObjects
 							);
 
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
-							this->attributes->getAttribute(attributeName)->userDataType = prop->FieldType;
+							this->attributes->getAttribute(attributeName)->userDataType = gcnew Engine::Reflectable::ReflectableType(prop->FieldType);
 						}
 						else
 						{
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
-							this->attributes->getAttribute(attributeName)->userDataType = prop->FieldType;
+							this->attributes->getAttribute(attributeName)->userDataType = gcnew Engine::Reflectable::ReflectableType(prop->FieldType);
 						}
 					}
 				}
@@ -174,12 +174,12 @@ namespace Engine::EngineObjects
 							);
 
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
-							this->attributes->getAttribute(attributeName)->userDataType = prop->PropertyType;
+							this->attributes->getAttribute(attributeName)->userDataType = gcnew Engine::Reflectable::ReflectableType(prop->PropertyType);
 						}
 						else
 						{
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
-							this->attributes->getAttribute(attributeName)->userDataType = prop->PropertyType;
+							this->attributes->getAttribute(attributeName)->userDataType = gcnew Engine::Reflectable::ReflectableType(prop->PropertyType);
 						}
 					}
 				}
@@ -208,12 +208,12 @@ namespace Engine::EngineObjects
 							);
 
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
-							this->attributes->getAttribute(attributeName)->userDataType = prop->FieldType;
+							this->attributes->getAttribute(attributeName)->userDataType = gcnew Engine::Reflectable::ReflectableType(prop->FieldType);
 						}
 						else
 						{
 							this->attributes->getAttribute(attributeName)->setPropertyDescriptor(prop, this);
-							this->attributes->getAttribute(attributeName)->userDataType = prop->FieldType;
+							this->attributes->getAttribute(attributeName)->userDataType = gcnew Engine::Reflectable::ReflectableType(prop->FieldType);
 						}
 					}
 				}

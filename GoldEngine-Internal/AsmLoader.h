@@ -22,11 +22,13 @@ private:
 	void LoadAssemblyFromFile(System::String^ fileName)
 	{
 		loadedAssembly = loadedAssembly->LoadFile(fileName);
+		Engine::Reflectable::ReflectableManager::assemblies->Add(loadedAssembly);
 	}
 	
 	void LoadAssemblyFromRawAssembly(System::Reflection::Assembly^ assembly)
 	{
 		loadedAssembly = assembly;
+		Engine::Reflectable::ReflectableManager::assemblies->Add(loadedAssembly);
 	}
 
 public:

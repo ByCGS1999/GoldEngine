@@ -448,12 +448,12 @@ namespace Engine::EngineObjects
 
 			if (!attributes->getAttribute("ambientIntensity"))
 			{
-				attributes->addAttribute(Engine::Scripting::Attribute::create("ambientIntensity", 0.0f, float::typeid));
+				attributes->addAttribute(Engine::Scripting::Attribute::create("ambientIntensity", gcnew Single(0.0f), System::Single::typeid));
 			}
 
 			if (!attributes->getAttribute("shaderId"))
 			{
-				attributes->setAttribute(Engine::Scripting::Attribute::create("shaderId", 0, UInt32::typeid));
+				attributes->setAttribute(Engine::Scripting::Attribute::create("shaderId", gcnew System::UInt32(0), UInt32::typeid));
 			}
 			else
 			{
@@ -492,7 +492,7 @@ namespace Engine::EngineObjects
 				ShaderUpdate();
 			}
 
-			float ambientIntensity = (float)attributes->getAttribute("ambientIntensity")->getValueAuto();
+			float ambientIntensity = attributes->getAttribute("ambientIntensity")->getValue<float>();
 
 			if (attributes->getAttribute("ambientColor")->getCurrentType()->Equals(Newtonsoft::Json::Linq::JObject::typeid))
 			{

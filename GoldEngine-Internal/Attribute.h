@@ -15,7 +15,7 @@ namespace Engine::Scripting
 	public:
 		AccessLevel accessLevel;
 		String^ name;
-		System::Type^ userDataType;
+		Engine::Reflectable::ReflectableType^ userDataType;
 		System::Object^ userData;
 
 	private:
@@ -79,12 +79,15 @@ namespace Engine::Scripting
 			if (accessLevel == AccessLevel::WriteOnly)
 				return gcnew System::Object();
 
-			return Convert::ChangeType(userData, userDataType);
+			if(userDataType->getTypeReference() != nullptr)
+				return Convert::ChangeType(userData, userDataType->getTypeReference());
+			else
+				return Convert::ChangeType(userData, System::Object::typeid);
 		}
 
 		System::Type^ getValueType()
 		{
-			return this->userDataType;
+			return this->userDataType->getTypeReference();
 		}
 
 		System::Type^ getCurrentType()
@@ -102,14 +105,16 @@ namespace Engine::Scripting
 			if (userData == nullptr)
 				return userData;
 
+			if(userDataType != nullptr)
+				userDataType->DeserializeType();
+
 			if (userData->GetType() != Newtonsoft::Json::Linq::JObject::typeid)
 				return userData;
 
 			try
 			{
 				Newtonsoft::Json::Linq::JObject^ sonObject = (Newtonsoft::Json::Linq::JObject^)userData;
-
-				return sonObject->ToObject(userDataType);
+				return sonObject->ToObject(userDataType->getTypeReference());
 			}
 			catch (Exception^ ex)
 			{
@@ -135,7 +140,7 @@ namespace Engine::Scripting
 			#ifdef LOGAPI_IMPL
 				printConsole("Converting from " + userData->GetType()->Name + " To -> " + type->Name);
 			#endif
-				userDataType = type;
+				userDataType->SetType(type);
 
 				userData = System::Convert::ChangeType(userData, type);
 			}
@@ -155,9 +160,9 @@ namespace Engine::Scripting
 					return;
 
 #ifdef LOGAPI_IMPL
-				printConsole("Converting from " + userData->GetType()->Name + " To -> " + userDataType->Name);
+				printConsole("Converting from " + userData->GetType()->Name + " To -> " + userDataType->getTypeReference()->Name);
 #endif
-				userData = System::Convert::ChangeType(userData, userDataType);
+				userData = System::Convert::ChangeType(userData, userDataType->getTypeReference());
 			}
 			catch (Exception^ ex)
 			{

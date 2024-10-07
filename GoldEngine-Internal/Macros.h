@@ -1,4 +1,5 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
 
 #pragma region Coding_Macros
 
@@ -45,13 +46,14 @@
 
 #define USE_BULLET_PHYS
 
-#ifdef USE_BULLET_PHYS
-
 #ifdef _WIN64
+#pragma comment(lib, "../Libs/x64/GFXLib.lib")
+#ifdef USE_BULLET_PHYS
 #pragma comment(lib, "../Libs/x64/Bullet3Common.lib")
 
 #endif
-
+#else
+#pragma comment(lib, "../Libs/x86/GFXLib.lib")
 #endif
 
 

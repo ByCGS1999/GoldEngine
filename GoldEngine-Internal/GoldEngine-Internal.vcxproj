@@ -115,6 +115,7 @@
     <ManagedAssembly>true</ManagedAssembly>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
     <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
+    <PublicIncludeDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">
     <ManagedAssembly>true</ManagedAssembly>
@@ -185,9 +186,10 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PRODUCTION_BUILD;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -201,7 +203,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -213,9 +215,10 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PRODUCTION_BUILD;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\Raylib\lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -231,6 +234,7 @@
     <ClInclude Include="DataPack.h" />
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="DataManager.h" />
+    <ClInclude Include="EditorGUI.h" />
     <ClInclude Include="EngineConfig.h" />
     <ClInclude Include="EngineGC.h" />
     <ClInclude Include="EngineIncludes.h" />
@@ -290,6 +294,7 @@
     <ClInclude Include="Raylib\include\x64\raylib.h" />
     <ClInclude Include="Raylib\include\x64\raymath.h" />
     <ClInclude Include="Raylib\include\x64\rlgl.h" />
+    <ClInclude Include="Reflection\ReflectedType.h" />
     <ClInclude Include="RenderPipelines\RaymarchSRP.h" />
     <ClInclude Include="RenderPipelines\LightweightSRP.h" />
     <ClInclude Include="RenderPipelines\LitPBR_SRP.h" />
@@ -349,6 +354,7 @@
     <ClCompile Include="Packs.cpp" />
     <ClCompile Include="Raylib\craylib\craylib.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
+    <ClCompile Include="Reflection\ReflectedType.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>
@@ -483,9 +489,6 @@
     </Reference>
     <Reference Include="MoonSharp.Interpreter">
       <HintPath>..\netasm\MoonSharp.Interpreter.dll</HintPath>
-      <Private>true</Private>
-      <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\netasm\Newtonsoft.Json.dll</HintPath>

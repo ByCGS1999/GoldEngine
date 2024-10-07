@@ -1,6 +1,7 @@
 using namespace System;
 
 #include "Includes.h"
+#include "Reflection/ReflectedType.h"
 #include "GlIncludes.h"
 #include "CastToNative.h"
 #include "LoggingAPI.h"
@@ -18,8 +19,17 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 	this->accessLevel = AccessLevel::Public;
 	this->name = str;
 
-	if(data != nullptr)
-		userDataType = data->GetType();
+	if (data != nullptr)
+	{
+		if (userDataType == nullptr)
+			userDataType = gcnew Engine::Reflectable::ReflectableType(data->GetType());
+		else
+			userDataType->DeserializeType();
+	}
+	else
+	{
+		userDataType = gcnew Engine::Reflectable::ReflectableType();
+	}
 
 	if (data == Newtonsoft::Json::Linq::JObject::typeid)
 	{
@@ -29,6 +39,8 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 	{
 		userData = data;
 	}
+
+	setType(userDataType->getTypeReference()); // For consistency
 }
 
 [Newtonsoft::Json::JsonConstructorAttribute]
@@ -45,7 +57,16 @@ inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, S
 	this->name = str;
 
 	if (data != nullptr)
-		userDataType = dT;
+	{
+		if (userDataType == nullptr)
+			userDataType = gcnew Engine::Reflectable::ReflectableType(data->GetType());
+		else
+			userDataType->DeserializeType();
+	}
+	else
+	{
+		userDataType = gcnew Engine::Reflectable::ReflectableType(dT);
+	}
 
 	if (data == Newtonsoft::Json::Linq::JObject::typeid)
 	{
@@ -56,7 +77,7 @@ inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, S
 		userData = data;
 	}
 
-	setType(userDataType); // For consistency
+	setType(userDataType->getTypeReference()); // For consistency
 }
 
 inline void Engine::Scripting::Attribute::synchronizeDescriptor()
@@ -80,7 +101,7 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object)
 		return;
 
 	userData = object;
-	userDataType = object->GetType();
+	userDataType->SetType(object->GetType());
 
 	if (descriptor != nullptr)
 		if (descriptor->GetType() == System::Reflection::FieldInfo::typeid)
@@ -103,7 +124,7 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool 
 			((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);
 
 	if (overrideType)
-		userDataType = object->GetType();
+		userDataType->SetType(object->GetType());
 }
 
 inline void Engine::Scripting::Attribute::lockRead()

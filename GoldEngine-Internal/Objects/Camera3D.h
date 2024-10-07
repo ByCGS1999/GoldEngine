@@ -27,13 +27,8 @@ namespace Engine::EngineObjects
 			if(attributes->getAttribute("camera direction"))
 				nativeCamera->get().target = ((Engine::Components::Vector3^)attributes->getAttribute("camera direction")->getValue())->toNative();
 			
-			#if !defined(PRODUCTION_BUILD)
 			nativeCamera->getCameraPtr()->position = transform->position->toNative();
 			UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
-			#else
-			nativeCamera->getCameraPtr()->position = transform->position->toNative();
-			UpdateCamera(nativeCamera->getCameraPtr(), cameraProjection);
-			#endif
 		}
 
 		void DrawGizmo() override
