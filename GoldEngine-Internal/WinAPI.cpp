@@ -24,5 +24,9 @@ void WinAPI::SetWindowStatus(void* winHandle, int windowId)
 
 void WinAPI::SetAttribute(const char* path, int ptr)
 {
-	SetFileAttributes((LPCSTR)path, (DWORD)ptr);
+#if _DEBUG
+	SetFileAttributes((LPCWSTR)path, (DWORD)ptr);
+#else
+	SetFileAttributesA((LPCSTR)path, (DWORD)ptr);
+#endif
 }

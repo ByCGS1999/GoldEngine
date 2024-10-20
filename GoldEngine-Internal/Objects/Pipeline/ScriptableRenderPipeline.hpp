@@ -56,7 +56,7 @@ namespace Engine::Render
 					}
 				}
 
-				windowHandle->DrawImGui();
+				//windowHandle->DrawImGui();
 
 				rlImGuiEnd();
 			}
@@ -88,8 +88,6 @@ namespace Engine::Render
 					bool is3DCamera = camera->is3DCamera();
 
 					BeginMode3D(((Engine::EngineObjects::Native::NativeCamera3D*)camera->get())->get());
-
-					
 
 					int currentLayer = 1;
 
@@ -160,7 +158,12 @@ namespace Engine::Render
 							reference->GameDraw();
 							*/
 							#if PRODUCTION_BUILD == FALSE
+
+							if (!EngineState::PlayMode)
+							{
 								reference->GameDrawGizmos();
+							}
+
 							#endif
 
 							PostRenderObject();

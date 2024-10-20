@@ -17,6 +17,7 @@ namespace Engine::EngineObjects
 			}
 		}
 
+		[Engine::Scripting::ExecuteInEditModeAttribute]
 		void Update() override
 		{
  			if (!attributes->getAttribute("camera direction"))

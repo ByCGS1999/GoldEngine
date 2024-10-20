@@ -15,4 +15,5 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/TextEditor/TextEditor.h"
+#include "imgui/Style/ScopedStyle.h"
 #include "Singleton.h"

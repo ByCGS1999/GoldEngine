@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../../Screen.h"
+#include "../../InputManager.h"
+
 namespace Engine::EngineObjects::UI
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
@@ -46,7 +49,7 @@ namespace Engine::EngineObjects::UI
 	public:
 		void Draw() override
 		{
-			RAYLIB::BeginBlendMode(RAYLIB::BlendMode::BLEND_ADDITIVE);
+			RAYLIB::BeginBlendMode(RAYLIB::BlendMode::BLEND_ALPHA);
 
 			auto posV2 = this->transform->position->toVector2();
 			auto sizV2 = this->transform->scale->toVector2();
@@ -76,7 +79,7 @@ namespace Engine::EngineObjects::UI
 
 		void Update() override
 		{
-			RAYLIB::Vector2 mousePosition = GetMousePosition();
+			auto mousePosition = Engine::Scripting::InputManager::GetMousePosition();
 			auto posV2 = this->transform->position->toVector2();
 			auto sizV2 = this->transform->scale->toVector2();
 
@@ -87,8 +90,14 @@ namespace Engine::EngineObjects::UI
 			rectangle.width = sizV2->x;
 			rectangle.height = sizV2->y;
 			
-			if (RAYLIB::CheckCollisionPointRec(mousePosition, rectangle))
+			if (
+				(mousePosition->x >= (rectangle.x+rectangle.height) && mousePosition->y >= (rectangle.y+rectangle.height))
+				&&
+				(mousePosition->x <= (rectangle.x-rectangle.height) && (mousePosition->y <= (rectangle.y - rectangle.height)))
+			)
 			{
+				printConsole("In Trigger");
+
 				if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_BUTTON_LEFT))
 					OnMouseButton1Click->raiseExecution(nullptr);
 

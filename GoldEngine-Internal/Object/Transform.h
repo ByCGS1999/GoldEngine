@@ -11,7 +11,9 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Quaternion.h"
+#include "../ExecuteInEditModeAttribute.h"
 #include "../LoggingAPI.h"
+#include "../EngineState.h"
 
 using namespace System;
 
@@ -208,6 +210,17 @@ namespace Engine::Internal::Components
 				return;
 
 			HookUpdate();
+
+			if (EngineState::PlayMode == false)
+			{
+				auto method = GetType()->GetMethod("Update");
+
+				if (!method->IsDefined(Engine::Scripting::ExecuteInEditModeAttribute::typeid, false))
+				{
+					return;
+				}
+			}
+
 			Update();
 		}
 
@@ -234,6 +247,16 @@ namespace Engine::Internal::Components
 		{
 			if (!active)
 				return;
+
+			if (!EngineState::PlayMode)
+			{
+				auto method = GetType()->GetMethod("DrawImGUI");
+
+				if (!method->IsDefined(Engine::Scripting::ExecuteInEditModeAttribute::typeid, false))
+				{
+					return;
+				}
+			}
 
 			DrawImGUI();
 		}

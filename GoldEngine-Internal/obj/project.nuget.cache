@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "3ZwP7ls+AEQ=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Carles\\source\\repos\\GoldEngine\\GoldEngine-Internal\\GoldEngine-Internal.vcxproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Carles\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.22000.34\\microsoft.windows.sdk.net.ref.10.0.22000.34.nupkg.sha512"
+  ],
+  "logs": []
+}

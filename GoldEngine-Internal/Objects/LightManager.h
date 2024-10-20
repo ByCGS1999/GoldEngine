@@ -144,6 +144,7 @@ namespace Engine::EngineObjects
 			nativeLightSource->reInstantiate(nativeLightSource->getLight(), newShader);
 		}
 
+		[Engine::Scripting::ExecuteInEditModeAttribute]
 		void Update() override
 		{
 			nativeLightSource->SetLightEnabled(enabled);

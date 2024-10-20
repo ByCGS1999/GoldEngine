@@ -1,0 +1,7 @@
+C:\Users\Carles\source\repos\GoldEngine\Build\x64\Debug\Ijwhost.dll
+C:\Users\Carles\source\repos\GoldEngine\Build\x64\Debug\GoldEngine-Internal.deps.json
+C:\Users\Carles\source\repos\GoldEngine\Build\x64\Debug\GoldEngine-Internal.runtimeconfig.json
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\GoldEngine-Internal.vcxproj.AssemblyReference.cache
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\GoldEngine-Internal.sourcelink.json
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\GoldEngi.C4BC61D1.Up2Date
+C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\x64\Debug\GoldEngine-Internal.genruntimeconfig.cache

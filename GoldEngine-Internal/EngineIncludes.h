@@ -22,6 +22,7 @@
 // last class to be imported, it must access to all the components included \\
 
 #include "Attribute.h"
+#include "PropertyAttribute.h"
 #include "AttributeManager.h"
 #include "Event.h"
 

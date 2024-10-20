@@ -36,12 +36,13 @@ namespace Engine::Signals
 	{
 	private:
 		System::Object^ bindedSignal;
+		bool closure = false;
 
 		System::Object^ Callback()
 		{
 			if (bindedSignal != nullptr)
 			{
-				if(bindedSignal->GetType() == System::Delegate::typeid)
+				if(!closure)
 					return ((System::Delegate^)bindedSignal)->DynamicInvoke();
 				else
 					return ((MoonSharp::Interpreter::Closure^)bindedSignal)->Call();
@@ -54,7 +55,7 @@ namespace Engine::Signals
 		{
 			if (bindedSignal != nullptr)
 			{
-				if (bindedSignal->GetType() == System::Delegate::typeid)
+				if (!closure)
 					return ((System::Delegate^)bindedSignal)->DynamicInvoke(arg);
 				else
 					return ((MoonSharp::Interpreter::Closure^)bindedSignal)->Call(arg);
@@ -67,7 +68,7 @@ namespace Engine::Signals
 		{
 			if (bindedSignal != nullptr)
 			{
-				if (bindedSignal->GetType() == System::Delegate::typeid)
+				if (!closure)
 					return ((System::Delegate^)bindedSignal)->DynamicInvoke(args);
 				else
 					return ((MoonSharp::Interpreter::Closure^)bindedSignal)->Call(args);
@@ -148,11 +149,13 @@ namespace Engine::Signals
 		void Bind(MoonSharp::Interpreter::Closure^ closure)
 		{
 			invoker = nullptr;
+			this->closure = true;
 			bindedSignal = closure;
 		}
 
 		void Bind(MoonSharp::Interpreter::DynValue^ value)
 		{
+			this->closure = true;
 			invoker = nullptr;
 
 			if (value->Type == DataType::Function)

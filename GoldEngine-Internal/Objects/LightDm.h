@@ -35,6 +35,7 @@ namespace Engine::EngineObjects::Daemons
 			lightM->UpdateCameraPosition(cameraPos);
 		}
 
+		[ExecuteInEditModeAttribute]
 		void Update() override
 		{
 			if (lightM == nullptr)

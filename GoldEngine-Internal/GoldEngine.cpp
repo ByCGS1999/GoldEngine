@@ -1,7 +1,18 @@
 ﻿#include "Macros.h"
 int max_lights = 4;
-unsigned int passwd = 0;
+unsigned int passwd = 0; 
 
+/*
+GENERIC ATTRIBUTES
+*/
+
+#include "ExecuteInEditModeAttribute.h"
+
+/*
+DEPENDENCIES
+*/
+
+#include "EngineState.h"
 #include "WinAPI.h"
 #include "Window.h"
 #include "Includes.h"
@@ -34,6 +45,7 @@ unsigned int passwd = 0;
 
 // last but not least, the assembly loader.
 
+#include "Screen.h"
 #include "Time.h"
 #include "ImguiHook.h"
 #include "InputManager.h"
@@ -163,6 +175,12 @@ bool ce1, ce2, ce3, ce4, ce5, ce6;
 std::string codeEditorChunk;
 
 char fileName[] = "Level0";
+
+bool hierarchyVisible = true;
+bool propertiesVisible = true;
+bool assetsVisible = true;
+bool consoleVisible = true;
+bool scenevpVisible = true;
 
 typedef enum assetDisplay
 {
@@ -641,7 +659,7 @@ private:
 							nullptr
 						),
 						assetId,
-						1,
+						0,
 						0,
 						0xFFFFFFFF
 					);
@@ -960,7 +978,7 @@ end
 
 	void DrawConsole()
 	{
-		if (ImGui::Begin("Console", &isOpen))
+		if (consoleVisible && ImGui::Begin("Console", &consoleVisible))
 		{
 			if (ImGui::Button("Clear"))
 			{
@@ -1158,6 +1176,8 @@ public:
 			}
 		}
 
+		
+
 		SceneManager::SetAssemblyManager(assemblies);
 		luaVM = gcnew Engine::Lua::VM::LuaVM();
 
@@ -1344,13 +1364,54 @@ public:
 
 			if (ImGui::BeginMenu("Views", true))
 			{
+				if (ImGui::BeginMenu("Windows"))
+				{
+					if (ImGui::MenuItem("Hierarchy", "", hierarchyVisible))
+						if (!hierarchyVisible)
+							hierarchyVisible = true;
+						else
+							hierarchyVisible = false;
+
+					if (ImGui::MenuItem("Properties", "", propertiesVisible))
+						if (!propertiesVisible)
+							propertiesVisible = true;
+						else
+							propertiesVisible = false;
+
+					if (ImGui::MenuItem("Assets", "", assetsVisible))
+						if (!assetsVisible)
+							assetsVisible = true;
+						else
+							assetsVisible = false;
+
+					if (ImGui::MenuItem("Scene Viewport", "", scenevpVisible))
+						if (!scenevpVisible)
+							scenevpVisible = true;
+						else
+							scenevpVisible = false;
+
+					if (ImGui::MenuItem("Console", "", consoleVisible))
+						if (!consoleVisible)
+							consoleVisible = true;
+						else
+							consoleVisible = false;
+
+					ImGui::EndMenu();
+				}
+
+				ImGui::SeparatorText("Modes");
+
 				if (ImGui::MenuItem("Editor View"))
 				{
+					print("[GoldEngine]:", "Exiting PlayMode");
 
+					EngineState::PlayMode = false;
 				}
 				if (ImGui::MenuItem("Game View"))
 				{
+					print("[GoldEngine]:", "Entering PlayMode");
 
+					EngineState::PlayMode = true;
 				}
 				ImGui::SeparatorText("Render Pipelines");
 
@@ -1740,7 +1801,7 @@ public:
 
 	void DrawHierarchy()
 	{
-		if (ImGui::Begin("Hierarchy", &isOpen))
+		if (hierarchyVisible && ImGui::Begin("Hierarchy", &hierarchyVisible))
 		{
 			ImGui::Text("Scene Objects: %d", scene->GetRenderQueue()->Count);
 			ImGui::Separator();
@@ -1803,7 +1864,7 @@ public:
 
 	void DrawProperties()
 	{
-		if (ImGui::Begin("Properties", &isOpen, ImGuiWindowFlags_MenuBar))
+		if (propertiesVisible && ImGui::Begin("Properties", &propertiesVisible, ImGuiWindowFlags_MenuBar))
 		{
 			if (selectedObject == nullptr)
 			{
@@ -2065,7 +2126,7 @@ public:
 
 	void DrawAssets()
 	{
-		if (ImGui::Begin("Assets", &isOpen, ImGuiWindowFlags_MenuBar))
+		if (assetsVisible && ImGui::Begin("Assets", &assetsVisible, ImGuiWindowFlags_MenuBar))
 		{
 			if (ImGui::BeginMenuBar())
 			{
@@ -2161,7 +2222,7 @@ public:
 			}
 		}
 
-		if (ImGui::Begin("Game Viewport", &isOpen))
+		if (scenevpVisible && ImGui::Begin("Scene Viewport", &scenevpVisible))
 		{
 			bool showing = showCursor;
 
@@ -2182,202 +2243,28 @@ public:
 				DisableCursor();
 			}
 
+			ImGuiStyle style = ImGui::GetStyle();
+
+			ImVec2 oldPadding = style.WindowPadding;
+			ImVec2 oldFramePadding = style.FramePadding;
+
+			style.WindowPadding = ImVec2(0, 0);
+			style.FramePadding = ImVec2(0, 0);
+
+			ScopedStyle scopedStyle;
+			scopedStyle.Set(style);
+
+			ImVec2 windowPos = ImGui::GetWindowPos();
+			ImVec2 windowSize = ImGui::GetWindowSize();
+
+			Screen::setX(windowPos.x+8.0f);
+			Screen::setY(windowPos.y+20.0f);
+			Screen::setWidth(windowSize.x-17.5f);
+			Screen::setHeight(windowSize.y-35.0f);
+
 			rlImGuiImageRenderTextureCustom(&viewportTexture, new int[2] { (int)ImGui::GetWindowSize().x, (int)ImGui::GetWindowSize().y }, new float[2] {17.5f, 35.0f});
 
-			ImGui::End();
-		}
-
-		if (ImGui::Begin("Toolbox", &isOpen, ImGuiWindowFlags_AlwaysVerticalScrollbar))
-		{
-			ImGui::SeparatorText("Engine Internal Objects");
-
-			if (ImGui::BeginListBox("###INTERNALSCRIPTS"))
-			{
-				if (ImGui::Button("Model Renderer"))
-				{
-					auto meshRenderer = gcnew Engine::EngineObjects::ModelRenderer(
-						"ModelRenderer",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							nullptr
-						),
-						0,
-						0,
-						0,
-						0xFFFFFFFF
-					);
-					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
-					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
-				}
-
-				if (ImGui::Button("Point Light"))
-				{
-					auto meshRenderer = gcnew Engine::EngineObjects::LightSource(
-						"Point Light",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							nullptr
-						),
-						0xFF0000FF,
-						rPBR::LightType::LIGHT_POINT,
-						gcnew Engine::Components::Vector3(1.0f, 1.0f, 1.0f),
-						1.0f,
-						1
-					);
-					meshRenderer->SetParent(lightManager);
-					lightManager->AddLight(meshRenderer, 1);
-					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
-				}
-
-				if (ImGui::Button("PBR Model Renderer"))
-				{
-					auto meshRenderer = gcnew Engine::EngineObjects::PBRModelRenderer(
-						"PBRModelRenderer",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							nullptr
-						)
-					);
-					meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
-					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
-				}
-
-				if (ImGui::Button("Skybox"))
-				{
-					auto skyBox = gcnew Engine::EngineObjects::Skybox(
-						"Skybox",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							nullptr
-						),
-						2,
-						0,
-						0
-					);
-					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
-					scene->AddObjectToScene(skyBox);
-					scene->PushToRenderQueue(skyBox);
-				}
-
-				if (ImGui::Button("Cube Renderer"))
-				{
-					auto skyBox = gcnew Engine::EngineObjects::CubeRenderer(
-						"Cube",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							nullptr
-						),
-						0xFFFFFFFF
-					);
-					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
-					scene->AddObjectToScene(skyBox);
-					scene->PushToRenderQueue(skyBox);
-				}
-
-				if (ImGui::Button("BoundingBox Renderer"))
-				{
-					auto skyBox = gcnew Engine::EngineObjects::BoundingBoxRenderer(
-						"BoundingBox",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							nullptr
-						),
-						0xFFFFFFFF
-					);
-					skyBox->SetParent(scene->GetDatamodelMember("workspace"));
-					scene->AddObjectToScene(skyBox);
-					scene->PushToRenderQueue(skyBox);
-				}
-
-				if (ImGui::Button("Grid Renderer"))
-				{
-					auto skyBox = gcnew Engine::EngineObjects::GridRenderer(
-						"Grid",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							nullptr
-						),
-						8,
-						1.0f
-					);
-					skyBox->SetParent(scene->GetDatamodelMember("editor only"));
-					scene->AddObjectToScene(skyBox);
-					scene->PushToRenderQueue(skyBox);
-				}
-
-				if (ImGui::Button("Lua Script"))
-				{
-					auto luaScript = gcnew Engine::EngineObjects::LuaScript(
-						"LuaScript",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							scene->GetDatamodelMember("workspace")->GetTransform()
-						)
-					);
-					scene->AddObjectToScene(luaScript);
-					scene->PushToRenderQueue(luaScript);
-				}
-
-				if (ImGui::Button("Mesh Renderer"))
-				{
-					auto meshRenderer = gcnew Engine::EngineObjects::MeshRenderer(
-						"MeshRenderer",
-						gcnew Engine::Internal::Components::Transform(
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(0, 0, 0),
-							gcnew Engine::Components::Vector3(1, 1, 1),
-							scene->GetDatamodelMember("workspace")->GetTransform()
-						),
-						0,
-						gcnew List<unsigned int>(),
-						0xFFFFFFFF
-					);
-					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
-				}
-
-				ImGui::EndListBox();
-			}
-
-			ImGui::SeparatorText("UserScripts");
-
-			if (ImGui::BeginListBox("###USERSCRIPTS"))
-			{
-				for each (auto assembly in assemblies)
-				{
-					if (!assembly->getLoadedAssembly()->Equals(System::Reflection::Assembly::GetExecutingAssembly()))
-					{
-						for each (auto T in assembly->GetAssemblyTypes())
-						{
-							if (ImGui::Button(CastToNative(T->Name)))
-							{
-								Engine::Internal::Components::Object^ retn = assembly->Create<Engine::Internal::Components::Object^>(T->FullName);
-								scene->PushToRenderQueue(retn);
-								scene->AddObjectToScene(retn);
-							}
-						}
-					}
-				}
-			}
+			scopedStyle.Reset();
 
 			ImGui::End();
 		}
@@ -2723,7 +2610,21 @@ public:
 
 	void Draw() override
 	{
+		/*
+		if (EngineState::PlayMode)
+		{
+			renderPipeline->ExecuteRenderWorkflow(this, scene);
+
+			// TODO: draw imgui over main renderer
+		}
+		else
+		{
+		}
+		*/
+
+
 		renderPipeline->ExecuteRenderWorkflow_Editor(this, scene, viewportTexture);
+
 		/*
 		BeginDrawing();
 		{
@@ -2880,6 +2781,11 @@ public:
 		Logging::LogCustom("[GL Version]:", "Current OpenGL version is -> " + rlGetVersion() + ".");
 
 		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+
+		ImGui::GetIO().ConfigErrorRecovery = false;
+		ImGui::GetIO().ConfigErrorRecoveryEnableAssert = true;
+		ImGui::GetIO().ConfigErrorRecoveryEnableDebugLog = false;
+		ImGui::GetIO().ConfigErrorRecoveryEnableTooltip = true;
 	}
 
 	void Preload() override
@@ -2976,6 +2882,16 @@ public:
 			if (obj->GetReference() != nullptr)
 			{
 				obj->GetReference()->GameUpdate();
+			}
+		}
+
+		if (EngineState::PlayMode)
+		{
+			if (InputManager::IsKeyDown(KeyCodes::KEY_LEFT_CONTROL) && InputManager::IsKeyDown(KeyCodes::KEY_P))
+			{
+				print("[GoldEngine]:", "Exiting PlayMode");
+
+				EngineState::PlayMode = false;
 			}
 		}
 
@@ -3157,7 +3073,7 @@ public:
 		}
 
 		auto viewPort = ImGui::GetMainViewport();
-		ImGui::DockSpaceOverViewport(viewPort, ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
+		ImGui::DockSpaceOverViewport(ImGui::GetID("MAIN", "vport"), viewPort, ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
 	}
 
 	virtual void Draw() override
@@ -3292,3 +3208,11 @@ public:
 #endif
 	}
 };
+
+
+#ifdef _DEBUG
+	int main()
+	{
+		InitializeGoldEngine();
+	}
+#endif

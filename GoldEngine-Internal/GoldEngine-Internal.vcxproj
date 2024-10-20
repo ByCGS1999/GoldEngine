@@ -67,7 +67,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CLRSupport>true</CLRSupport>
+    <CLRSupport>NetCore</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -110,6 +110,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ManagedAssembly>true</ManagedAssembly>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
+    <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ManagedAssembly>true</ManagedAssembly>
@@ -144,9 +145,10 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -201,11 +203,14 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <PreventDllBinding>false</PreventDllBinding>
     </Link>
+    <ProjectReference />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">
     <ClCompile>
@@ -215,7 +220,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>PRODUCTION_BUILD;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -230,6 +235,7 @@
     <ClInclude Include="Cast.h" />
     <ClInclude Include="CastToNative.h" />
     <ClInclude Include="Chunk.h" />
+    <ClInclude Include="cimgui\cimgui.h" />
     <ClInclude Include="CypherLib.h" />
     <ClInclude Include="DataPack.h" />
     <ClInclude Include="DataPacks.h" />
@@ -238,18 +244,26 @@
     <ClInclude Include="EngineConfig.h" />
     <ClInclude Include="EngineGC.h" />
     <ClInclude Include="EngineIncludes.h" />
+    <ClInclude Include="EngineState.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="ExecuteInEditModeAttribute.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="GlIncludes.h" />
     <ClInclude Include="GraphicsWrapper.h" />
     <ClInclude Include="ImGuiHook.h" />
     <ClInclude Include="imguistyleserializer.h" />
-    <ClInclude Include="imgui\cimgui.h" />
+    <ClInclude Include="imguizmo\GraphEditor.h" />
+    <ClInclude Include="imguizmo\ImCurveEdit.h" />
+    <ClInclude Include="imguizmo\ImGradient.h" />
+    <ClInclude Include="imguizmo\ImGuizmo.h" />
+    <ClInclude Include="imguizmo\ImSequencer.h" />
+    <ClInclude Include="imguizmo\ImZoomSlider.h" />
     <ClInclude Include="imgui\FileExplorer\filedialog.h" />
     <ClInclude Include="imgui\Fonts\IconsFontAwesome4.h" />
     <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="imgui\misc\freetype\imgui_freetype.h" />
     <ClInclude Include="imgui\misc\single_file\imgui_single_file.h" />
+    <ClInclude Include="imgui\Style\ScopedStyle.h" />
     <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LogFileReporter.h" />
@@ -291,6 +305,7 @@
     <ClInclude Include="Object\ViewSpace.h" />
     <ClInclude Include="Packs.h" />
     <ClInclude Include="PreloadScript.h" />
+    <ClInclude Include="PropertyAttribute.h" />
     <ClInclude Include="Raylib\include\x64\raylib.h" />
     <ClInclude Include="Raylib\include\x64\raymath.h" />
     <ClInclude Include="Raylib\include\x64\rlgl.h" />
@@ -333,18 +348,24 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="CastToNative.cpp" />
+    <ClCompile Include="cimgui\cimgui.cpp" />
     <ClCompile Include="EngineGC.cpp" />
     <ClCompile Include="GoldEngine.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="GraphicsWrapper.cpp" />
     <ClCompile Include="imguistyleserializer.cpp" />
-    <ClCompile Include="imgui\cimgui.cpp" />
+    <ClCompile Include="imguizmo\GraphEditor.cpp" />
+    <ClCompile Include="imguizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="imguizmo\ImGradient.cpp" />
+    <ClCompile Include="imguizmo\ImGuizmo.cpp" />
+    <ClCompile Include="imguizmo\ImSequencer.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="imgui\Style\ScopedStyle.cpp" />
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp" />
     <ClCompile Include="Object\Color.cpp" />
     <ClCompile Include="Object\Layer.cpp" />
@@ -355,6 +376,8 @@
     <ClCompile Include="Raylib\craylib\craylib.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
     <ClCompile Include="Reflection\ReflectedType.cpp" />
+    <ClCompile Include="Screen.cpp" />
+    <ClCompile Include="Screen.h" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="WinAPI.cpp" />
   </ItemGroup>

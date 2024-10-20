@@ -177,7 +177,22 @@ namespace Engine::Scripting
 
 		static Engine::Components::Vector2^ GetMousePosition()
 		{
-			return gcnew Engine::Components::Vector2(GetMousePosition()->x, GetMousePosition()->y);
+            #if !PRODUCTION_BUILD
+                auto mousePos = ImGui::GetMousePos();
+                auto viewportPos = ImVec2(Screen::getX(), Screen::getY());
+                auto viewportSize = ImVec2(Screen::Width, Screen::Height);
+
+                ImVec2 translatedPosition;
+                translatedPosition.x = mousePos.x - viewportPos.x;
+                translatedPosition.y = mousePos.y - viewportPos.y;
+
+                translatedPosition.x = std::clamp(translatedPosition.x, 0.0f, viewportSize.x);
+                translatedPosition.y = std::clamp(translatedPosition.y, 0.0f, viewportSize.y);
+
+                return gcnew Engine::Components::Vector2(translatedPosition.x, translatedPosition.y);
+            #else
+                return gcnew Engine::Components::Vector2(RAYLIB::GetMousePosition().x, RAYLIB::GetMousePosition().y);
+            #endif
 		}
 
 		static bool IsMouseButton1Up()

@@ -47,6 +47,7 @@
 #define USE_BULLET_PHYS
 
 #ifdef _WIN64
+#pragma comment(lib, "../Libs/x64/GFXLib.dll")
 #pragma comment(lib, "../Libs/x64/GFXLib.lib")
 #ifdef USE_BULLET_PHYS
 #pragma comment(lib, "../Libs/x64/Bullet3Common.lib")

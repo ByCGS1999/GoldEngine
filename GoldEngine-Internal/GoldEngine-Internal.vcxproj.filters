@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="imgui">
-      <UniqueIdentifier>{e2134739-ab52-4e6d-8f9a-b334b34c6107}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data">
       <UniqueIdentifier>{e7126ab7-7b3f-4014-b94d-ded0fd000284}</UniqueIdentifier>
     </Filter>
@@ -31,20 +28,11 @@
     <Filter Include="Binaries\fbx2gltf">
       <UniqueIdentifier>{fbcbac8e-c827-4c12-a648-8df3d5c14398}</UniqueIdentifier>
     </Filter>
-    <Filter Include="imgui\TextEditor">
-      <UniqueIdentifier>{66308d28-2328-4ed9-87c7-a853aec34b01}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data\Engine\Textures">
       <UniqueIdentifier>{4906a301-d328-4c2e-b0fd-8f75ea6b5098}</UniqueIdentifier>
     </Filter>
     <Filter Include="Data\EditorAssets">
       <UniqueIdentifier>{363e5041-ea71-49a0-86a4-165b28ddbc77}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui\FileExplorer">
-      <UniqueIdentifier>{4b25e3d2-b7f0-47a1-a619-5d87a8925f4d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui\Fonts">
-      <UniqueIdentifier>{5b48b030-99b1-4bfd-b657-828ab59b7f87}</UniqueIdentifier>
     </Filter>
     <Filter Include="Data\EditorAssets\Icons">
       <UniqueIdentifier>{0133aeaf-9e76-4e5b-b09e-d933b0b9e6c7}</UniqueIdentifier>
@@ -197,9 +185,6 @@
     <Filter Include="Source\Engine\Native">
       <UniqueIdentifier>{de4e4d3d-9b5c-43dd-861e-e98c5aeb001d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Engine\Editor">
-      <UniqueIdentifier>{a3986d25-1246-4e1c-b842-df40194a65d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Engine\Utils">
       <UniqueIdentifier>{1394687c-b10e-48e6-8430-d5caf21711a2}</UniqueIdentifier>
     </Filter>
@@ -235,9 +220,6 @@
     <Filter Include="Source\Engine\ScriptingAPI\Wrappers\GraphicsWrapper">
       <UniqueIdentifier>{5dd1dd43-b8d3-48fe-b378-b8c0d3012447}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Engine\ScriptingAPI\Wrappers\TimeWrapper">
-      <UniqueIdentifier>{88128305-5072-464d-be0b-575a0d18f476}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Engine\GarbageCollector">
       <UniqueIdentifier>{f5c83e96-8249-4400-b93f-73ba01f9601e}</UniqueIdentifier>
     </Filter>
@@ -250,27 +232,6 @@
     <Filter Include="Source\Engine\Events">
       <UniqueIdentifier>{b25df8fd-c01b-4a23-a60e-fa9218564b41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="imgui\cimgui">
-      <UniqueIdentifier>{8522c647-b2e4-40aa-88a8-d7565fd0c39f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui\misc">
-      <UniqueIdentifier>{cbc7d2d7-1207-49a7-bc59-d85acf69b88f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui\misc\freetype">
-      <UniqueIdentifier>{a2daa8db-e3fa-4b8d-833e-7b26f7ad09cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui\misc\fonts">
-      <UniqueIdentifier>{4a232296-a2ab-4d0d-9439-fd5950f4dab5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui\misc\debuggers">
-      <UniqueIdentifier>{0aaab7ca-dac4-4fbc-b8e9-6210bf69d067}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui\misc\cpp">
-      <UniqueIdentifier>{0bf50258-b86c-47b3-aecb-849570869212}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="imgui\misc\single_file">
-      <UniqueIdentifier>{8dfab3b0-9882-4737-8b3f-7a70eba0da54}</UniqueIdentifier>
-    </Filter>
     <Filter Include="raylib\include\wrapper">
       <UniqueIdentifier>{e56c7419-1ea2-497e-ad13-fb2dc2d37e2c}</UniqueIdentifier>
     </Filter>
@@ -279,6 +240,60 @@
     </Filter>
     <Filter Include="Source\Engine\Reflection">
       <UniqueIdentifier>{b2e9df82-1d73-4a53-88e0-75579e196b3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{974d3038-a8e5-4a03-9a2f-24c2c6685455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui">
+      <UniqueIdentifier>{e2134739-ab52-4e6d-8f9a-b334b34c6107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\TextEditor">
+      <UniqueIdentifier>{66308d28-2328-4ed9-87c7-a853aec34b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\FileExplorer">
+      <UniqueIdentifier>{4b25e3d2-b7f0-47a1-a619-5d87a8925f4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\Fonts">
+      <UniqueIdentifier>{5b48b030-99b1-4bfd-b657-828ab59b7f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\misc">
+      <UniqueIdentifier>{cbc7d2d7-1207-49a7-bc59-d85acf69b88f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\misc\freetype">
+      <UniqueIdentifier>{a2daa8db-e3fa-4b8d-833e-7b26f7ad09cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\misc\fonts">
+      <UniqueIdentifier>{4a232296-a2ab-4d0d-9439-fd5950f4dab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\misc\debuggers">
+      <UniqueIdentifier>{0aaab7ca-dac4-4fbc-b8e9-6210bf69d067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\misc\cpp">
+      <UniqueIdentifier>{0bf50258-b86c-47b3-aecb-849570869212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\misc\single_file">
+      <UniqueIdentifier>{8dfab3b0-9882-4737-8b3f-7a70eba0da54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGuizmo">
+      <UniqueIdentifier>{12b4a776-2fe1-4d62-9af6-ef71fb92872b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\cimgui">
+      <UniqueIdentifier>{968b6c56-c8c2-4207-8c0a-74728950eaee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\EngineClasses">
+      <UniqueIdentifier>{7dca31b4-1ebf-4b9f-b911-b098e5b157c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\EngineClasses\Screen">
+      <UniqueIdentifier>{c7afbfd0-d5cd-4dee-a35f-f85baf8b5bad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\EngineClasses\Time">
+      <UniqueIdentifier>{88128305-5072-464d-be0b-575a0d18f476}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\ScriptingAPI\Attributes">
+      <UniqueIdentifier>{c7ee0e17-eba7-497a-a7c5-322d573d1ab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\ImGui\style">
+      <UniqueIdentifier>{60399a65-b2c9-4cf6-9826-252b6b0d8fd0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -289,22 +304,22 @@
       <Filter>Source\Engine\Marshaller</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui.h">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_rectpack.h">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_textedit.h">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="DataManager.h">
       <Filter>Source\Engine\HLAPI</Filter>
@@ -406,13 +421,10 @@
       <Filter>Source\Engine\EngineObjects</Filter>
     </ClInclude>
     <ClInclude Include="imgui\TextEditor\TextEditor.h">
-      <Filter>imgui\TextEditor</Filter>
+      <Filter>GUI\ImGui\TextEditor</Filter>
     </ClInclude>
     <ClInclude Include="native\json.hpp">
       <Filter>Source\Engine\Native</Filter>
-    </ClInclude>
-    <ClInclude Include="imguistyleserializer.h">
-      <Filter>Source\Engine\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Packs.h">
       <Filter>Source\Engine\ObjectManagement\Types</Filter>
@@ -424,13 +436,13 @@
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClInclude>
     <ClInclude Include="imgui\FileExplorer\filedialog.h">
-      <Filter>imgui\FileExplorer</Filter>
+      <Filter>GUI\ImGui\FileExplorer</Filter>
     </ClInclude>
     <ClInclude Include="Objects\LuaScript.h">
       <Filter>Source\Engine\EngineObjects\Script</Filter>
     </ClInclude>
     <ClInclude Include="imgui\Fonts\IconsFontAwesome4.h">
-      <Filter>imgui\Fonts</Filter>
+      <Filter>GUI\ImGui\Fonts</Filter>
     </ClInclude>
     <ClInclude Include="Attribute.h">
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
@@ -565,7 +577,7 @@
       <Filter>Source\Engine\ScriptingAPI\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Time.h">
-      <Filter>Source\Engine\ScriptingAPI\Wrappers\TimeWrapper</Filter>
+      <Filter>Source\Engine\ScriptingAPI\EngineClasses\Time</Filter>
     </ClInclude>
     <ClInclude Include="EngineGC.h">
       <Filter>Source\Engine\GarbageCollector</Filter>
@@ -582,23 +594,56 @@
     <ClInclude Include="Event.h">
       <Filter>Source\Engine\Events</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\cimgui.h">
-      <Filter>imgui\cimgui</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h">
-      <Filter>imgui\misc\cpp</Filter>
+      <Filter>GUI\ImGui\misc\cpp</Filter>
     </ClInclude>
     <ClInclude Include="imgui\misc\freetype\imgui_freetype.h">
-      <Filter>imgui\misc\freetype</Filter>
+      <Filter>GUI\ImGui\misc\freetype</Filter>
     </ClInclude>
     <ClInclude Include="imgui\misc\single_file\imgui_single_file.h">
-      <Filter>imgui\misc\single_file</Filter>
+      <Filter>GUI\ImGui\misc\single_file</Filter>
     </ClInclude>
     <ClInclude Include="EditorGUI.h">
       <Filter>Source\EngineTools\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Reflection\ReflectedType.h">
       <Filter>Source\Engine\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="imguistyleserializer.h">
+      <Filter>Source\EngineTools\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="imguizmo\GraphEditor.h">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="imguizmo\ImCurveEdit.h">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="imguizmo\ImGradient.h">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="imguizmo\ImGuizmo.h">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="imguizmo\ImSequencer.h">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="imguizmo\ImZoomSlider.h">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="cimgui\cimgui.h">
+      <Filter>GUI\cimgui</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyAttribute.h">
+      <Filter>Source\Engine\ScriptingAPI\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecuteInEditModeAttribute.h">
+      <Filter>Source\Engine\ScriptingAPI\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineState.h">
+      <Filter>Source\Engine\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\Style\ScopedStyle.h">
+      <Filter>GUI\ImGui\style</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -609,19 +654,19 @@
       <Filter>Source\Engine\Marshaller</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
+      <Filter>GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="WinAPI.cpp">
       <Filter>Source\Engine\Windows</Filter>
@@ -630,10 +675,7 @@
       <Filter>Source\EngineTools</Filter>
     </ClCompile>
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp">
-      <Filter>imgui\TextEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="imguistyleserializer.cpp">
-      <Filter>Source\Engine\Editor</Filter>
+      <Filter>GUI\ImGui\TextEditor</Filter>
     </ClCompile>
     <ClCompile Include="Object\Layer.cpp">
       <Filter>Source\Engine\Object\Source</Filter>
@@ -663,7 +705,7 @@
       <Filter>Source\Engine\ScriptingAPI\Wrappers\GraphicsWrapper</Filter>
     </ClCompile>
     <ClCompile Include="Time.cpp">
-      <Filter>Source\Engine\ScriptingAPI\Wrappers\TimeWrapper</Filter>
+      <Filter>Source\Engine\ScriptingAPI\EngineClasses\Time</Filter>
     </ClCompile>
     <ClCompile Include="EngineGC.cpp">
       <Filter>Source\Engine\GarbageCollector</Filter>
@@ -671,17 +713,44 @@
     <ClCompile Include="Event.cpp">
       <Filter>Source\Engine\Events</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\cimgui.cpp">
-      <Filter>imgui\cimgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp">
-      <Filter>imgui\misc\cpp</Filter>
+      <Filter>GUI\ImGui\misc\cpp</Filter>
     </ClCompile>
     <ClCompile Include="Raylib\craylib\craylib.cpp">
       <Filter>raylib\include\wrapper</Filter>
     </ClCompile>
     <ClCompile Include="Reflection\ReflectedType.cpp">
       <Filter>Source\Engine\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="imguistyleserializer.cpp">
+      <Filter>Source\EngineTools\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="imguizmo\GraphEditor.cpp">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="imguizmo\ImCurveEdit.cpp">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="imguizmo\ImGradient.cpp">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="imguizmo\ImGuizmo.cpp">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="imguizmo\ImSequencer.cpp">
+      <Filter>GUI\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="cimgui\cimgui.cpp">
+      <Filter>GUI\cimgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.h">
+      <Filter>Source\Engine\ScriptingAPI\EngineClasses\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>Source\Engine\ScriptingAPI\EngineClasses\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\Style\ScopedStyle.cpp">
+      <Filter>GUI\ImGui\style</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -749,40 +818,40 @@
       <Filter>Binaries\fbx2gltf</Filter>
     </None>
     <None Include="imgui\misc\debuggers\imgui.gdb">
-      <Filter>imgui\misc\debuggers</Filter>
+      <Filter>GUI\ImGui\misc\debuggers</Filter>
     </None>
     <None Include="imgui\misc\debuggers\imgui.natstepfilter">
-      <Filter>imgui\misc\debuggers</Filter>
+      <Filter>GUI\ImGui\misc\debuggers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="imgui\misc\README.txt">
-      <Filter>imgui\misc</Filter>
+      <Filter>GUI\ImGui\misc</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="imgui\misc\debuggers\imgui.natvis">
-      <Filter>imgui\misc\debuggers</Filter>
+      <Filter>GUI\ImGui\misc\debuggers</Filter>
     </Natvis>
   </ItemGroup>
   <ItemGroup>
     <Font Include="imgui\misc\fonts\Cousine-Regular.ttf">
-      <Filter>imgui\misc\fonts</Filter>
+      <Filter>GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\DroidSans.ttf">
-      <Filter>imgui\misc\fonts</Filter>
+      <Filter>GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\Karla-Regular.ttf">
-      <Filter>imgui\misc\fonts</Filter>
+      <Filter>GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\ProggyClean.ttf">
-      <Filter>imgui\misc\fonts</Filter>
+      <Filter>GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\ProggyTiny.ttf">
-      <Filter>imgui\misc\fonts</Filter>
+      <Filter>GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\Roboto-Medium.ttf">
-      <Filter>imgui\misc\fonts</Filter>
+      <Filter>GUI\ImGui\misc\fonts</Filter>
     </Font>
   </ItemGroup>
 </Project>
