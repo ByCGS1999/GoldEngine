@@ -1,6 +1,8 @@
 #pragma once
 
+#pragma managed(push, off)
 #include <cstdio>
+#include <vector>
 
 namespace rPBR
 {
@@ -51,7 +53,7 @@ namespace rPBR
     static Light CreateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, float cutoff, float outerCutoff, Shader& shader);
     static Light ReInstantiateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity, float cutoff, float outerCutoff, Shader& shader, unsigned int lightId);
     static void SetAmbientColor(Shader& shader, RAYLIB::Vector3* color, float* intensity);
-    static void ReorganizeLights(Light[]);
+    static void ReorganizeLights(std::vector<Light>);
 
     static Light CreateLight(int type, RAYLIB::Vector3 position, RAYLIB::Vector3 target, RAYLIB::Color color, float intensity , float cutoff, float outerCutoff, Shader& shader)
     {
@@ -177,11 +179,11 @@ namespace rPBR
         SetShaderValue(shader, GetShaderLocation(shader, "ambient"), intensity, SHADER_UNIFORM_FLOAT);
     }
 
-    static void ReorganizeLights(Light light[])
+    static void ReorganizeLights(std::vector<Light> light)
     {
         int lastIndex = 0;
 
-        for (int x = 0; x < (sizeof(light) / sizeof(Light)); x++)
+        for (int x = 0; x < light.size(); x++)
         {
             light[x].lightId = x;
             lastIndex++;
@@ -190,3 +192,5 @@ namespace rPBR
         lightCount = lastIndex;
     }
 }
+
+#pragma managed(pop)

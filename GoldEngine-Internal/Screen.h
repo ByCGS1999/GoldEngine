@@ -1,5 +1,4 @@
 #pragma once
-#include "GlIncludes.h"
 
 namespace Engine::Scripting
 {

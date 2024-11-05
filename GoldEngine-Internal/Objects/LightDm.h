@@ -31,7 +31,7 @@ namespace Engine::EngineObjects::Daemons
 			if (camera == nullptr)
 				return;
 
-			float cameraPos[3] = { camera->GetTransform()->position->x, camera->GetTransform()->position->y, camera->GetTransform()->position->z };
+			float cameraPos[3] = { camera->getTransform()->position->x, camera->getTransform()->position->y, camera->getTransform()->position->z };
 			lightM->UpdateCameraPosition(cameraPos);
 		}
 
@@ -54,19 +54,19 @@ namespace Engine::EngineObjects::Daemons
 					try
 					{
 						src = (Engine::EngineObjects::LightSource^)light;
+
+						if (src != nullptr)
+						{
+							if (!lightM->hasLight(src))
+							{
+								lightM->AddLight(src, src->shaderId);
+							}
+						}
 					}
 					catch (Exception^ ex)
 					{
 						printError("Failed to cast <unknown-type> to GC_LightSource");
 						throw ex;
-					}
-
-					if (src != nullptr)
-					{
-						if (!lightM->hasLight(src))
-						{
-							lightM->AddLight(src, src->shaderId);
-						}
 					}
 				}
 			}

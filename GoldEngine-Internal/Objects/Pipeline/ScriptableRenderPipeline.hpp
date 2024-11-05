@@ -27,18 +27,22 @@ namespace Engine::Render
 				{
 					Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
 
+					int currentLayer = 1;
+
 					if (camera == nullptr)
-						return;
+						goto RENDER_END;
 
 					bool is3DCamera = camera->is3DCamera();
 
 					BeginMode3D(((Engine::EngineObjects::Native::NativeCamera3D*)camera->get())->get());
 
-					int currentLayer = 1;
-
 					render(currentLayer, scene);
 
 					EndMode3D();
+
+					RENDER_END:
+
+					renderGUI(currentLayer, scene);
 				}
 
 				OnRenderEnd();
@@ -82,18 +86,22 @@ namespace Engine::Render
 				{
 					Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
 
+					int currentLayer = 1;
+
 					if (camera == nullptr)
-						return;
+						goto RENDER_END;
 
 					bool is3DCamera = camera->is3DCamera();
 
 					BeginMode3D(((Engine::EngineObjects::Native::NativeCamera3D*)camera->get())->get());
 
-					int currentLayer = 1;
-
 					render(currentLayer, scene);
 
 					EndMode3D();
+
+					RENDER_END:
+
+					renderGUI(currentLayer, scene);
 				}
 
 				OnRenderEnd();
@@ -131,52 +139,117 @@ namespace Engine::Render
 		}
 
 	protected:
+		void renderGUI(int currentLayer, Engine::Management::Scene^ scene)
+		{
+			Layer^ lastLayer = nullptr;
+
+			while (currentLayer != LayerManager::getHigherLayer())
+			{
+				Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+
+				if (cL != nullptr)
+				{
+					for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+					{
+						if (scene->sceneLoaded())
+						{
+							Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject->GetReference();
+
+							if (reference->layerMask->IsLayer(cL))
+							{
+								if (reference->active)
+									reference->DrawGUI();
+							}
+						}
+					}
+
+					Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+
+					if (nextLayer != nullptr)
+						currentLayer = nextLayer->layerMask;
+					else
+						break;
+
+					lastLayer = cL;
+				}
+				else
+				{
+					if (lastLayer == nullptr)
+						break;
+			
+					Layer^ nextLayer = LayerManager::getNextHigherLayer(lastLayer);
+
+					if (nextLayer != nullptr)
+						currentLayer = nextLayer->layerMask;
+					else
+						break;
+				}
+
+			}
+		}
+
+	protected:
 		void render(int currentLayer, Engine::Management::Scene^ scene)
 		{
 			ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::LightManager^>()->LightUpdate();
 
 			PreRenderObjects();
 
-			while (currentLayer != LayerManager::getHigherLayer())
+			Layer^ lastLayer = nullptr;
+
+			while (currentLayer <= LayerManager::getHigherLayer())
 			{
 				Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
 
-				if (cL == nullptr)
-					break;
-
-				for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+				if (cL != nullptr)
 				{
-					if (scene->sceneLoaded())
+					for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
 					{
-						Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
-
-						if (reference->layerMask = cL)
+						if (scene->sceneLoaded())
 						{
-							PreRenderObject(reference);
+							Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject->GetReference();
 
-							/*
-							reference->GameDraw();
-							*/
-							#if PRODUCTION_BUILD == FALSE
-
-							if (!EngineState::PlayMode)
+							if (reference->layerMask->IsLayer(cL))
 							{
-								reference->GameDrawGizmos();
+								PreRenderObject(reference);
+
+								/*
+								reference->GameDraw();
+								*/
+#if PRODUCTION_BUILD == FALSE
+
+								if (!EngineState::PlayMode)
+								{
+									reference->GameDrawGizmos();
+								}
+
+#endif
+
+								PostRenderObject();
 							}
-
-							#endif
-
-							PostRenderObject();
 						}
 					}
+					Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+
+					if (nextLayer != nullptr)
+						currentLayer = nextLayer->layerMask;
+					else
+						break;
+
+					lastLayer = cL;
 				}
-
-				Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
-
-				if (nextLayer != nullptr)
-					currentLayer = nextLayer->layerMask;
 				else
-					break;
+				{
+					if (lastLayer == nullptr)
+						break;
+
+					Layer^ nextLayer = LayerManager::getNextHigherLayer(lastLayer);
+
+					if (nextLayer != nullptr)
+						currentLayer = nextLayer->layerMask;
+					else
+						break;
+				}
 			}
 
 			PostRenderObjects();
@@ -194,15 +267,15 @@ namespace Engine::Render
 				Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
 
 				if (cL == nullptr)
-					break;
+					continue;
 
 				for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
 				{
 					if (scene->sceneLoaded())
 					{
-						Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
+						Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject->GetReference();
 
-						if (reference->layerMask = cL)
+						if (reference->layerMask->IsLayer(cL))
 						{
 							reference->Draw();
 							reference->DrawGizmo();
@@ -219,7 +292,7 @@ namespace Engine::Render
 			}
 		}
 
-		void firstPassRender(int currentLayer, System::Collections::Generic::List< Engine::Internal::Components::Object^>^% objects)
+		void firstPassRender(int currentLayer, System::Collections::Generic::List< Engine::Internal::Components::GameObject^>^% objects)
 		{
 			if (Engine::Scripting::ObjectManager::singleton() == nullptr || !Singleton<Engine::Management::Scene^>::Instantiated)
 				return;
@@ -231,15 +304,15 @@ namespace Engine::Render
 				Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
 
 				if (cL == nullptr)
-					break;
+					continue;
 
 				for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
 				{
 					if (scene->sceneLoaded())
 					{
-						Engine::Internal::Components::Object^ reference = (Engine::Internal::Components::Object^)sceneObject->GetReference();
+						Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject->GetReference();
 
-						if (reference->layerMask = cL)
+						if (reference->layerMask->IsLayer(cL))
 						{
 							objects->Add(reference);
 							reference->Draw();
@@ -267,7 +340,7 @@ namespace Engine::Render
 		virtual void PostRenderObjects() abstract;
 
 		// Render Per Object
-		virtual void PreRenderObject(Engine::Internal::Components::Object^) abstract;
+		virtual void PreRenderObject(Engine::Internal::Components::GameObject^) abstract;
 		virtual void PostRenderObject() abstract;
 
 		// Hooks at the beggining and end of the render process

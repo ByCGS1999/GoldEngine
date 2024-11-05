@@ -1,9 +1,11 @@
 #pragma once
 
+#include "EngineState.h"
+
 namespace Engine::Scripting
 {
     [MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-    public ref class MouseButtons
+        public ref class MouseButtons
     {
     public:
         static int const MOUSE_BUTTON_LEFT = 0;
@@ -16,7 +18,7 @@ namespace Engine::Scripting
     };
 
     [MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-    public ref class KeyCodes
+        public ref class KeyCodes
     {
     public:
         static int const KEY_NULL = 0;        // Key: NULL; used for no key pressed
@@ -135,30 +137,30 @@ namespace Engine::Scripting
         static int const KEY_VOLUME_DOWN = 25;        // Key: Android volume down button
     };
 
-	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class InputManager
-	{
-	public:
-		static bool IsKeyPressed(int key_id)
-		{
-			return RAYLIB::IsKeyPressed(key_id);
-		}
+    [MoonSharp::Interpreter::MoonSharpUserDataAttribute]
+        public ref class InputManager
+    {
+    public:
+        static bool IsKeyPressed(int key_id)
+        {
+            return RAYLIB::IsKeyPressed(key_id);
+        }
 
-		static bool IsKeyDown(int key_id)
-		{
-			
-			return RAYLIB::IsKeyDown(key_id);
-		}
+        static bool IsKeyDown(int key_id)
+        {
 
-		static bool IsKeyReleased(int key_id)
-		{
-			return RAYLIB::IsKeyReleased(key_id);
-		}
+            return RAYLIB::IsKeyDown(key_id);
+        }
 
-		static bool IsKeyPressedRepeat(int key_id)
-		{
-			return RAYLIB::IsKeyPressedRepeat(key_id);
-		}
+        static bool IsKeyReleased(int key_id)
+        {
+            return RAYLIB::IsKeyReleased(key_id);
+        }
+
+        static bool IsKeyPressedRepeat(int key_id)
+        {
+            return RAYLIB::IsKeyPressedRepeat(key_id);
+        }
 
         static bool IsMouseButtonUp(int button_press)
         {
@@ -175,54 +177,63 @@ namespace Engine::Scripting
             return RAYLIB::IsMouseButtonPressed(button_press);
         }
 
-		static Engine::Components::Vector2^ GetMousePosition()
-		{
-            #if !PRODUCTION_BUILD
-                auto mousePos = ImGui::GetMousePos();
-                auto viewportPos = ImVec2(Screen::getX(), Screen::getY());
-                auto viewportSize = ImVec2(Screen::Width, Screen::Height);
+        static Engine::Components::Vector2^ GetMousePosition()
+        {
+#if !PRODUCTION_BUILD
+            if (!EngineState::PlayMode)
+            {
+                ImVec2 mousePos = ImGui::GetMousePos();
+                ImVec2 viewportPos = ImVec2(Screen::getX(), Screen::getY());
+                ImVec2 viewportSize = ImVec2(Screen::Width, Screen::Height);
 
-                ImVec2 translatedPosition;
-                translatedPosition.x = mousePos.x - viewportPos.x;
-                translatedPosition.y = mousePos.y - viewportPos.y;
+                ImGuiStyle style = ImGui::GetStyle();
+                float paddingX = style.WindowPadding.x;
+                float paddingY = style.WindowPadding.y;
 
-                translatedPosition.x = std::clamp(translatedPosition.x, 0.0f, viewportSize.x);
-                translatedPosition.y = std::clamp(translatedPosition.y, 0.0f, viewportSize.y);
+                ImVec2 localMousePos;
+                localMousePos.x = mousePos.x - viewportPos.x - paddingX;
+                localMousePos.y = mousePos.y - viewportPos.y - paddingY;
 
-                return gcnew Engine::Components::Vector2(translatedPosition.x, translatedPosition.y);
-            #else
+                localMousePos.x = std::clamp(localMousePos.x, 0.0f, viewportSize.x);
+                localMousePos.y = std::clamp(localMousePos.y, 0.0f, viewportSize.y);
+
+                return gcnew Engine::Components::Vector2(localMousePos.x, localMousePos.y);
+            }
+            else
                 return gcnew Engine::Components::Vector2(RAYLIB::GetMousePosition().x, RAYLIB::GetMousePosition().y);
-            #endif
-		}
+#else
+            return gcnew Engine::Components::Vector2(RAYLIB::GetMousePosition().x, RAYLIB::GetMousePosition().y);
+#endif
+        }
 
-		static bool IsMouseButton1Up()
-		{
-			return RAYLIB::IsMouseButtonUp(MOUSE_BUTTON_LEFT);
-		}
+        static bool IsMouseButton1Up()
+        {
+            return RAYLIB::IsMouseButtonUp(MOUSE_BUTTON_LEFT);
+        }
 
-		static bool IsMouseButton2Up()
-		{
-			return RAYLIB::IsMouseButtonUp(MOUSE_BUTTON_RIGHT);
-		}
+        static bool IsMouseButton2Up()
+        {
+            return RAYLIB::IsMouseButtonUp(MOUSE_BUTTON_RIGHT);
+        }
 
-		static bool IsMouseButton1Down()
-		{
-			return RAYLIB::IsMouseButtonDown(MOUSE_BUTTON_LEFT);
-		}
+        static bool IsMouseButton1Down()
+        {
+            return RAYLIB::IsMouseButtonDown(MOUSE_BUTTON_LEFT);
+        }
 
-		static bool IsMouseButton2Down()
-		{
-			return RAYLIB::IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
-		}
+        static bool IsMouseButton2Down()
+        {
+            return RAYLIB::IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
+        }
 
-		static bool IsMouseButton1Pressed()
-		{
-			return RAYLIB::IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-		}
+        static bool IsMouseButton1Pressed()
+        {
+            return RAYLIB::IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+        }
 
-		static bool IsMouseButton2Pressed()
-		{
-			return RAYLIB::IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
-		}
-	};
+        static bool IsMouseButton2Pressed()
+        {
+            return RAYLIB::IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
+        }
+    };
 }

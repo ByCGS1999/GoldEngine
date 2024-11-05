@@ -13,12 +13,10 @@ ScopedStyle::~ScopedStyle()
 
 void ScopedStyle::Set(const ImGuiStyle& style)
 {
-	ImGuiStyle& styleRef = ImGui::GetStyle();
-	styleRef = style;
+	ImGui::GetStyle() = style;
 }
 
 void ScopedStyle::Reset()
 {
-	ImGuiStyle& styleRef = ImGui::GetStyle();
-	styleRef = this->originalStyle;
+	ImGui::GetStyle() = this->originalStyle;
 }

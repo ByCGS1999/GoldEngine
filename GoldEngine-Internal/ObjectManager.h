@@ -44,7 +44,7 @@ namespace Engine::Scripting
 				this->loadedScene = loadedScene;
 
 				this->sceneObjects = gcnew ArrayList();
-				this->sceneObjects = this->loadedScene->GetRenderQueue();
+				this->sceneObjects = (System::Collections::ArrayList^)this->loadedScene->GetRenderQueue();
 			}
 
 			Singleton<ObjectManager^>::Create(this);
@@ -109,16 +109,16 @@ namespace Engine::Scripting
 		}
 
 	private:
-		Engine::Internal::Components::Object^ GetObjectFromScene(Engine::Management::MiddleLevel::SceneObject^ sceneObject)
+		Engine::Internal::Components::GameObject^ GetObjectFromScene(Engine::Management::MiddleLevel::SceneObject^ sceneObject)
 		{
 			return sceneObject->GetReference();
 		}
 
 	private:
-		bool topReferenceIsDatamodel(Engine::Internal::Components::Object^ object, String^ dataModelName)
+		bool topReferenceIsDatamodel(Engine::Internal::Components::GameObject^ object, String^ dataModelName)
 		{
 			if (object->transform->parent != nullptr)
-				return topReferenceIsDatamodel((Engine::Internal::Components::Object^)object->transform->parent->getGameObject(), dataModelName);
+				return topReferenceIsDatamodel((Engine::Internal::Components::GameObject^)object->transform->parent->getGameObject(), dataModelName);
 			else
 			{
 				if (object->name == dataModelName)
@@ -131,9 +131,9 @@ namespace Engine::Scripting
 	public:
 
 	#ifndef PRODUCTION_BUILD
-		System::Object^ GetSelectedObject()
+		GameObject^ GetSelectedObject()
 		{
-			return Singleton<Window^>::Instance->GetSelectedObject();
+			return (GameObject^)Singleton<Window^>::Instance->GetSelectedObject();
 		}
 	#endif
 
@@ -142,19 +142,19 @@ namespace Engine::Scripting
 			return loadedScene;
 		}
 
-		System::Object^ GetDatamodel(String^ dataModelName)
+		GameObject^ GetDatamodel(String^ dataModelName)
 		{
 			return loadedScene->GetDatamodelMember(dataModelName, false);
 		}
 
-		System::Object^ GetDatamodel(String^ dataModelName, bool createDataModel)
+		GameObject^ GetDatamodel(String^ dataModelName, bool createDataModel)
 		{
 			return loadedScene->GetDatamodelMember(dataModelName, createDataModel);
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetObjectsFromDatamodel(System::String^ datamodel)
+		List<Engine::Internal::Components::GameObject^>^ GetObjectsFromDatamodel(System::String^ datamodel)
 		{
-			auto objects = gcnew List<Engine::Internal::Components::Object^>();
+			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
@@ -167,9 +167,9 @@ namespace Engine::Scripting
 			return objects;
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetObjectsByTag(System::String^ tag)
+		List<Engine::Internal::Components::GameObject^>^ GetObjectsByTag(System::String^ tag)
 		{
-			auto objects = gcnew List<Engine::Internal::Components::Object^>();
+			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
@@ -182,9 +182,9 @@ namespace Engine::Scripting
 			return objects;
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetObjectsByName(System::String^ name)
+		List<Engine::Internal::Components::GameObject^>^ GetObjectsByName(System::String^ name)
 		{
-			auto objects = gcnew List<Engine::Internal::Components::Object^>();
+			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
 			if (sceneObjects == nullptr)
 				return nullptr;
@@ -200,9 +200,22 @@ namespace Engine::Scripting
 			return objects;
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetObjectsOfType(Engine::Internal::Components::ObjectType type)
+		List<Engine::Internal::Components::GameObject^>^ GetObjects()
 		{
-			auto objects = gcnew List<Engine::Internal::Components::Object^>();
+			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			{
+				if(t != nullptr && t->GetReference() != nullptr)
+					objects->Add(t->GetReference());
+			}
+
+			return objects;
+		}
+
+		List<Engine::Internal::Components::GameObject^>^ GetObjectsOfType(Engine::Internal::Components::ObjectType type)
+		{
+			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
@@ -231,7 +244,7 @@ namespace Engine::Scripting
 			return objects;
 		}
 
-		Engine::Internal::Components::Object^ GetFirstObjectByTag(System::String^ tag)
+		Engine::Internal::Components::GameObject^ GetFirstObjectByTag(System::String^ tag)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
@@ -243,7 +256,8 @@ namespace Engine::Scripting
 
 			return nullptr;
 		}
-		Engine::Internal::Components::Object^ GetFirstObjectOfName(System::String^ name)
+
+		Engine::Internal::Components::GameObject^ GetFirstObjectByName(System::String^ name)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
@@ -256,7 +270,7 @@ namespace Engine::Scripting
 			return nullptr;
 		}
 
-		Engine::Internal::Components::Object^ GetFirstObjectOfType(System::String^ assemblyType)
+		Engine::Internal::Components::GameObject^ GetFirstObjectOfType(System::String^ assemblyType)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
@@ -282,21 +296,21 @@ namespace Engine::Scripting
 			}
 		}
 
-		Engine::Internal::Components::Object^ GetFirstObjectOfType(System::Type^ type)
+		Engine::Internal::Components::GameObject^ GetFirstObjectOfType(System::Type^ type)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
 				if (t == nullptr)
 					continue;
 
-				if (t->GetReference()->GetType()->Equals(type) || t->GetReference()->GetType()->Equals(type->BaseType))
+				if (t->GetReference()->GetType()->Equals(type) || t->GetReference()->GetType()->IsSubclassOf(type))
 				{
 					return t->GetReference();
 				}
 			}
 		}
 
-		Engine::Internal::Components::Object^ GetFirstObjectOfType(Engine::Internal::Components::ObjectType type)
+		Engine::Internal::Components::GameObject^ GetFirstObjectOfType(Engine::Internal::Components::ObjectType type)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
@@ -310,16 +324,16 @@ namespace Engine::Scripting
 			}
 		}
 
-		List<Engine::Internal::Components::Object^>^ GetChildrenOf(Engine::Internal::Components::Object^ parent)
+		List<Engine::Internal::Components::GameObject^>^ GetChildrenOf(Engine::Internal::Components::GameObject^ parent)
 		{
-			List<Engine::Internal::Components::Object^>^ newList = gcnew List<Engine::Internal::Components::Object^>();
+			List<Engine::Internal::Components::GameObject^>^ newList = gcnew List<Engine::Internal::Components::GameObject^>();
 
 			for each (Engine::Management::MiddleLevel::SceneObject^ object in sceneObjects)
 			{
 				auto v = GetObjectFromScene(object);
-				if (v->GetTransform()->parent != nullptr)
+				if (v->getTransform()->parent != nullptr)
 				{
-					if (v->GetTransform()->GetParent()->GetUID() == parent->GetTransform()->GetUID())
+					if (v->getTransform()->GetParent()->GetUID() == parent->getTransform()->GetUID())
 					{
 						newList->Add(v);
 					}
@@ -329,11 +343,11 @@ namespace Engine::Scripting
 			return newList;
 		}
 
-		Engine::Internal::Components::Object^ GetObjectByUid(System::String^ uid)
+		Engine::Internal::Components::GameObject^ GetObjectByUid(System::String^ uid)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
 			{
-				if (t->GetReference()->GetTransform()->GetUID() == uid)
+				if (t->GetReference()->getTransform()->GetUID() == uid)
 				{
 					return t->GetReference();
 				}
@@ -342,7 +356,7 @@ namespace Engine::Scripting
 			return nullptr;
 		}
 
-		Engine::Internal::Components::Object^ GetObjectFromTransform(Engine::Internal::Components::Transform^ transform)
+		Engine::Internal::Components::GameObject^ GetObjectFromTransform(Engine::Internal::Components::Transform^ transform)
 		{
 			return nullptr;
 		}
@@ -363,7 +377,7 @@ namespace Engine::Scripting
 			return nullptr;
 		}
 
-		Engine::Internal::Components::Object^ Instantiate(Engine::Internal::Components::Object^ newObject)
+		Engine::Internal::Components::GameObject^ Instantiate(Engine::Internal::Components::GameObject^ newObject)
 		{
 			loadedScene->AddObjectToScene(newObject);
 			loadedScene->PushToRenderQueue(newObject);
@@ -371,7 +385,7 @@ namespace Engine::Scripting
 			return newObject;
 		}
 
-		void Destroy(Engine::Internal::Components::Object^ object)
+		void Destroy(Engine::Internal::Components::GameObject^ object)
 		{
 			for each (Engine::Management::MiddleLevel::SceneObject^ objTmp in sceneObjects)
 			{
@@ -387,11 +401,11 @@ namespace Engine::Scripting
 							return;
 
 						// REPARENT ALL THE CHILDREN TO NULL (SET AS UNPARENTED).
-						List<Engine::Internal::Components::Object^>^ objectList = ObjectManager::singleton()->GetChildrenOf(object);
+						List<Engine::Internal::Components::GameObject^>^ objectList = ObjectManager::singleton()->GetChildrenOf(object);
 
 						for each (auto obj in objectList)
 						{
-							obj->GetTransform()->SetParent(nullptr);
+							obj->getTransform()->SetParent(nullptr);
 						}
 
 						// PURGE THE OBJECT FROM THE SCENE
@@ -417,9 +431,9 @@ namespace Engine::Scripting
 
 			if (attribute->getValue() != nullptr)
 			{
-				if ((attribute->getValue()->GetType()->Equals(Engine::Internal::Components::Object::typeid) || attribute->getValue()->GetType()->IsSubclassOf(Engine::Internal::Components::Object::typeid)))
+				if ((attribute->getValue()->GetType()->Equals(Engine::Internal::Components::GameObject::typeid) || attribute->getValue()->GetType()->IsSubclassOf(Engine::Internal::Components::GameObject::typeid)))
 				{
-					String^ uid = ((Engine::Internal::Components::Object^)attribute->getValue())->GetTransform()->GetUID();
+					String^ uid = ((Engine::Internal::Components::GameObject^)attribute->getValue())->getTransform()->GetUID();
 
 					attribute->setValue(GetObjectByUid(uid), false);
 				}

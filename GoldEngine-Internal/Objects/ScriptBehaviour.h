@@ -3,14 +3,14 @@
 namespace Engine::EngineObjects
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class ScriptBehaviour : public Engine::Internal::Components::Object
+	public ref class ScriptBehaviour : public Engine::Internal::Components::GameObject
 	{
 	public:
 		System::String^ assemblyReference;
 		Engine::Scripting::AttributeManager^ attributes;
 
 	public:
-		ScriptBehaviour(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Script, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		ScriptBehaviour(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::GameObject(name, transform, Engine::Internal::Components::ObjectType::Script, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			attributes = gcnew Engine::Scripting::AttributeManager();
 			assemblyReference = GetType()->FullName->ToString();

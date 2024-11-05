@@ -40,32 +40,8 @@
     <Filter Include="Data\EditorAssets\Fonts">
       <UniqueIdentifier>{a14989d7-3f94-4d63-9bab-965872423dcc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="raylib">
-      <UniqueIdentifier>{92919462-bb7f-4617-8aea-0ec992ea0d3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include">
-      <UniqueIdentifier>{a58c4469-bad3-4eed-aee2-c8b1af098c30}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data\EditorAssets\Templates">
       <UniqueIdentifier>{784d2fb2-8d10-45fe-a804-30d43454375e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\ext">
-      <UniqueIdentifier>{8db3416d-adf6-4ff6-8979-05b4a1037bb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\impls">
-      <UniqueIdentifier>{46dc3b57-f7f9-40d8-8d9f-bebe36e21434}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\deps">
-      <UniqueIdentifier>{b8190d54-6dca-4ab6-97d0-bec90bd19e1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\impls\imgui">
-      <UniqueIdentifier>{47b26e79-2933-4e1b-b087-4644eae7d0d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\impls\raygui">
-      <UniqueIdentifier>{45923578-8f25-472a-9bb0-c32e347a3ff1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="raylib\include\impls\other">
-      <UniqueIdentifier>{1560900a-6699-48c2-9657-54dcde1a812a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Data\Engine\Shaders\Lighting">
       <UniqueIdentifier>{fcdb4358-6ea0-4f9d-a048-c14ccf451478}</UniqueIdentifier>
@@ -101,12 +77,6 @@
     <Filter Include="Source\Engine\Object\Enums">
       <UniqueIdentifier>{a461a0a5-f22a-44ee-a4da-ce99eee107d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Engine\Object\Source">
-      <UniqueIdentifier>{122918f0-ebc8-49b2-8a46-ea7dc70140d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Engine\Object\Header">
-      <UniqueIdentifier>{962bd13e-e425-430b-b66a-de85ffb23b81}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Engine\Management">
       <UniqueIdentifier>{bb63e44a-1dbe-4beb-ba51-7054d1f23afe}</UniqueIdentifier>
     </Filter>
@@ -115,9 +85,6 @@
     </Filter>
     <Filter Include="Source\Engine\Management\MiddleLevel">
       <UniqueIdentifier>{539ae321-1426-4428-90f7-5bb797a2fb37}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Engine\Encryption">
-      <UniqueIdentifier>{7cc418b0-5231-4f9b-a467-cf98afcde18b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Engine\EngineObjects">
       <UniqueIdentifier>{51b6938c-f7b4-4ebc-b8c9-b7db1c25a7b8}</UniqueIdentifier>
@@ -188,9 +155,6 @@
     <Filter Include="Source\Engine\Utils">
       <UniqueIdentifier>{1394687c-b10e-48e6-8430-d5caf21711a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Engine\Configuration">
-      <UniqueIdentifier>{74ef52fb-c3dd-415f-90d8-5990dff4cd5f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Engine\Signals">
       <UniqueIdentifier>{741a851b-feff-416d-a254-c447b15545d4}</UniqueIdentifier>
     </Filter>
@@ -232,53 +196,11 @@
     <Filter Include="Source\Engine\Events">
       <UniqueIdentifier>{b25df8fd-c01b-4a23-a60e-fa9218564b41}</UniqueIdentifier>
     </Filter>
-    <Filter Include="raylib\include\wrapper">
-      <UniqueIdentifier>{e56c7419-1ea2-497e-ad13-fb2dc2d37e2c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\EngineTools\Editor">
       <UniqueIdentifier>{ebd769a8-5af6-411d-b164-ec6af0c45d69}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Engine\Reflection">
       <UniqueIdentifier>{b2e9df82-1d73-4a53-88e0-75579e196b3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI">
-      <UniqueIdentifier>{974d3038-a8e5-4a03-9a2f-24c2c6685455}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui">
-      <UniqueIdentifier>{e2134739-ab52-4e6d-8f9a-b334b34c6107}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\TextEditor">
-      <UniqueIdentifier>{66308d28-2328-4ed9-87c7-a853aec34b01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\FileExplorer">
-      <UniqueIdentifier>{4b25e3d2-b7f0-47a1-a619-5d87a8925f4d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\Fonts">
-      <UniqueIdentifier>{5b48b030-99b1-4bfd-b657-828ab59b7f87}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\misc">
-      <UniqueIdentifier>{cbc7d2d7-1207-49a7-bc59-d85acf69b88f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\misc\freetype">
-      <UniqueIdentifier>{a2daa8db-e3fa-4b8d-833e-7b26f7ad09cb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\misc\fonts">
-      <UniqueIdentifier>{4a232296-a2ab-4d0d-9439-fd5950f4dab5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\misc\debuggers">
-      <UniqueIdentifier>{0aaab7ca-dac4-4fbc-b8e9-6210bf69d067}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\misc\cpp">
-      <UniqueIdentifier>{0bf50258-b86c-47b3-aecb-849570869212}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGui\misc\single_file">
-      <UniqueIdentifier>{8dfab3b0-9882-4737-8b3f-7a70eba0da54}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\ImGuizmo">
-      <UniqueIdentifier>{12b4a776-2fe1-4d62-9af6-ef71fb92872b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GUI\cimgui">
-      <UniqueIdentifier>{968b6c56-c8c2-4207-8c0a-74728950eaee}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Engine\ScriptingAPI\EngineClasses">
       <UniqueIdentifier>{7dca31b4-1ebf-4b9f-b911-b098e5b157c6}</UniqueIdentifier>
@@ -292,34 +214,151 @@
     <Filter Include="Source\Engine\ScriptingAPI\Attributes">
       <UniqueIdentifier>{c7ee0e17-eba7-497a-a7c5-322d573d1ab3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GUI\ImGui\style">
+    <Filter Include="Source\Engine\EngineObjects\Physics">
+      <UniqueIdentifier>{0497ec21-bd47-4929-b935-ad976c75acd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine">
+      <UniqueIdentifier>{622cf0b0-fb65-4fc7-ac4f-35c9168f869d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\EngineTools">
+      <UniqueIdentifier>{b0a90909-7708-461a-b459-33803617ab1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\EngineTools\Editor">
+      <UniqueIdentifier>{cece738d-5c6c-45c6-8864-dc8bb4a6fa3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine\Marshaller">
+      <UniqueIdentifier>{5c96b5c1-565f-40ae-9b54-ab7a966a92ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine\Configuration">
+      <UniqueIdentifier>{78181d98-4386-464f-b45b-ef5e74468c87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine\Encryption">
+      <UniqueIdentifier>{7cc418b0-5231-4f9b-a467-cf98afcde18b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine\GarbageCollector">
+      <UniqueIdentifier>{39f7a3e1-3b6c-4f52-b551-83f4a0ec688b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine\Events">
+      <UniqueIdentifier>{641fdbb7-fe95-4284-b0dd-cb0b16a984c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine\Object">
+      <UniqueIdentifier>{a38a6141-e458-4e68-9edc-c25bfccdf004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\EngineTools\ModelWrapper">
+      <UniqueIdentifier>{fe5f4bf5-4400-4fe9-ad0d-60416510b66b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\EngineTools\ModelWrapper">
+      <UniqueIdentifier>{64c9efd4-8681-465f-84c1-a32bf1d6ee2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps">
+      <UniqueIdentifier>{1bc6d63e-83e2-48f4-a86b-f302c7152a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI">
+      <UniqueIdentifier>{974d3038-a8e5-4a03-9a2f-24c2c6685455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui">
+      <UniqueIdentifier>{e2134739-ab52-4e6d-8f9a-b334b34c6107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\TextEditor">
+      <UniqueIdentifier>{66308d28-2328-4ed9-87c7-a853aec34b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\FileExplorer">
+      <UniqueIdentifier>{4b25e3d2-b7f0-47a1-a619-5d87a8925f4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\Fonts">
+      <UniqueIdentifier>{5b48b030-99b1-4bfd-b657-828ab59b7f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\misc">
+      <UniqueIdentifier>{cbc7d2d7-1207-49a7-bc59-d85acf69b88f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\misc\freetype">
+      <UniqueIdentifier>{a2daa8db-e3fa-4b8d-833e-7b26f7ad09cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\misc\fonts">
+      <UniqueIdentifier>{4a232296-a2ab-4d0d-9439-fd5950f4dab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\misc\debuggers">
+      <UniqueIdentifier>{0aaab7ca-dac4-4fbc-b8e9-6210bf69d067}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\misc\cpp">
+      <UniqueIdentifier>{0bf50258-b86c-47b3-aecb-849570869212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\misc\single_file">
+      <UniqueIdentifier>{8dfab3b0-9882-4737-8b3f-7a70eba0da54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGui\style">
       <UniqueIdentifier>{60399a65-b2c9-4cf6-9826-252b6b0d8fd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\ImGuizmo">
+      <UniqueIdentifier>{12b4a776-2fe1-4d62-9af6-ef71fb92872b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\GUI\cimgui">
+      <UniqueIdentifier>{968b6c56-c8c2-4207-8c0a-74728950eaee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib">
+      <UniqueIdentifier>{92919462-bb7f-4617-8aea-0ec992ea0d3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib\include">
+      <UniqueIdentifier>{a58c4469-bad3-4eed-aee2-c8b1af098c30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib\include\ext">
+      <UniqueIdentifier>{8db3416d-adf6-4ff6-8979-05b4a1037bb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib\include\impls">
+      <UniqueIdentifier>{46dc3b57-f7f9-40d8-8d9f-bebe36e21434}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib\include\impls\imgui">
+      <UniqueIdentifier>{47b26e79-2933-4e1b-b087-4644eae7d0d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib\include\impls\raygui">
+      <UniqueIdentifier>{45923578-8f25-472a-9bb0-c32e347a3ff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib\include\impls\other">
+      <UniqueIdentifier>{1560900a-6699-48c2-9657-54dcde1a812a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib\include\deps">
+      <UniqueIdentifier>{b8190d54-6dca-4ab6-97d0-bec90bd19e1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\raylib\include\wrapper">
+      <UniqueIdentifier>{e56c7419-1ea2-497e-ad13-fb2dc2d37e2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\Assimp">
+      <UniqueIdentifier>{180554b7-a8a6-4396-afd3-dd663a187c54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\Assimp\Compiler">
+      <UniqueIdentifier>{e82ac04f-821e-42ca-b937-86d79c77a2fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\Assimp\port">
+      <UniqueIdentifier>{6b0c0265-8283-44f9-a775-6c8899b0d8f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Deps\Assimp\port\AndroidJNI">
+      <UniqueIdentifier>{10b2f070-5f4f-48c4-826f-599865e0b753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine\Reflection">
+      <UniqueIdentifier>{bd38ae50-e0af-48a8-bc06-7bb84642bce9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="CastToNative.h">
-      <Filter>Source\Engine\Marshaller</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imgui.h">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_internal.h">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_rectpack.h">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_textedit.h">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="DataManager.h">
       <Filter>Source\Engine\HLAPI</Filter>
@@ -343,7 +382,7 @@
       <Filter>Source\Engine\Management</Filter>
     </ClInclude>
     <ClInclude Include="CypherLib.h">
-      <Filter>Source\Engine\Encryption</Filter>
+      <Filter>Headers\Engine\Encryption</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Archivos de origen\Engine</Filter>
@@ -359,9 +398,6 @@
     </ClInclude>
     <ClInclude Include="SceneObject.h">
       <Filter>Source\Engine\Management\MiddleLevel</Filter>
-    </ClInclude>
-    <ClInclude Include="Cast.h">
-      <Filter>Source\Engine\Marshaller</Filter>
     </ClInclude>
     <ClInclude Include="Voxel.h">
       <Filter>Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Voxel</Filter>
@@ -379,12 +415,6 @@
       <Filter>Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
     </ClInclude>
     <ClInclude Include="AsmLoader.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="EngineIncludes.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="GlIncludes.h">
       <Filter>Source\Engine</Filter>
     </ClInclude>
     <ClInclude Include="PreloadScript.h">
@@ -421,7 +451,7 @@
       <Filter>Source\Engine\EngineObjects</Filter>
     </ClInclude>
     <ClInclude Include="imgui\TextEditor\TextEditor.h">
-      <Filter>GUI\ImGui\TextEditor</Filter>
+      <Filter>Deps\GUI\ImGui\TextEditor</Filter>
     </ClInclude>
     <ClInclude Include="native\json.hpp">
       <Filter>Source\Engine\Native</Filter>
@@ -436,13 +466,13 @@
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClInclude>
     <ClInclude Include="imgui\FileExplorer\filedialog.h">
-      <Filter>GUI\ImGui\FileExplorer</Filter>
+      <Filter>Deps\GUI\ImGui\FileExplorer</Filter>
     </ClInclude>
     <ClInclude Include="Objects\LuaScript.h">
       <Filter>Source\Engine\EngineObjects\Script</Filter>
     </ClInclude>
     <ClInclude Include="imgui\Fonts\IconsFontAwesome4.h">
-      <Filter>GUI\ImGui\Fonts</Filter>
+      <Filter>Deps\GUI\ImGui\Fonts</Filter>
     </ClInclude>
     <ClInclude Include="Attribute.h">
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
@@ -453,32 +483,14 @@
     <ClInclude Include="LogFileReporter.h">
       <Filter>Source\Engine\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="EngineConfig.h">
-      <Filter>Source\Engine\Configuration</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\MeshRenderer.h">
       <Filter>Source\Engine\EngineObjects\ModelRenderer</Filter>
     </ClInclude>
     <ClInclude Include="Object\ObjectType.h">
       <Filter>Source\Engine\Object\Enums</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Layer.h">
-      <Filter>Source\Engine\Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Transform.h">
-      <Filter>Source\Engine\Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Vector2.h">
-      <Filter>Source\Engine\Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Vector3.h">
-      <Filter>Source\Engine\Object\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Object\ViewSpace.h">
       <Filter>Source\Engine\Object\Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Quaternion.h">
-      <Filter>Source\Engine\Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Camera.h">
       <Filter>Source\Engine\EngineObjects\Camera</Filter>
@@ -486,44 +498,41 @@
     <ClInclude Include="Objects\Camera3D.h">
       <Filter>Source\Engine\EngineObjects\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Color.h">
-      <Filter>Source\Engine\Object\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h">
-      <Filter>raylib\include\ext</Filter>
+      <Filter>Deps\raylib\include\ext</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\IconsFontAwesome6.h">
-      <Filter>raylib\include\ext</Filter>
+      <Filter>Deps\raylib\include\ext</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\imgui_impl_raylib.h">
-      <Filter>raylib\include\ext</Filter>
+      <Filter>Deps\raylib\include\ext</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\glad.h">
-      <Filter>raylib\include\deps</Filter>
+      <Filter>Deps\raylib\include\deps</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\rlImGui.h">
-      <Filter>raylib\include\impls\imgui</Filter>
+      <Filter>Deps\raylib\include\impls\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\rlImGuiColors.h">
-      <Filter>raylib\include\impls\imgui</Filter>
+      <Filter>Deps\raylib\include\impls\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\raygui.h">
-      <Filter>raylib\include\impls\raygui</Filter>
+      <Filter>Deps\raylib\include\impls\raygui</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\rPBR.h">
-      <Filter>raylib\include\impls\other</Filter>
+      <Filter>Deps\raylib\include\impls\other</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\rlights.h">
-      <Filter>raylib\include\impls\other</Filter>
+      <Filter>Deps\raylib\include\impls\other</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\x64\raylib.h">
-      <Filter>raylib\include</Filter>
+      <Filter>Deps\raylib\include</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\x64\raymath.h">
-      <Filter>raylib\include</Filter>
+      <Filter>Deps\raylib\include</Filter>
     </ClInclude>
     <ClInclude Include="Raylib\include\x64\rlgl.h">
-      <Filter>raylib\include</Filter>
+      <Filter>Deps\raylib\include</Filter>
     </ClInclude>
     <ClInclude Include="ManagedSignal.h">
       <Filter>Source\Engine\Signals</Filter>
@@ -542,12 +551,6 @@
     </ClInclude>
     <ClInclude Include="RenderPipelines\RaymarchSRP.h">
       <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Pipelines</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Macros.h">
-      <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Camera2D.h">
       <Filter>Source\Engine\EngineObjects\Camera</Filter>
@@ -579,9 +582,6 @@
     <ClInclude Include="Time.h">
       <Filter>Source\Engine\ScriptingAPI\EngineClasses\Time</Filter>
     </ClInclude>
-    <ClInclude Include="EngineGC.h">
-      <Filter>Source\Engine\GarbageCollector</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\EditorCamera.h">
       <Filter>Source\Engine\EngineObjects\Editor</Filter>
     </ClInclude>
@@ -591,47 +591,35 @@
     <ClInclude Include="Objects\UI\Button.h">
       <Filter>Source\Engine\EngineObjects\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Event.h">
-      <Filter>Source\Engine\Events</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\misc\cpp\imgui_stdlib.h">
-      <Filter>GUI\ImGui\misc\cpp</Filter>
+      <Filter>Deps\GUI\ImGui\misc\cpp</Filter>
     </ClInclude>
     <ClInclude Include="imgui\misc\freetype\imgui_freetype.h">
-      <Filter>GUI\ImGui\misc\freetype</Filter>
+      <Filter>Deps\GUI\ImGui\misc\freetype</Filter>
     </ClInclude>
     <ClInclude Include="imgui\misc\single_file\imgui_single_file.h">
-      <Filter>GUI\ImGui\misc\single_file</Filter>
-    </ClInclude>
-    <ClInclude Include="EditorGUI.h">
-      <Filter>Source\EngineTools\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="Reflection\ReflectedType.h">
-      <Filter>Source\Engine\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="imguistyleserializer.h">
-      <Filter>Source\EngineTools\Editor</Filter>
+      <Filter>Deps\GUI\ImGui\misc\single_file</Filter>
     </ClInclude>
     <ClInclude Include="imguizmo\GraphEditor.h">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="imguizmo\ImCurveEdit.h">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="imguizmo\ImGradient.h">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="imguizmo\ImGuizmo.h">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="imguizmo\ImSequencer.h">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="imguizmo\ImZoomSlider.h">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="cimgui\cimgui.h">
-      <Filter>GUI\cimgui</Filter>
+      <Filter>Deps\GUI\cimgui</Filter>
     </ClInclude>
     <ClInclude Include="PropertyAttribute.h">
       <Filter>Source\Engine\ScriptingAPI\Attributes</Filter>
@@ -639,11 +627,335 @@
     <ClInclude Include="ExecuteInEditModeAttribute.h">
       <Filter>Source\Engine\ScriptingAPI\Attributes</Filter>
     </ClInclude>
-    <ClInclude Include="EngineState.h">
-      <Filter>Source\Engine\Configuration</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\Style\ScopedStyle.h">
-      <Filter>GUI\ImGui\style</Filter>
+      <Filter>Deps\GUI\ImGui\style</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\UI\Image.h">
+      <Filter>Source\Engine\EngineObjects\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Physics\PhysicsService.h">
+      <Filter>Source\Engine\EngineObjects\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Macros.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imguistyleserializer.h">
+      <Filter>Headers\EngineTools\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorGUI.h">
+      <Filter>Headers\EngineTools\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Cast.h">
+      <Filter>Headers\Engine\Marshaller</Filter>
+    </ClInclude>
+    <ClInclude Include="CastToNative.h">
+      <Filter>Headers\Engine\Marshaller</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineConfig.h">
+      <Filter>Headers\Engine\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineState.h">
+      <Filter>Headers\Engine\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGC.h">
+      <Filter>Headers\Engine\GarbageCollector</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Headers\Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Color.h">
+      <Filter>Headers\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Layer.h">
+      <Filter>Headers\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Quaternion.h">
+      <Filter>Headers\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Transform.h">
+      <Filter>Headers\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Vector2.h">
+      <Filter>Headers\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Vector3.h">
+      <Filter>Headers\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\aabb.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\ai_assert.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\anim.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\AssertHandler.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Base64.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\BaseImporter.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Bitmap.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\BlobIOSystem.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\ByteSwapper.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\camera.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\cexport.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\cfileio.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\cimport.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\ColladaMetaData.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\color4.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\commonMetaData.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\CreateAnimMesh.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\DefaultIOStream.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\DefaultIOSystem.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\DefaultLogger.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\defs.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Exceptional.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Exporter.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\fast_atof.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\GenericProperty.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\GltfMaterial.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Hash.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Importer.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\importerdesc.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\IOStream.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\IOStreamBuffer.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\IOSystem.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\light.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\LineSplitter.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\LogAux.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Logger.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\LogStream.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\material.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\MathFunctions.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\matrix3x3.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\matrix4x4.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\MemoryIOWrapper.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\mesh.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\metadata.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\NullLogger.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\ObjMaterial.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\ParsingUtils.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\pbrmaterial.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\postprocess.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Profiler.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\ProgressHandler.hpp">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\qnan.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\quaternion.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\RemoveComments.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\scene.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\SceneCombiner.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\SGSpatialSort.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\SkeletonMeshBuilder.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\SmallVector.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\SmoothingGroups.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\SpatialSort.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\StandardShapes.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\StreamReader.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\StreamWriter.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\StringComparison.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\StringUtils.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Subdivision.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\texture.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\TinyFormatter.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\types.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\vector2.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\vector3.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\version.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Vertex.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\XmlParser.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\XMLTools.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\ZipArchiveIOSystem.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\config.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\revision.h">
+      <Filter>Deps\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Compiler\poppack1.h">
+      <Filter>Deps\Assimp\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Compiler\pstdint.h">
+      <Filter>Deps\Assimp\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\Compiler\pushpack1.h">
+      <Filter>Deps\Assimp\Compiler</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\port\AndroidJNI\AndroidJNIIOSystem.h">
+      <Filter>Deps\Assimp\port\AndroidJNI</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\assimp\port\AndroidJNI\BundledAssetIOSystem.h">
+      <Filter>Deps\Assimp\port\AndroidJNI</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpImpl\AssimpConverter.h">
+      <Filter>Headers\EngineTools\ModelWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="Reflection\ReflectedType.h">
+      <Filter>Headers\Engine\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="ManagedIncludes.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineIncludes.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GlIncludes.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\GameObject.h">
+      <Filter>Headers\Engine\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -654,19 +966,19 @@
       <Filter>Source\Engine\Marshaller</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_draw.cpp">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
-      <Filter>GUI\ImGui</Filter>
+      <Filter>Deps\GUI\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="WinAPI.cpp">
       <Filter>Source\Engine\Windows</Filter>
@@ -675,28 +987,13 @@
       <Filter>Source\EngineTools</Filter>
     </ClCompile>
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp">
-      <Filter>GUI\ImGui\TextEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Layer.cpp">
-      <Filter>Source\Engine\Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Vector2.cpp">
-      <Filter>Source\Engine\Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Vector3.cpp">
-      <Filter>Source\Engine\Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Quaternion.cpp">
-      <Filter>Source\Engine\Object\Source</Filter>
+      <Filter>Deps\GUI\ImGui\TextEditor</Filter>
     </ClCompile>
     <ClCompile Include="Packs.cpp">
       <Filter>Source\Engine\ObjectManagement\Types</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Color.cpp">
-      <Filter>Source\Engine\Object\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Raylib\include\rlImGui.cpp">
-      <Filter>raylib\include\impls\imgui</Filter>
+      <Filter>Deps\raylib\include\impls\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Attribute.cpp">
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
@@ -714,10 +1011,10 @@
       <Filter>Source\Engine\Events</Filter>
     </ClCompile>
     <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp">
-      <Filter>GUI\ImGui\misc\cpp</Filter>
+      <Filter>Deps\GUI\ImGui\misc\cpp</Filter>
     </ClCompile>
     <ClCompile Include="Raylib\craylib\craylib.cpp">
-      <Filter>raylib\include\wrapper</Filter>
+      <Filter>Deps\raylib\include\wrapper</Filter>
     </ClCompile>
     <ClCompile Include="Reflection\ReflectedType.cpp">
       <Filter>Source\Engine\Reflection</Filter>
@@ -726,22 +1023,22 @@
       <Filter>Source\EngineTools\Editor</Filter>
     </ClCompile>
     <ClCompile Include="imguizmo\GraphEditor.cpp">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClCompile>
     <ClCompile Include="imguizmo\ImCurveEdit.cpp">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClCompile>
     <ClCompile Include="imguizmo\ImGradient.cpp">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClCompile>
     <ClCompile Include="imguizmo\ImGuizmo.cpp">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClCompile>
     <ClCompile Include="imguizmo\ImSequencer.cpp">
-      <Filter>GUI\ImGuizmo</Filter>
+      <Filter>Deps\GUI\ImGuizmo</Filter>
     </ClCompile>
     <ClCompile Include="cimgui\cimgui.cpp">
-      <Filter>GUI\cimgui</Filter>
+      <Filter>Deps\GUI\cimgui</Filter>
     </ClCompile>
     <ClCompile Include="Screen.h">
       <Filter>Source\Engine\ScriptingAPI\EngineClasses\Screen</Filter>
@@ -750,7 +1047,37 @@
       <Filter>Source\Engine\ScriptingAPI\EngineClasses\Screen</Filter>
     </ClCompile>
     <ClCompile Include="imgui\Style\ScopedStyle.cpp">
-      <Filter>GUI\ImGui\style</Filter>
+      <Filter>Deps\GUI\ImGui\style</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Physics\PhysicsService.cpp">
+      <Filter>Source\Engine\EngineObjects\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="DataPacks.cpp">
+      <Filter>Source\Engine\ObjectManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Color.cpp">
+      <Filter>Source\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Layer.cpp">
+      <Filter>Source\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Quaternion.cpp">
+      <Filter>Source\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Vector2.cpp">
+      <Filter>Source\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Vector3.cpp">
+      <Filter>Source\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="AssimpImpl\AssimpConverter.cpp">
+      <Filter>Source\EngineTools\ModelWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Transform.cpp">
+      <Filter>Source\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\GameObject.cpp">
+      <Filter>Source\Engine\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -818,40 +1145,76 @@
       <Filter>Binaries\fbx2gltf</Filter>
     </None>
     <None Include="imgui\misc\debuggers\imgui.gdb">
-      <Filter>GUI\ImGui\misc\debuggers</Filter>
+      <Filter>Deps\GUI\ImGui\misc\debuggers</Filter>
     </None>
     <None Include="imgui\misc\debuggers\imgui.natstepfilter">
-      <Filter>GUI\ImGui\misc\debuggers</Filter>
+      <Filter>Deps\GUI\ImGui\misc\debuggers</Filter>
+    </None>
+    <None Include="assimp\assimp\color4.inl">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\config.h.in">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\material.inl">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\matrix3x3.inl">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\matrix4x4.inl">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\module.modulemap">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\quaternion.inl">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\revision.h.in">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\SmoothingGroups.inl">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\vector2.inl">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\vector3.inl">
+      <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="assimp\assimp\.editorconfig">
+      <Filter>Deps\Assimp</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="imgui\misc\README.txt">
-      <Filter>GUI\ImGui\misc</Filter>
+      <Filter>Deps\GUI\ImGui\misc</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="imgui\misc\debuggers\imgui.natvis">
-      <Filter>GUI\ImGui\misc\debuggers</Filter>
+      <Filter>Deps\GUI\ImGui\misc\debuggers</Filter>
     </Natvis>
   </ItemGroup>
   <ItemGroup>
     <Font Include="imgui\misc\fonts\Cousine-Regular.ttf">
-      <Filter>GUI\ImGui\misc\fonts</Filter>
+      <Filter>Deps\GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\DroidSans.ttf">
-      <Filter>GUI\ImGui\misc\fonts</Filter>
+      <Filter>Deps\GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\Karla-Regular.ttf">
-      <Filter>GUI\ImGui\misc\fonts</Filter>
+      <Filter>Deps\GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\ProggyClean.ttf">
-      <Filter>GUI\ImGui\misc\fonts</Filter>
+      <Filter>Deps\GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\ProggyTiny.ttf">
-      <Filter>GUI\ImGui\misc\fonts</Filter>
+      <Filter>Deps\GUI\ImGui\misc\fonts</Filter>
     </Font>
     <Font Include="imgui\misc\fonts\Roboto-Medium.ttf">
-      <Filter>GUI\ImGui\misc\fonts</Filter>
+      <Filter>Deps\GUI\ImGui\misc\fonts</Filter>
     </Font>
   </ItemGroup>
 </Project>

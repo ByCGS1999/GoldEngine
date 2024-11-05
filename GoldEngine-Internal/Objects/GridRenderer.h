@@ -2,14 +2,14 @@
 
 namespace Engine::EngineObjects
 {
-	public ref class GridRenderer : public Engine::Internal::Components::Object
+	public ref class GridRenderer : public Engine::Internal::Components::GameObject
 	{
 	public:
 		int lines;
 		float spacing;
 
 	public:
-		GridRenderer(String^ name, Engine::Internal::Components::Transform^ trans, int lines, float spacing) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::GridRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		GridRenderer(System::String^ name, Engine::Internal::Components::Transform^ trans, int lines, float spacing) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::GridRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->lines = lines;
 			this->spacing = spacing;

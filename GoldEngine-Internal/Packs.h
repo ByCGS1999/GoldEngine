@@ -4,7 +4,7 @@
 
 namespace Engine::Assets::Storage::Types
 {
-	public struct ShaderPack
+	struct ShaderPack
 	{
 	private:
 		unsigned int id;
@@ -23,7 +23,7 @@ namespace Engine::Assets::Storage::Types
 		void freealloc();
 	};
 	
-	public struct ModelPack
+	struct ModelPack
 	{
 	private:
 		unsigned int id;
@@ -43,7 +43,7 @@ namespace Engine::Assets::Storage::Types
 	};
 
 
-	public struct Texture2DPack
+	struct Texture2DPack
 	{
 	private:
 		unsigned int id;

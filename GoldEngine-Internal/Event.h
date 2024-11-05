@@ -7,7 +7,7 @@ namespace Engine::Scripting::Events
 	{
 	private:
 		delegate void LuaEvent(cli::array<MoonSharp::Interpreter::DynValue^>^);
-		System::Object^ pInvokable;
+		System::Collections::Generic::List<System::Object^>^ invokables;
 		bool isLuaFunction = false;
 		bool isDelegate = false;
 		bool isAction = false;
@@ -23,12 +23,14 @@ namespace Engine::Scripting::Events
 		void connect(System::Action^);
 		void connect(MoonSharp::Interpreter::DynValue^);
 
-		void disconnect();
-
+		void disconnect(System::Delegate^);
+		void disconnect(System::Action^);
+		void disconnect(MoonSharp::Interpreter::DynValue^);
 
 	public:
 		System::Object^ invoke(cli::array<System::Object^>^);
 		System::Object^ invoke();
 		System::Object^ raiseExecution(cli::array<System::Object^>^);
+		System::Object^ raiseExecution();
 	};
 }

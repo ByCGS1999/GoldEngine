@@ -1,10 +1,14 @@
+#include "Includes.h"
+#include "GlIncludes.h"
+#include "CastToNative.h"
+#include "LoggingAPI.h"
 #include "Event.h"
 
 using namespace Engine::Scripting::Events;
 
 Event::Event()
 {
-	this->pInvokable = nullptr;
+	this->invokables = gcnew System::Collections::Generic::List<System::Object^>();
 	this->isLuaFunction = false;
 	this->isAction = false;
 	this->isDelegate = false;
@@ -12,7 +16,7 @@ Event::Event()
 
 void Event::connect(System::Delegate^ delegate)
 {
-	this->pInvokable = delegate;
+	this->invokables->Add(delegate);
 	this->isLuaFunction = false;
 	this->isAction = false;
 	this->isDelegate = true;
@@ -20,7 +24,7 @@ void Event::connect(System::Delegate^ delegate)
 
 void Event::connect(System::Action^ delegate)
 {
-	this->pInvokable = delegate;
+	this->invokables->Add(delegate);
 	this->isLuaFunction = false;
 	this->isDelegate = false;
 	this->isAction = true;
@@ -30,16 +34,32 @@ void Event::connect(MoonSharp::Interpreter::DynValue^ function)
 {
 	if (function->Type == MoonSharp::Interpreter::DataType::Function)
 	{
-		this->pInvokable = function->Function->GetDelegate();
+		this->invokables->Add(function->Function->GetDelegate());
 		this->isLuaFunction = true;
 		this->isAction = false;
 		this->isDelegate = false;
 	}
 }
 
-void Event::disconnect()
+void Event::disconnect(System::Delegate^ delegate)
 {
-	this->pInvokable = nullptr;
+	this->invokables->Remove(delegate);
+	this->isLuaFunction = false;
+	this->isAction = false;
+	this->isDelegate = false;
+}
+
+void Event::disconnect(System::Action^ delegate)
+{
+	this->invokables->Remove(delegate);
+	this->isLuaFunction = false;
+	this->isAction = false;
+	this->isDelegate = false;
+}
+
+void Event::disconnect(MoonSharp::Interpreter::DynValue^ delegate)
+{
+	this->invokables->Remove(delegate);
 	this->isLuaFunction = false;
 	this->isAction = false;
 	this->isDelegate = false;
@@ -47,55 +67,101 @@ void Event::disconnect()
 
 System::Object^ Event::invoke()
 {
-	if (pInvokable == nullptr)
-		return nullptr;
-
-	if (isLuaFunction)
+	try
 	{
-		MoonSharp::Interpreter::ScriptFunctionDelegate^ delegate = (MoonSharp::Interpreter::ScriptFunctionDelegate^)pInvokable;
+		if (invokables == nullptr)
+			return nullptr;
 
-		delegate->Invoke();
+		for each (System::Object^ pInvokable in invokables)
+		{
+			if (isLuaFunction)
+			{
+				MoonSharp::Interpreter::ScriptFunctionDelegate^ delegate = (MoonSharp::Interpreter::ScriptFunctionDelegate^)pInvokable;
+
+				return delegate->Invoke();
+			}
+			else if (isDelegate)
+			{
+				System::Delegate^ delegate = (System::Delegate^)pInvokable;
+
+				return delegate->DynamicInvoke();
+			}
+			else if (isAction)
+			{
+				System::Action^ delegate = (System::Action^)pInvokable;
+
+				return delegate->DynamicInvoke();
+			}
+		}
 	}
-	else if (isDelegate)
+	catch (MoonSharp::Interpreter::ScriptRuntimeException^ exception)
 	{
-		System::Delegate^ delegate = (System::Delegate^)pInvokable;
-
-		delegate->DynamicInvoke();
+		printError(exception->Message);
+		printError(exception->StackTrace);
+		printError("Lua Error Inspector:");
+		printError(exception->DecoratedMessage);
 	}
-	else if (isAction)
+	catch (System::Exception^ exception)
 	{
-		System::Action^ delegate = (System::Action^)pInvokable;
-
-		delegate->DynamicInvoke();
+		printError(exception->Message);
+		printError(exception->StackTrace);
 	}
+
+	return nullptr;
 }
 
 System::Object^ Event::invoke(cli::array<System::Object^>^ objects)
 {
-	if (pInvokable == nullptr)
-		return nullptr;
-
-	if (isLuaFunction)
+	try
 	{
-		MoonSharp::Interpreter::ScriptFunctionDelegate^ delegate = (MoonSharp::Interpreter::ScriptFunctionDelegate^)pInvokable;
+		if (invokables == nullptr)
+			return nullptr;
 
-		return delegate->Invoke(objects);
+		for each (System::Object ^ pInvokable in invokables)
+		{
+			if (isLuaFunction)
+			{
+				MoonSharp::Interpreter::ScriptFunctionDelegate^ delegate = (MoonSharp::Interpreter::ScriptFunctionDelegate^)pInvokable;
+				
+				return delegate->Invoke(objects);
+			}
+			else if (isDelegate)
+			{
+				System::Delegate^ delegate = (System::Delegate^)pInvokable;
+
+				return delegate->DynamicInvoke(objects);
+			}
+			else if (isAction)
+			{
+				System::Action^ delegate = (System::Action^)pInvokable;
+
+				return delegate->DynamicInvoke(objects);
+			}
+		}
 	}
-	else if(isDelegate)
+	catch (MoonSharp::Interpreter::ScriptRuntimeException^ exception)
 	{
-		System::Delegate^ delegate = (System::Delegate^)pInvokable;
-
-		return delegate->DynamicInvoke(objects);
+		printError(exception->Message);
+		printError(exception->StackTrace);
+		printError("Lua Error Inspector:");
+		printError(exception->DecoratedMessage);
 	}
-	else if (isAction)
+	catch (System::Exception^ exception)
 	{
-		System::Action^ delegate = (System::Action^)pInvokable;
-
-		return delegate->DynamicInvoke(objects);
+		printError(exception->Message);
+		printError(exception->StackTrace);
 	}
+
+	return nullptr;
 }
 
 System::Object^ Event::raiseExecution(cli::array<System::Object^>^ objects)
 {
 	return invoke(objects);
+}
+
+
+System::Object^ Event::raiseExecution()
+{
+	return invoke();
 }

@@ -21,7 +21,7 @@ namespace Engine::Assets::Management
 	private:
 		void ParseContentData()
 		{
-			DataPacks::singleton().FreeAll();
+			Engine::Assets::Storage::DataPacks::singleton().FreeAll();
 			print("[DataPack]:", "Adding stored assets to the datapacks");
 
 			for each (unsigned int shader_id in shaders->Keys)
@@ -50,8 +50,8 @@ namespace Engine::Assets::Management
 				unsigned int shaderId = materials[material_id];
 
 				Material m;
-				m.shader = DataPacks::singleton().GetShader(shaderId);
-				DataPacks::singleton().AddMaterial(material_id, m);
+				m.shader = Engine::Assets::Storage::DataPacks::singleton().GetShader(shaderId);
+				Engine::Assets::Storage::DataPacks::singleton().AddMaterial(material_id, m);
 			}
 		}
 
@@ -120,7 +120,7 @@ namespace Engine::Assets::Management
 				printConsole("VertexShader: " + vs);
 				printConsole("FragmentShader: " + fs);
 
-				DataPacks::singleton().AddShader(id, s);
+				Engine::Assets::Storage::DataPacks::singleton().AddShader(id, s);
 
 				return s;
 			}
@@ -142,7 +142,7 @@ namespace Engine::Assets::Management
 
 				print("[Resource Manager]", "------------------------------------------");
 
-				DataPacks::singleton().AddShader(id, s);
+				Engine::Assets::Storage::DataPacks::singleton().AddShader(id, s);
 
 				return s;
 			}
@@ -159,7 +159,7 @@ namespace Engine::Assets::Management
 
 				Model m = LoadModel(text.c_str());
 
-				DataPacks::singleton().AddModel(id, m);
+				Engine::Assets::Storage::DataPacks::singleton().AddModel(id, m);
 
 				return m;
 			}
@@ -171,7 +171,7 @@ namespace Engine::Assets::Management
 
 				Model m = LoadModel(text.c_str());
 
-				DataPacks::singleton().AddModel(id, m);
+				Engine::Assets::Storage::DataPacks::singleton().AddModel(id, m);
 
 				return m;
 			}
@@ -180,9 +180,9 @@ namespace Engine::Assets::Management
 		Material AddMaterials(unsigned int id, unsigned int shaderId)
 		{
 			Material m;
-			m.shader = DataPacks::singleton().GetShader(shaderId);
+			m.shader = Engine::Assets::Storage::DataPacks::singleton().GetShader(shaderId);
 			materials->Add(id, shaderId);
-			DataPacks::singleton().AddMaterial(id, m);
+			Engine::Assets::Storage::DataPacks::singleton().AddMaterial(id, m);
 			return m;
 		}
 
@@ -205,7 +205,7 @@ namespace Engine::Assets::Management
 
 				Texture2D tex = LoadTexture(text.c_str());
 
-				DataPacks::singleton().AddTexture2D(id, tex);
+				Engine::Assets::Storage::DataPacks::singleton().AddTexture2D(id, tex);
 
 				return tex;
 			}
@@ -224,7 +224,7 @@ namespace Engine::Assets::Management
 
 				print("[Resource Manager]", "------------------------------------------");
 
-				DataPacks::singleton().AddTexture2D(id, texture);
+				Engine::Assets::Storage::DataPacks::singleton().AddTexture2D(id, texture);
 
 				return texture;
 			}

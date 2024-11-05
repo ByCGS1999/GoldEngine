@@ -19,10 +19,10 @@ namespace Engine::EngineObjects
 	}
 	*/
 
-	public ref class PBRModelRenderer : public Engine::Internal::Components::Object
+	public ref class PBRModelRenderer : public Engine::Internal::Components::GameObject
 	{
 	public:
-		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 
 		}
@@ -38,7 +38,7 @@ namespace Engine::EngineObjects
 		unsigned int texture_id;
 		unsigned int color_hex;
 
-		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer, this->tag)
+		PBRModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::PBR_ModelRenderer, this->tag)
 		{
 			rPBR::PBRModel pbrModel = rPBR::PBRModelLoad(&DataPacks::singleton().GetModel(model));
 			model_id = model;
@@ -89,7 +89,7 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			auto t = GetTransform();
+			auto t = getTransform();
 			Color c =
 			{
 				color_hex >> 0,

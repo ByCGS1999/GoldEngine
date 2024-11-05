@@ -2,13 +2,13 @@
 
 namespace Engine::EngineObjects
 {
-	public ref class CubeRenderer : public Engine::Internal::Components::Object
+	public ref class CubeRenderer : public Engine::Internal::Components::GameObject
 	{
 	public:
 		unsigned int color;
 
 	public:
-		CubeRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::CubeRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		CubeRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int tint) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::CubeRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->color = tint;
 		}
@@ -20,7 +20,7 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			auto v3 = GetTransform()->scale->toNative();
+			auto v3 = getTransform()->scale->toNative();
 			RAYLIB::Color c =
 			{
 				color >> 0,
@@ -29,7 +29,7 @@ namespace Engine::EngineObjects
 				color >> 24
 			};
 			
-			DrawCube(GetTransform()->position->toNative(), v3.x, v3.y, v3.z , c);
+			DrawCube(getTransform()->position->toNative(), v3.x, v3.y, v3.z , c);
 		}
 
 	public:

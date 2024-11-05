@@ -13,15 +13,8 @@ namespace Engine::Components
 		Vector3(float, float, float);
 		Vector3();
 
-		Engine::Components::Vector2^ toVector2()
-		{
-			return gcnew Engine::Components::Vector2(x, y);
-		}
-
-		System::Numerics::Vector3^ toNumericsVector3()
-		{
-			return gcnew System::Numerics::Vector3(this->x, this->y, this->z);
-		}
+		Engine::Components::Vector2^ toVector2();
+		System::Numerics::Vector3^ toNumericsVector3();
 
 		void Set(float x, float y, float z);
 
@@ -51,9 +44,9 @@ namespace Engine::Components
 
 		static Vector3^ lerp(Vector3^ origin, Vector3^ target, float interpolate)
 		{
-			auto newX = ::Lerp(origin->x, target->x, interpolate);
-			auto newY = ::Lerp(origin->y, target->y, interpolate);
-			auto newZ = ::Lerp(origin->z, target->z, interpolate);
+			auto newX = RAYMATH::Lerp(origin->x, target->x, interpolate);
+			auto newY = RAYMATH::Lerp(origin->y, target->y, interpolate);
+			auto newZ = RAYMATH::Lerp(origin->z, target->z, interpolate);
 
 			return gcnew Vector3(newX, newY, newZ);
 		}
@@ -100,12 +93,12 @@ namespace Engine::Components
 
 		static float Dot(Vector3^ left, Vector3^ right)
 		{
-			return (Vector3DotProduct(left->toNative(), right->toNative()));
+			return (RAYMATH::Vector3DotProduct(left->toNative(), right->toNative()));
 		}
 
 		static float Distance(Vector3^ left, Vector3^ right)
 		{
-			return Vector3Distance(left->toNative(), right->toNative());
+			return RAYMATH::Vector3Distance(left->toNative(), right->toNative());
 		}
 
 		bool Equals(Vector3^ value) override

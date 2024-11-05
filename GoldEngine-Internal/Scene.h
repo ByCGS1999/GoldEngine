@@ -87,7 +87,7 @@ namespace Engine::Management
 			{
 				printConsole("Loading asset -> " + packRoute);
 
-				Engine::Assets::IO::FileManager::ReadCustomFileFormat(packRoute, "ThreadcallNull");
+				Engine::Assets::IO::FileManager::ReadCustomFileFormat(packRoute, Engine::Config::EngineSecrets::singleton()->encryptionPassword);
 			}
 
 			sceneDatapack->setFile(sceneRequirements);
@@ -130,7 +130,7 @@ namespace Engine::Management
 			}
 		}
 
-		void AddObjectToScene(Engine::Internal::Components::Object^ object)
+		void AddObjectToScene(Engine::Internal::Components::GameObject^ object)
 		{
 			auto tmp = gcnew Engine::Management::MiddleLevel::SceneObject
 			(
@@ -174,9 +174,9 @@ namespace Engine::Management
 			return false;
 		}
 
-		Engine::Internal::Components::Object^ GetMember(System::String^ datamodel)
+		Engine::Internal::Components::GameObject^ GetMember(System::String^ datamodel)
 		{
-			Engine::Internal::Components::Object^ retn = nullptr;
+			Engine::Internal::Components::GameObject^ retn = nullptr;
 			for each (auto objects in drawQueue)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
@@ -188,9 +188,9 @@ namespace Engine::Management
 			return nullptr;
 		}
 
-		Engine::Internal::Components::Object^ GetDatamodelMember(System::String^ datamodel)
+		Engine::Internal::Components::GameObject^ GetDatamodelMember(System::String^ datamodel)
 		{
-			Engine::Internal::Components::Object^ retn = nullptr;
+			Engine::Internal::Components::GameObject^ retn = nullptr;
 			for each (auto objects in drawQueue)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
@@ -206,9 +206,9 @@ namespace Engine::Management
 		}
 
 
-		Engine::Internal::Components::Object^ GetDatamodelMember(System::String^ datamodel, bool create)
+		Engine::Internal::Components::GameObject^ GetDatamodelMember(System::String^ datamodel, bool create)
 		{
-			Engine::Internal::Components::Object^ retn = nullptr;
+			Engine::Internal::Components::GameObject^ retn = nullptr;
 			for each (auto objects in drawQueue)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
@@ -245,7 +245,7 @@ namespace Engine::Management
 			}
 		}
 
-		void PushToRenderQueue(Engine::Internal::Components::Object^ object)
+		void PushToRenderQueue(Engine::Internal::Components::GameObject^ object)
 		{
 			msclr::lock^ l = gcnew msclr::lock(drawQueue);
 			{
@@ -256,9 +256,9 @@ namespace Engine::Management
 
 				if (!sceneFinishedLoading)
 				{
-					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::Object::Setup);
-					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::Object::Init);
-					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::Object::Start);
+					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::GameObject::Setup);
+					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::GameObject::Init);
+					onLoadedScene += gcnew OnSceneLoaded(object, &Engine::Internal::Components::GameObject::Start);
 				}
 				else
 				{
@@ -279,9 +279,9 @@ namespace Engine::Management
 
 				if (!sceneFinishedLoading)
 				{
-					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::Object::Setup);
-					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::Object::Init);
-					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::Object::Start);
+					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::GameObject::Setup);
+					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::GameObject::Init);
+					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::GameObject::Start);
 				}
 				else
 				{
@@ -294,9 +294,9 @@ namespace Engine::Management
 		}
 
 
-		Engine::Internal::Components::Object^ GetObjectByNameFromDrawQueue(System::String^ name)
+		Engine::Internal::Components::GameObject^ GetObjectByNameFromDrawQueue(System::String^ name)
 		{
-			Engine::Internal::Components::Object^ object = nullptr;
+			Engine::Internal::Components::GameObject^ object = nullptr;
 
 			for each (Engine::Management::MiddleLevel::SceneObject^ obj in GetRenderQueue())
 			{
@@ -311,16 +311,19 @@ namespace Engine::Management
 		}
 
 	private protected:
-		Engine::Internal::Components::Object^ AddDatamodelMember(System::String^ datamodel)
+		Engine::Internal::Components::GameObject^ AddDatamodelMember(System::String^ datamodel)
 		{
-			return gcnew Engine::Internal::Components::Object(datamodel,
+			return gcnew Engine::Internal::Components::GameObject(datamodel,
 				gcnew Engine::Internal::Components::Transform(
 					gcnew Engine::Components::Vector3(0, 0, 0),
 					gcnew Engine::Components::Vector3(0, 0, 0),
 					gcnew Engine::Components::Vector3(1, 1, 1),
 					nullptr
 				),
-				Engine::Internal::Components::ObjectType::Datamodel, "", Engine::Scripting::LayerManager::GetLayerFromId(1));
+				Engine::Internal::Components::ObjectType::Datamodel, 
+				"", 
+				Engine::Scripting::LayerManager::GetLayerFromId(0)
+			);
 		}
 
 	public:

@@ -10,7 +10,7 @@ namespace Engine::EngineObjects
 		{
 			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
 			{
-				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+				Singleton<Engine::Scripting::ObjectManager^>::Instance->PatchAttributeObject(attrib);
 				attrib->synchronizeDescriptor();
 			}
 		}
@@ -21,7 +21,7 @@ namespace Engine::EngineObjects
 
 			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
 			{
-				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+				Singleton<Engine::Scripting::ObjectManager^>::Instance->PatchAttributeObject(attrib);
 				attrib->synchronizeDescriptor();
 			}
 
@@ -34,7 +34,7 @@ namespace Engine::EngineObjects
 
 			for each (Engine::Scripting::Attribute ^ attrib in attributes->attributes)
 			{
-				Singleton<ObjectManager^>::Instance->PatchAttributeObject(attrib);
+				Singleton<Engine::Scripting::ObjectManager^>::Instance->PatchAttributeObject(attrib);
 				attrib->synchronizeDescriptor();
 			}
 

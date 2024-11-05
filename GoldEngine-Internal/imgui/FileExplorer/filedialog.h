@@ -31,6 +31,8 @@ namespace Engine::Editor::Gui
 	public:
 		fileExplorer(std::string title)
 		{
+			Singleton<fileExplorer^>::Create(this);
+
 			this->title = gcnew String(title.c_str());
 			open = false;
 			files = gcnew List<String^>();
@@ -159,9 +161,11 @@ namespace Engine::Editor::Gui
 				registeredFont = true;
 			}
 
-			ImGui::OpenPopup(CastStringToNative(title).c_str());
+			const char* name = CastStringToNative(title).c_str();
+
+			ImGui::OpenPopup(name);
 			bool isFile = !isDirectory(selectedFile);
-			if (ImGui::BeginPopupModal(CastStringToNative(title).c_str(), (bool*)false, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize))
+			if (ImGui::BeginPopupModal(name, (bool*)false, ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoResize))
 			{
 				ImGui::SetWindowSize({ 899,462 });
 

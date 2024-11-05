@@ -1,7 +1,5 @@
 #pragma once
 #include <list>
-#include "../Object/Vector3.h"
-#include "../Object/Transform.h"
 #include "LightManager.h"
 
 namespace Engine::EngineObjects
@@ -51,7 +49,7 @@ namespace Engine::EngineObjects
 		};
 	}
 
-	public ref class LightSource : public Engine::Internal::Components::Object
+	public ref class LightSource : public Engine::Internal::Components::GameObject
 	{
 	private:
 		Native::NativeLightSource* nativeLightSource;
@@ -71,7 +69,7 @@ namespace Engine::EngineObjects
 		unsigned int oldShaderId;
 
 	public:
-		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned int lightColor, int lightType, Engine::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::LightSource, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		LightSource(String^ name, Engine::Internal::Components::Transform^ transform, unsigned int lightColor, int lightType, Engine::Components::Vector3^ target, float intensity, unsigned int shader) : Engine::Internal::Components::GameObject(name, transform, Engine::Internal::Components::ObjectType::LightSource, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->lightType = (rPBR::LightType)lightType;
 			this->lightColor = lightColor;
@@ -88,7 +86,7 @@ namespace Engine::EngineObjects
 
 			nativeLightSource = new Native::NativeLightSource(
 				this->lightType,
-				GetTransform()->position->toNative(),
+				getTransform()->position->toNative(),
 				{0,0,0},
 				GetColor(this->lightColor),
 				this->intensity,
@@ -120,7 +118,7 @@ namespace Engine::EngineObjects
 			Shader& s = DataPacks::singleton().GetShader(this->shaderId);
 			nativeLightSource = new Native::NativeLightSource(
 				this->lightType,
-				GetTransform()->position->toNative(),
+				getTransform()->position->toNative(),
 				this->target->toNative(),
 				GetColor(this->lightColor),
 				this->intensity,
@@ -149,7 +147,7 @@ namespace Engine::EngineObjects
 		{
 			nativeLightSource->SetLightEnabled(enabled);
 			nativeLightSource->SetIntensity(intensity);
-			nativeLightSource->SetPosition(GetTransform()->position->toNative());
+			nativeLightSource->SetPosition(getTransform()->position->toNative());
 			nativeLightSource->SetTarget(Engine::Components::Vector3::zero()->toNative());
 
 			float red = static_cast<float>((lightColor >> 0) & 0xFF) * lightPower;
@@ -188,7 +186,7 @@ namespace Engine::EngineObjects
 
 			int lightType = this->lightType;
 
-			auto lightTransform = this->GetTransform();
+			auto lightTransform = this->getTransform();
 
 			if (lightType == rPBR::LIGHT_POINT)
 			{
@@ -359,7 +357,7 @@ namespace Engine::EngineObjects
 				}
 
 				int lightCountLoc = GetShaderLocation(s, "numOfLights");
-				int maxLightCount = _light.size();
+				int maxLightCount = lightSources->Count;
 				SetShaderValue(s, lightCountLoc, &maxLightCount, SHADER_UNIFORM_INT);
 
 				TraceLog(LOG_INFO, "Lights %d", _light.size());
@@ -402,7 +400,7 @@ namespace Engine::EngineObjects
 					lights.push_back(t->GetLight());
 				}
 
-				rPBR::ReorganizeLights(lights.data());
+				rPBR::ReorganizeLights(lights);
 
 				return lightSources->IndexOf(light);
 			}
@@ -421,7 +419,7 @@ namespace Engine::EngineObjects
 				lights.push_back(t->GetLight());
 			}
 
-			rPBR::ReorganizeLights(lights.data());
+			rPBR::ReorganizeLights(lights);
 			lightSources->Remove(light);
 		}
 
@@ -470,7 +468,7 @@ namespace Engine::EngineObjects
 			shaderId = (unsigned int)attributes->getAttribute("shaderId")->getValue<UInt32>();
 			ShaderUpdate();
 
-			rlCheckErrors();
+			RLGL::rlCheckErrors();
 		}
 
 		void DrawGizmo() override
@@ -508,7 +506,7 @@ namespace Engine::EngineObjects
 	public:
 		void Update() override
 		{
-
+			LightUpdate();
 		}
 
 		void LightUpdate()
@@ -518,6 +516,19 @@ namespace Engine::EngineObjects
 				lightNum = lightSources->Count;
 				shaderId = attributes->getAttribute("shaderId")->getValue<unsigned int>();
 				ShaderUpdate();
+			}
+
+			std::vector<int> indexes = std::vector<int>();
+
+			for (int x = 0; x < lightSources->Count; x++)
+			{
+				if (lightSources[x] == nullptr)
+					indexes.push_back(x);
+			}
+
+			for (int arg : indexes)
+			{
+				lightSources->RemoveAt(arg);
 			}
 
 			max_lights = lightSources->Count;

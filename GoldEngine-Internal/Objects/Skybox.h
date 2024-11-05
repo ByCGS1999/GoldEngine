@@ -15,7 +15,7 @@ namespace Engine::EngineObjects
 		};
 	}
 
-	public ref class Skybox : Engine::Internal::Components::Object
+	public ref class Skybox : Engine::Internal::Components::GameObject
 	{
 	private:
 		Native::NativeSkybox* nativeSkybox;
@@ -25,7 +25,7 @@ namespace Engine::EngineObjects
 		unsigned int material;
 		unsigned int texture;
 
-		Skybox(String^ s, Engine::Internal::Components::Transform^ t, unsigned int modelId, unsigned int matId, unsigned int texturePath) : Object(s, t, Engine::Internal::Components::ObjectType::Skybox, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		Skybox(System::String^ s, Engine::Internal::Components::Transform^ t, unsigned int modelId, unsigned int matId, unsigned int texturePath) : GameObject(s, t, Engine::Internal::Components::ObjectType::Skybox, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			material = matId;
 			texture = texturePath;
@@ -45,9 +45,9 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			auto t = GetTransform();
+			auto t = getTransform();
 
-			nativeSkybox->model->transform = MatrixRotateXYZ({
+			nativeSkybox->model->transform = RAYMATH::MatrixRotateXYZ({
 				DEG2RAD * this->transform->scale->x,
 				DEG2RAD * this->transform->scale->y,
 				DEG2RAD * this->transform->scale->z

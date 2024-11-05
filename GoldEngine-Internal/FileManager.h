@@ -1,4 +1,5 @@
 #pragma once
+
 using namespace System;
 using namespace System::IO;
 
@@ -148,10 +149,11 @@ namespace Engine::Assets::IO
 						Directory::CreateDirectory(Path::GetDirectoryName("Data/unpacked/" + fN));
 						auto fS = File::Open("Data/unpacked/" + fN, FileMode::OpenOrCreate);
 						auto bW = gcnew BinaryWriter(fS);
-						bW->Flush();
+
 						bW->Write(
 							fC
 						);
+						bW->Flush();
 
 						bW->Close();
 					}

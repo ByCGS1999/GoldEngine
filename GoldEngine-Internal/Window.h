@@ -49,7 +49,7 @@ namespace Engine
 		{
 			InitWindow(width, height, name);
 			InitAudioDevice();
-			rlglInit(width, height);
+			RLGL::rlglInit(width, height);
 			rlImGuiSetup(true);
 		}
 

@@ -7,6 +7,6 @@ public ref class SceneFormat
 public:
 	String^ sceneName;
 
-	List<Engine::Internal::Components::Object^>^ sceneObjects;
+	List<Engine::Internal::Components::GameObject^>^ sceneObjects;
 };
 

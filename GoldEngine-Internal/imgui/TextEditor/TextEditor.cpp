@@ -3558,7 +3558,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"GetObjectsByType",
 			"GetObjectsOfType",
 			"GetFirstObjectByTag",
-			"GetFirstObjectOfName",
+			"GetFirstObjectByName",
 			"GetFirstObjectOfType",
 			"GetChildrenOf",
 			"GetObjectByUid",

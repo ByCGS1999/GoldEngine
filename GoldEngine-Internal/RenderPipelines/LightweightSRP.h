@@ -59,7 +59,7 @@ namespace Engine::Render::Pipelines
 
         }
 
-        void PreRenderObject(Engine::Internal::Components::Object^ engineObject) override
+        void PreRenderObject(Engine::Internal::Components::GameObject^ engineObject) override
         {
             engineObject->GameDraw();
         }

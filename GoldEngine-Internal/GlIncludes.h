@@ -1,10 +1,18 @@
 #pragma once
 
-#include "Raylib/include/x64/raylib.h"
-#include "Raylib/include/x64/raymath.h"
-#include "Raylib/include/x64/rlgl.h"
+#pragma managed(push, off)
 
-using namespace RAYLIB;
+#include "Raylib/include/x64/raylib.h"
+
+namespace RAYMATH
+{
+#include "Raylib/include/x64/raymath.h"
+}
+
+namespace RLGL
+{
+#include "Raylib/include/x64/rlgl.h"
+}
 
 #include "Raylib/include/raygui.h"
 #include "Raylib/include/rlImGui.h"
@@ -15,3 +23,5 @@ using namespace RAYLIB;
 #define GLIMPL
 #include "Raylib/include/rPBR.h"
 #endif
+
+#pragma managed(pop)

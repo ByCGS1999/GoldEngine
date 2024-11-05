@@ -9,4 +9,12 @@ namespace Engine::Components
 		this->layerMask = mask;
 		this->layerName = name;
 	}
+
+	bool Layer::IsLayer(Layer^ layerB)
+	{
+		if ((this->layerName->Equals(layerB->layerName)) && (this->layerMask == layerB->layerMask))
+			return true;
+	
+		return false;
+	}
 }

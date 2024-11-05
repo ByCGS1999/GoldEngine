@@ -46,7 +46,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CLRSupport>NetFramework</CLRSupport>
+    <CLRSupport>NetCore</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -108,20 +108,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ManagedAssembly>true</ManagedAssembly>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
     <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
+    <ManagedAssembly>true</ManagedAssembly>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ManagedAssembly>true</ManagedAssembly>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
     <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
     <PublicIncludeDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs;$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <ManagedAssembly>true</ManagedAssembly>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">
-    <ManagedAssembly>true</ManagedAssembly>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
     <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
+    <ManagedAssembly>true</ManagedAssembly>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
@@ -136,6 +136,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
+    <ManagedAssembly>true</ManagedAssembly>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -174,6 +175,8 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;;..\Solutions\Physics\bullet3\Extras\HACD;..\Solutions\Physics\bullet3\Extras\Serialize\BulletWorldImporter%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -204,6 +207,8 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -229,6 +234,91 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AsmLoader.h" />
+    <ClInclude Include="AssimpImpl\AssimpConverter.h" />
+    <ClInclude Include="assimp\assimp\aabb.h" />
+    <ClInclude Include="assimp\assimp\ai_assert.h" />
+    <ClInclude Include="assimp\assimp\anim.h" />
+    <ClInclude Include="assimp\assimp\AssertHandler.h" />
+    <ClInclude Include="assimp\assimp\Base64.hpp" />
+    <ClInclude Include="assimp\assimp\BaseImporter.h" />
+    <ClInclude Include="assimp\assimp\Bitmap.h" />
+    <ClInclude Include="assimp\assimp\BlobIOSystem.h" />
+    <ClInclude Include="assimp\assimp\ByteSwapper.h" />
+    <ClInclude Include="assimp\assimp\camera.h" />
+    <ClInclude Include="assimp\assimp\cexport.h" />
+    <ClInclude Include="assimp\assimp\cfileio.h" />
+    <ClInclude Include="assimp\assimp\cimport.h" />
+    <ClInclude Include="assimp\assimp\ColladaMetaData.h" />
+    <ClInclude Include="assimp\assimp\color4.h" />
+    <ClInclude Include="assimp\assimp\commonMetaData.h" />
+    <ClInclude Include="assimp\assimp\Compiler\poppack1.h" />
+    <ClInclude Include="assimp\assimp\Compiler\pstdint.h" />
+    <ClInclude Include="assimp\assimp\Compiler\pushpack1.h" />
+    <ClInclude Include="assimp\assimp\config.h" />
+    <ClInclude Include="assimp\assimp\CreateAnimMesh.h" />
+    <ClInclude Include="assimp\assimp\DefaultIOStream.h" />
+    <ClInclude Include="assimp\assimp\DefaultIOSystem.h" />
+    <ClInclude Include="assimp\assimp\DefaultLogger.hpp" />
+    <ClInclude Include="assimp\assimp\defs.h" />
+    <ClInclude Include="assimp\assimp\Exceptional.h" />
+    <ClInclude Include="assimp\assimp\Exporter.hpp" />
+    <ClInclude Include="assimp\assimp\fast_atof.h" />
+    <ClInclude Include="assimp\assimp\GenericProperty.h" />
+    <ClInclude Include="assimp\assimp\GltfMaterial.h" />
+    <ClInclude Include="assimp\assimp\Hash.h" />
+    <ClInclude Include="assimp\assimp\Importer.hpp" />
+    <ClInclude Include="assimp\assimp\importerdesc.h" />
+    <ClInclude Include="assimp\assimp\IOStream.hpp" />
+    <ClInclude Include="assimp\assimp\IOStreamBuffer.h" />
+    <ClInclude Include="assimp\assimp\IOSystem.hpp" />
+    <ClInclude Include="assimp\assimp\light.h" />
+    <ClInclude Include="assimp\assimp\LineSplitter.h" />
+    <ClInclude Include="assimp\assimp\LogAux.h" />
+    <ClInclude Include="assimp\assimp\Logger.hpp" />
+    <ClInclude Include="assimp\assimp\LogStream.hpp" />
+    <ClInclude Include="assimp\assimp\material.h" />
+    <ClInclude Include="assimp\assimp\MathFunctions.h" />
+    <ClInclude Include="assimp\assimp\matrix3x3.h" />
+    <ClInclude Include="assimp\assimp\matrix4x4.h" />
+    <ClInclude Include="assimp\assimp\MemoryIOWrapper.h" />
+    <ClInclude Include="assimp\assimp\mesh.h" />
+    <ClInclude Include="assimp\assimp\metadata.h" />
+    <ClInclude Include="assimp\assimp\NullLogger.hpp" />
+    <ClInclude Include="assimp\assimp\ObjMaterial.h" />
+    <ClInclude Include="assimp\assimp\ParsingUtils.h" />
+    <ClInclude Include="assimp\assimp\pbrmaterial.h" />
+    <ClInclude Include="assimp\assimp\port\AndroidJNI\AndroidJNIIOSystem.h" />
+    <ClInclude Include="assimp\assimp\port\AndroidJNI\BundledAssetIOSystem.h" />
+    <ClInclude Include="assimp\assimp\postprocess.h" />
+    <ClInclude Include="assimp\assimp\Profiler.h" />
+    <ClInclude Include="assimp\assimp\ProgressHandler.hpp" />
+    <ClInclude Include="assimp\assimp\qnan.h" />
+    <ClInclude Include="assimp\assimp\quaternion.h" />
+    <ClInclude Include="assimp\assimp\RemoveComments.h" />
+    <ClInclude Include="assimp\assimp\revision.h" />
+    <ClInclude Include="assimp\assimp\scene.h" />
+    <ClInclude Include="assimp\assimp\SceneCombiner.h" />
+    <ClInclude Include="assimp\assimp\SGSpatialSort.h" />
+    <ClInclude Include="assimp\assimp\SkeletonMeshBuilder.h" />
+    <ClInclude Include="assimp\assimp\SmallVector.h" />
+    <ClInclude Include="assimp\assimp\SmoothingGroups.h" />
+    <ClInclude Include="assimp\assimp\SpatialSort.h" />
+    <ClInclude Include="assimp\assimp\StandardShapes.h" />
+    <ClInclude Include="assimp\assimp\StreamReader.h" />
+    <ClInclude Include="assimp\assimp\StreamWriter.h" />
+    <ClInclude Include="assimp\assimp\StringComparison.h" />
+    <ClInclude Include="assimp\assimp\StringUtils.h" />
+    <ClInclude Include="assimp\assimp\Subdivision.h" />
+    <ClInclude Include="assimp\assimp\texture.h" />
+    <ClInclude Include="assimp\assimp\TinyFormatter.h" />
+    <ClInclude Include="assimp\assimp\types.h" />
+    <ClInclude Include="assimp\assimp\vector2.h" />
+    <ClInclude Include="assimp\assimp\vector3.h" />
+    <ClInclude Include="assimp\assimp\version.h" />
+    <ClInclude Include="assimp\assimp\Vertex.h" />
+    <ClInclude Include="assimp\assimp\XmlParser.h" />
+    <ClInclude Include="assimp\assimp\XMLTools.h" />
+    <ClInclude Include="assimp\assimp\ZipArchiveIOSystem.h" />
     <ClInclude Include="Attribute.h" />
     <ClInclude Include="AttributeManager.h" />
     <ClInclude Include="CameraPack.h" />
@@ -269,6 +359,7 @@
     <ClInclude Include="LogFileReporter.h" />
     <ClInclude Include="LoggingAPI.h" />
     <ClInclude Include="LuaVM.h" />
+    <ClInclude Include="ManagedIncludes.h" />
     <ClInclude Include="ManagedSignal.h" />
     <ClInclude Include="native\json.hpp" />
     <ClInclude Include="ObjectManager.h" />
@@ -281,6 +372,7 @@
     <ClInclude Include="Objects\Daemon.h" />
     <ClInclude Include="Objects\EditorCamera.h" />
     <ClInclude Include="Objects\EditorPlugin.h" />
+    <ClInclude Include="Objects\Physics\PhysicsService.h" />
     <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\GridRenderer.h" />
     <ClInclude Include="Objects\LightDm.h" />
@@ -294,7 +386,9 @@
     <ClInclude Include="Objects\Skybox.h" />
     <ClInclude Include="Objects\Sprite.h" />
     <ClInclude Include="Objects\UI\Button.h" />
+    <ClInclude Include="Objects\UI\Image.h" />
     <ClInclude Include="Object\Color.h" />
+    <ClInclude Include="Object\GameObject.h" />
     <ClInclude Include="Object\Layer.h" />
     <ClInclude Include="Object\LayerManager.h" />
     <ClInclude Include="Object\ObjectType.h" />
@@ -316,6 +410,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneObject.h" />
+    <ClInclude Include="SDK.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Time.h" />
@@ -346,9 +441,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="AssimpImpl\AssimpConverter.cpp" />
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="CastToNative.cpp" />
     <ClCompile Include="cimgui\cimgui.cpp" />
+    <ClCompile Include="DataPacks.cpp" />
     <ClCompile Include="EngineGC.cpp" />
     <ClCompile Include="GoldEngine.cpp" />
     <ClCompile Include="Event.cpp" />
@@ -367,9 +464,12 @@
     <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="imgui\Style\ScopedStyle.cpp" />
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp" />
+    <ClCompile Include="Objects\Physics\PhysicsService.cpp" />
     <ClCompile Include="Object\Color.cpp" />
+    <ClCompile Include="Object\GameObject.cpp" />
     <ClCompile Include="Object\Layer.cpp" />
     <ClCompile Include="Object\Quaternion.cpp" />
+    <ClCompile Include="Object\Transform.cpp" />
     <ClCompile Include="Object\Vector2.cpp" />
     <ClCompile Include="Object\Vector3.cpp" />
     <ClCompile Include="Packs.cpp" />
@@ -534,6 +634,18 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assimp\assimp\.editorconfig" />
+    <None Include="assimp\assimp\color4.inl" />
+    <None Include="assimp\assimp\config.h.in" />
+    <None Include="assimp\assimp\material.inl" />
+    <None Include="assimp\assimp\matrix3x3.inl" />
+    <None Include="assimp\assimp\matrix4x4.inl" />
+    <None Include="assimp\assimp\module.modulemap" />
+    <None Include="assimp\assimp\quaternion.inl" />
+    <None Include="assimp\assimp\revision.h.in" />
+    <None Include="assimp\assimp\SmoothingGroups.inl" />
+    <None Include="assimp\assimp\vector2.inl" />
+    <None Include="assimp\assimp\vector3.inl" />
     <None Include="Bin\FBX2glTF.exe" />
     <None Include="Data\Engine\Shaders\Lighting\rlights.frag" />
     <None Include="Data\Engine\Shaders\Lighting\rlights.vert" />

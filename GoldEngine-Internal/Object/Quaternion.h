@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector3.h"
+
 namespace Engine::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]

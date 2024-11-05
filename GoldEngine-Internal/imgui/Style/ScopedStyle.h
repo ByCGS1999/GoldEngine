@@ -1,6 +1,6 @@
 #pragma once
 
-private struct ScopedStyle
+class ScopedStyle
 {
 private:
 	ImGuiStyle originalStyle;

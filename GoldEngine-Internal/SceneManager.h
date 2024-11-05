@@ -58,7 +58,7 @@ namespace Engine::Managers
 
 					// PARAMS \\
 
-					auto referenceObject = (Engine::Internal::Components::Object^)t->GetReference();
+					auto referenceObject = (Engine::Internal::Components::GameObject^)t->GetReference();
 					auto objectType = t->objectType;
 					auto deserializedData = t->deserializedData;
 					auto renderQueue = loadedScene->GetRenderQueue();
@@ -133,7 +133,7 @@ namespace Engine::Managers
 								{
 									Engine::Scripting::Logging::Log(String::Format("Loading assembly type {0}", script->assemblyReference));
 
-									auto obj = (Engine::Internal::Components::Object^)assembly->CastToType(sceneObject, script->assemblyReference);
+									auto obj = (Engine::Internal::Components::GameObject^)assembly->CastToType(sceneObject, script->assemblyReference);
 
 									sceneObject->SetReference(obj);
 								}

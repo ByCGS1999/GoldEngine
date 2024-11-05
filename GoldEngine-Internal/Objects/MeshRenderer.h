@@ -45,7 +45,7 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			auto t = GetTransform();
+			auto t = getTransform();
 
 			if (!attributes->getAttribute("tint") || !attributes->getAttribute("model") || !attributes->getAttribute("material"))
 				return;
@@ -63,7 +63,7 @@ namespace Engine::EngineObjects
 				255
 			};
 
-			m.transform = MatrixRotateXYZ({
+			m.transform = RAYMATH::MatrixRotateXYZ({
 				DEG2RAD * this->transform->rotation->x,
 				DEG2RAD * this->transform->rotation->y,
 				DEG2RAD * this->transform->rotation->z
@@ -93,7 +93,7 @@ namespace Engine::EngineObjects
 		
 		void Destroy() override
 		{
-			Object::Destroy();
+			GameObject::Destroy();
 		}
 	};
 }

@@ -1,7 +1,8 @@
-#include "Transform.h"
+#include "../Includes.h"
+#include "../GlIncludes.h"
+#include "Vector2.h"
 #include "Vector3.h"
 
-using namespace Engine::Internal;
 using namespace Newtonsoft::Json;
 
 [[JsonConstructorAttribute]]
@@ -33,7 +34,7 @@ void Engine::Components::Vector3::Set(float* v)
 	this->z = v[2];
 }
 
-Color Engine::Components::Vector3::toColor()
+RAYLIB::Color Engine::Components::Vector3::toColor()
 {
 	return GetColor(x + y + z);
 }
@@ -105,4 +106,14 @@ void Engine::Components::Vector3::copy(const Vector3^ origin)
 	this->x = origin->x;
 	this->y = origin->y;
 	this->z = origin->z;
+}
+
+Engine::Components::Vector2^ Engine::Components::Vector3::toVector2()
+{
+	return gcnew Engine::Components::Vector2(x, y);
+}
+
+System::Numerics::Vector3^ Engine::Components::Vector3::toNumericsVector3()
+{
+	return gcnew System::Numerics::Vector3(this->x, this->y, this->z);
 }

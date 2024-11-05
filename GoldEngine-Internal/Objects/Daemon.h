@@ -2,7 +2,7 @@
 
 namespace Engine::EngineObjects
 {
-	public ref class Daemon : public Engine::Internal::Components::Object
+	public ref class Daemon : public Engine::Internal::Components::GameObject
 	{
 	public:
 		System::String^ assemblyReference;
@@ -10,7 +10,7 @@ namespace Engine::EngineObjects
 
 
 	public:
-		Daemon(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::Object(name, transform, Engine::Internal::Components::ObjectType::Daemon, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		Daemon(System::String^ name, Engine::Internal::Components::Transform^ transform) : Engine::Internal::Components::GameObject(name, transform, Engine::Internal::Components::ObjectType::Daemon, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			assemblyReference = GetType()->FullName->ToString();
 		}

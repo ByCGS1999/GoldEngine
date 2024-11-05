@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Event.h"
+#include "LoggingAPI.h"
+
 namespace Engine::Scripting
 {
 	public enum class AccessLevel
@@ -16,9 +19,13 @@ namespace Engine::Scripting
 		AccessLevel accessLevel;
 		String^ name;
 		Engine::Reflectable::ReflectableType^ userDataType;
-		System::Object^ userData;
+		[Newtonsoft::Json::JsonIgnoreAttribute]
+		Engine::Scripting::Events::Event^ onPropertyChanged;
 
 	private:
+		[Newtonsoft::Json::JsonPropertyAttribute]
+		System::Object^ userData;
+
 		System::Reflection::MemberInfo^ descriptor;
 		System::Object^ rootObject;
 		

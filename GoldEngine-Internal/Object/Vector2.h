@@ -18,8 +18,8 @@ namespace Engine::Components
 	public:
 		static Vector2^ lerp(Vector2^ origin, Vector2^ target, float interpolate)
 		{
-			auto newX = ::Lerp(origin->x, target->x, interpolate);
-			auto newY = ::Lerp(origin->y, target->y, interpolate);
+			auto newX = RAYMATH::Lerp(origin->x, target->x, interpolate);
+			auto newY = RAYMATH::Lerp(origin->y, target->y, interpolate);
 
 			return gcnew Vector2(newX, newY);
 		}

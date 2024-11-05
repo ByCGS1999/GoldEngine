@@ -1,8 +1,5 @@
 #pragma once
 
-#using <mscorlib.dll>
-#using <System.Core.dll>
-
 using namespace MoonSharp::Interpreter;
 
 namespace Engine::Lua::VM
@@ -109,7 +106,7 @@ namespace Engine::Lua::VM
 			return UserData::Create(System::Convert::ChangeType(object, object->GetType()));
 		}
 
-		static bool HasProperty(Engine::Internal::Components::Object^ object, String^ propertyName)
+		static bool HasProperty(Engine::Internal::Components::GameObject^ object, String^ propertyName)
 		{
 			if (object->GetType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid))
 			{
@@ -124,7 +121,7 @@ namespace Engine::Lua::VM
 			return false;
 		}
 
-		static AttributeManager^ GetAttributeManager(Engine::Internal::Components::Object^ object)
+		static AttributeManager^ GetAttributeManager(Engine::Internal::Components::GameObject^ object)
 		{
 			if (object->GetType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid))
 			{
@@ -135,7 +132,7 @@ namespace Engine::Lua::VM
 			return nullptr;
 		}
 
-		static void SetProperty(Engine::Internal::Components::Object^ object, String^ propertyName, System::Object^ newValue)
+		static void SetProperty(Engine::Internal::Components::GameObject^ object, String^ propertyName, System::Object^ newValue)
 		{
 			if (HasProperty(object, propertyName))
 			{
@@ -187,6 +184,7 @@ namespace Engine::Lua::VM
 		{
 			this->source = source;
 		}
+
 
 	public:
 		void WriteLuaCodeToFile(String^ src)
@@ -340,9 +338,9 @@ namespace Engine::Lua::VM
 			RegisterGlobal("error", gcnew System::Action<String^>(&Logging::LogError));
 			RegisterGlobal("info", gcnew System::Action<String^>(&Logging::LogDebug));
 			RegisterGlobal("log", gcnew System::Action<String^, String^>(&Logging::LogCustom));
-			RegisterGlobal("HasProperty", gcnew System::Func<Engine::Internal::Components::Object^, String^, bool>(&VMWrapper::HasProperty));
-			RegisterGlobal("GetAttributes", gcnew System::Func<Engine::Internal::Components::Object^, AttributeManager^>(&VMWrapper::GetAttributeManager));
-			RegisterGlobal("SetProperty", gcnew System::Action<Engine::Internal::Components::Object^, String^, Object^>(&VMWrapper::SetProperty));
+			RegisterGlobal("HasProperty", gcnew System::Func<Engine::Internal::Components::GameObject^, String^, bool>(&VMWrapper::HasProperty));
+			RegisterGlobal("GetAttributes", gcnew System::Func<Engine::Internal::Components::GameObject^, AttributeManager^>(&VMWrapper::GetAttributeManager));
+			RegisterGlobal("SetProperty", gcnew System::Action<Engine::Internal::Components::GameObject^, String^, Object^>(&VMWrapper::SetProperty));
 			RegisterGlobal("CastToClass", gcnew System::Func<System::Object^, System::String^, System::Object^>(&VMWrapper::ToDerivate));
 			RegisterGlobal("ToDerivate", gcnew System::Func<System::Object^, System::Object^>(&VMWrapper::ToDerivate));
 			//RegisterGlobal("VM", this->scriptState);

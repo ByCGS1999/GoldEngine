@@ -1,5 +1,7 @@
 #pragma once
 
+#include <msclr/lock.h>
+
 using namespace System;
 using namespace System::Collections;
 using namespace System::Collections::Generic;
@@ -38,7 +40,8 @@ namespace Engine::Scripting
 
 			if (l.try_acquire(1000))
 			{
-				TraceLog(LOG_INFO, CastStringToNative(message).c_str());
+				//TraceLog(LOG_INFO, CastStringToNative(message).c_str());
+				Console::WriteLine("[INFO] " + message);
 				log->Add(gcnew Engine::Scripting::Log(LOG_INFO, "[INFO] " + message));
 			}
 			else
@@ -55,7 +58,7 @@ namespace Engine::Scripting
 
 			if (l.try_acquire(1000))
 			{
-				TraceLog(LOG_INFO, CastStringToNative(message).c_str());
+				Console::WriteLine(header + " " + message);
 				log->Add(gcnew Engine::Scripting::Log(LOG_INFO, header + " " + message));
 			}
 			else
@@ -72,7 +75,8 @@ namespace Engine::Scripting
 
 			if (l.try_acquire(1000))
 			{
-				TraceLog(LOG_DEBUG, CastStringToNative(message).c_str());
+				//TraceLog(LOG_DEBUG, CastStringToNative(message).c_str());
+				Console::WriteLine("[DEBUG] " + message);
 				log->Add(gcnew Engine::Scripting::Log(LOG_DEBUG, "[DEBUG] " + message));
 			}
 			else
@@ -89,7 +93,8 @@ namespace Engine::Scripting
 
 			if (l.try_acquire(1000))
 			{
-				TraceLog(LOG_WARNING, CastStringToNative(message).c_str());
+				//TraceLog(LOG_WARNING, CastStringToNative(message).c_str());
+				Console::WriteLine("[WARNING] " + message);
 				log->Add(gcnew Engine::Scripting::Log(LOG_WARNING, "[WARNING] " + message));
 			}
 			else
@@ -107,7 +112,7 @@ namespace Engine::Scripting
 			if (l.try_acquire(1000))
 			{
 				log->Add(gcnew Engine::Scripting::Log(LOG_FATAL, "[FATAL] " + message));
-				TraceLog(LOG_FATAL, CastStringToNative(message).c_str());
+				RAYLIB::TraceLog(LOG_FATAL, CastStringToNative(message).c_str());
 			}
 			else
 			{
@@ -123,7 +128,8 @@ namespace Engine::Scripting
 
 			if (l.try_acquire(1000))
 			{
-				TraceLog(LOG_ERROR, CastStringToNative(message).c_str());
+				//TraceLog(LOG_ERROR, CastStringToNative(message).c_str());
+				Console::WriteLine("[ERROR] " + message);
 				log->Add(gcnew Engine::Scripting::Log(LOG_ERROR, "[ERROR] " + message));
 			}
 			else

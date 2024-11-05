@@ -1,4 +1,7 @@
 
+#using <System.Core.dll>
+#using <mscorlib.dll>
+
 using namespace System;
 using namespace System::Reflection;
 using namespace System::Runtime::CompilerServices;

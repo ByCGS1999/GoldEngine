@@ -24,28 +24,16 @@ namespace Engine::Assets::Storage
 		std::vector<Engine::Assets::Storage::Types::CameraPack> cameras;
 		std::vector<Engine::Assets::Storage::Types::MaterialPack> materials;
 		std::vector<Engine::Assets::Storage::Types::Texture2DPack> textures2d;
-		NativeDataPack() {
-			shaders = std::vector<Engine::Assets::Storage::Types::ShaderPack>();
-			models = std::vector<Engine::Assets::Storage::Types::ModelPack>();
-			cameras = std::vector<Engine::Assets::Storage::Types::CameraPack>();
-			materials = std::vector<Engine::Assets::Storage::Types::MaterialPack>();
-			textures2d = std::vector<Engine::Assets::Storage::Types::Texture2DPack>();
-		}
+		NativeDataPack();
 	};
 
 	public class DataPacks
 	{
 	private:
 		NativeDataPack* nativePacks;
-		// singleton
-		static DataPacks* singleton_Ref;
 
 	public:
-		DataPacks()
-		{
-			nativePacks = new NativeDataPack();
-			singleton_Ref = this;
-		}
+		DataPacks();
 
 		bool dataPackHasAssets()
 		{
@@ -187,9 +175,9 @@ namespace Engine::Assets::Storage
 			return shader;
 		}
 
-		::Camera3D GetCamera3D(unsigned int cameraId)
+		RAYLIB::Camera3D GetCamera3D(unsigned int cameraId)
 		{
-			::Camera3D camera = { };
+			RAYLIB::Camera3D camera = { };
 
 			for each (Engine::Assets::Storage::Types::CameraPack  cP in nativePacks->cameras)
 			{
@@ -203,9 +191,9 @@ namespace Engine::Assets::Storage
 			return camera;
 		}
 
-		::Camera2D GetCamera2D(unsigned int cameraId)
+		RAYLIB::Camera2D GetCamera2D(unsigned int cameraId)
 		{
-			Camera2D camera = { };
+			RAYLIB::Camera2D camera = { };
 
 			for each (Engine::Assets::Storage::Types::CameraPack  cP in nativePacks->cameras)
 			{
@@ -417,7 +405,7 @@ namespace Engine::Assets::Storage
 				nativePacks->models.push_back(Engine::Assets::Storage::Types::ModelPack(modelId, modelRef));
 			}
 		}
-		void AddCamera(unsigned int cameraId, Camera2D camera, Engine::Internal::Components::CameraType type)
+		void AddCamera(unsigned int cameraId, RAYLIB::Camera2D camera, Engine::Internal::Components::CameraType type)
 		{
 			bool hasCamera = false;
 
@@ -441,7 +429,7 @@ namespace Engine::Assets::Storage
 			}
 		}
 
-		void AddCamera(unsigned int cameraId, ::Camera3D camera, Engine::Internal::Components::CameraType type)
+		void AddCamera(unsigned int cameraId, RAYLIB::Camera3D camera, Engine::Internal::Components::CameraType type)
 		{
 			bool hasCamera = false;
 
@@ -592,17 +580,9 @@ namespace Engine::Assets::Storage
 			return hasMaterial;
 		}
 
-		static DataPacks singleton()
-		{
-			return *singleton_Ref;
-		}
+		static DataPacks singleton();
 
-		NativeDataPack* GetNativeDataPack()
-		{
-			return nativePacks;
-		}
+		NativeDataPack* GetNativeDataPack();
 	};
 
 }
-
-Engine::Assets::Storage::DataPacks* Engine::Assets::Storage::DataPacks::singleton_Ref;

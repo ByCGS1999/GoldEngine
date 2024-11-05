@@ -1,5 +1,11 @@
 #pragma once
 
+bool showFbxConverter = false;
+std::string fbxFile = "";
+std::string exportId = "";
+std::string exportDesc = "";
+AssimpConverter* fbxConverter = nullptr;
+
 void BoolEditor(Engine::Scripting::Attribute^ attrib)
 {
 	bool tmp = (bool)attrib->getValue();
@@ -91,5 +97,65 @@ void EnumEditor(Engine::Scripting::Attribute^ attrib)
 		}
 
 		ImGui::EndCombo();
+	}
+}
+
+
+void EnableFBXConverter(std::string fbxFilePath)
+{
+	showFbxConverter = true;
+	fbxFile = fbxFilePath;
+}
+
+void OnFBXConverted(String^ fileName)
+{
+	fbxConverter = new AssimpConverter(fbxFile, CastStringToNative(fileName), exportId);
+
+	delete fbxConverter;
+}
+
+void RenderFBXConverter() 
+{
+	if(showFbxConverter)
+		ImGui::OpenPopup("FBX Converter");
+
+	bool conversion = false;
+
+	if (ImGui::BeginPopupModal("FBX Converter", &showFbxConverter))
+	{
+		ImGui::Text("Export Format");
+
+		if (ImGui::BeginCombo("###EXPORT_FORMAT", exportDesc.c_str()))
+		{
+			for (int x = 0; x < getAssimpExporters(); x++)
+			{
+				if (ImGui::Selectable(getAssimpExporterDescription(x)))
+				{
+					exportDesc = std::string(getAssimpExporterDescription(x));
+					exportId = std::string(getAssimpExporterId(x));
+				}
+			}
+
+			ImGui::EndCombo();
+		}
+
+		if (ImGui::Button("Convert"))
+		{
+			conversion = true;
+			showFbxConverter = false;
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (conversion)
+	{
+		auto fileExplorer = Singleton<Engine::Editor::Gui::fileExplorer^>::Instance;
+
+		fileExplorer->SetWindowName("Convert FBX File");
+		fileExplorer->setExplorerMode(Engine::Editor::Gui::explorerMode::Save);
+		fileExplorer->Open();
+
+		fileExplorer->OnCompleted(gcnew Engine::Editor::Gui::onFileSelected(&OnFBXConverted));
 	}
 }

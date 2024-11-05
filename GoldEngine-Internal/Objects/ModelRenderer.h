@@ -58,12 +58,12 @@ namespace Engine::EngineObjects
 				model.materials[0].maps[MATERIAL_MAP_EMISSION].color = RAYLIB::WHITE;
 				model.materials[0].maps[MATERIAL_MAP_EMISSION].value = 0.0f;
 
-				rlCheckErrors();
+				RLGL::rlCheckErrors();
 			}
 		};
 	}
 
-	public ref class ModelRenderer : public Engine::Internal::Components::Object
+	public ref class ModelRenderer : public Engine::Internal::Components::GameObject
 	{
 	private:
 		Native::NativeModel* modelManager;
@@ -75,7 +75,7 @@ namespace Engine::EngineObjects
 		unsigned int texture;
 		unsigned int tint;
 		// methods & constructor
-		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::Object(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->model = model;
 			this->shader = shader;
@@ -120,7 +120,7 @@ namespace Engine::EngineObjects
 
 		void Draw() override
 		{
-			auto t = GetTransform();
+			auto t = getTransform();
 
 			RAYLIB::Color c =
 			{
@@ -155,11 +155,11 @@ namespace Engine::EngineObjects
 			RAYLIB::SetShaderValue(modelManager->getShader(), emmisiveColorLocation, &EmissiveColor, SHADER_UNIFORM_VEC4);
 			RAYLIB::SetShaderValue(modelManager->getShader(), emmisiveIntensityLocation, &emissiveIntensity, SHADER_UNIFORM_FLOAT);
 
-			rlCheckErrors();
+			RLGL::rlCheckErrors();
 
 			Model& m = modelManager->getModel();
 
-			m.transform = MatrixRotateXYZ({
+			m.transform = RAYMATH::MatrixRotateXYZ({
 				DEG2RAD*this->transform->rotation->x,
 				DEG2RAD* this->transform->rotation->y,
 				DEG2RAD* this->transform->rotation->z
@@ -196,7 +196,7 @@ namespace Engine::EngineObjects
 
 		void Destroy() override
 		{
-			Object::Destroy();
+			GameObject::Destroy();
 		}
 };
 }

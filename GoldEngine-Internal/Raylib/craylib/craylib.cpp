@@ -1,3 +1,6 @@
+#pragma managed(push, off)
+
+#include "../../Includes.h"
 #include "../../GlIncludes.h"
 
 #define DLL_EXPORT __declspec(dllexport)
@@ -12,6 +15,7 @@ DLL_EXPORT ret_type RL_##func_name() {                \
     return func_name();                               \
 }
 
+
 using namespace RAYLIB;
 
 extern "C"
@@ -20,13 +24,13 @@ extern "C"
 
     WRAP_RAYLIB_FUNC(InitWindow, void, (int width, int height, const char* title), (width, height, title))
     WRAP_RAYLIB_FUNC_NO_ARGS(CloseWindow, void)
-        WRAP_RAYLIB_FUNC_NO_ARGS(WindowShouldClose, bool)
-        WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowReady, bool)
-        WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowFullscreen, bool)
-        WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowHidden, bool)
-        WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowMinimized, bool)
-        WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowMaximized, bool)
-        WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowFocused, bool)
+    WRAP_RAYLIB_FUNC_NO_ARGS(WindowShouldClose, bool)
+    WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowReady, bool)
+    WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowFullscreen, bool)
+    WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowHidden, bool)
+    WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowMinimized, bool)
+    WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowMaximized, bool)
+    WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowFocused, bool)
         WRAP_RAYLIB_FUNC_NO_ARGS(IsWindowResized, bool)
         WRAP_RAYLIB_FUNC(IsWindowState, bool, (unsigned int flag), (flag))
         WRAP_RAYLIB_FUNC(SetWindowState, void, (unsigned int flags), (flags))
@@ -555,3 +559,5 @@ extern "C"
 
 #pragma endregion
 }
+
+#pragma managed(pop)

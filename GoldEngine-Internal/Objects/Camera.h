@@ -1,4 +1,3 @@
-#include "../Object/LayerManager.h"
 #include <memory>
 
 using namespace Engine::Internal::Components;

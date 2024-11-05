@@ -13,32 +13,32 @@ RenderTexture GraphicsWrapper::GL_GetDepthTexture(int width, int height)
 {
 	RenderTexture2D target = LoadRenderTexture(width, height);;
 
-	target.id = rlLoadFramebuffer();
+	target.id = RLGL::rlLoadFramebuffer();
 
 	if (target.id > 0)
 	{
-		rlEnableFramebuffer(target.id);
+		RLGL::rlEnableFramebuffer(target.id);
 
 
-		target.texture.id = rlLoadTexture(NULL, width, height, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 1);
+		target.texture.id = RLGL::rlLoadTexture(NULL, width, height, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 1);
 		target.texture.width = width;
 		target.texture.height = height;
 		target.texture.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
 		target.texture.mipmaps = 1;
 
-		target.depth.id = rlLoadTextureDepth(width, height, false);
+		target.depth.id = RLGL::rlLoadTextureDepth(width, height, false);
 		target.depth.width = width;
 		target.depth.height = height;
 		target.depth.format = 19;       //DEPTH_COMPONENT_24BIT?
 		target.depth.mipmaps = 1;
 
-		rlFramebufferAttach(target.id, target.texture.id, RL_ATTACHMENT_COLOR_CHANNEL0, RL_ATTACHMENT_TEXTURE2D, 0);
-		rlFramebufferAttach(target.id, target.depth.id, RL_ATTACHMENT_DEPTH, RL_ATTACHMENT_TEXTURE2D, 0);
+		RLGL::rlFramebufferAttach(target.id, target.texture.id, RLGL::RL_ATTACHMENT_COLOR_CHANNEL0, RLGL::RL_ATTACHMENT_TEXTURE2D, 0);
+		RLGL::rlFramebufferAttach(target.id, target.depth.id, RLGL::RL_ATTACHMENT_DEPTH, RLGL::RL_ATTACHMENT_TEXTURE2D, 0);
 
-		if (rlFramebufferComplete(target.id)) 
+		if (RLGL::rlFramebufferComplete(target.id))
 			printWarning(gcnew String(TextFormat("FBO: [ID %i] Framebuffer object created successfully", target.id)));
 
-		rlDisableFramebuffer();
+		RLGL::rlDisableFramebuffer();
 	}
 	else 
 		printWarning(gcnew String("FBO: Framebuffer object can not be created"));
@@ -95,7 +95,7 @@ void GraphicsWrapper::GL_LoadDepthTexture(RAYLIB::RenderTexture renderTexture, i
 {
 	renderTexture.depth.width = width;
 	renderTexture.depth.height = height;
-	renderTexture.depth.id = rlLoadTextureDepth(width, height, renderBuffer);
+	renderTexture.depth.id = RLGL::rlLoadTextureDepth(width, height, renderBuffer);
 }
 
 void GraphicsWrapper::GL_DrawModel(RAYLIB::Model model, Engine::Components::Vector3^ position, float scale, Engine::Components::Color^ color)

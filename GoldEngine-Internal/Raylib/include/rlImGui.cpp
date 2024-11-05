@@ -31,6 +31,7 @@
 
 #include "imgui_impl_raylib.h"
 
+#include "../imguizmo/ImGuizmo.h"
 #include "../../Raylib/include/x64/raylib.h"
 #include "../../Raylib/include/x64/rlgl.h"
 
@@ -492,6 +493,7 @@ void rlImGuiBeginDelta(float deltaTime)
     ImGuiNewFrame(deltaTime);
     ImGui_ImplRaylib_ProcessEvents();
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
 }
 
 void rlImGuiEnd(void)

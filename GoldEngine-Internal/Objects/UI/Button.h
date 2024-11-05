@@ -47,7 +47,7 @@ namespace Engine::EngineObjects::UI
 		}
 
 	public:
-		void Draw() override
+		void DrawGUI() override
 		{
 			RAYLIB::BeginBlendMode(RAYLIB::BlendMode::BLEND_ALPHA);
 
@@ -90,19 +90,13 @@ namespace Engine::EngineObjects::UI
 			rectangle.width = sizV2->x;
 			rectangle.height = sizV2->y;
 			
-			if (
-				(mousePosition->x >= (rectangle.x+rectangle.height) && mousePosition->y >= (rectangle.y+rectangle.height))
-				&&
-				(mousePosition->x <= (rectangle.x-rectangle.height) && (mousePosition->y <= (rectangle.y - rectangle.height)))
-			)
+			if (RAYLIB::CheckCollisionPointRec(mousePosition->toNative(), rectangle))
 			{
-				printConsole("In Trigger");
-
 				if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_BUTTON_LEFT))
-					OnMouseButton1Click->raiseExecution(nullptr);
+					OnMouseButton1Down->raiseExecution();
 
 				if (RAYLIB::IsMouseButtonPressed(RAYLIB::MOUSE_BUTTON_LEFT))
-					OnMouseButton1Down->raiseExecution(nullptr);
+					OnMouseButton1Click->raiseExecution();
 			}
 		}
 

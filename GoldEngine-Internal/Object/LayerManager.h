@@ -3,10 +3,12 @@
 using namespace System;
 using namespace Engine::Components;
 
+#include "../CastToNative.h"
+
 namespace Engine::Scripting
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-		public ref class LayerManager abstract
+	public ref class LayerManager abstract
 	{
 	private:
 		static System::Collections::Generic::List<Layer^>^ layers;
@@ -94,6 +96,12 @@ namespace Engine::Scripting
 			}
 
 			return nullptr;
+		}
+
+	public:
+		static System::Collections::Generic::List<Layer^>^ GetLayers() 
+		{ 
+			return layers;
 		}
 
 	public:

@@ -13,10 +13,10 @@ namespace Engine::Management::MiddleLevel
 		Engine::Internal::Components::ObjectType objectType;
 		System::String^ deserializedData;
 	private:
-		Engine::Internal::Components::Object^ reference;
+		Engine::Internal::Components::GameObject^ reference;
 
 	public:
-		SceneObject(Engine::Internal::Components::ObjectType type, Engine::Internal::Components::Object^ obj, System::String^ data)
+		SceneObject(Engine::Internal::Components::ObjectType type, Engine::Internal::Components::GameObject^ obj, System::String^ data)
 		{
 			objectType = type;
 			reference = obj;
@@ -32,7 +32,7 @@ namespace Engine::Management::MiddleLevel
 			}
 		}
 
-		Engine::Internal::Components::Object^ GetReference()
+		Engine::Internal::Components::GameObject^ GetReference()
 		{
 			if (reference == nullptr)
 				return nullptr;
@@ -40,7 +40,7 @@ namespace Engine::Management::MiddleLevel
 			return reference;
 		}
 
-		void SetReference(Engine::Internal::Components::Object^ ref)
+		void SetReference(Engine::Internal::Components::GameObject^ ref)
 		{
 			this->reference = ref;
 		}
@@ -65,13 +65,13 @@ namespace Engine::Management::MiddleLevel
 
 			case Engine::Internal::Components::ObjectType::Generic:
 			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Internal::Components::Object^>(deserializedData);
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Internal::Components::GameObject^>(deserializedData);
 				break;
 			}
 
 			case Engine::Internal::Components::ObjectType::Datamodel:
 			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Internal::Components::Object^>(deserializedData);
+				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Internal::Components::GameObject^>(deserializedData);
 				break;
 			}
 
@@ -149,7 +149,7 @@ namespace Engine::Management::MiddleLevel
 
 			case Engine::Internal::Components::ObjectType::Generic:
 			{
-				Engine::Internal::Components::Object^ genericType = (Engine::Internal::Components::Object^)reference;
+				Engine::Internal::Components::GameObject^ genericType = (Engine::Internal::Components::GameObject^)reference;
 				deserializedData = Serialize(genericType);
 				break;
 			}
@@ -163,7 +163,7 @@ namespace Engine::Management::MiddleLevel
 
 			case Engine::Internal::Components::ObjectType::Datamodel:
 			{
-				Engine::Internal::Components::Object^ genericType = (Engine::Internal::Components::Object^)reference;
+				Engine::Internal::Components::GameObject^ genericType = (Engine::Internal::Components::GameObject^)reference;
 				deserializedData = Serialize(genericType);
 				break;
 			}

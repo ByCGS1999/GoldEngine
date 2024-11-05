@@ -1,29 +1,21 @@
-﻿#include "Macros.h"
-int max_lights = 4;
-unsigned int passwd = 0; 
-
-/*
-GENERIC ATTRIBUTES
-*/
+﻿// ATTRIBUTES \\
 
 #include "ExecuteInEditModeAttribute.h"
 
-/*
-DEPENDENCIES
-*/
+// DEPENDENCIES \\
 
-#include "EngineState.h"
-#include "WinAPI.h"
-#include "Window.h"
 #include "Includes.h"
+#include "ManagedIncludes.h"
+#include "Window.h"
 #include "GlIncludes.h"
 #include "LoggingAPI.h"
 #include "DataManager.h"
 #include "Cast.h"
 #include "EngineConfig.h"
+#include "Event.h"
 #include "Object/Transform.h"
+#include "Object/GameObject.h"
 #include "CypherLib.h"
-#include "Reflection/ReflectedType.h"
 #include "SceneObject.h"
 #include "Scene.h"
 #include "SceneManager.h"
@@ -43,7 +35,7 @@ DEPENDENCIES
 #include "SceneFormat.h"
 #include "EngineIncludes.h"
 
-// last but not least, the assembly loader.
+// API
 
 #include "Screen.h"
 #include "Time.h"
@@ -55,7 +47,7 @@ DEPENDENCIES
 #include "AsmLoader.h"
 #include "GraphicsWrapper.h"
 
-// Daemons (Daemons are tasks that are ran mandatory by the engine, these cannot be displayed by the hierarchy)
+// Daemons
 
 #include "Objects/LightDm.h"
 
@@ -63,7 +55,6 @@ DEPENDENCIES
 
 #include "PreloadScript.h"
 
-#include "native/json.hpp"
 #include "imguistyleserializer.h"
 
 // lua virtual machine
@@ -72,6 +63,12 @@ DEPENDENCIES
 // lua script object
 #include "Objects/Script.h"
 #include "Objects/LuaScript.h"
+
+// physics
+
+#include "Objects/Physics/PhysicsService.h"
+
+// render pipelines
 
 #include "Objects/Pipeline/ScriptableRenderPipeline.hpp"
 #include "RenderPipelines/LitPBR_SRP.h"
@@ -89,9 +86,11 @@ using namespace Engine::Management::MiddleLevel;
 using namespace Engine::Managers;
 using namespace Engine::Scripting;
 
-DataPacks dataPack;
+DataPacks dataPack; 
+unsigned int passwd = 0;
+int max_lights = 4;
 
-void engine_bootstrap()
+static void engine_bootstrap()
 {
 	auto serializerSettings = gcnew Newtonsoft::Json::JsonSerializerSettings();
 	serializerSettings->Converters->Add(gcnew Newtonsoft::Json::Converters::StringEnumConverter());
@@ -131,6 +130,9 @@ void engine_bootstrap()
 
 // EDITOR UI
 
+// extra tools (converters, etc...)
+
+#include "AssimpImpl/AssimpConverter.h"
 #include "EditorGUI.h"
 
 Model mod;
@@ -202,12 +204,12 @@ private:
 	Scene^ scene;
 	Engine::EngineObjects::LightManager^ lightManager;
 	Engine::Components::Vector3^ cameraPosition;
-	Engine::Internal::Components::Object^ selectedObject;
+	Engine::Internal::Components::GameObject^ selectedObject;
 	int selectedObjectIndex;
 	bool selectionLock = false;
-	Engine::Internal::Components::Object^ selectionObject;
+	Engine::Internal::Components::GameObject^ selectionObject;
 
-	Engine::Internal::Components::Object^ reparentObject;
+	Engine::Internal::Components::GameObject^ reparentObject;
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Engine::Lua::VM::LuaVM^ luaVM;
 	Engine::Editor::Gui::fileExplorer^ fileExplorer = gcnew Engine::Editor::Gui::fileExplorer(std::string("File Explorer"));
@@ -237,12 +239,12 @@ private:
 			return "World";
 	}
 
-	String^ GetAccessRoute(Engine::Internal::Components::Object^ object)
+	String^ GetAccessRoute(Engine::Internal::Components::GameObject^ object)
 	{
 		return GetParentRoute(object->transform) + "/" + object->name;
 	}
 
-	void SpecializedPropertyEditor(Engine::Internal::Components::Object^ object)
+	void SpecializedPropertyEditor(Engine::Internal::Components::GameObject^ object)
 	{
 		if (object != nullptr)
 		{
@@ -348,7 +350,7 @@ private:
 				}
 
 				int lightType = light->lightType;
-				ImGui::Text("Intensity:");
+				ImGui::Text("Light Type:");
 				ImGui::SameLine();
 				const char* data[] = { "Directional Light", "Point Light", "Spot Light" };
 
@@ -555,16 +557,16 @@ private:
 									attrib->setType(float::typeid);
 								}
 							}
-							else if (attrib->getValueType()->Equals(Engine::Internal::Components::Object::typeid) || attrib->getValueType()->IsSubclassOf(Engine::Internal::Components::Object::typeid) || attrib->getValueType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || attrib->getValueType()->IsSubclassOf(Engine::EngineObjects::Script::typeid))
+							else if (attrib->getValueType()->Equals(Engine::Internal::Components::GameObject::typeid) || attrib->getValueType()->IsSubclassOf(Engine::Internal::Components::GameObject::typeid) || attrib->getValueType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || attrib->getValueType()->IsSubclassOf(Engine::EngineObjects::Script::typeid))
 							{
 								std::string temp = std::string("");
-								if (attrib->userData == nullptr)
+								if (attrib->getValue() == nullptr)
 								{
 									temp = CastStringToNative("NOT ASSIGNED - (NULL)");
 								}
 								else
 								{
-									Engine::Internal::Components::Object^ value = attrib->getValueAs<Engine::Internal::Components::Object^>();
+									Engine::Internal::Components::GameObject^ value = attrib->getValueAs<Engine::Internal::Components::GameObject^>();
 
 									temp = CastStringToNative(value->name + " - (" + GetAccessRoute(value) + ")");
 								}
@@ -672,6 +674,16 @@ private:
 							""
 						)
 					);
+				}
+				ImGui::SameLine();
+				ImGui::Text(CastStringToNative(t).c_str());
+			}
+
+			if ((f->Contains(".fbx")) && (displayingAssets == ALL || displayingAssets == MODELS))
+			{
+				if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
+				{
+					EnableFBXConverter(CastStringToNative(f));
 				}
 				ImGui::SameLine();
 				ImGui::Text(CastStringToNative(t).c_str());
@@ -969,12 +981,11 @@ end
 
 			codeEditor->SetLanguageDefinition(language);
 
-			codeEditor->Render("Embedded Code Editor");
+			codeEditor->Render("Embedded_Code_Editor");
 
 			ImGui::End();
 		}
 	}
-
 
 	void DrawConsole()
 	{
@@ -1026,7 +1037,7 @@ end
 	}
 
 
-	void DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::Object^ parent, int depth)
+	void DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::GameObject^ parent, int depth)
 	{
 		for each (SceneObject ^ _obj in scene->GetRenderQueue())
 		{
@@ -1036,12 +1047,12 @@ end
 			if (parent->Equals(_reference))
 				continue;
 
-			if (_reference->GetTransform() == nullptr)
+			if (_reference->getTransform() == nullptr)
 				continue;
 
-			if (_reference->GetTransform()->parent != nullptr)
+			if (_reference->getTransform()->parent != nullptr)
 			{
-				if (_reference->GetTransform()->parent->GetUID() == parent->GetTransform()->GetUID())
+				if (_reference->getTransform()->parent->GetUID() == parent->getTransform()->GetUID())
 				{
 					String^ refName = "";
 					for (int x = 0; x < depth; x++)
@@ -1054,7 +1065,7 @@ end
 
 					if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager || _reference->isProtected())
 					{
-						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->GetTransform()->GetUID()).c_str()))
+						if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->getTransform()->GetUID()).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -1070,7 +1081,7 @@ end
 					}
 					else
 					{
-						if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->GetTransform()->GetUID()).c_str()))
+						if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->getTransform()->GetUID()).c_str()))
 						{
 							if (reparentLock)
 								reparentObject = _reference;
@@ -1095,7 +1106,7 @@ end
 	{
 		if (scene->sceneLoaded())
 		{
-			Engine::Internal::Components::Object^ modelRenderer = (Engine::Internal::Components::Object^)object;
+			Engine::Internal::Components::GameObject^ modelRenderer = (Engine::Internal::Components::GameObject^)object;
 			modelRenderer->GameDraw();
 			modelRenderer->GameDrawGizmos();
 		}
@@ -1161,8 +1172,9 @@ public:
 
 		engine_bootstrap();
 
-		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 		dataPack = DataPacks();
+
+		assemblies = gcnew System::Collections::Generic::List<EngineAssembly^>();
 
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
 
@@ -1175,8 +1187,6 @@ public:
 				assemblies->Add(gcnew EngineAssembly(path));
 			}
 		}
-
-		
 
 		SceneManager::SetAssemblyManager(assemblies);
 		luaVM = gcnew Engine::Lua::VM::LuaVM();
@@ -1450,7 +1460,7 @@ public:
 							Engine::Components::Vector3::create({ 0,0,0 }),
 							Engine::Components::Vector3::create({ 0,0,0 }),
 							Engine::Components::Vector3::create({ 1,1,1 }),
-							scene->GetDatamodelMember("workspace")->GetTransform()
+							scene->GetDatamodelMember("workspace")->getTransform()
 						)
 					);
 
@@ -1469,7 +1479,7 @@ public:
 								Engine::Components::Vector3::create({ 0,0,0 }),
 								Engine::Components::Vector3::create({ 0,0,0 }),
 								Engine::Components::Vector3::create({ 1,1,1 }),
-								scene->GetDatamodelMember("workspace")->GetTransform()
+								scene->GetDatamodelMember("workspace")->getTransform()
 							), 0xFFFFFFFF);
 
 						scene->AddObjectToScene(cubeRenderer);
@@ -1527,7 +1537,7 @@ public:
 									gcnew Engine::Components::Vector3(0, 0, 0),
 									gcnew Engine::Components::Vector3(0, 0, 0),
 									gcnew Engine::Components::Vector3(1, 1, 1),
-									scene->GetDatamodelMember("workspace")->GetTransform()
+									scene->GetDatamodelMember("workspace")->getTransform()
 								)
 							);
 
@@ -1548,7 +1558,7 @@ public:
 									Engine::Components::Vector3::create({ 0,0,0 }),
 									Engine::Components::Vector3::create({ 0,0,0 }),
 									Engine::Components::Vector3::create({ 0,0,0 }),
-									scene->GetDatamodelMember("workspace")->GetTransform()
+									scene->GetDatamodelMember("workspace")->getTransform()
 								),
 								0,
 								0,
@@ -1652,6 +1662,18 @@ public:
 					// Text, Labels, Images.
 					if (ImGui::BeginMenu("Static"))
 					{
+						if (ImGui::MenuItem("Image"))
+						{
+							auto image = gcnew Engine::EngineObjects::UI::Image("Image", gcnew Engine::Internal::Components::Transform(
+								gcnew Engine::Components::Vector3(),
+								gcnew Engine::Components::Vector3(),
+								gcnew Engine::Components::Vector3(1, 1, 1),
+								scene->GetDatamodelMember("gui")->getTransform()
+							));
+
+							scene->AddObjectToScene(image);
+							scene->PushToRenderQueue(image);
+						}
 
 						ImGui::EndMenu();
 					}
@@ -1665,7 +1687,7 @@ public:
 								gcnew Engine::Components::Vector3(),
 								gcnew Engine::Components::Vector3(),
 								gcnew Engine::Components::Vector3(1,1,1),
-								scene->GetDatamodelMember("gui")->GetTransform()
+								scene->GetDatamodelMember("gui")->getTransform()
 							));
 
 							scene->AddObjectToScene(button);
@@ -1688,7 +1710,7 @@ public:
 								Engine::Components::Vector3::create({ 0,0,0 }),
 								Engine::Components::Vector3::create({ 0,0,0 }),
 								Engine::Components::Vector3::create({ 1,1,1 }),
-								scene->GetDatamodelMember("workspace")->GetTransform()
+								scene->GetDatamodelMember("workspace")->getTransform()
 							));
 
 						scene->AddObjectToScene(luaScript);
@@ -1733,6 +1755,42 @@ public:
 					ImGui::EndMenu();
 				}
 
+				ImGui::Separator();
+
+				if (ImGui::BeginMenu("Editor"))
+				{
+					if (ImGui::MenuItem("Grid Renderer"))
+					{
+						Engine::EngineObjects::GridRenderer^ cubeRenderer = gcnew Engine::EngineObjects::GridRenderer("GridRenderer",
+							gcnew Engine::Internal::Components::Transform(
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								Engine::Components::Vector3::create({ 1,1,1 }),
+								scene->GetDatamodelMember("editor only")->getTransform()
+							), 64, 1.0f);
+
+						scene->AddObjectToScene(cubeRenderer);
+						scene->PushToRenderQueue(cubeRenderer);
+					}
+
+					if (ImGui::MenuItem("Editor Camera"))
+					{
+						auto camera3D = gcnew Engine::EngineObjects::Editor::EditorCamera("EditorCamera",
+							gcnew Engine::Internal::Components::Transform(
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								Engine::Components::Vector3::create({ 0,0,0 }),
+								Engine::Components::Vector3::create({ 1,1,1 }),
+								nullptr
+							)
+						);
+
+						scene->AddObjectToScene(camera3D);
+						scene->PushToRenderQueue(camera3D);
+					}
+
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenu();
 			}
 
@@ -1740,12 +1798,8 @@ public:
 
 			if (ImGui::BeginMenu("Scripts", true))
 			{
-				ImGui::SeparatorText("Scene");
-				if (ImGui::MenuItem("Scene Assemblies"))
-				{
-
-				}
-				if (ImGui::MenuItem("Preload Assemblies"))
+				ImGui::SeparatorText("Assemblies");
+				if (ImGui::MenuItem("Hot Reload"))
 				{
 
 				}
@@ -1814,7 +1868,7 @@ public:
 
 				if (reference != nullptr)
 				{
-					if (reference->GetTransform()->parent != nullptr)
+					if (reference->getTransform()->parent != nullptr)
 						continue;
 
 					String^ refName = reference->name;
@@ -1822,7 +1876,7 @@ public:
 
 					if (type == ObjectType::Datamodel || type == ObjectType::LightManager || reference->isProtected())
 					{
-						if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)" + "###" + reference->GetTransform()->GetUID())))
+						if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)" + "###" + reference->getTransform()->GetUID())))
 						{
 							if (reparentLock)
 								reparentObject = reference;
@@ -1836,9 +1890,9 @@ public:
 							}
 						}
 					}
-					else if (reference->GetTransform()->parent == nullptr)
+					else if (reference->getTransform()->parent == nullptr)
 					{
-						if (ImGui::Selectable(CastToNative(refName + " (UNPARENTED)" + "###" + reference->GetTransform()->GetUID())))
+						if (ImGui::Selectable(CastToNative(refName + " (UNPARENTED)" + "###" + reference->getTransform()->GetUID())))
 						{
 							if (reparentLock)
 								reparentObject = reference;
@@ -1880,12 +1934,12 @@ public:
 						{
 							if (ImGui::MenuItem("Set Active"))
 							{
-								selectedObject->active = true;
+								selectedObject->SetActive(true);
 							}
 
 							if (ImGui::MenuItem("Set Inactive"))
 							{
-								selectedObject->active = false;
+								selectedObject->SetActive(false);
 							}
 
 							ImGui::EndMenu();
@@ -2017,7 +2071,6 @@ public:
 						{
 							ObjectManager::singleton()->Destroy(selectedObject);
 							selectedObject = nullptr;
-
 							return;
 						}
 
@@ -2066,59 +2119,61 @@ public:
 					{
 						// position
 						float pos[3] = {
-							selectedObject->GetTransform()->position->x,
-							selectedObject->GetTransform()->position->y,
-							selectedObject->GetTransform()->position->z
+							selectedObject->getTransform()->position->x,
+							selectedObject->getTransform()->position->y,
+							selectedObject->getTransform()->position->z
 						};
 
 						if (ImGui::DragFloat3("Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 						{
-							selectedObject->GetTransform()->position = gcnew Engine::Components::Vector3(pos[0], pos[1], pos[2]);
+							selectedObject->getTransform()->position = gcnew Engine::Components::Vector3(pos[0], pos[1], pos[2]);
 						}
 					}
 					else
 					{
 						// local position
 						float pos[3] = {
-							selectedObject->GetTransform()->localPosition->x,
-							selectedObject->GetTransform()->localPosition->y,
-							selectedObject->GetTransform()->localPosition->z
+							selectedObject->getTransform()->localPosition->x,
+							selectedObject->getTransform()->localPosition->y,
+							selectedObject->getTransform()->localPosition->z
 						};
 
 						if (ImGui::DragFloat3("Local Position", pos, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 						{
-							selectedObject->GetTransform()->UpdateLocalPosition(gcnew Engine::Components::Vector3(pos[0], pos[1], pos[2]));
+							selectedObject->getTransform()->UpdateLocalPosition(gcnew Engine::Components::Vector3(pos[0], pos[1], pos[2]));
 						}
 					}
 
 					// rotation
 					float rot[3] = {
-						selectedObject->GetTransform()->rotation->x,
-						selectedObject->GetTransform()->rotation->y,
-						selectedObject->GetTransform()->rotation->z
+						selectedObject->getTransform()->rotation->x,
+						selectedObject->getTransform()->rotation->y,
+						selectedObject->getTransform()->rotation->z
 					};
 
 					if (ImGui::DragFloat3("Rotation", rot, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 					{
-						selectedObject->GetTransform()->rotation = gcnew Engine::Components::Vector3(rot[0], rot[1], rot[2]);
+						selectedObject->getTransform()->rotation = gcnew Engine::Components::Vector3(rot[0], rot[1], rot[2]);
 					}
 
 					// scale
 
 					float scale[3] = {
-						selectedObject->GetTransform()->scale->x,
-						selectedObject->GetTransform()->scale->y,
-						selectedObject->GetTransform()->scale->z
+						selectedObject->getTransform()->scale->x,
+						selectedObject->getTransform()->scale->y,
+						selectedObject->getTransform()->scale->z
 					};
 
 					if (ImGui::DragFloat3("Scale", scale, 0.01f, float::MinValue, float::MaxValue, "%.3f", ImGuiInputTextFlags_CallbackCompletion) && !readonlyLock)
 					{
-						selectedObject->GetTransform()->scale = gcnew Engine::Components::Vector3(scale[0], scale[1], scale[2]);
+						selectedObject->getTransform()->scale = gcnew Engine::Components::Vector3(scale[0], scale[1], scale[2]);
 					}
 				} // Transform
 
 				SpecializedPropertyEditor(selectedObject);
 			}
+
+
 
 			ImGui::End();
 		}
@@ -2186,8 +2241,6 @@ public:
 		}
 	}
 
-	
-
 #pragma endregion
 
 	void DrawImGui() override
@@ -2251,16 +2304,16 @@ public:
 			style.WindowPadding = ImVec2(0, 0);
 			style.FramePadding = ImVec2(0, 0);
 
-			ScopedStyle scopedStyle;
+			ScopedStyle scopedStyle = ScopedStyle();
 			scopedStyle.Set(style);
 
 			ImVec2 windowPos = ImGui::GetWindowPos();
 			ImVec2 windowSize = ImGui::GetWindowSize();
 
-			Screen::setX(windowPos.x+8.0f);
-			Screen::setY(windowPos.y+20.0f);
-			Screen::setWidth(windowSize.x-17.5f);
-			Screen::setHeight(windowSize.y-35.0f);
+			Screen::setX(windowPos.x);
+			Screen::setY(windowPos.y);
+			Screen::setWidth(windowSize.x);
+			Screen::setHeight(windowSize.y);
 
 			rlImGuiImageRenderTextureCustom(&viewportTexture, new int[2] { (int)ImGui::GetWindowSize().x, (int)ImGui::GetWindowSize().y }, new float[2] {17.5f, 35.0f});
 
@@ -2391,21 +2444,90 @@ public:
 
 		if (ImGui::BeginPopupModal("Engine Configuration", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
 		{
-			char* buff = new char[8 * 512];
-
 			auto config = Engine::Config::EngineConfiguration::singleton();
 
-			strcpy(buff, CastStringToNative(config->windowName).c_str());
-
-			ImGui::Text("Window Name: ");
-			ImGui::SameLine();
-			if (ImGui::InputText("##WINDOW_NAME", buff, config->windowName->Length + 512))
 			{
-				Engine::Config::EngineConfiguration::singleton()->windowName = gcnew String(buff);
+				char* buff = new char[8 * 512];
+				strcpy(buff, CastStringToNative(config->windowName).c_str());
+
+				ImGui::Text("Window Name: ");
+				ImGui::SameLine();
+				if (ImGui::InputText("##WINDOW_NAME", buff, config->windowName->Length + 512))
+				{
+					Engine::Config::EngineConfiguration::singleton()->windowName = gcnew String(buff);
+				}
 			}
 
+			ImGui::SeparatorText("Resolution");
 
+			{
+				ImGui::Text("Window X:");
+				ImGui::SameLine();
+				ImGuiNET::ImGui::InputInt("###_ENGINECONFIG_WINDOW_X", config->resolution->x);
 
+				ImGui::Text("Window Y:");
+				ImGui::SameLine();
+				ImGuiNET::ImGui::InputInt("###_ENGINECONFIG_WINDOW_Y", config->resolution->y);
+
+				if (ImGui::Button("Set Screen Center"))
+				{
+					config->resolution->x = -1;
+					config->resolution->y = -1;
+				}
+
+				ImGui::Text("Window Width:");
+				ImGui::SameLine();
+				ImGuiNET::ImGui::InputInt("###_ENGINECONFIG_WINDOW_WIDTH", config->resolution->w);
+
+				ImGui::Text("Window Height:");
+				ImGui::SameLine();
+				ImGuiNET::ImGui::InputInt("###_ENGINECONFIG_WINDOW_HEIGHT", config->resolution->h);
+			}
+
+			ImGui::SeparatorText("Window Flags");
+
+			{
+				if(ImGui::BeginListBox("###_ENGINECONFIG_WINDOW_FLAGS"))
+				{
+					{
+						ImGui::Text("VSync:");
+						ImGui::SameLine();
+						ImGuiNET::ImGui::Checkbox(gcnew String("###ENGINECONFIG_VSync"), Engine::Config::EngineConfiguration::singleton()->_windowFlags->VSync);
+					}
+
+					{
+						ImGui::Text("FullScreen:");
+						ImGui::SameLine();
+						ImGuiNET::ImGui::Checkbox(gcnew String("###ENGINECONFIG_FullScreen"), Engine::Config::EngineConfiguration::singleton()->_windowFlags->Fullscreen);
+					}
+
+					{
+						ImGui::Text("Resizable:");
+						ImGui::SameLine();
+						ImGuiNET::ImGui::Checkbox(gcnew String("###ENGINECONFIG_Resizable"), Engine::Config::EngineConfiguration::singleton()->_windowFlags->Resizable);
+					}
+
+					{
+						ImGui::Text("Undecorated:");
+						ImGui::SameLine();
+						ImGuiNET::ImGui::Checkbox(gcnew String("###ENGINECONFIG_Undecorated"), Engine::Config::EngineConfiguration::singleton()->_windowFlags->Undecorated);
+					}
+
+					{
+						ImGui::Text("Hidden:");
+						ImGui::SameLine();
+						ImGuiNET::ImGui::Checkbox(gcnew String("###ENGINECONFIG_Hidden"), Engine::Config::EngineConfiguration::singleton()->_windowFlags->Hidden);
+					}
+
+					{
+						ImGui::Text("Borderless Windowed:");
+						ImGui::SameLine();
+						ImGuiNET::ImGui::Checkbox(gcnew String("###ENGINECONFIG_BorderlessFullScreen"), Engine::Config::EngineConfiguration::singleton()->_windowFlags->BorderlessWindowed);
+					}
+
+					ImGui::EndListBox();
+				}
+			}
 
 			if (ImGui::Button("Close"))
 			{
@@ -2418,6 +2540,21 @@ public:
 
 		if (ImGui::BeginPopupModal("Layer Editor", (bool*)false, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize))
 		{
+			if (ImGui::BeginListBox("###LAYER_LIST"))
+			{
+				auto% layers = LayerManager::GetLayers();
+
+				for (int x = 0; x < layers->Count; x++)
+				{
+					Layer^ layer = layers[x];
+
+
+				}
+
+				
+
+				ImGui::EndListBox();
+			}
 
 			ImGui::EndPopup();
 		}
@@ -2593,9 +2730,9 @@ public:
 			ImGui::EndPopup();
 		}
 
+		RenderFBXConverter();
 
 		ShowError();
-
 	}
 
 	void Exit() override
@@ -2608,9 +2745,37 @@ public:
 		exit(0);
 	}
 
+	void RegisterKeybinds()
+	{
+		if (EngineState::PlayMode)
+		{
+			if (InputManager::IsKeyDown(KeyCodes::KEY_LEFT_CONTROL) && InputManager::IsKeyPressed(KeyCodes::KEY_P))
+			{
+				print("[GoldEngine]:", "Exiting PlayMode");
+
+				EngineState::PlayMode = false;
+			}
+		}
+		else
+		{
+			if (selectedObject != nullptr && InputManager::IsKeyDown(KeyCodes::KEY_DELETE))
+			{
+				Singleton<ObjectManager^>::Instance->Destroy(selectedObject);
+				selectedObject = nullptr;
+			}
+
+			if (InputManager::IsKeyDown(KeyCodes::KEY_LEFT_CONTROL) && InputManager::IsKeyPressed(KeyCodes::KEY_P))
+			{
+				print("[GoldEngine]:", "Entering PlayMode");
+
+				EngineState::PlayMode = true;
+			}
+		}
+
+	}
+
 	void Draw() override
 	{
-		/*
 		if (EngineState::PlayMode)
 		{
 			renderPipeline->ExecuteRenderWorkflow(this, scene);
@@ -2619,11 +2784,10 @@ public:
 		}
 		else
 		{
+			renderPipeline->ExecuteRenderWorkflow_Editor(this, scene, viewportTexture);
 		}
-		*/
 
 
-		renderPipeline->ExecuteRenderWorkflow_Editor(this, scene, viewportTexture);
 
 		/*
 		BeginDrawing();
@@ -2705,6 +2869,20 @@ private:
 		scene->GetDatamodelMember("gui", true);
 		auto daemonParent = scene->GetDatamodelMember("daemons", true);
 
+		if (!scene->ExistsMember("PhysicsService"))
+		{
+			auto physicsService = gcnew Engine::EngineObjects::Physics::PhysicsService("PhysicsService",
+				gcnew Engine::Internal::Components::Transform(
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					gcnew Engine::Components::Vector3(0, 0, 0),
+					nullptr
+				)
+			);
+
+			scene->PushToRenderQueue(physicsService);
+			scene->AddObjectToScene(physicsService);
+		}
 
 		if (!scene->ExistsMember("lighting"))
 		{
@@ -2758,10 +2936,10 @@ private:
 					nullptr
 				)
 			);
-			//camera3D->SetParent(Singleton<ObjectManager^>::Instance->GetDatamodel("workspace"));
+			//camera3D->SetParent(((Engine::Internal::Components::GameObject^)Singleton<ObjectManager^>::Instance->GetDatamodel("workspace")));
 
 			scene->PushToRenderQueue(camera3D);
-			scene->PushToRenderQueue(camera3D);
+			scene->AddObjectToScene(camera3D);
 		}
 	}
 
@@ -2778,7 +2956,7 @@ public:
 
 		create();
 
-		Logging::LogCustom("[GL Version]:", "Current OpenGL version is -> " + rlGetVersion() + ".");
+		Logging::LogCustom("[GL Version]:", "Current OpenGL version is -> " + RLGL::rlGetVersion() + ".");
 
 		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
 
@@ -2802,8 +2980,6 @@ public:
 
 		renderPipeline = gcnew Engine::Render::Pipelines::LitPBR_SRP();
 
-		//scene = SceneManager::CreateScene("GoldEngineBoot");
-
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
 
 		while (!scene->sceneLoaded())
@@ -2813,49 +2989,15 @@ public:
 
 		packedData = scene->getSceneDataPack();
 
-		renderPipeline = Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance;
-
-		// initialize editor assets
-
-		// end of editor assets
-
-		/*
-		auto files = gcnew List<String^>();
-
-		FileManager::WriteToCustomFile("Data/engineassets.gold", "ThreadcallNull", files->ToArray());*/
-		//FileManager::WriteCustomFileFormat("Data/assets1.gold", "ThereGoesThePasswordGyat", passwd);
-
-		/*
-		FileManager::ReadCustomFileFormat("Data/engineassets.gold", "ThreadcallNull");
-
-		Model model;
-		MaterialMap matMap;
-
-		packedData->ReadFromFile("Assets0", passwd);
-
-		Texture2D t = dataPack.GetTexture2D(1);
-
-		matMap.texture = dataPack.GetTexture2D(1);
-
-		Material m = dataPack.GetMaterial(0);
-		m.maps = &matMap;
-
-		Shader s = dataPack.GetShader(0);
-
-		t = dataPack.GetTexture2D(0);
-
-		model = dataPack.GetModel(0);
-		m = { dataPack.GetShader(0), 0,0,0,0, {0} };
-
-		dataPack.SetShader(1, lightShader);
-		*/
-
 		Init();
 	}
 
 	void Update() override
 	{
 		Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
+
+		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance != renderPipeline)
+			renderPipeline = Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance;
 
 		if (camera == nullptr)
 			return;
@@ -2879,21 +3021,13 @@ public:
 
 		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 		{
-			if (obj->GetReference() != nullptr)
+			if (scene->sceneLoaded())
 			{
 				obj->GetReference()->GameUpdate();
 			}
 		}
 
-		if (EngineState::PlayMode)
-		{
-			if (InputManager::IsKeyDown(KeyCodes::KEY_LEFT_CONTROL) && InputManager::IsKeyDown(KeyCodes::KEY_P))
-			{
-				print("[GoldEngine]:", "Exiting PlayMode");
-
-				EngineState::PlayMode = false;
-			}
-		}
+		RegisterKeybinds();
 
 		Engine::GC::EngineGC::Update();
 	}
@@ -2914,6 +3048,7 @@ private:
 	System::Collections::Generic::List<EngineAssembly^>^ assemblies;
 	Scene^ scene;
 	DataPack^ packedData;
+	Engine::Render::ScriptableRenderPipeline^ renderPipeline;
 
 public:
 	GameWindow()
@@ -2928,7 +3063,6 @@ public:
 		dataPack = DataPacks();
 
 		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetExecutingAssembly()));
-		assemblies->Add(gcnew EngineAssembly(System::Reflection::Assembly::GetCallingAssembly()));
 
 		for each (String ^ fileName in Directory::GetFiles("Bin\\Asm\\"))
 		{
@@ -2958,8 +3092,17 @@ public:
 
 		auto config = Engine::Config::EngineConfiguration::ImportConfig("./Data/appinfo.dat");
 
+		config->windowFlags = config->_windowFlags->toWindowFlags();
+
 		SetWindowFlags(config->windowFlags);
-		OpenWindow(config->resolution->w, config->resolution->h, config->getWindowName().c_str());
+		OpenWindow(1, 1, config->getWindowName().c_str());
+
+		if (config->resolution->x != -1 && config->resolution->y != -1)
+			SetWindowPosition(config->resolution->x, config->resolution->y);
+		else
+			SetWindowPosition(config->resolution->w - (config->resolution->w / 2), config->resolution->h - (config->resolution->h / 2));
+
+		SetWindowSize(config->resolution->w, config->resolution->h);
 
 		gcnew Engine::Managers::SignalManager();
 
@@ -2983,6 +3126,8 @@ private:
 		LightManager^ lightManager = nullptr;
 
 		scene->GetDatamodelMember("workspace", true);
+		scene->GetDatamodelMember("gui", true);
+		auto daemonParent = scene->GetDatamodelMember("daemons");
 
 		if (!scene->ExistsMember("lighting"))
 		{
@@ -3008,10 +3153,6 @@ private:
 			lightManager->protectMember();
 		}
 
-
-		scene->GetDatamodelMember("editor only");
-		scene->GetDatamodelMember("gui");
-		auto daemonParent = scene->GetDatamodelMember("daemons");
 
 		if (ObjectManager::singleton()->GetChildrenOf(daemonParent)->Count <= 0)
 		{
@@ -3040,16 +3181,20 @@ public:
 		create();
 
 		Logging::LogCustom("[GL Version]:", "Current OpenGL version is -> " + rlGetVersion() + ".");
+
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+
+		ImGui::GetIO().ConfigErrorRecovery = false;
+		ImGui::GetIO().ConfigErrorRecoveryEnableAssert = true;
+		ImGui::GetIO().ConfigErrorRecoveryEnableDebugLog = false;
+		ImGui::GetIO().ConfigErrorRecoveryEnableTooltip = true;
 	}
 
 	void Preload() override
 	{
-		//scene = SceneManager::CreateScene("GoldEngineBoot");
-
-		gcnew Engine::Render::Pipelines::LitPBR_SRP();
+		renderPipeline = gcnew Engine::Render::Pipelines::LitPBR_SRP();
 
 		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
-		//scene->LoadScene();
 
 		while (!scene->sceneLoaded())
 		{
@@ -3057,6 +3202,8 @@ public:
 		}
 
 		packedData = scene->getSceneDataPack();
+
+		renderPipeline = Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance;
 
 		Init();
 	}
@@ -3076,10 +3223,10 @@ public:
 		ImGui::DockSpaceOverViewport(ImGui::GetID("MAIN", "vport"), viewPort, ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode);
 	}
 
-	virtual void Draw() override
+	void Draw() override
 	{
+		renderPipeline->ExecuteRenderWorkflow(this, scene);
 
-		Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->ExecuteRenderWorkflow(this, scene);
 		/*
 		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
 			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreFirstPassRender(scene);
@@ -3151,6 +3298,9 @@ public:
 
 	virtual void Update() override
 	{
+		if(Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance != renderPipeline)
+			renderPipeline = Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance;
+
 		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
 		{
 			if (obj->GetReference() != nullptr)
@@ -3182,7 +3332,7 @@ BOOTSTRAPS
 
 extern "C"
 {
-	__declspec(dllexport) void InitializeGoldEngine()
+	DllExport void InitializeGoldEngine()
 	{
 		passwd = CypherLib::GetPasswordBytes(gcnew String(ENCRYPTION_PASSWORD));
 

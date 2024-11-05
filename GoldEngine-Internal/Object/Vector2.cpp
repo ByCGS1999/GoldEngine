@@ -1,7 +1,6 @@
-#include "Transform.h"
+#include "../Includes.h"
+#include "../GlIncludes.h"
 #include "Vector2.h"
-
-using namespace Engine::Internal;
 
 Engine::Components::Vector2::Vector2(float x, float y)
 {

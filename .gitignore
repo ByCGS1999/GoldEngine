@@ -10,14 +10,11 @@ Win32/
 Solutions/
 Release/
 **/Solutions
-./GoldEngine-Internal/Data/*
-./GoldEngine-Internal/Binaries/*
-./GoldEngine-Internal/x64/*
-./GoldEngine-Internal/Win32/*
-./GoldEngine_Internal/Release/*
-./GoldEngine_Editor/x64/*
-./GoldEngine_Editor/Win32/*
-./GoldEngine_Editor/Release/*
+./GoldEngine-Internal/Data/
+./GoldEngine-Internal/x64/
+./GoldEngine-Internal/Win32/
+./GoldEngine_Internal/Release/
+./GoldEngine_Internal/obj/
 ./Build/*
 ./Build/**
 **/Build
@@ -31,3 +28,4 @@ Build
 .workspace
 ./Libs
 ./Libs/*
+/GoldEngine-Internal/x64

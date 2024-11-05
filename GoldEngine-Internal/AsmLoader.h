@@ -21,14 +21,54 @@ public:
 private:
 	void LoadAssemblyFromFile(System::String^ fileName)
 	{
+		print("[Assembly Loader] ", "Loading Assembly: " + fileName);
+
+		bool assemblyLoaded = false;
+
+		for each (auto assembly in System::AppDomain::CurrentDomain->GetAssemblies())
+		{
+			if (assembly->GetName()->Equals(fileName))
+			{
+				assemblyLoaded = true;
+				break;
+			}
+		}
+
+		if (assemblyLoaded)
+			return;
+
 		loadedAssembly = loadedAssembly->LoadFile(fileName);
 		Engine::Reflectable::ReflectableManager::assemblies->Add(loadedAssembly);
+
+		for each (auto referencedAssembly in loadedAssembly->GetReferencedAssemblies())
+		{
+
+		}
 	}
 	
 	void LoadAssemblyFromRawAssembly(System::Reflection::Assembly^ assembly)
 	{
+		bool assemblyLoaded = false;
+
+		for each (auto _assembly in System::AppDomain::CurrentDomain->GetAssemblies())
+		{
+			if (_assembly->GetName()->Equals(assembly->GetName()))
+			{
+				assemblyLoaded = true;
+				break;
+			}
+		}
+
+		if (assemblyLoaded)
+			return;
+
 		loadedAssembly = assembly;
 		Engine::Reflectable::ReflectableManager::assemblies->Add(loadedAssembly);
+
+		for each (auto referencedAssembly in loadedAssembly->GetReferencedAssemblies())
+		{
+
+		}
 	}
 
 public:
@@ -45,7 +85,7 @@ public:
 			printf(" -- Assembly Types -- \n");
 			for each (Type ^ type in loadedAssembly->GetTypes())
 			{
-				if (type->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || type->IsSubclassOf(Engine::Internal::Components::Object::typeid))
+				if (type->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || type->IsSubclassOf(Engine::Internal::Components::GameObject::typeid))
 				{
 					Console::WriteLine("Type Found: " + type->FullName);
 				}
@@ -108,7 +148,7 @@ public:
 			{
 				if (!t->Namespace->IsNullOrEmpty(t->Namespace))
 				{
-					if (t->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || t->IsSubclassOf(Engine::Internal::Components::Object::typeid))
+					if (t->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) || t->IsSubclassOf(Engine::Internal::Components::GameObject::typeid))
 					{
 						types->Add(t);
 					}
@@ -184,7 +224,7 @@ public:
 		return (System::Object^)sceneObject;
 	}
 
-	auto CastToType(Engine::Internal::Components::Object^ object, String^ asmType)
+	auto CastToType(Engine::Internal::Components::GameObject^ object, String^ asmType)
 	{
 		if (loadedAssembly != nullptr)
 		{

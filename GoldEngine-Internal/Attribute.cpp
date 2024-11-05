@@ -5,6 +5,7 @@ using namespace System;
 #include "GlIncludes.h"
 #include "CastToNative.h"
 #include "LoggingAPI.h"
+#include "Event.h"
 #include "Attribute.h"
 
 inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data)
@@ -18,6 +19,7 @@ inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data
 	*/
 	this->accessLevel = AccessLevel::Public;
 	this->name = str;
+	this->onPropertyChanged = gcnew Engine::Scripting::Events::Event();
 
 	if (data != nullptr)
 	{
@@ -55,6 +57,7 @@ inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, S
 	*/
 	this->accessLevel = level;
 	this->name = str;
+	this->onPropertyChanged = gcnew Engine::Scripting::Events::Event();
 
 	if (data != nullptr)
 	{
@@ -100,6 +103,7 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object)
 	if (accessLevel == AccessLevel::ReadOnly)
 		return;
 
+	onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { this->name, object, userData });
 	userData = object;
 	userDataType->SetType(object->GetType());
 
@@ -115,6 +119,7 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool 
 	if (accessLevel == AccessLevel::ReadOnly)
 		return;
 
+	onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { this->name, object, userData });
 	userData = object;
 	
 	if (descriptor != nullptr)

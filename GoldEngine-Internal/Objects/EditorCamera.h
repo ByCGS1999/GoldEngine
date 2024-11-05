@@ -21,7 +21,6 @@ namespace Engine::EngineObjects::Editor
 			{
 				attributes->getAttribute("camera direction")->setValue(Engine::Components::Vector3::create(((Native::NativeCamera3D*)this->get())->get().target));
 			}
-
 		}
 	};
 }
