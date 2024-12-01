@@ -579,6 +579,9 @@ void rlImGuiImageRenderTextureCustom(const RAYLIB::RenderTexture* image, int sca
         ImGui::SetCurrentContext(GlobalContext);
 
     rlImGuiImageRect(&image->texture, scale[0] - offset[0], scale[1] - offset[1], { 0.0f, 0.0f, (float)image->texture.width, -(float)image->texture.height });
+
+    delete scale;
+    delete offset;
 }
 
 void rlImGuiImageRect(const Texture* image, int destWidth, int destHeight, Rectangle sourceRect)

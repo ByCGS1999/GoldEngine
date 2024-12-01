@@ -1,5 +1,7 @@
 #pragma once
 
+using namespace System;
+
 namespace Engine::Reflectable
 {
 	typedef value struct ReflectedType
@@ -40,7 +42,7 @@ namespace Engine::Reflectable
 		ReflectedType^ type;
 
 	public:
-		String^ reflectedMess;
+		String^ reflectedData;
 
 	public:
 		ReflectableType(Type^);

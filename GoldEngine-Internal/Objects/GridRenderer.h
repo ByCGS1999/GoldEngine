@@ -21,7 +21,7 @@ namespace Engine::EngineObjects
 			this->spacing = spacing;
 		}
 
-		void Draw() override
+		void DrawGuizmos() override
 		{
 			DrawGrid(lines, spacing);
 		}

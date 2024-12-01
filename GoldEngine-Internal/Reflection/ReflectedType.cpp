@@ -52,7 +52,7 @@ ReflectableType::ReflectableType(Type^ type)
 		type->Assembly->ImageRuntimeVersion
 	);
 
-	this->reflectedMess = Serialize(this->type);
+	this->reflectedData = System::Convert::ToBase64String(System::Text::Encoding::UTF8->GetBytes(Serialize(this->type)));
 }
 
 ReflectableType::ReflectableType(String^ messyCode)
@@ -60,7 +60,7 @@ ReflectableType::ReflectableType(String^ messyCode)
 	this->type = nullptr;
 	this->typeReference = nullptr;
 
-	this->reflectedMess = messyCode;
+	this->reflectedData = messyCode;
 }
 
 
@@ -109,7 +109,7 @@ void ReflectableType::SetType(Type^ type)
 		type->Assembly->ImageRuntimeVersion
 	);
 
-	this->reflectedMess = Serialize(this->type);
+	this->reflectedData = System::Convert::ToBase64String(System::Text::Encoding::UTF8->GetBytes(Serialize(this->type)));
 }
 
 Type^ ReflectableType::getTypeReference()
@@ -136,12 +136,12 @@ void ReflectableType::DeserializeType(String^ serializedData)
 
 void ReflectableType::DeserializeType()
 {
-	if (this->typeReference != nullptr || this->type != nullptr || (reflectedMess == nullptr || reflectedMess->IsNullOrEmpty(reflectedMess)))
+	if (this->typeReference != nullptr || this->type != nullptr || (reflectedData == nullptr || reflectedData->IsNullOrEmpty(reflectedData)))
 		return;
 
 	try
 	{
-		this->type = Deserialize<ReflectedType>(reflectedMess);
+		this->type = Deserialize<ReflectedType>(System::Text::Encoding::UTF8->GetString(System::Convert::FromBase64String(reflectedData)));
 		SolveTypeRef();
 	}
 	catch (Exception^ ex)

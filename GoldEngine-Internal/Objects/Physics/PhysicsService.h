@@ -15,19 +15,31 @@ namespace Engine::EngineObjects::Physics
 		btCollisionDispatcher* collisionDispatcher;
 		btBroadphaseInterface* bvhInterface;
 		btSequentialImpulseConstraintSolver* SQCsolver;
+		Engine::EngineObjects::Physics::Native::NativePhysicsService* nativePhysicsService;
 		btDiscreteDynamicsWorld* world;
 
 	public:
 		Engine::Components::Vector3^ Gravity;
+		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::Public)]
+		float frameRate;
+		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::Public)]
+		int maxSubSteps;
 
 	public:
 		PhysicsService(String^ name, Engine::Internal::Components::Transform^ transform);
 
 	public:
 		void Start() override;
+
+		[Engine::Scripting::ExecuteInEditModeAttribute]
 		void Update() override;
 
+		void AddPhysicsObject(Engine::EngineObjects::Physics::RigidBody^);
+		void RemovePhysicsObject(Engine::EngineObjects::Physics::RigidBody^);
 
-		void AddPhysicsObject();
+		void AddCollisionObject(btCollisionObject*);
+		void RemoveCollisionObject(btCollisionObject*);
+
+		Engine::EngineObjects::Physics::Native::NativePhysicsService* getNativePhysicsService();
 	};
 }

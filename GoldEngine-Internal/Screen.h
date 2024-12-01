@@ -1,5 +1,10 @@
 #pragma once
 
+#include "Includes.h"
+#include "ManagedIncludes.h"
+#include "EngineState.h"
+#include "GlIncludes.h"
+
 namespace Engine::Scripting
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
@@ -22,6 +27,11 @@ namespace Engine::Scripting
 #else
 			int get()
 			{
+				if (EngineState::PlayMode)
+				{
+					return RAYLIB::GetScreenWidth();
+				}
+
 				return width;
 			}
 #endif
@@ -38,6 +48,11 @@ namespace Engine::Scripting
 #else
 			int get()
 			{
+				if (EngineState::PlayMode)
+				{
+					return RAYLIB::GetScreenHeight();
+				}
+
 				return height;
 			}
 #endif

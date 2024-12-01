@@ -14,8 +14,6 @@ namespace Engine::EngineObjects
 		{
 			attributes = gcnew Engine::Scripting::AttributeManager();
 			assemblyReference = GetType()->FullName->ToString();
-
-			attributes->DeserializeAttributes();
 		}
 
 	public:
@@ -63,8 +61,6 @@ namespace Engine::EngineObjects
 	public:
 		virtual void Init() override
 		{
-			attributes->DeserializeAttributes();
-
 			try
 			{
 				for each (auto prop in GetType()->GetProperties(System::Reflection::BindingFlags::Public | System::Reflection::BindingFlags::NonPublic | System::Reflection::BindingFlags::Instance | System::Reflection::BindingFlags::CreateInstance))

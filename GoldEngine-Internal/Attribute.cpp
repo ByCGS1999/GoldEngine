@@ -1,5 +1,3 @@
-using namespace System;
-
 #include "Includes.h"
 #include "Reflection/ReflectedType.h"
 #include "GlIncludes.h"
@@ -7,6 +5,21 @@ using namespace System;
 #include "LoggingAPI.h"
 #include "Event.h"
 #include "Attribute.h"
+
+using namespace System;
+
+inline System::Type^ GetTypeFromDescriptor(System::Reflection::MemberInfo^ memberInfo, System::Type^ defaultType)
+{
+	System::Type^ targetType = defaultType;
+
+	if (memberInfo == System::Reflection::FieldInfo::typeid)
+		targetType = ((System::Reflection::FieldInfo^)memberInfo)->FieldType;
+
+	if (memberInfo == System::Reflection::PropertyInfo::typeid)
+		targetType = ((System::Reflection::PropertyInfo^)memberInfo)->PropertyType;
+
+	return targetType;
+}
 
 inline Engine::Scripting::Attribute::Attribute(String^ str, System::Object^ data)
 {
@@ -83,35 +96,60 @@ inline Engine::Scripting::Attribute::Attribute(AccessLevel level, String^ str, S
 	setType(userDataType->getTypeReference()); // For consistency
 }
 
+bool isEnum(System::Type^ type)
+{
+	return (type->IsEnum);
+}
+
 inline void Engine::Scripting::Attribute::synchronizeDescriptor()
 {
-	if(descriptor != nullptr && rootObject != nullptr)
-		if(descriptor->GetType() == System::Reflection::FieldInfo::typeid)
-			((System::Reflection::FieldInfo^)descriptor)->SetValue(rootObject, userData);
+	if (descriptor != nullptr && rootObject != nullptr)
+	{
+		System::Type^ descriptorType = GetTypeFromDescriptor(descriptor, userDataType->getTypeReference());
+		
+		if (descriptor->MemberType.Equals(System::Reflection::MemberTypes::Field))
+		{
+			if (!isEnum(descriptorType))
+			{
+				((System::Reflection::FieldInfo^)descriptor)->SetValue(rootObject, userData);
+			}
+			else
+			{
+				System::Object^ arg = System::Enum::Parse(descriptorType, userData->ToString(), false);
+
+				((System::Reflection::FieldInfo^)descriptor)->SetValue(
+					rootObject,
+					arg
+				);
+
+				this->setValueForce(arg, true);
+			}
+		}
 		else
-			((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);
+		{
+			if (!isEnum(descriptorType))
+			{
+				((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);
+			}
+			else
+			{
+				System::Object^ arg = System::Enum::Parse(descriptorType, userData->ToString(), false);
+
+				((System::Reflection::PropertyInfo^)descriptor)->SetValue(
+					rootObject,
+					arg
+				);
+
+				this->setValueForce(arg, true);
+			}
+		}
+	}
 }
 
 inline void Engine::Scripting::Attribute::setPropertyDescriptor(System::Reflection::MemberInfo^ descriptor, System::Object^ rootDescriptor)
 {
 	this->descriptor = descriptor;
 	this->rootObject = rootDescriptor;
-}
-
-inline void Engine::Scripting::Attribute::setValue(System::Object^ object)
-{
-	if (accessLevel == AccessLevel::ReadOnly)
-		return;
-
-	onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { this->name, object, userData });
-	userData = object;
-	userDataType->SetType(object->GetType());
-
-	if (descriptor != nullptr)
-		if (descriptor->GetType() == System::Reflection::FieldInfo::typeid)
-			((System::Reflection::FieldInfo^)descriptor)->SetValue(rootObject, userData);
-		else
-			((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);
 }
 
 inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool overrideType)
@@ -123,7 +161,22 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool 
 	userData = object;
 	
 	if (descriptor != nullptr)
-		if (descriptor->GetType() == System::Reflection::FieldInfo::typeid)
+		if (descriptor->MemberType.Equals(System::Reflection::MemberTypes::Field))
+			((System::Reflection::FieldInfo^)descriptor)->SetValue(rootObject, userData);
+		else
+			((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);
+
+	if (overrideType)
+		userDataType->SetType(object->GetType());
+}
+
+inline void Engine::Scripting::Attribute::setValueForce(System::Object^ object, bool overrideType)
+{
+	onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { this->name, object, userData });
+	userData = object;
+
+	if (descriptor != nullptr)
+		if (descriptor->MemberType.Equals(System::Reflection::MemberTypes::Field))
 			((System::Reflection::FieldInfo^)descriptor)->SetValue(rootObject, userData);
 		else
 			((System::Reflection::PropertyInfo^)descriptor)->SetValue(rootObject, userData);

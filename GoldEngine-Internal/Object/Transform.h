@@ -63,14 +63,11 @@ namespace Engine::Internal::Components
 
 		void setReference(System::Object^);
 		void setParent(Transform^);
+		Transform^ getParent();
 
 		void SetReference(System::Object^ ref) { return setReference(ref); }
 		void SetParent(Transform^ parent) { return setParent(parent); }
-
-		Transform^ GetParent()
-		{
-			return parent;
-		}
+		Transform^ GetParent() { return getParent(); }
 
 		generic <class T>
 		T GetObject()

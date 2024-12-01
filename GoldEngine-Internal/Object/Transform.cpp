@@ -49,3 +49,8 @@ System::Object^ Engine::Internal::Components::Transform::getGameObject()
 	//return (Engine::Internal::Components::GameObject^)this->gameObject;
 	return this->gameObject;
 }
+
+Engine::Internal::Components::Transform^ Engine::Internal::Components::Transform::getParent()
+{
+	return parent;
+}

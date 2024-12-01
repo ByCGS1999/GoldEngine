@@ -43,7 +43,7 @@ namespace Engine::Scripting
 		{
 			for each (auto x in attributes)
 			{
-				x->setValue(x->DeserializeAttribute(), false);
+				x->setValueForce(x->DeserializeAttribute(), false);
 				x->resetType();
 			}
 		}

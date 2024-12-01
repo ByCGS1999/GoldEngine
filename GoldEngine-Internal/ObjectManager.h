@@ -435,12 +435,12 @@ namespace Engine::Scripting
 				{
 					String^ uid = ((Engine::Internal::Components::GameObject^)attribute->getValue())->getTransform()->GetUID();
 
-					attribute->setValue(GetObjectByUid(uid), false);
+					attribute->setValueForce(GetObjectByUid(uid), false);
 				}
 			}
 			else
 			{
-				attribute->setValue(nullptr, false);
+				attribute->setValueForce(nullptr, false);
 			}
 		}
 

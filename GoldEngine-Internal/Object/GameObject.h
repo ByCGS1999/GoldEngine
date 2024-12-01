@@ -5,6 +5,9 @@ namespace Engine::Internal::Components
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 		public ref class GameObject
 	{
+	private:
+		void* collisionShape;
+
 	public:
 		bool active;
 
@@ -16,13 +19,13 @@ namespace Engine::Internal::Components
 		System::String^ tag;
 
 		[Newtonsoft::Json::JsonIgnoreAttribute]
-		Engine::Scripting::Events::Event^ onPropertyChanged;
+			Engine::Scripting::Events::Event^ onPropertyChanged;
 		[Newtonsoft::Json::JsonIgnoreAttribute]
-		Engine::Scripting::Events::Event^ onChildAdded;
+			Engine::Scripting::Events::Event^ onChildAdded;
 		[Newtonsoft::Json::JsonIgnoreAttribute]
-		Engine::Scripting::Events::Event^ onChildRemoved;
+			Engine::Scripting::Events::Event^ onChildRemoved;
 		[Newtonsoft::Json::JsonIgnoreAttribute]
-		Engine::Scripting::Events::Event^ onDescendantAdded;
+			Engine::Scripting::Events::Event^ onDescendantAdded;
 
 	private:
 		bool memberIsProtected;
@@ -35,11 +38,15 @@ namespace Engine::Internal::Components
 	private:
 		~GameObject()
 		{
+			delete collisionShape;
 			delete name;
 			delete transform;
 			delete layerMask;
 			delete tag;
 		}
+
+	public:
+		void* getCollisionShape() { return collisionShape; }
 
 	public:
 		// vmethods
@@ -59,6 +66,11 @@ namespace Engine::Internal::Components
 		virtual void DrawGizmo() {}
 		virtual void DrawImGUI() {}
 
+		virtual void OnActive() {}
+		virtual void OnUnactive() {}
+
+		virtual void OnCollisionEnter(GameObject^ other) {}
+
 		// internal methods
 	protected:
 		virtual void HookUpdate() {}
@@ -67,44 +79,7 @@ namespace Engine::Internal::Components
 
 	private:
 		void descendantAdded(GameObject^ descendant);
-
-		void OnPropChanged()
-		{
-			if (lastTransform == nullptr)
-			{
-				lastTransform = gcnew Engine::Internal::Components::Transform(transform->position, transform->rotation, transform->scale, transform->parent);
-				return;
-			}
-
-			if (!transform->position->Equals(lastTransform->position))
-			{
-				cli::array<System::Object^>^ contents = gcnew cli::array<System::Object^> { "position", transform->position, lastTransform->position };
-				onPropertyChanged->raiseExecution(contents);
-
-				lastTransform = gcnew Engine::Internal::Components::Transform(transform->position, transform->rotation, transform->scale, transform->parent);
-			}
-			else if (!transform->rotation->Equals(lastTransform->rotation))
-			{
-				cli::array<System::Object^>^ contents = gcnew cli::array<System::Object^> { "rotation", transform->rotation, lastTransform->rotation };
-				onPropertyChanged->raiseExecution(contents);
-
-				lastTransform = gcnew Engine::Internal::Components::Transform(transform->position, transform->rotation, transform->scale, transform->parent);
-			}
-			else if (!transform->scale->Equals(lastTransform->scale))
-			{
-				cli::array<System::Object^>^ contents = gcnew cli::array<System::Object^> { "scale", transform->scale, lastTransform->scale };
-				onPropertyChanged->raiseExecution(contents);
-
-				lastTransform = gcnew Engine::Internal::Components::Transform(transform->position, transform->rotation, transform->scale, transform->parent);
-			}
-			else if (transform->parent != nullptr && !transform->parent->GetUID()->Equals(lastTransform->parent->GetUID()))
-			{
-				cli::array<System::Object^>^ contents = gcnew cli::array<System::Object^> { "parent", transform->parent, lastTransform->parent };
-				onPropertyChanged->raiseExecution(contents);
-
-				lastTransform = gcnew Engine::Internal::Components::Transform(transform->position, transform->rotation, transform->scale, transform->parent);
-			}
-		}
+		void OnPropChanged();
 
 		void UpdateLocalPosition()
 		{
@@ -185,6 +160,10 @@ namespace Engine::Internal::Components
 		{
 			this->layerMask = layerMask;
 		}
+
+		System::Collections::Generic::List<GameObject^>^ GetChildren();
+		GameObject^ GetChild(int index);
+		GameObject^ GetChild(String^ name);
 
 		/*
 

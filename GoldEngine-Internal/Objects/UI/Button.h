@@ -76,7 +76,7 @@ namespace Engine::EngineObjects::UI
 			RAYLIB::EndBlendMode();
 		}
 
-
+		[Engine::Scripting::ExecuteInEditModeAttribute]
 		void Update() override
 		{
 			auto mousePosition = Engine::Scripting::InputManager::GetMousePosition();

@@ -35,8 +35,12 @@ namespace Engine::Scripting
 		Attribute(AccessLevel level, String^ str, System::Object^ data, System::Type^ dT);
 
 	public:
-		void setValue(System::Object^ object);
 		void setValue(System::Object^ object, bool overrideType);
+		void setValueForce(System::Object^ object, bool overrideType);
+
+		void setValue(System::Object^ object) { setValue(object, false); }
+		void setValueForce(System::Object^ object) { setValueForce(object, false); }
+
 		void synchronizeDescriptor();
 		void setPropertyDescriptor(System::Reflection::MemberInfo^ descriptor, System::Object^ rootDescriptor);
 

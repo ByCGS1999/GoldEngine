@@ -66,6 +66,9 @@
 
 // physics
 
+#include "Objects/Physics/CollisionType.h"
+#include "Objects/Physics/Native/NativePhysicsService.h"
+#include "Objects/Physics/RigidBody.h"
 #include "Objects/Physics/PhysicsService.h"
 
 // render pipelines
@@ -90,11 +93,24 @@ DataPacks dataPack;
 unsigned int passwd = 0;
 int max_lights = 4;
 
-static void engine_bootstrap()
+static Newtonsoft::Json::JsonSerializerSettings^ SerializerSettings()
 {
 	auto serializerSettings = gcnew Newtonsoft::Json::JsonSerializerSettings();
 	serializerSettings->Converters->Add(gcnew Newtonsoft::Json::Converters::StringEnumConverter());
 	serializerSettings->TypeNameHandling = Newtonsoft::Json::TypeNameHandling::None;
+
+	return serializerSettings;
+}
+
+static void engine_keybinds()
+{
+	if (InputManager::IsKeyDown(KeyCodes::KEY_F11))
+		ToggleFullscreen();
+}
+
+static void engine_bootstrap()
+{
+	Newtonsoft::Json::JsonConvert::DefaultSettings = gcnew Func<Newtonsoft::Json::JsonSerializerSettings^>(&SerializerSettings);
 
 	if (!Directory::Exists("Bin/"))
 		Directory::CreateDirectory("Bin");
@@ -138,7 +154,6 @@ static void engine_bootstrap()
 Model mod;
 float cameraSpeed = 1.25f;
 bool controlCamera = true;
-RenderTexture viewportTexture;
 bool isOpen = true;
 bool toggleControl = true;
 bool initSettings = false;
@@ -156,7 +171,6 @@ TextEditor* codeEditor = new TextEditor();
 ImVec2 codeEditorSize;
 auto language = TextEditor::LanguageDefinition::CPlusPlus();
 bool codeEditorOpen = false;
-VoxelRenderer* renderer;
 std::string styleFN;
 Texture modelTexture;
 Texture materialTexture;
@@ -983,8 +997,10 @@ end
 
 			codeEditor->Render("Embedded_Code_Editor");
 
-			ImGui::End();
 		}
+
+		if(codeEditorOpen)
+			ImGui::End();
 	}
 
 	void DrawConsole()
@@ -1032,10 +1048,11 @@ end
 				ThrowUIError("Console commands not implemented yet!");
 			}
 
-			ImGui::End();
 		}
-	}
 
+		if (consoleVisible)
+			ImGui::End();
+	}
 
 	void DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::GameObject^ parent, int depth)
 	{
@@ -1583,6 +1600,29 @@ public:
 
 				ImGui::Separator();
 
+				if (ImGui::BeginMenu("Physics"))
+				{
+					if (ImGui::MenuItem("RigidBody"))
+					{
+						auto meshRenderer = gcnew Engine::EngineObjects::Physics::RigidBody(
+							"RigidBody",
+							gcnew Engine::Internal::Components::Transform(
+								gcnew Engine::Components::Vector3(0, 0, 0),
+								gcnew Engine::Components::Vector3(0, 0, 0),
+								gcnew Engine::Components::Vector3(1, 1, 1),
+								nullptr
+							)
+						);
+
+						scene->AddObjectToScene(meshRenderer);
+						scene->PushToRenderQueue(meshRenderer);
+					}
+
+					ImGui::EndMenu();
+				}
+
+				ImGui::Separator();
+
 				if (ImGui::BeginMenu("Lighting"))
 				{
 					if (ImGui::MenuItem("Point Light"))
@@ -1910,10 +1950,10 @@ public:
 					DrawHierarchyInherits(scene, reference, 1);
 				}
 			}
-
-
-			ImGui::End();
 		}
+
+		if (hierarchyVisible)
+			ImGui::End();
 	}
 
 	void DrawProperties()
@@ -2172,11 +2212,10 @@ public:
 
 				SpecializedPropertyEditor(selectedObject);
 			}
-
-
-
-			ImGui::End();
 		}
+
+		if(propertiesVisible)
+			ImGui::End();
 	}
 
 	void DrawAssets()
@@ -2236,9 +2275,10 @@ public:
 
 				ImGui::EndListBox();
 			}
-
-			ImGui::End();
 		}
+
+		if (assetsVisible)
+			ImGui::End();
 	}
 
 #pragma endregion
@@ -2297,7 +2337,7 @@ public:
 			}
 
 			ImGuiStyle style = ImGui::GetStyle();
-
+			
 			ImVec2 oldPadding = style.WindowPadding;
 			ImVec2 oldFramePadding = style.FramePadding;
 
@@ -2315,12 +2355,12 @@ public:
 			Screen::setWidth(windowSize.x);
 			Screen::setHeight(windowSize.y);
 
-			rlImGuiImageRenderTextureCustom(&viewportTexture, new int[2] { (int)ImGui::GetWindowSize().x, (int)ImGui::GetWindowSize().y }, new float[2] {17.5f, 35.0f});
+			rlImGuiImageRenderTextureCustom(&renderPipeline->framebufferTexturePtr->getInstance(), new int[2] { (int)ImGui::GetWindowSize().x, (int)ImGui::GetWindowSize().y }, new float[2] {17.5f, 35.0f});
 
 			scopedStyle.Reset();
-
-			ImGui::End();
 		}
+		if(scenevpVisible)
+			ImGui::End();
 
 		DrawConsole();
 
@@ -2740,7 +2780,6 @@ public:
 		UnloadTexture(modelTexture);
 		UnloadTexture(materialTexture);
 		Engine::Utils::LogReporter::singleton->CloseThread();
-		UnloadRenderTexture(viewportTexture);
 		dataPack.FreeAll();
 		exit(0);
 	}
@@ -2770,6 +2809,12 @@ public:
 
 				EngineState::PlayMode = true;
 			}
+
+			if (InputManager::IsKeyDown(KeyCodes::KEY_LEFT_CONTROL) && InputManager::IsKeyPressed(KeyCodes::KEY_S))
+			{
+				print("[GoldEngine]:", "Saving Scene");
+				SceneManager::SaveSceneToFile(scene, passwd);
+			}
 		}
 
 	}
@@ -2784,7 +2829,7 @@ public:
 		}
 		else
 		{
-			renderPipeline->ExecuteRenderWorkflow_Editor(this, scene, viewportTexture);
+				renderPipeline->ExecuteRenderWorkflow_Editor(this, scene);
 		}
 
 
@@ -2976,7 +3021,6 @@ public:
 			Boot();
 		}
 		SetExitKey(KEY_NULL);
-		viewportTexture = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
 
 		renderPipeline = gcnew Engine::Render::Pipelines::LitPBR_SRP();
 
@@ -3002,8 +3046,8 @@ public:
 		if (camera == nullptr)
 			return;
 
-		auto projectionMode = camera->cameraProjection;
-		bool is3DCamera = (projectionMode == CameraProjection::CAMERA_PERSPECTIVE);
+		auto projectionMode = camera->getProjection();
+		bool is3DCamera = (projectionMode == CamProjection::CAMERA_PERSPECTIVE);
 
 		void* cameraLocal = camera->get();
 
@@ -3027,6 +3071,7 @@ public:
 			}
 		}
 
+		engine_keybinds();
 		RegisterKeybinds();
 
 		Engine::GC::EngineGC::Update();
@@ -3308,6 +3353,8 @@ public:
 				obj->GetReference()->GameUpdate();
 			}
 		}
+
+		engine_keybinds();
 
 		Engine::GC::EngineGC::Update();
 	}

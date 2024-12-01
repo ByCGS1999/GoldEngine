@@ -15,4 +15,11 @@ public:
 			return T();
 		}
 	};
+
+
+	template <typename T>
+	static T toNativeType()
+	{
+		return nullptr;
+	}
 };

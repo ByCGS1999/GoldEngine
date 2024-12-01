@@ -1,0 +1,11 @@
+﻿  WineBootstrapper.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Users\Carles\source\repos\GoldEngine\Utils\WineBootstrap\WineBootstrapper\WineBootstrapper.cpp(14,22): error C2039: "filesystem": no es un miembro de "std"
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\sstream(19,1):
+      vea la declaración de 'std'
+  
+C:\Users\Carles\source\repos\GoldEngine\Utils\WineBootstrap\WineBootstrapper\WineBootstrapper.cpp(14,22): error C2871: 'filesystem': no existe ningún espacio de nombres con este nombre
+C:\Users\Carles\source\repos\GoldEngine\Utils\WineBootstrap\WineBootstrapper\WineBootstrapper.cpp(229,6): error C3861: 'exists': no se encontró el identificador
+C:\Users\Carles\source\repos\GoldEngine\Utils\WineBootstrap\WineBootstrapper\WineBootstrapper.cpp(234,7): error C3861: 'exists': no se encontró el identificador
+C:\Users\Carles\source\repos\GoldEngine\Utils\WineBootstrap\WineBootstrapper\WineBootstrapper.cpp(237,6): error C3861: 'exists': no se encontró el identificador
+C:\Users\Carles\source\repos\GoldEngine\Utils\WineBootstrap\WineBootstrapper\WineBootstrapper.cpp(240,6): error C3861: 'exists': no se encontró el identificador

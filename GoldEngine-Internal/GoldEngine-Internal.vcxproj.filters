@@ -337,6 +337,15 @@
     <Filter Include="Headers\Engine\Reflection">
       <UniqueIdentifier>{bd38ae50-e0af-48a8-bc06-7bb84642bce9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Rigidbody">
+      <UniqueIdentifier>{a65309c7-5f19-494c-aed7-b238054578d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Physics\Native">
+      <UniqueIdentifier>{00c92128-a556-4cfd-8de4-e41559b93c0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Engine\Native">
+      <UniqueIdentifier>{d98459a2-0104-414a-9c53-3eeb44b25aac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -372,9 +381,6 @@
     <ClInclude Include="MaterialPack.h">
       <Filter>Source\Engine\ObjectManagement\Materials</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Source\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Source\Engine\Management\Instance</Filter>
     </ClInclude>
@@ -383,9 +389,6 @@
     </ClInclude>
     <ClInclude Include="CypherLib.h">
       <Filter>Headers\Engine\Encryption</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Archivos de origen\Engine</Filter>
     </ClInclude>
     <ClInclude Include="DataPack.h">
       <Filter>Source\Engine\ObjectManagement</Filter>
@@ -413,9 +416,6 @@
     </ClInclude>
     <ClInclude Include="VoxelMatrix.h">
       <Filter>Source\Engine\EngineObjects\Renderer Pipelines\VXBR\Typedefs</Filter>
-    </ClInclude>
-    <ClInclude Include="AsmLoader.h">
-      <Filter>Source\Engine</Filter>
     </ClInclude>
     <ClInclude Include="PreloadScript.h">
       <Filter>Source\Engine\Preload</Filter>
@@ -452,9 +452,6 @@
     </ClInclude>
     <ClInclude Include="imgui\TextEditor\TextEditor.h">
       <Filter>Deps\GUI\ImGui\TextEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="native\json.hpp">
-      <Filter>Source\Engine\Native</Filter>
     </ClInclude>
     <ClInclude Include="Packs.h">
       <Filter>Source\Engine\ObjectManagement\Types</Filter>
@@ -957,6 +954,30 @@
     <ClInclude Include="Object\GameObject.h">
       <Filter>Headers\Engine\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Physics\RigidBody.h">
+      <Filter>Source\Engine\EngineObjects\Rigidbody</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Physics\CollisionType.h">
+      <Filter>Source\Engine\EngineObjects\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="native\json.hpp">
+      <Filter>Headers\Engine\Native</Filter>
+    </ClInclude>
+    <ClInclude Include="native\CollisionShape.h">
+      <Filter>Headers\Engine\Native</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePtr.h">
+      <Filter>Headers\Engine\Native</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="AsmLoader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -1079,6 +1100,18 @@
     <ClCompile Include="Object\GameObject.cpp">
       <Filter>Source\Engine\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\Physics\RigidBody.cpp">
+      <Filter>Source\Engine\EngineObjects\Rigidbody</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Physics\Native\NativePhysicsService.cpp">
+      <Filter>Source\Engine\EngineObjects\Physics\Native</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaVM.cpp">
+      <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="native\CollisionShape.cpp">
+      <Filter>Source\Engine\Native</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -1133,6 +1166,9 @@
     <CopyFileToFolders Include="EditorAssets\Fonts\fontawesome-webfont.ttf">
       <Filter>Data\EditorAssets\Fonts</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\Engine\Shaders\depth.frag">
+      <Filter>Data\Engine\Shaders</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Engine\Shaders\Lighting\rlights.vert">
@@ -1185,6 +1221,9 @@
     </None>
     <None Include="assimp\assimp\.editorconfig">
       <Filter>Deps\Assimp</Filter>
+    </None>
+    <None Include="Objects\Physics\Native\NativePhysicsService.h">
+      <Filter>Source\Engine\EngineObjects\Physics\Native</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

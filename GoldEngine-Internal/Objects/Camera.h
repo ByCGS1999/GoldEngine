@@ -49,19 +49,43 @@ namespace Engine::EngineObjects
 		};
 	}
 
+	public enum class CamProjection
+	{
+		CAMERA_PERSPECTIVE = 0,         // Perspective projection
+		CAMERA_ORTHOGRAPHIC             // Orthographic projection
+	};
+
+	public enum class CamMode
+	{
+		CAMERA_CUSTOM = 0,              // Camera custom, controlled by user (UpdateCamera() does nothing)
+		CAMERA_FREE,                    // Camera free mode
+		CAMERA_ORBITAL,                 // Camera orbital, around target, zoom supported
+		CAMERA_FIRST_PERSON,            // Camera first person
+		CAMERA_THIRD_PERSON             // Camera third person
+	};
+
+
 	public ref class Camera abstract : public Engine::EngineObjects::ScriptBehaviour
 	{
-	public:
-		[Newtonsoft::Json::JsonIgnoreAttribute]
-		CameraProjection cameraProjection;
+	protected:
+		CamProjection cameraProjection;
 
-	private:
+	public:
+		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::Public)]
+		CamMode cameraMode;
+
+		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::Public)]
+		float nearPlane = 1.0f;
+
+		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::Public)]
+		float farPlane = 10.0f;
+
 		bool isMainCamera;
 
 	public:
-		Camera(String^ name, Engine::Internal::Components::Transform^ trans, CameraProjection projection) : Engine::EngineObjects::ScriptBehaviour(name, trans)
+		Camera(String^ name, Engine::Internal::Components::Transform^ trans, int projection) : Engine::EngineObjects::ScriptBehaviour(name, trans)
 		{
-			cameraProjection = projection;
+			cameraProjection = (CamProjection)projection;
 
 			if (!attributes->getAttribute("IsMainCamera"))
 			{
@@ -95,6 +119,10 @@ namespace Engine::EngineObjects
 		}
 
 	public:
+		CamProjection getProjection() { return cameraProjection; }
+
+	public:
+		virtual void setTarget(Engine::Components::Vector3^ target) abstract;
 		virtual bool is3DCamera() abstract;
 		virtual void* get() abstract;
 	};

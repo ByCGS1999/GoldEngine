@@ -147,6 +147,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -161,6 +162,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -175,11 +177,11 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;;..\Solutions\Physics\bullet3\Extras\HACD;..\Solutions\Physics\bullet3\Extras\Serialize\BulletWorldImporter%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>raylib.lib;winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\Carles\source\repos\GoldEngine\Libs\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -192,6 +194,7 @@
       <PreprocessorDefinitions>PRODUCTION_BUILD;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -226,6 +229,7 @@
       <PreprocessorDefinitions>PRODUCTION_BUILD;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -334,6 +338,7 @@
     <ClInclude Include="EngineConfig.h" />
     <ClInclude Include="EngineGC.h" />
     <ClInclude Include="EngineIncludes.h" />
+    <ClInclude Include="EnginePtr.h" />
     <ClInclude Include="EngineState.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="ExecuteInEditModeAttribute.h" />
@@ -361,6 +366,7 @@
     <ClInclude Include="LuaVM.h" />
     <ClInclude Include="ManagedIncludes.h" />
     <ClInclude Include="ManagedSignal.h" />
+    <ClInclude Include="native\CollisionShape.h" />
     <ClInclude Include="native\json.hpp" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Macros.h" />
@@ -372,7 +378,9 @@
     <ClInclude Include="Objects\Daemon.h" />
     <ClInclude Include="Objects\EditorCamera.h" />
     <ClInclude Include="Objects\EditorPlugin.h" />
+    <ClInclude Include="Objects\Physics\CollisionType.h" />
     <ClInclude Include="Objects\Physics\PhysicsService.h" />
+    <ClInclude Include="Objects\Physics\RigidBody.h" />
     <ClInclude Include="Objects\Script.h" />
     <ClInclude Include="Objects\GridRenderer.h" />
     <ClInclude Include="Objects\LightDm.h" />
@@ -464,7 +472,11 @@
     <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="imgui\Style\ScopedStyle.cpp" />
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp" />
+    <ClCompile Include="LuaVM.cpp" />
+    <ClCompile Include="native\CollisionShape.cpp" />
+    <ClCompile Include="Objects\Physics\Native\NativePhysicsService.cpp" />
     <ClCompile Include="Objects\Physics\PhysicsService.cpp" />
+    <ClCompile Include="Objects\Physics\RigidBody.cpp" />
     <ClCompile Include="Object\Color.cpp" />
     <ClCompile Include="Object\GameObject.cpp" />
     <ClCompile Include="Object\Layer.cpp" />
@@ -647,10 +659,20 @@
     <None Include="assimp\assimp\vector2.inl" />
     <None Include="assimp\assimp\vector3.inl" />
     <None Include="Bin\FBX2glTF.exe" />
+    <CopyFileToFolders Include="Data\Engine\Shaders\depth.frag">
+      <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
     <None Include="Data\Engine\Shaders\Lighting\rlights.frag" />
     <None Include="Data\Engine\Shaders\Lighting\rlights.vert" />
     <None Include="imgui\misc\debuggers\imgui.gdb" />
     <None Include="imgui\misc\debuggers\imgui.natstepfilter" />
+    <None Include="Objects\Physics\Native\NativePhysicsService.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Solutions\API\raylib\build\x64\raylib\external\glfw\src\glfw.vcxproj">

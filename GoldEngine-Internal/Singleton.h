@@ -23,6 +23,34 @@ public:
 	}
 };
 
+/*
+
+template <class T>
+public class NativeSingleton
+{
+public:
+	static T* Instance;
+	static bool Instantiated;
+
+public:
+	static void Create(T* inst)
+	{
+		if (!NativeSingleton<T>::Instantiated)
+			NativeSingleton<T>::Release();
+
+		Instance = inst;
+		Instantiated = true;
+	}
+
+	static void Release()
+	{
+		Instance = NULL;
+		Instantiated = false;
+	}
+};
+
+*/
+
 [MoonSharp::Interpreter::MoonSharpUserDataAttribute]
 private ref class LuaSingletonProxy
 {

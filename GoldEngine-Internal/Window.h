@@ -50,6 +50,9 @@ namespace Engine
 			InitWindow(width, height, name);
 			InitAudioDevice();
 			RLGL::rlglInit(width, height);
+
+			RLGL::rlEnableDepthTest();
+
 			rlImGuiSetup(true);
 		}
 

@@ -40,6 +40,7 @@ extern unsigned int passwd;
 #define USE_BULLET_PHYS
 
 #ifdef _WIN64
+
 #pragma comment(lib, "../Libs/x64/GFXLib.dll")
 #pragma comment(lib, "../Libs/x64/GFXLib.lib")
 #pragma comment(lib, "../Libs/x64/assimp.lib")

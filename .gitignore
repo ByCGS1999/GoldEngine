@@ -2,14 +2,9 @@
 *.exe
 *.vsidx
 /.vs
-./Solutions/*
 ./x64/
-./Solutions/
-Solutions
 Win32/
-Solutions/
-Release/
-**/Solutions
+Release/¡
 ./GoldEngine-Internal/Data/
 ./GoldEngine-Internal/x64/
 ./GoldEngine-Internal/Win32/

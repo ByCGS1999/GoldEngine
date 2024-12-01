@@ -1,0 +1,7 @@
+﻿  WineBootstrapper.cpp
+C:\Users\Carles\source\repos\GoldEngine\Utils\WineBootstrap\WineBootstrapper\WineBootstrapper.cpp(81,22): warning C4018: '<': no coinciden signed/unsigned
+  Generando código
+  Previous IPDB not found, fall back to full compilation.
+  All 388 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Generación de código finalizada
+  WineBootstrapper.vcxproj -> C:\Users\Carles\source\repos\GoldEngine\Release\WineBootstrapper.exe
