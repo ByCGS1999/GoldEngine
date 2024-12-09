@@ -10,7 +10,7 @@ using namespace System::IO;
 
 namespace Engine::Assets::Management
 {
-	typedef enum assetType { _Model, _Shader, _Texture2D, _Material };
+	typedef enum assetType { _Model, _Shader, _Texture2D, _Material, _Sound, _Musics };
 
 	public ref class DataPack
 	{
@@ -45,6 +45,20 @@ namespace Engine::Assets::Management
 				AddTextures2D(textureId, filePath);
 			}
 
+			for each (unsigned int soundId in sounds->Keys)
+			{
+				System::String^ filePath = sounds[soundId];
+
+				AddSound(soundId, filePath);
+			}
+
+			for each (unsigned int musicId in musics->Keys)
+			{
+				System::String^ filePath = musics[musicId];
+
+				AddMusic(musicId, filePath);
+			}
+
 			for each (unsigned int material_id in materials->Keys)
 			{
 				unsigned int shaderId = materials[material_id];
@@ -66,6 +80,8 @@ namespace Engine::Assets::Management
 			models = gcnew Dictionary<unsigned int, String^>(newPack->models);
 			textures2d = gcnew Dictionary<unsigned int, String^>(newPack->textures2d);
 			materials = gcnew Dictionary<unsigned int, unsigned int>(newPack->materials);
+			sounds = gcnew Dictionary<unsigned int, String^>(newPack->sounds);
+			musics = gcnew Dictionary<unsigned int, String^>(newPack->musics);
 
 			ParseContentData();
 		}
@@ -76,6 +92,8 @@ namespace Engine::Assets::Management
 			models = gcnew Dictionary<unsigned int, String^>();
 			materials = gcnew Dictionary<unsigned int, unsigned int>();
 			textures2d = gcnew Dictionary<unsigned int, String^>();
+			sounds = gcnew Dictionary<unsigned int, String^>();
+			musics = gcnew Dictionary<unsigned int, String^>();
 		}
 
 	public:
@@ -83,6 +101,8 @@ namespace Engine::Assets::Management
 		System::Collections::Generic::Dictionary<unsigned int, String^>^ models;
 		System::Collections::Generic::Dictionary<unsigned int, unsigned int>^ materials;
 		System::Collections::Generic::Dictionary<unsigned int, String^>^ textures2d;
+		System::Collections::Generic::Dictionary<unsigned int, String^>^ sounds;
+		System::Collections::Generic::Dictionary<unsigned int, String^>^ musics;
 
 	public:
 		DataPack(String^ fileName)
@@ -93,6 +113,8 @@ namespace Engine::Assets::Management
 			models = gcnew Dictionary<unsigned int, String^>();
 			materials = gcnew Dictionary<unsigned int, unsigned int>();
 			textures2d = gcnew Dictionary<unsigned int, String^>();
+			sounds = gcnew Dictionary<unsigned int, String^>();
+			musics = gcnew Dictionary<unsigned int, String^>();
 			singletonRef = this;
 			fileTarget = fileName;
 		}
@@ -174,6 +196,94 @@ namespace Engine::Assets::Management
 				Engine::Assets::Storage::DataPacks::singleton().AddModel(id, m);
 
 				return m;
+			}
+		}
+
+		Sound AddSound(unsigned int id, String^ sound)
+		{
+			if (!sounds->ContainsKey(id))
+			{
+				sounds->Add(id, sound);
+
+				std::string text = "";
+
+				text = CastStringToNative(sound);
+
+				print("[Resource Manager]:", "Loading Sound");
+
+				print("[Resource Manager]:", "Path -> " + sound);
+				print("[Resource Manager]:", "Id -> " + id);
+
+				print("[Resource Manager]", "------------------------------------------");
+
+				Sound _sound = LoadSound(text.c_str());
+
+				Engine::Assets::Storage::DataPacks::singleton().AddSound(id, _sound);
+
+				return _sound;
+			}
+			else
+			{
+				std::string text = "";
+
+				text = CastStringToNative(sound);
+
+				Sound _sound = LoadSound(text.c_str());
+
+				print("[Resource Manager]:", "Loading Sound");
+
+				print("[Resource Manager]:", "Path -> " + sound);
+				print("[Resource Manager]:", "Id -> " + id);
+
+				print("[Resource Manager]", "------------------------------------------");
+
+				Engine::Assets::Storage::DataPacks::singleton().AddSound(id, _sound);
+
+				return _sound;
+			}
+		}
+
+		Music AddMusic(unsigned int id, String^ sound)
+		{
+			if (!musics->ContainsKey(id))
+			{
+				musics->Add(id, sound);
+
+				std::string text = "";
+
+				text = CastStringToNative(sound);
+
+				print("[Resource Manager]:", "Loading Music");
+
+				print("[Resource Manager]:", "Path -> " + sound);
+				print("[Resource Manager]:", "Id -> " + id);
+
+				print("[Resource Manager]", "------------------------------------------");
+
+				Music _sound = LoadMusicStream(text.c_str());
+
+				Engine::Assets::Storage::DataPacks::singleton().AddMusic(id, _sound);
+
+				return _sound;
+			}
+			else
+			{
+				std::string text = "";
+
+				text = CastStringToNative(sound);
+
+				Music _sound = LoadMusicStream(text.c_str());
+
+				print("[Resource Manager]:", "Loading Music");
+
+				print("[Resource Manager]:", "Path -> " + sound);
+				print("[Resource Manager]:", "Id -> " + id);
+
+				print("[Resource Manager]", "------------------------------------------");
+
+				Engine::Assets::Storage::DataPacks::singleton().AddMusic(id, _sound);
+
+				return _sound;
 			}
 		}
 
@@ -274,6 +384,26 @@ namespace Engine::Assets::Management
 				}
 				return false;
 				break;
+			case _Sound:
+				for each (auto T in sounds)
+				{
+					if (T.Key == value)
+					{
+						return true;
+					}
+				}
+				return false;
+				break;
+			case _Musics:
+				for each (auto T in musics)
+				{
+					if (T.Key == value)
+					{
+						return true;
+					}
+				}
+				return false;
+				break;
 			}
 		}
 
@@ -321,6 +451,26 @@ namespace Engine::Assets::Management
 				}
 				return std::tuple<bool, int>(false, 0);
 				break;
+			case _Sound:
+				for each (auto T in sounds)
+				{
+					if (T.Value == value)
+					{
+						return std::tuple<bool, int>(true, T.Key);
+					}
+				}
+				return std::tuple<bool, int>(false, 0);
+				break;
+			case _Musics:
+				for each (auto T in musics)
+				{
+					if (T.Value == value)
+					{
+						return std::tuple<bool, int>(true, T.Key);
+					}
+				}
+				return std::tuple<bool, int>(false, 0);
+				break;
 			}
 		}
 
@@ -350,6 +500,18 @@ namespace Engine::Assets::Management
 				break;
 			case _Texture2D:
 				for each (auto T in textures2d)
+				{
+					assetId = Math::Max(assetId, T.Key + 1);
+				}
+				break;
+			case _Sound:
+				for each (auto T in sounds)
+				{
+					assetId = Math::Max(assetId, T.Key + 1);
+				}
+				break;
+			case _Musics:
+				for each (auto T in musics)
 				{
 					assetId = Math::Max(assetId, T.Key + 1);
 				}

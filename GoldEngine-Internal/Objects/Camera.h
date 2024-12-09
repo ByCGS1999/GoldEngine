@@ -105,7 +105,7 @@ namespace Engine::EngineObjects
 			}
 		}
 
-		[Engine::Scripting::ExecuteInEditModeAttribute]
+		[Engine::Attributes::ExecuteInEditModeAttribute]
 		void Update() override
 		{
 

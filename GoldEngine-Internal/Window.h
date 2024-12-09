@@ -97,7 +97,8 @@ namespace Engine
 		virtual System::Object^ GetSelectedObject() { return nullptr; }
 
 		// vmethods
-		virtual void Preload() { } // loading assets
+		virtual void Preload() {} // loading assets
+		virtual void Start() {}
 		virtual void Init() {} // Initialization (spawning objects, scene loading, whatever.)
 		virtual void Exit() {} // exit
 		virtual void Draw() {} // draw

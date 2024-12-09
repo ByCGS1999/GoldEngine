@@ -119,7 +119,7 @@ void PhysicsService::Start()
 		attributes->addAttribute(Engine::Scripting::Attribute::New(Engine::Scripting::AccessLevel::Public, "Gravity", gcnew Engine::Components::Vector3(0, 9.81f, 0), Engine::Components::Vector3::typeid));
 }
 
-[Engine::Scripting::ExecuteInEditModeAttribute]
+[Engine::Attributes::ExecuteInEditModeAttribute]
 void PhysicsService::Update()
 {
 	if (maxSubSteps <= 0)

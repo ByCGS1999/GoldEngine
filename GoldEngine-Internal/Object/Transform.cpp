@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include "../ManagedIncludes.h"
 #include "../Event.h"
 #include "GameObject.h"
 

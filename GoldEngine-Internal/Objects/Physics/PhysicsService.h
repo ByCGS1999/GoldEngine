@@ -31,7 +31,7 @@ namespace Engine::EngineObjects::Physics
 	public:
 		void Start() override;
 
-		[Engine::Scripting::ExecuteInEditModeAttribute]
+		[Engine::Attributes::ExecuteInEditModeAttribute]
 		void Update() override;
 
 		void AddPhysicsObject(Engine::EngineObjects::Physics::RigidBody^);

@@ -10,4 +10,9 @@
 #include "Cast.h"
 #include "CastToNative.h"
 
+// ATTRIBUTES \\
+
+#include "ExecuteInEditModeAttribute.h"
+#include "Instantiable.h"
+
 #pragma managed(pop)

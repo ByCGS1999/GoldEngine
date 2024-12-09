@@ -24,6 +24,9 @@ namespace Engine::Assets::Storage
 		std::vector<Engine::Assets::Storage::Types::CameraPack> cameras;
 		std::vector<Engine::Assets::Storage::Types::MaterialPack> materials;
 		std::vector<Engine::Assets::Storage::Types::Texture2DPack> textures2d;
+		std::vector<Engine::Assets::Storage::Types::SoundPack> sounds;
+		std::vector<Engine::Assets::Storage::Types::MusicPack> musics;
+
 		NativeDataPack();
 	};
 
@@ -44,6 +47,7 @@ namespace Engine::Assets::Storage
 			assetCount += nativePacks->textures2d.size();
 			assetCount += nativePacks->materials.size();
 			assetCount += nativePacks->cameras.size();
+			assetCount += nativePacks->sounds.size();
 
 			return (assetCount >= 0);
 		}
@@ -59,6 +63,32 @@ namespace Engine::Assets::Storage
 
 			nativePacks->shaders.clear();
 		}
+
+		void FreeMusics()
+		{
+			for (int x = 0; x < nativePacks->musics.size(); x++)
+			{
+				auto sP = &nativePacks->musics[x];
+
+				sP->freealloc();
+			}
+
+			nativePacks->musics.clear();
+		}
+
+
+		void FreeSounds()
+		{
+			for (int x = 0; x < nativePacks->sounds.size(); x++)
+			{
+				auto sP = &nativePacks->sounds[x];
+
+				sP->freealloc();
+			}
+
+			nativePacks->sounds.clear();
+		}
+
 
 		void FreeShader(unsigned int shaderId)
 		{
@@ -135,6 +165,8 @@ namespace Engine::Assets::Storage
 			FreeMaterials();
 			FreeShaders();
 			FreeCameras();
+			FreeSounds();
+			FreeMusics();
 		}
 
 
@@ -223,6 +255,14 @@ namespace Engine::Assets::Storage
 
 			return GetTexture2D(textureId);
 		}
+
+		Sound GetSound(unsigned int soundId);
+		Sound* GetSoundPtr(unsigned int soundId);
+		void AddSound(unsigned int soundId, Sound sound);
+
+		Music GetMusic(unsigned int musicId);
+		Music* GetMusicPtr(unsigned int musicId);
+		void AddMusic(unsigned int musicId, Music music);
 
 		Material GetMaterial(unsigned int materialId)
 		{

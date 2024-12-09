@@ -20,6 +20,11 @@ Shader* ShaderPack::getResourcePtr() { return &resource; }
 
 void ShaderPack::setResource(Shader& s)
 {
+/*
+	if (&resource != NULL)
+		freealloc();
+*/
+
 	resource = s;
 }
 
@@ -79,4 +84,81 @@ void Texture2DPack::freealloc()
 	UnloadTexture(*resource);
 	Texture* resPtr = resource.release();
 	delete resPtr;
+}
+
+// SOUNDPACK
+
+SoundPack::SoundPack(unsigned int id, Sound& ref)
+{
+	this->id = id;
+	this->resource = ref;
+}
+
+unsigned int SoundPack::getId()
+{
+	return id;
+}
+
+Sound& SoundPack::getResource()
+{
+	return resource;
+}
+
+Sound* SoundPack::getResourcePtr()
+{
+	return &resource;
+}
+
+void SoundPack::setResource(Sound& res)
+{
+	/*
+	if (&resource != NULL)
+		freealloc();
+	*/
+
+	resource = res;
+}
+
+void SoundPack::freealloc()
+{
+	UnloadSound(resource);
+}
+
+
+// MUSICPACK
+
+MusicPack::MusicPack(unsigned int id, Music& ref)
+{
+	this->id = id;
+	this->resource = ref;
+}
+
+unsigned int MusicPack::getId()
+{
+	return id;
+}
+
+Music& MusicPack::getResource()
+{
+	return resource;
+}
+
+Music* MusicPack::getResourcePtr()
+{
+	return &resource;
+}
+
+void MusicPack::setResource(Music& res)
+{
+	/*
+	if (&resource != NULL)
+		freealloc();
+	*/
+
+	resource = res;
+}
+
+void MusicPack::freealloc()
+{
+	UnloadMusicStream(resource);
 }

@@ -3,7 +3,7 @@
 namespace Engine::Scripting::Events
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class Event
+	public ref class Event : Engine::Interfaces::IInstantiable<Event^>
 	{
 	private:
 		delegate void LuaEvent(cli::array<MoonSharp::Interpreter::DynValue^>^);
@@ -15,8 +15,6 @@ namespace Engine::Scripting::Events
 
 	public:
 		Event();
-		static Event^ Create() { return gcnew Event(); }
-		static Event^ New() { return gcnew Event(); }
 
 	public:
 		void connect(System::Delegate^);
@@ -32,5 +30,9 @@ namespace Engine::Scripting::Events
 		System::Object^ invoke();
 		System::Object^ raiseExecution(cli::array<System::Object^>^);
 		System::Object^ raiseExecution();
+
+	public:
+		static Event^ Create();
+		static Event^ New();
 	};
 }

@@ -3,7 +3,7 @@
 namespace Engine::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class Vector2
+		public ref class Vector2 : Engine::Interfaces::IInstantiable<Vector2^>
 	{
 	public:
 		float x, y;
@@ -47,6 +47,16 @@ namespace Engine::Components
 		static Vector2^ New(float x, float y)
 		{
 			return gcnew Vector2(x, y);
+		}
+
+		static Vector2^ Create()
+		{
+			return gcnew Vector2();
+		}
+
+		static Vector2^ New()
+		{
+			return gcnew Vector2();
 		}
 
 		bool Equals(Vector2^ value) override

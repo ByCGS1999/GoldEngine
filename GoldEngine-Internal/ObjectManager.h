@@ -331,6 +331,10 @@ namespace Engine::Scripting
 			for each (Engine::Management::MiddleLevel::SceneObject^ object in sceneObjects)
 			{
 				auto v = GetObjectFromScene(object);
+
+				if (v->getTransform() == nullptr)
+					continue;
+
 				if (v->getTransform()->parent != nullptr)
 				{
 					if (v->getTransform()->GetParent()->GetUID() == parent->getTransform()->GetUID())
@@ -377,12 +381,10 @@ namespace Engine::Scripting
 			return nullptr;
 		}
 
-		Engine::Internal::Components::GameObject^ Instantiate(Engine::Internal::Components::GameObject^ newObject)
+		void Instantiate(Engine::Internal::Components::GameObject^ newObject)
 		{
 			loadedScene->AddObjectToScene(newObject);
 			loadedScene->PushToRenderQueue(newObject);
-
-			return newObject;
 		}
 
 		void Destroy(Engine::Internal::Components::GameObject^ object)

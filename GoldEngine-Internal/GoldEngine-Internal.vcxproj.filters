@@ -101,9 +101,6 @@
     <Filter Include="Source\Engine\EngineObjects\PBR\PBRModelRenderer">
       <UniqueIdentifier>{1caeaa6b-8ee3-40e8-94d6-b081916f8d25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Engine\EngineObjects\Script">
-      <UniqueIdentifier>{baa9c9f2-4cbd-485c-aac6-39300e73a3c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines">
       <UniqueIdentifier>{8cd565ea-b573-41fb-ac22-1833499cbb34}</UniqueIdentifier>
     </Filter>
@@ -345,6 +342,12 @@
     </Filter>
     <Filter Include="Headers\Engine\Native">
       <UniqueIdentifier>{d98459a2-0104-414a-9c53-3eeb44b25aac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Script">
+      <UniqueIdentifier>{baa9c9f2-4cbd-485c-aac6-39300e73a3c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Engine\EngineObjects\Audio">
+      <UniqueIdentifier>{6134285a-5948-4a83-ab47-b2245e5d2086}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -978,6 +981,21 @@
     <ClInclude Include="Window.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Instantiable.h">
+      <Filter>Source\Engine\ScriptingAPI\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Audio\AudioSource.h">
+      <Filter>Source\Engine\EngineObjects\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorTools\CodeEditor.h">
+      <Filter>Headers\EngineTools\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="VMWrapper.h">
+      <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorWindow.h">
+      <Filter>Source\EngineTools\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -1112,6 +1130,18 @@
     <ClCompile Include="native\CollisionShape.cpp">
       <Filter>Source\Engine\Native</Filter>
     </ClCompile>
+    <ClCompile Include="Instantiable.cpp">
+      <Filter>Source\Engine\ScriptingAPI\Attributes</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Audio\AudioSource.cpp">
+      <Filter>Source\Engine\EngineObjects\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorTools\CodeEditor.cpp">
+      <Filter>Source\EngineTools\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Pipeline\ScriptableRenderPipeline.cpp">
+      <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Scriptable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -1168,6 +1198,12 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="Data\Engine\Shaders\depth.frag">
       <Filter>Data\Engine\Shaders</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EditorAssets\Icons\Script.png">
+      <Filter>Data\EditorAssets\Icons</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EditorAssets\Icons\Sound.png">
+      <Filter>Data\EditorAssets\Icons</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>

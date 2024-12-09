@@ -36,7 +36,7 @@ namespace Engine::EngineObjects::Physics
 
 		void Start() override;
 
-		[Engine::Scripting::ExecuteInEditModeAttribute]
+		[Engine::Attributes::ExecuteInEditModeAttribute]
 		void Update() override;
 
 		void OnUnactive() override;

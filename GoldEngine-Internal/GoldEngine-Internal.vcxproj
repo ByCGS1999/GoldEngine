@@ -335,6 +335,8 @@
     <ClInclude Include="DataPacks.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="EditorGUI.h" />
+    <ClInclude Include="EditorTools\CodeEditor.h" />
+    <ClInclude Include="EditorWindow.h" />
     <ClInclude Include="EngineConfig.h" />
     <ClInclude Include="EngineGC.h" />
     <ClInclude Include="EngineIncludes.h" />
@@ -361,6 +363,7 @@
     <ClInclude Include="imgui\Style\ScopedStyle.h" />
     <ClInclude Include="imgui\TextEditor\TextEditor.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Instantiable.h" />
     <ClInclude Include="LogFileReporter.h" />
     <ClInclude Include="LoggingAPI.h" />
     <ClInclude Include="LuaVM.h" />
@@ -370,6 +373,7 @@
     <ClInclude Include="native\json.hpp" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Macros.h" />
+    <ClInclude Include="Objects\Audio\AudioSource.h" />
     <ClInclude Include="Objects\BoundingBoxRenderer.h" />
     <ClInclude Include="Objects\Camera.h" />
     <ClInclude Include="Objects\Camera2D.h" />
@@ -422,6 +426,7 @@
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="VMWrapper.h" />
     <ClInclude Include="VoxelMatrix.h" />
     <ClInclude Include="VoxelTypedefs.h" />
     <ClInclude Include="Voxel.h" />
@@ -454,6 +459,7 @@
     <ClCompile Include="CastToNative.cpp" />
     <ClCompile Include="cimgui\cimgui.cpp" />
     <ClCompile Include="DataPacks.cpp" />
+    <ClCompile Include="EditorTools\CodeEditor.cpp" />
     <ClCompile Include="EngineGC.cpp" />
     <ClCompile Include="GoldEngine.cpp" />
     <ClCompile Include="Event.cpp" />
@@ -472,11 +478,14 @@
     <ClCompile Include="imgui\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="imgui\Style\ScopedStyle.cpp" />
     <ClCompile Include="imgui\TextEditor\TextEditor.cpp" />
+    <ClCompile Include="Instantiable.cpp" />
     <ClCompile Include="LuaVM.cpp" />
     <ClCompile Include="native\CollisionShape.cpp" />
+    <ClCompile Include="Objects\Audio\AudioSource.cpp" />
     <ClCompile Include="Objects\Physics\Native\NativePhysicsService.cpp" />
     <ClCompile Include="Objects\Physics\PhysicsService.cpp" />
     <ClCompile Include="Objects\Physics\RigidBody.cpp" />
+    <ClCompile Include="Objects\Pipeline\ScriptableRenderPipeline.cpp" />
     <ClCompile Include="Object\Color.cpp" />
     <ClCompile Include="Object\GameObject.cpp" />
     <ClCompile Include="Object\Layer.cpp" />
@@ -507,32 +516,52 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/Engine/Textures/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="EditorAssets\Icons\Material.png">
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Icons\%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="EditorAssets\Icons\Model.png">
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Icons\%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="EditorAssets\Icons\Run.png">
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Icons\%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <CopyFileToFolders Include="EditorAssets\Icons\Stop.png">
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
-      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets\Icons\%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EditorAssets\Icons\Script.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="EditorAssets\Icons\Sound.png">
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EditorAssets/Icons/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
@@ -619,6 +648,9 @@
     <Reference Include="0Harmony">
       <HintPath>..\netasm\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="GFXWrapper">
+      <HintPath>..\netasm\GFXWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="ImGui.NET">
       <HintPath>..\netasm\ImGui.NET.dll</HintPath>
     </Reference>
@@ -630,9 +662,6 @@
       <Private>true</Private>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-    </Reference>
-    <Reference Include="Raylib-cs">
-      <HintPath>..\netasm\Raylib-cs.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

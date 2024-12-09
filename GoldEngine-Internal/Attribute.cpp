@@ -3,6 +3,7 @@
 #include "GlIncludes.h"
 #include "CastToNative.h"
 #include "LoggingAPI.h"
+#include "Instantiable.h"
 #include "Event.h"
 #include "Attribute.h"
 
@@ -157,7 +158,7 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool 
 	if (accessLevel == AccessLevel::ReadOnly)
 		return;
 
-	onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { this->name, object, userData });
+	onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { object, userData });
 	userData = object;
 	
 	if (descriptor != nullptr)
@@ -172,7 +173,7 @@ inline void Engine::Scripting::Attribute::setValue(System::Object^ object, bool 
 
 inline void Engine::Scripting::Attribute::setValueForce(System::Object^ object, bool overrideType)
 {
-	onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { this->name, object, userData });
+	onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { object, userData });
 	userData = object;
 
 	if (descriptor != nullptr)

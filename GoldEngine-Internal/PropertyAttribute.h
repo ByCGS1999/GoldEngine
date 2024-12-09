@@ -20,5 +20,11 @@ namespace Engine::Scripting
 			this->accessLevel = level;
 			this->attributeName = "";
 		}
+
+		PropertyAttribute()
+		{
+			this->accessLevel = Engine::Scripting::AccessLevel::Public;
+			this->attributeName = "";
+		}
 	};
 }

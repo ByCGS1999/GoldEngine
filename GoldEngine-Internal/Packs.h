@@ -4,6 +4,45 @@
 
 namespace Engine::Assets::Storage::Types
 {
+	struct SoundPack
+	{
+	private:
+		unsigned int id;
+		Sound resource;
+
+	public:
+		SoundPack(unsigned int id, Sound& res);
+
+	public:
+		unsigned int getId();
+		Sound& getResource();
+		Sound* getResourcePtr();
+
+		void setResource(Sound& s);
+
+		void freealloc();
+	};
+
+
+	struct MusicPack
+	{
+	private:
+		unsigned int id;
+		Music resource;
+
+	public:
+		MusicPack(unsigned int id, Music& res);
+
+	public:
+		unsigned int getId();
+		Music& getResource();
+		Music* getResourcePtr();
+
+		void setResource(Music& s);
+
+		void freealloc();
+	};
+
 	struct ShaderPack
 	{
 	private:

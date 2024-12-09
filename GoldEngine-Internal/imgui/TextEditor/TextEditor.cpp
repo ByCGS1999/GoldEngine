@@ -3380,7 +3380,13 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"Attribute",
 			"attributes",
 			"script",
-			"VMWrap"
+			"VMWrap",
+			"Time",
+			"Graphics",
+			"Vector2",
+			"Vector3",
+			"Color",
+			"Event"
 		};
 
 		static const char* customAttributes[] = {
@@ -3500,7 +3506,17 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 	"MOUSE_BUTTON_SIDE",    // Mouse Button: Side
 	"MOUSE_BUTTON_EXTRA",   // Mouse Button: Extra
 	"MOUSE_BUTTON_FORWARD", // Mouse Button: Forward
-	"MOUSE_BUTTON_BACK"     // Mouse Button: Back
+	"MOUSE_BUTTON_BACK",     // Mouse Button: Back
+	"onPropertyChanged",
+	"onChildAdded",
+	"onChildRemoved",
+	"onDescendantAdded",
+	"FPS",
+	"deltaTime",
+	"time",
+	"x",
+	"y",
+	"z"
 		};
 
 		static const char* customFunctions[] = // GOLD ENGINE FUNCTIONS
@@ -3513,6 +3529,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"create",
 			"Globals",
 			"New",
+			"Create",
 			"addAttribute",
 			"setAttribute",
 			"getAttribute",
@@ -3568,7 +3585,27 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 			"Destroy",
 			"HasProperty",
 			"GetAttributes",
-			"SetProperty"
+			"SetProperty",
+			"GetProperty",
+			"CastToClass",
+			"ToDerivate",
+			"GetChildren",
+			"GetChild",
+			"connect",
+			"raiseExecution",
+			"invoke",
+			"setR",
+			"setG",
+			"setB",
+			"setA",
+			"SetR",
+			"SetG",
+			"SetB",
+			"SetA",
+			"setHex",
+			"SetHex",
+			"toHex",
+			"toNative"
 		};
 
 		for (auto& k : identifiers)
@@ -3628,6 +3665,7 @@ const TextEditor::LanguageDefinition& TextEditor::LanguageDefinition::Lua()
 		langDef.mSingleLineComment = "--";
 
 		langDef.mCaseSensitive = true;
+		langDef.mAutoIndentation = true;
 
 		langDef.mName = "Lua";
 

@@ -3,7 +3,7 @@
 namespace Engine::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
-	public ref class Vector3
+	public ref class Vector3 : Engine::Interfaces::IInstantiable<Vector2^>
 	{
 	public:
 		float x, y, z;
@@ -76,17 +76,22 @@ namespace Engine::Components
 			return gcnew Vector3(left->x / right->x, left->y / right->y, left->z / right->z);
 		}
 
+		static Vector3^ Create()
+		{
+			return gcnew Vector3();
+		}
+
+		static Vector3^ New()
+		{
+			return gcnew Vector3();
+		}
+
 		static Vector3^ create(RAYLIB::Vector3 vec)
 		{
 			return gcnew Vector3(vec.x, vec.y, vec.z);
 		}
 
-		static Vector3^ New(float x, float y, float z)
-		{
-			return gcnew Vector3(x, y, z);
-		}
-
-		static Vector3^ create(float* vec)
+		static Vector3^ create(float vec[])
 		{
 			return gcnew Vector3(vec[0], vec[1], vec[2]);
 		}

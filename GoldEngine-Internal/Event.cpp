@@ -1,4 +1,5 @@
 #include "Includes.h"
+#include "ManagedIncludes.h"
 #include "GlIncludes.h"
 #include "CastToNative.h"
 #include "LoggingAPI.h"
@@ -164,4 +165,14 @@ System::Object^ Event::raiseExecution(cli::array<System::Object^>^ objects)
 System::Object^ Event::raiseExecution()
 {
 	return invoke();
+}
+
+Event^ Event::Create()
+{
+	return gcnew Event();
+}
+
+Event^ Event::New()
+{
+	return gcnew Event();
 }

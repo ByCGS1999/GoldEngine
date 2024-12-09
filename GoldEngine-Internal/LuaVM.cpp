@@ -3,10 +3,12 @@
 #include "Attribute.h"
 #include "AttributeManager.h"
 #include "LuaVM.h"
+#include "VMWrapper.h"
 #include "DataManager.h"
 #include "Time.h"
 #include "GraphicsWrapper.h"
 #include "ManagedSignal.h"
+
 #include "Objects/LuaScript.h"
 
 using namespace Engine::Scripting;
@@ -57,6 +59,17 @@ void VMWrapper::SetProperty(Engine::Internal::Components::GameObject^ object, St
 		Engine::Scripting::AttributeManager^ attribs = ((Engine::EngineObjects::ScriptBehaviour^)object)->attributes;
 		attribs->getAttribute(propertyName)->setValue(newValue);
 	}
+}
+
+Object^ VMWrapper::GetProperty(Engine::Internal::Components::GameObject^ object, String^ propertyName)
+{
+	if (HasProperty(object, propertyName))
+	{
+		Engine::Scripting::AttributeManager^ attribs = ((Engine::EngineObjects::ScriptBehaviour^)object)->attributes;
+		return attribs->getAttribute(propertyName)->getValue();
+	}
+
+	return nullptr;
 }
 
 // STATIC VM FUNCTIONS \\
@@ -111,6 +124,7 @@ void LuaVM::RegisterGlobalFunctions()
 	RegisterGlobal("HasProperty", gcnew System::Func<Engine::Internal::Components::GameObject^, String^, bool>(&VMWrapper::HasProperty));
 	RegisterGlobal("GetAttributes", gcnew System::Func<Engine::Internal::Components::GameObject^, Engine::Scripting::AttributeManager^>(&VMWrapper::GetAttributeManager));
 	RegisterGlobal("SetProperty", gcnew System::Action<Engine::Internal::Components::GameObject^, String^, Object^>(&VMWrapper::SetProperty));
+	RegisterGlobal("GetProperty", gcnew System::Func<Engine::Internal::Components::GameObject^, String^, Object^>(&VMWrapper::GetProperty));
 	RegisterGlobal("CastToClass", gcnew System::Func<System::Object^, System::String^, System::Object^>(&VMWrapper::ToDerivate));
 	RegisterGlobal("ToDerivate", gcnew System::Func<System::Object^, System::Object^>(&VMWrapper::ToDerivate));
 	//RegisterGlobal("VM", this->scriptState);

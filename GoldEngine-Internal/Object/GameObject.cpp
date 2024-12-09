@@ -10,7 +10,6 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Quaternion.h"
-#include "../ExecuteInEditModeAttribute.h"
 #include "../LoggingAPI.h"
 #include "../EngineState.h"
 #include "../Event.h"
@@ -178,7 +177,7 @@ void GameObject::GameUpdate()
 	{
 		auto method = GetType()->GetMethod("Update");
 
-		if (!method->IsDefined(Engine::Scripting::ExecuteInEditModeAttribute::typeid, false))
+		if (!method->IsDefined(Engine::Attributes::ExecuteInEditModeAttribute::typeid, false))
 		{
 			return;
 		}
@@ -213,7 +212,7 @@ void GameObject::GameDrawImGUI()
 	{
 		auto method = GetType()->GetMethod("DrawImGUI");
 
-		if (!method->IsDefined(Engine::Scripting::ExecuteInEditModeAttribute::typeid, false))
+		if (!method->IsDefined(Engine::Attributes::ExecuteInEditModeAttribute::typeid, false))
 		{
 			return;
 		}
@@ -264,4 +263,24 @@ GameObject^ GameObject::GetChild(String^ childName)
 	}
 
 	return nullptr;
+}
+
+GameObject^ GameObject::InstantiateChild(GameObject^ instance)
+{
+	instance->setParent(this);
+	Singleton<Engine::Scripting::ObjectManager^>::Instance->Instantiate(instance);
+	return instance;
+}
+
+GameObject^ GameObject::Instantiate(GameObject^ instance)
+{
+	Singleton<Engine::Scripting::ObjectManager^>::Instance->Instantiate(instance);
+	return instance;
+}
+
+GameObject^ GameObject::Instantiate(GameObject^ instance, Transform^ parent)
+{
+	instance->transform->setParent(parent);
+	Singleton<Engine::Scripting::ObjectManager^>::Instance->Instantiate(instance);
+	return instance;
 }

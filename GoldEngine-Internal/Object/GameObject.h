@@ -7,6 +7,8 @@ namespace Engine::Internal::Components
 	{
 	private:
 		void* collisionShape;
+		bool memberIsProtected;
+		Engine::Internal::Components::Transform^ lastTransform;
 
 	public:
 		bool active;
@@ -14,6 +16,7 @@ namespace Engine::Internal::Components
 		System::String^ name;
 		initonly Engine::Internal::Components::ObjectType type;
 		Engine::Internal::Components::Transform^ transform;
+
 		Engine::Internal::Components::ViewSpace viewSpace;
 		Engine::Components::Layer^ layerMask;
 		System::String^ tag;
@@ -26,10 +29,6 @@ namespace Engine::Internal::Components
 			Engine::Scripting::Events::Event^ onChildRemoved;
 		[Newtonsoft::Json::JsonIgnoreAttribute]
 			Engine::Scripting::Events::Event^ onDescendantAdded;
-
-	private:
-		bool memberIsProtected;
-		Engine::Internal::Components::Transform^ lastTransform;
 
 	public:
 		[Newtonsoft::Json::JsonConstructorAttribute]
@@ -164,6 +163,11 @@ namespace Engine::Internal::Components
 		System::Collections::Generic::List<GameObject^>^ GetChildren();
 		GameObject^ GetChild(int index);
 		GameObject^ GetChild(String^ name);
+
+		GameObject^ InstantiateChild(GameObject^ instance);
+
+		static GameObject^ Instantiate(GameObject^ instance);
+		static GameObject^ Instantiate(GameObject^ instance, Transform^ parent);
 
 		/*
 

@@ -25,3 +25,5 @@
 #include "imguizmo/GraphEditor.h"
 #include "imguizmo/ImZoomSlider.h"
 #pragma managed(pop)
+
+#include "ManagedIncludes.h"

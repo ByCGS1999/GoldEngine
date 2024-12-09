@@ -431,5 +431,9 @@ namespace Engine::Internal
         static void GL_UnloadTexture(RAYLIB::Texture);
         static void GL_UnloadModel(RAYLIB::Model);
         static void GL_UnloadRenderTexture(RAYLIB::RenderTexture);
+
+
+        static GLWrapper::Texture2D ConvertTexture2D(RAYLIB::Texture2D texture);
+        static GLWrapper::RenderTexture2D ConvertRenderTexture2D(RAYLIB::RenderTexture2D texture);
 	};
 }

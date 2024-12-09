@@ -1,19 +1,7 @@
+#pragma once
+
 namespace Engine::Render
 {
-	void UnloadRenderTextureDepthTex(RenderTexture2D target)
-	{
-		if (target.id > 0)
-		{
-			// Color texture attached to FBO is deleted
-			RLGL::rlUnloadTexture(target.texture.id);
-			RLGL::rlUnloadTexture(target.depth.id);
-
-			// NOTE: Depth texture is automatically
-			// queried and deleted before deleting framebuffer
-			RLGL::rlUnloadFramebuffer(target.id);
-		}
-	}
-
 	struct cameraData
 	{
 	public:
@@ -27,10 +15,8 @@ namespace Engine::Render
 		}
 	};
 
-	void unloadCameraData(cameraData* data)
-	{
-		delete data;
-	}
+	void UnloadRenderTextureDepthTex(RenderTexture2D target);
+	void unloadCameraData(cameraData* data);
 
 	public ref class ScriptableRenderPipeline abstract
 	{
@@ -39,50 +25,40 @@ namespace Engine::Render
 
 	public:
 		Engine::Native::EnginePtr<RAYLIB::RenderTexture>* framebufferTexturePtr;
-		Engine::Native::EnginePtr<RAYLIB::RenderTexture>* depthbufferTexturePtr;
 		Engine::Native::EnginePtr<RAYLIB::Shader>* depthShaderPtr;
 		Engine::Native::EnginePtr<cameraData*>* cameraDataPtr;
 
 	public:
 		ScriptableRenderPipeline()
 		{
-			Logging::Log("Creating new ScriptableRenderPipeline");
+			Engine::Scripting::Logging::Log("Creating new ScriptableRenderPipeline");
 
 			Singleton<ScriptableRenderPipeline^>::Create(this);
 			Singleton<HarmonyLib::Harmony^>::Instance->UnpatchAll("HarmonyInstance");
 
-			this->height = Screen::Height;
-			this->width = Screen::Width;
+			this->height = Engine::Scripting::Screen::Height;
+			this->width = Engine::Scripting::Screen::Width;
 
-			RAYLIB::RenderTexture renderTexture = LoadRenderTextureDepthTex(Screen::Width, Screen::Height);
+			RAYLIB::RenderTexture renderTexture = LoadRenderTextureDepthTex(Engine::Scripting::Screen::Width, Engine::Scripting::Screen::Height);
 			framebufferTexturePtr = new Engine::Native::EnginePtr<RAYLIB::RenderTexture>(renderTexture, &UnloadRenderTextureDepthTex);
 
 			RAYLIB::Shader depthShader = RAYLIB::LoadShader("Data/Engine/Shaders/base.vs", "Data/Engine/Shaders/depth.frag");
 			depthShaderPtr = new Engine::Native::EnginePtr<RAYLIB::Shader>(depthShader, &RAYLIB::UnloadShader);
-
-			RAYLIB::RenderTexture depthTexture = RAYLIB::LoadRenderTexture(Screen::Width, Screen::Height);
-			depthbufferTexturePtr = new Engine::Native::EnginePtr<RAYLIB::RenderTexture>(depthTexture, &RAYLIB::UnloadRenderTexture);
 		}
 
 	protected:
 		void CreateTexture()
 		{
-			if ((this->height != Screen::Height) || (this->width != Screen::Width))
+			if ((this->height != Engine::Scripting::Screen::Height) || (this->width != Engine::Scripting::Screen::Width))
 			{
 				if (framebufferTexturePtr != nullptr)
 					delete framebufferTexturePtr;
 
-				if (depthbufferTexturePtr != nullptr)
-					delete depthbufferTexturePtr;
-
-				RAYLIB::RenderTexture renderTexture = LoadRenderTextureDepthTex(Screen::Width, Screen::Height);
+				RAYLIB::RenderTexture renderTexture = LoadRenderTextureDepthTex(Engine::Scripting::Screen::Width, Engine::Scripting::Screen::Height);
 				framebufferTexturePtr = new Engine::Native::EnginePtr<RAYLIB::RenderTexture>(renderTexture, &UnloadRenderTextureDepthTex);
 
-				RAYLIB::RenderTexture depthTexture = RAYLIB::LoadRenderTexture(Screen::Width, Screen::Height);
-				depthbufferTexturePtr = new Engine::Native::EnginePtr<RAYLIB::RenderTexture>(depthTexture, &RAYLIB::UnloadRenderTexture);
-
-				this->width = Screen::Width;
-				this->height = Screen::Height;
+				this->width = Engine::Scripting::Screen::Width;
+				this->height = Engine::Scripting::Screen::Height;
 			}
 		}
 
@@ -143,7 +119,7 @@ namespace Engine::Render
 				RLGL::rlEnableDepthTest();
 				PreRenderFrame();
 				{
-					Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
+					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera();
 
 					int currentLayer = 0;
 
@@ -173,42 +149,15 @@ namespace Engine::Render
 				RLGL::rlDisableDepthTest();
 				EndTextureMode();
 
-				int nearPlaneLOC = GetShaderLocation(depthShaderPtr->getInstance(), "nearPlane");
-				int farPlaneLOC = GetShaderLocation(depthShaderPtr->getInstance(), "farPlane");
-				int depthTextureLOC = GetShaderLocation(depthShaderPtr->getInstance(), "texture0");
-
-				float nearPlane = cameraDataPtr->getInstance()->nearPlane;
-				float farPlane = cameraDataPtr->getInstance()->farPlane;
-
-				SetShaderValue(depthShaderPtr->getInstance(), nearPlaneLOC, &nearPlane, RAYLIB::SHADER_UNIFORM_FLOAT);
-				SetShaderValue(depthShaderPtr->getInstance(), farPlaneLOC, &farPlane, RAYLIB::SHADER_UNIFORM_FLOAT);
-				SetShaderValue(depthShaderPtr->getInstance(), depthTextureLOC, &framebufferTexturePtr->getInstance().depth.id, RAYLIB::SHADER_UNIFORM_SAMPLER2D);
-
-				BeginShaderMode(depthShaderPtr->getInstance());
-				BeginTextureMode(depthbufferTexturePtr->getInstance());
-				{
-					Rectangle target;
-					target.x = 0;
-					target.y = 0;
-					target.width = Screen::Width;
-					target.height = -Screen::Height;
-
-					ClearBackground({ 0,0,0,255 });
-
-					DrawTextureRec(framebufferTexturePtr->getInstance().depth, target, { 0,0 }, { 255,255,255,255 });
-				}
-				EndTextureMode();
-				EndShaderMode();
-
 				Rectangle target;
 				target.x = 0;
 				target.y = 0;
-				target.width = Screen::Width;
-				target.height = -Screen::Height;
+				target.width = Engine::Scripting::Screen::Width;
+				target.height = -Engine::Scripting::Screen::Height;
 
 				ClearBackground({ 0,0,0,255 });
 
-				DrawTextureRec(depthbufferTexturePtr->getInstance().texture, target, { 0,0 }, { 255,255,255,255 });
+				DrawTextureRec(framebufferTexturePtr->getInstance().texture, target, { 0,0 }, { 255,255,255,255 });
 
 				OnRenderEnd();
 
@@ -249,7 +198,7 @@ namespace Engine::Render
 
 				PreRenderFrame(); // PRE FRAME
 				{
-					Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
+					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera();
 
 					int currentLayer = 1;
 
@@ -308,9 +257,9 @@ namespace Engine::Render
 		{
 			Layer^ lastLayer = nullptr;
 
-			while (currentLayer != LayerManager::getHigherLayer())
+			while (currentLayer != Engine::Scripting::LayerManager::getHigherLayer())
 			{
-				Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+				Layer^ cL = Engine::Scripting::LayerManager::GetLayerFromId(currentLayer);
 
 				if (cL != nullptr)
 				{
@@ -328,7 +277,7 @@ namespace Engine::Render
 						}
 					}
 
-					Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+					Layer^ nextLayer = Engine::Scripting::LayerManager::getNextHigherLayer(cL);
 
 					if (nextLayer != nullptr)
 						currentLayer = nextLayer->layerMask;
@@ -342,7 +291,7 @@ namespace Engine::Render
 					if (lastLayer == nullptr)
 						break;
 
-					Layer^ nextLayer = LayerManager::getNextHigherLayer(lastLayer);
+					Layer^ nextLayer = Engine::Scripting::LayerManager::getNextHigherLayer(lastLayer);
 
 					if (nextLayer != nullptr)
 						currentLayer = nextLayer->layerMask;
@@ -356,7 +305,7 @@ namespace Engine::Render
 	protected:
 		void render(int currentLayer, Engine::Management::Scene^ scene)
 		{
-			if (currentLayer == LayerManager::getHigherLayer())
+			if (currentLayer == Engine::Scripting::LayerManager::getHigherLayer())
 				return;
 			else
 			{
@@ -364,7 +313,7 @@ namespace Engine::Render
 
 				PreRenderObjects();
 
-				Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+				Layer^ cL = Engine::Scripting::LayerManager::GetLayerFromId(currentLayer);
 
 				if (cL != nullptr)
 				{
@@ -394,7 +343,7 @@ namespace Engine::Render
 							}
 						}
 					}
-					Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+					Layer^ nextLayer = Engine::Scripting::LayerManager::getNextHigherLayer(cL);
 
 					if (nextLayer != nullptr)
 						return render(nextLayer->layerMask, scene);
@@ -416,9 +365,9 @@ namespace Engine::Render
 
 			Engine::Management::Scene^ scene = Singleton<Engine::Management::Scene^>::Instance;
 
-			while (currentLayer != LayerManager::getHigherLayer())
+			while (currentLayer != Engine::Scripting::LayerManager::getHigherLayer())
 			{
-				Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+				Layer^ cL = Engine::Scripting::LayerManager::GetLayerFromId(currentLayer);
 
 				if (cL == nullptr)
 					continue;
@@ -437,7 +386,7 @@ namespace Engine::Render
 					}
 				}
 
-				Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+				Layer^ nextLayer = Engine::Scripting::LayerManager::getNextHigherLayer(cL);
 
 				if (nextLayer != nullptr)
 					currentLayer = nextLayer->layerMask;
@@ -453,9 +402,9 @@ namespace Engine::Render
 
 			Engine::Management::Scene^ scene = Singleton<Engine::Management::Scene^>::Instance;
 
-			while (currentLayer != LayerManager::getHigherLayer())
+			while (currentLayer != Engine::Scripting::LayerManager::getHigherLayer())
 			{
-				Layer^ cL = LayerManager::GetLayerFromId(currentLayer);
+				Layer^ cL = Engine::Scripting::LayerManager::GetLayerFromId(currentLayer);
 
 				if (cL == nullptr)
 					continue;
@@ -475,7 +424,7 @@ namespace Engine::Render
 					}
 				}
 
-				Layer^ nextLayer = LayerManager::getNextHigherLayer(cL);
+				Layer^ nextLayer = Engine::Scripting::LayerManager::getNextHigherLayer(cL);
 
 				if (nextLayer != nullptr)
 					currentLayer = nextLayer->layerMask;
@@ -506,6 +455,6 @@ namespace Engine::Render
 		virtual void PostFirstPassRender() abstract;
 
 		// For freeing resources and memory
-		virtual void OnUnloadPipeline() { delete framebufferTexturePtr; delete depthbufferTexturePtr; delete depthShaderPtr; };
+		virtual void OnUnloadPipeline() { delete framebufferTexturePtr; delete depthShaderPtr; };
 	};
 }

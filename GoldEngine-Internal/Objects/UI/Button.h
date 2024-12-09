@@ -10,15 +10,21 @@ namespace Engine::EngineObjects::UI
 	{
 	public:
 			[Newtonsoft::Json::JsonIgnoreAttribute]
-			Engine::Scripting::Events::Event^ OnMouseButton1Down;
+			Engine::Scripting::Events::Event^ onMouseButton1Down;
 			[Newtonsoft::Json::JsonIgnoreAttribute]
-			Engine::Scripting::Events::Event^ OnMouseButton1Click;
+			Engine::Scripting::Events::Event^ onMouseButton1Click;
+			[Newtonsoft::Json::JsonIgnoreAttribute]
+			Engine::Scripting::Events::Event^ onMouseButton2Down;
+			[Newtonsoft::Json::JsonIgnoreAttribute]
+			Engine::Scripting::Events::Event^ onMouseButton2Click;
 
 	public:
 		Button(String^ name, Engine::Internal::Components::Transform^ transform) : Engine::EngineObjects::ScriptBehaviour(name, transform)
 		{
-			OnMouseButton1Down = gcnew Engine::Scripting::Events::Event();
-			OnMouseButton1Click = gcnew Engine::Scripting::Events::Event();
+			onMouseButton1Down = gcnew Engine::Scripting::Events::Event();
+			onMouseButton1Click = gcnew Engine::Scripting::Events::Event();
+			onMouseButton2Down = gcnew Engine::Scripting::Events::Event();
+			onMouseButton2Click = gcnew Engine::Scripting::Events::Event();
 		}
 
 	public:
@@ -76,7 +82,7 @@ namespace Engine::EngineObjects::UI
 			RAYLIB::EndBlendMode();
 		}
 
-		[Engine::Scripting::ExecuteInEditModeAttribute]
+		[Engine::Attributes::ExecuteInEditModeAttribute]
 		void Update() override
 		{
 			auto mousePosition = Engine::Scripting::InputManager::GetMousePosition();
@@ -93,10 +99,16 @@ namespace Engine::EngineObjects::UI
 			if (RAYLIB::CheckCollisionPointRec(mousePosition->toNative(), rectangle))
 			{
 				if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_BUTTON_LEFT))
-					OnMouseButton1Down->raiseExecution();
+					onMouseButton1Down->raiseExecution();
 
 				if (RAYLIB::IsMouseButtonPressed(RAYLIB::MOUSE_BUTTON_LEFT))
-					OnMouseButton1Click->raiseExecution();
+					onMouseButton1Click->raiseExecution();
+
+				if (RAYLIB::IsMouseButtonDown(RAYLIB::MOUSE_BUTTON_RIGHT))
+					onMouseButton2Down->raiseExecution();
+
+				if (RAYLIB::IsMouseButtonPressed(RAYLIB::MOUSE_BUTTON_RIGHT))
+					onMouseButton2Click->raiseExecution();
 			}
 		}
 

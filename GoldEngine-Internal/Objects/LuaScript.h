@@ -34,6 +34,12 @@ namespace Engine::EngineObjects
 	public:
 		void Reset()
 		{
+			if (virtualMachine != nullptr)
+			{
+				delete virtualMachine;
+				virtualMachine = nullptr;
+			}
+
 			initVM();
 		}
 
@@ -57,7 +63,7 @@ namespace Engine::EngineObjects
 
 				virtualMachine->RegisterScript(luaSource);
 
-				Start();
+				//Start();
 			}
 			else
 			{

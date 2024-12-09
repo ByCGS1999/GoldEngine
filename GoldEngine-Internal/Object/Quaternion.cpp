@@ -1,6 +1,7 @@
 #pragma once
 #include "../Includes.h"
 #include "../GlIncludes.h"
+#include "../ManagedIncludes.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Quaternion.h"

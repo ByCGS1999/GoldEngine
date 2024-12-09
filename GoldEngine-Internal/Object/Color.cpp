@@ -1,5 +1,6 @@
 #include "../Includes.h"
 #include "../GlIncludes.h"
+#include "../ManagedIncludes.h"
 #include "Color.h"
 
 using namespace System;
@@ -8,11 +9,44 @@ using namespace Engine::Components;
 Engine::Components::Color::Color(unsigned int colorHex)
 {
 	this->hexColor = colorHex;
+
+	r = (hexColor >> 0) & 0xFF;
+	g = (hexColor >> 8) & 0xFF;
+	b = (hexColor >> 16) & 0xFF;
+	a = (hexColor >> 24) & 0xFF;
 }
 
-unsigned int Engine::Components::Color::toHex()
+Engine::Components::Color::Color(__int8 red, __int8 green, __int8 blue, __int8 alpha)
 {
-	return hexColor;
+	r = red;
+	g = green;
+	b = blue;
+	a = alpha;
+
+	hexColor = 0;
+	hexColor << r & 0xFF;
+	hexColor << g & 0xFF;
+	hexColor << b & 0xFF;
+	hexColor << a & 0xFF;
+}
+
+Engine::Components::Color::Color(int red, int green, int blue, int alpha)
+{
+	r = red;
+	g = green;
+	b = blue;
+	a = alpha;
+
+	hexColor = 0;
+	hexColor << r & 0xFF;
+	hexColor << g & 0xFF;
+	hexColor << b & 0xFF;
+	hexColor << a & 0xFF;
+}
+
+unsigned int% Engine::Components::Color::toHex()
+{
+	return this->hexColor;
 }
 
 RAYLIB::Color Engine::Components::Color::toNativeAlt()
@@ -64,4 +98,62 @@ float* Engine::Components::Color::toFloat()
 	args[3] = c.a;
 
 	return args;
+}
+
+void Engine::Components::Color::setHex(unsigned int value)
+{
+	this->hexColor = value;
+
+	r = (hexColor >> 0) & 0xFF;
+	g = (hexColor >> 8) & 0xFF;
+	b = (hexColor >> 16) & 0xFF;
+	a = (hexColor >> 24) & 0xFF;
+}
+
+
+void Engine::Components::Color::setR(__int8 value)
+{
+	r = value;
+
+	hexColor = 0;
+	hexColor << (r) & 0xFF;
+	hexColor << (g) & 0xFF;
+	hexColor << (b) & 0xFF;
+	hexColor << (a) & 0xFF;
+}
+
+
+void Engine::Components::Color::setG(__int8 value)
+{
+	g = value;
+
+	hexColor = 0;
+	hexColor << (r) & 0xFF;
+	hexColor << (g) & 0xFF;
+	hexColor << (b) & 0xFF;
+	hexColor << (a) & 0xFF;
+}
+
+
+void Engine::Components::Color::setB(__int8 value)
+{
+	b = value;
+
+	hexColor = 0;
+	hexColor << (r) & 0xFF;
+	hexColor << (g) & 0xFF;
+	hexColor << (b) & 0xFF;
+	hexColor << (a) & 0xFF;
+}
+
+
+void Engine::Components::Color::setA(__int8 value)
+{
+	a = value;
+
+	hexColor = 0;
+	hexColor << (r) & 0xFF;
+	hexColor << (g) & 0xFF;
+	hexColor << (b) & 0xFF;
+	hexColor << (a) & 0xFF;
 }

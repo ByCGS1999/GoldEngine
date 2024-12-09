@@ -187,3 +187,27 @@ void GraphicsWrapper::GL_DrawLine(Engine::Components::Vector2^ origin, Engine::C
 {
 	RAYLIB::DrawLine(origin->x, origin->y, dest->x, dest->y, color->toNative());
 }
+
+GLWrapper::Texture2D GraphicsWrapper::ConvertTexture2D(RAYLIB::Texture2D texture)
+{
+	GLWrapper::Texture2D newTexture = GLWrapper::Texture2D();
+
+	newTexture.Id = texture.id;
+	newTexture.Width = texture.width;
+	newTexture.Height = texture.height;
+	newTexture.Mipmaps = texture.mipmaps;
+	newTexture.Format = (GLWrapper::PixelFormat)texture.format;
+
+	return newTexture;
+}
+
+GLWrapper::RenderTexture2D GraphicsWrapper::ConvertRenderTexture2D(RAYLIB::RenderTexture2D texture)
+{
+	GLWrapper::RenderTexture2D newTexture = GLWrapper::RenderTexture2D();
+
+	newTexture.Id = texture.id;
+	newTexture.Texture = ConvertTexture2D(texture.texture);
+	newTexture.Depth = ConvertTexture2D(texture.depth);
+
+	return newTexture;
+}

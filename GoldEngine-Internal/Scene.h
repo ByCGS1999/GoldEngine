@@ -139,7 +139,12 @@ namespace Engine::Management
 				""
 			);
 
-			sceneObjects->Add(tmp);
+			msclr::lock^ _lock = gcnew msclr::lock(sceneObjects);
+			_lock->acquire();
+			{
+				sceneObjects->Add(tmp);
+			}
+			_lock->release();
 		}
 
 		System::Collections::ArrayList^ GetRenderQueue() { return drawQueue; }
@@ -248,6 +253,7 @@ namespace Engine::Management
 		void PushToRenderQueue(Engine::Internal::Components::GameObject^ object)
 		{
 			msclr::lock^ l = gcnew msclr::lock(drawQueue);
+			l->acquire();
 			{
 				drawQueue->Add(gcnew Engine::Management::MiddleLevel::SceneObject(
 					object->type,

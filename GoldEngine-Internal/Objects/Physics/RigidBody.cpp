@@ -137,7 +137,7 @@ void RigidBody::Start()
 	}
 }
 
-[Engine::Scripting::ExecuteInEditModeAttribute]
+[Engine::Attributes::ExecuteInEditModeAttribute]
 void RigidBody::Update()
 {
 	if (!Singleton<PhysicsService^>::Instantiated || hookedObject == nullptr || this->rigidBody == nullptr)
