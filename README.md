@@ -18,8 +18,8 @@ Features:</br>
   Embedded default objects [x]</br>
   Object Based System [x]</br>
   Entity Component System [] - NOR PLANNED</br>
-  64 Bit Support [x]</br>
-  32 Bit Support [x]</br>
+  64 Bit Support [x]</br> (you will need to compile assimp, raylib and bullet3 for x64 to make it run)
+  32 Bit Support [x]</br> (you will need to compile assimp, raylib and bullet3 for x86 to make it run)
   LuaVM [x] - Thanks To MoonSharp, it somehow works with C++/CLI<br>
 
 Requirements:</br>
