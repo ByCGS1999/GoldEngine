@@ -163,13 +163,13 @@ namespace Engine::Render
 
 				rlImGuiBegin();
 
-				for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
+				for each (Engine::Internal::Components::GameObject^ obj in scene->GetRenderQueue())
 				{
 					if (obj != nullptr)
 					{
-						if (obj->GetReference() != nullptr)
+						if (obj != nullptr)
 						{
-							obj->GetReference()->GameDrawImGUI();
+							obj->GameDrawImGUI();
 						}
 					}
 				}
@@ -232,13 +232,13 @@ namespace Engine::Render
 					ImGui::End();
 				}
 
-				for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
+				for each (GameObject^ obj in scene->GetRenderQueue())
 				{
 					if (obj != nullptr)
 					{
-						if (obj->GetReference() != nullptr)
+						if (obj != nullptr)
 						{
-							obj->GetReference()->GameDrawImGUI();
+							obj->GameDrawImGUI();
 						}
 					}
 				}
@@ -263,11 +263,11 @@ namespace Engine::Render
 
 				if (cL != nullptr)
 				{
-					for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+					for each (Engine::Internal::Components::GameObject^ sceneObject in scene->GetRenderQueue())
 					{
 						if (scene->sceneLoaded())
 						{
-							Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject->GetReference();
+							Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject;
 
 							if (reference->layerMask->IsLayer(cL))
 							{
@@ -317,11 +317,11 @@ namespace Engine::Render
 
 				if (cL != nullptr)
 				{
-					for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+					for each (Engine::Internal::Components::GameObject^ sceneObject in scene->GetRenderQueue())
 					{
 						if (scene->sceneLoaded())
 						{
-							Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject->GetReference();
+							Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject;
 
 							if (reference->layerMask->IsLayer(cL))
 							{
@@ -372,11 +372,11 @@ namespace Engine::Render
 				if (cL == nullptr)
 					continue;
 
-				for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+				for each (Engine::Internal::Components::GameObject^ sceneObject in scene->GetRenderQueue())
 				{
 					if (scene->sceneLoaded())
 					{
-						Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject->GetReference();
+						Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject;
 
 						if (reference->layerMask->IsLayer(cL))
 						{
@@ -409,11 +409,11 @@ namespace Engine::Render
 				if (cL == nullptr)
 					continue;
 
-				for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in scene->GetRenderQueue())
+				for each (Engine::Internal::Components::GameObject^ sceneObject in scene->GetRenderQueue())
 				{
 					if (scene->sceneLoaded())
 					{
-						Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject->GetReference();
+						Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject;
 
 						if (reference->layerMask->IsLayer(cL))
 						{

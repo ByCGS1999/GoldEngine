@@ -7,6 +7,7 @@ namespace Engine::Assets::IO
 {
 	public ref class FileManager
 	{
+	private:
 		static String^ fileHeader = "GOLD ";
 		static short int fileVersion = 100;
 
@@ -164,6 +165,68 @@ namespace Engine::Assets::IO
 			stream->Close();
 		}
 
+		static void CleanupUnpackedAssets()
+		{
+			if (Directory::Exists("Data/unpacked/"))
+				Directory::Delete("Data/unpacked/");
+		}
+
+		static void UnpackAsset(String^ fileName, String^ password, String^ resourceName)
+		{
+			auto file = File::Open(fileName, FileMode::OpenOrCreate);
+
+			auto stream = gcnew BinaryReader(file);
+
+			String^ header = stream->ReadString();
+
+			if (fileHeader->Equals(header))
+			{
+				short int version = stream->ReadInt16();
+
+				if (fileVersion == version)
+				{
+					auto deflateStream = gcnew Compression::DeflateStream(file, Compression::CompressionMode::Decompress);
+					stream = gcnew BinaryReader(deflateStream);
+
+					if (!Directory::Exists("Data/unpacked/"))
+						Directory::CreateDirectory("Data/unpacked/");
+
+					auto dirInfo = gcnew DirectoryInfo("Data/unpacked/");
+
+					int assets = stream->ReadInt32();
+
+					for (int x = 0; x < assets; x++)
+					{
+						String^ fN = stream->ReadString();
+						String^ resName = fN->Substring(0, fN->IndexOf("."));
+
+						if (resName->Equals(resourceName))
+						{
+							unsigned long length = stream->ReadInt32();
+							auto fC = stream->ReadBytes(length);
+							Directory::CreateDirectory(Path::GetDirectoryName("Data/unpacked/" + fN));
+							auto fS = File::Open("Data/unpacked/" + fN, FileMode::OpenOrCreate);
+							auto bW = gcnew BinaryWriter(fS);
+
+							bW->Write(
+								fC
+							);
+							bW->Flush();
+
+							bW->Close();
+						}
+						else
+						{
+							unsigned long length = stream->ReadInt32();
+							auto fC = stream->ReadBytes(length);
+						}
+					}
+				}
+			}
+
+
+			stream->Close();
+		}
 	};
 
 

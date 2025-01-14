@@ -53,8 +53,12 @@ namespace Engine
 
 			RLGL::rlEnableDepthTest();
 
+			InitializeExtensions();
+
 			rlImGuiSetup(true);
 		}
+
+		void InitializeExtensions();
 
 		void AddToDraw(System::Action^ invokable)
 		{

@@ -1,7 +1,6 @@
 #include "../../../SDK.h"
 #include "NativePhysicsService.h"
 
-
 using namespace Engine::EngineObjects::Physics::Native;
 
 
@@ -36,8 +35,18 @@ btCollisionShape* createCollisionMesh(RAYLIB::Mesh mesh, int collisionType)
 		((btConvexHullShape*)collisionShape)->recalcLocalAabb();
 	}
 
-
 	return collisionShape;
+}
+
+
+btCollisionShape* createCollisionBox(float x, float y, float z)
+{
+	return new btBoxShape(btVector3(x, y, z));
+}
+
+btCollisionShape* createCollisionSphere(float radius)
+{
+	return new btSphereShape(radius);
 }
 
 #pragma managed(pop)
@@ -59,7 +68,18 @@ btCollisionShape* NativePhysicsService::getCollisionShapeFromMesh(RAYLIB::Mesh m
 }
 
 
+btCollisionShape* NativePhysicsService::getCollisionShapeForBox(float x, float y, float z)
+{
+	return createCollisionBox(x, y, z);
+}
+
+btCollisionShape* NativePhysicsService::getCollisionShapeForSphere(float radius)
+{
+	return createCollisionSphere(radius);
+}
+
+
 NativePhysicsService::NativePhysicsService()
 {
-	//NativeSingleton<NativePhysicsService>::Create(this);
+	NativeSingleton<NativePhysicsService*>::create(this);
 }

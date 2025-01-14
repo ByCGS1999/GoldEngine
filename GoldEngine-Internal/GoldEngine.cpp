@@ -40,6 +40,10 @@ using namespace Engine::Attributes;
 
 #include "imguistyleserializer.h"
 
+// Prefabs
+
+#include "Object/Prefab.h"
+
 // API
 
 #include "Screen.h"
@@ -85,7 +89,6 @@ using namespace Engine::Attributes;
 #include "RenderPipelines/LitPBR_SRP.h"
 #include "RenderPipelines/RaymarchSRP.h"
 #include "RenderPipelines/LightweightSRP.h"
-
 
 using namespace Engine;
 using namespace Engine::EngineObjects;
@@ -201,6 +204,7 @@ bool propertiesVisible = true;
 bool assetsVisible = true;
 bool consoleVisible = true;
 bool scenevpVisible = true;
+msclr::gcroot<String^> jsonData = "";
 
 #include "EditorTools/CodeEditor.h"
 #include "EditorWindow.h"
@@ -210,8 +214,10 @@ typedef enum assetDisplay
 	ALL,
 	MODELS,
 	TEXTURES,
-	AUDIO,
-	SCRIPTS
+	SOUND,
+	MUSIC,
+	SCRIPTS,
+	PREFAB
 };
 
 assetDisplay displayingAssets;
@@ -243,6 +249,13 @@ void ShowError()
 		ImGui::EndPopup();
 	}
 }
+
+void SaveToFile(String^ filePath)
+{
+	File::WriteAllText(filePath, jsonData);
+	jsonData = "";
+}
+
 String^ GetParentRoute(Engine::Internal::Components::Transform^ transform)
 {
 	if (transform != nullptr && transform->parent != nullptr)
@@ -301,7 +314,7 @@ void EditorWindow::SpecializedPropertyEditor(Engine::Internal::Components::GameO
 {
 	if (object != nullptr)
 	{
-		auto type = object->type;
+		auto type = object->GetObjectType();
 
 		switch (type)
 		{
@@ -691,10 +704,12 @@ void EditorWindow::OpenFileExplorer(std::string name, Engine::Editor::Gui::explo
 }
 void EditorWindow::DrawHierarchyInherits(Engine::Management::Scene^ scene, Engine::Internal::Components::GameObject^ parent, int depth)
 {
-	for each (SceneObject ^ _obj in scene->GetRenderQueue())
+	for (int x = 0; x < scene->GetRenderQueue()->Count; x++)
 	{
-		auto _reference = _obj->GetReference();
-		auto _type = _obj->objectType;
+		Engine::Internal::Components::GameObject^ _obj = scene->GetRenderQueue()[x];
+
+		auto _reference = _obj;
+		auto _type = _obj->GetObjectType();
 
 		if (parent->Equals(_reference))
 			continue;
@@ -717,7 +732,7 @@ void EditorWindow::DrawHierarchyInherits(Engine::Management::Scene^ scene, Engin
 
 				if (_type == ObjectType::Daemon || _type == ObjectType::Datamodel || _type == ObjectType::LightManager || _reference->isProtected())
 				{
-					if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->getTransform()->GetUID()).c_str()))
+					if (ImGui::Selectable(CastStringToNative(refName + " (ENGINE PROTECTED)" + "###" + _reference->getTransform()->GetUID() + "_" + (depth + x)).c_str()))
 					{
 						if (reparentLock)
 							reparentObject = _reference;
@@ -733,7 +748,7 @@ void EditorWindow::DrawHierarchyInherits(Engine::Management::Scene^ scene, Engin
 				}
 				else
 				{
-					if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->getTransform()->GetUID()).c_str()))
+					if (ImGui::Selectable(CastStringToNative(refName + "###" + _reference->getTransform()->GetUID() + "_" + (depth + x)).c_str()))
 					{
 						if (reparentLock)
 							reparentObject = _reference;
@@ -795,13 +810,6 @@ void EditorWindow::createAssetEntries(String^ path)
 				);
 				meshRenderer->SetParent(scene->GetDatamodelMember("workspace"));
 				scene->AddObjectToScene(meshRenderer);
-				scene->GetRenderQueue()->Add(
-					gcnew Engine::Management::MiddleLevel::SceneObject(
-						meshRenderer->type,
-						meshRenderer,
-						""
-					)
-				);
 			}
 			ImGui::SameLine();
 			ImGui::Text(CastStringToNative(t).c_str());
@@ -817,7 +825,7 @@ void EditorWindow::createAssetEntries(String^ path)
 			ImGui::Text(CastStringToNative(t).c_str());
 		}
 
-		if ((f->Contains(".ogg") || f->Contains(".mp3") || f->Contains(".wav")) && (displayingAssets == ALL || displayingAssets == AUDIO))
+		if ((f->Contains(".ogg") || f->Contains(".mp3") || f->Contains(".wav")) && (displayingAssets == ALL || displayingAssets == SOUND))
 		{
 			if (rlImGuiImageButton(CastStringToNative("###" + t + " - As Sound").c_str(), &soundTexture))
 			{
@@ -840,7 +848,7 @@ void EditorWindow::createAssetEntries(String^ path)
 			ImGui::Text(CastStringToNative(t).c_str());
 		}
 
-		if ((f->Contains(".ogg") || f->Contains(".mp3") || f->Contains(".wav")) && (displayingAssets == ALL || displayingAssets == AUDIO))
+		if ((f->Contains(".ogg") || f->Contains(".mp3") || f->Contains(".wav")) && (displayingAssets == ALL || displayingAssets == MUSIC))
 		{
 			if (rlImGuiImageButton(CastStringToNative("###" + t + " - As Music").c_str(), &materialTexture))
 			{
@@ -868,6 +876,21 @@ void EditorWindow::createAssetEntries(String^ path)
 			if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &scriptTexture))
 			{
 				codeEditor->createTab(f, TextEditor::LanguageDefinition::Lua());
+			}
+			ImGui::SameLine();
+			ImGui::Text(CastStringToNative(t).c_str());
+		}
+
+		if (f->Contains(".prefab") && (displayingAssets == ALL || displayingAssets == PREFAB))
+		{
+			if (rlImGuiImageButton(CastStringToNative("###" + t).c_str(), &modelTexture))
+			{
+				auto scriptData = Prefab::LoadPrefab(f);
+
+				for each (GameObject^ d in scriptData)
+				{
+					scene->AddObjectToScene(d);
+				}
 			}
 			ImGui::SameLine();
 			ImGui::Text(CastStringToNative(t).c_str());
@@ -1244,7 +1267,6 @@ void EditorWindow::DrawMainMenuBar()
 				);
 
 				scene->AddObjectToScene(newObject);
-				scene->PushToRenderQueue(newObject);
 			}
 
 			ImGui::Separator();
@@ -1262,7 +1284,6 @@ void EditorWindow::DrawMainMenuBar()
 						), 0xFFFFFFFF);
 
 					scene->AddObjectToScene(cubeRenderer);
-					scene->PushToRenderQueue(cubeRenderer);
 				}
 
 				ImGui::EndMenu();
@@ -1283,7 +1304,6 @@ void EditorWindow::DrawMainMenuBar()
 						));
 
 					scene->AddObjectToScene(newCamera);
-					scene->PushToRenderQueue(newCamera);
 				}
 				if (ImGui::MenuItem("Camera2D"))
 				{
@@ -1296,7 +1316,6 @@ void EditorWindow::DrawMainMenuBar()
 						));
 
 					scene->AddObjectToScene(newCamera);
-					scene->PushToRenderQueue(newCamera);
 				}
 
 				ImGui::EndMenu();
@@ -1321,7 +1340,6 @@ void EditorWindow::DrawMainMenuBar()
 						);
 
 						scene->AddObjectToScene(sprite);
-						scene->PushToRenderQueue(sprite);
 					}
 
 					ImGui::EndMenu();
@@ -1346,7 +1364,6 @@ void EditorWindow::DrawMainMenuBar()
 						);
 
 						scene->AddObjectToScene(modelRenderer);
-						scene->PushToRenderQueue(modelRenderer);
 					}
 
 					if (ImGui::MenuItem("MeshRenderer"))
@@ -1377,7 +1394,6 @@ void EditorWindow::DrawMainMenuBar()
 					);
 
 					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
 				}
 
 				ImGui::EndMenu();
@@ -1401,7 +1417,6 @@ void EditorWindow::DrawMainMenuBar()
 					);
 
 					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
 				}
 
 				ImGui::EndMenu();
@@ -1429,8 +1444,8 @@ void EditorWindow::DrawMainMenuBar()
 					);
 					meshRenderer->SetParent(lightManager);
 					lightManager->AddLight(meshRenderer, 1);
+
 					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
 				}
 
 				if (ImGui::MenuItem("Dirrectional Light"))
@@ -1452,7 +1467,6 @@ void EditorWindow::DrawMainMenuBar()
 					meshRenderer->SetParent(lightManager);
 					lightManager->AddLight(meshRenderer, 1);
 					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
 				}
 
 				if (ImGui::MenuItem("Spot Light"))
@@ -1474,7 +1488,7 @@ void EditorWindow::DrawMainMenuBar()
 					meshRenderer->SetParent(lightManager);
 					lightManager->AddLight(meshRenderer, 1);
 					scene->AddObjectToScene(meshRenderer);
-					scene->PushToRenderQueue(meshRenderer);
+					
 				}
 
 				ImGui::EndMenu();
@@ -1498,7 +1512,6 @@ void EditorWindow::DrawMainMenuBar()
 						));
 
 						scene->AddObjectToScene(image);
-						scene->PushToRenderQueue(image);
 					}
 
 					ImGui::EndMenu();
@@ -1517,7 +1530,6 @@ void EditorWindow::DrawMainMenuBar()
 						));
 
 						scene->AddObjectToScene(button);
-						scene->PushToRenderQueue(button);
 					}
 
 					ImGui::EndMenu();
@@ -1540,7 +1552,6 @@ void EditorWindow::DrawMainMenuBar()
 						));
 
 					scene->AddObjectToScene(luaScript);
-					scene->PushToRenderQueue(luaScript);
 				}
 
 				ImGui::Separator();
@@ -1558,7 +1569,7 @@ void EditorWindow::DrawMainMenuBar()
 									if (ImGui::MenuItem(CastToNative(T->Name)))
 									{
 										Engine::EngineObjects::ScriptBehaviour^ retn = assembly->Create<Engine::EngineObjects::ScriptBehaviour^>(T->FullName);
-										scene->PushToRenderQueue(retn);
+										
 										scene->AddObjectToScene(retn);
 									}
 
@@ -1570,7 +1581,7 @@ void EditorWindow::DrawMainMenuBar()
 								if (ImGui::MenuItem(CastToNative(T->Name)))
 								{
 									Engine::EngineObjects::ScriptBehaviour^ retn = assembly->Create<Engine::EngineObjects::ScriptBehaviour^>(T->FullName);
-									scene->PushToRenderQueue(retn);
+									
 									scene->AddObjectToScene(retn);
 								}
 							}
@@ -1596,7 +1607,7 @@ void EditorWindow::DrawMainMenuBar()
 						), 64, 1.0f);
 
 					scene->AddObjectToScene(cubeRenderer);
-					scene->PushToRenderQueue(cubeRenderer);
+					
 				}
 
 				if (ImGui::MenuItem("Editor Camera"))
@@ -1611,7 +1622,6 @@ void EditorWindow::DrawMainMenuBar()
 					);
 
 					scene->AddObjectToScene(camera3D);
-					scene->PushToRenderQueue(camera3D);
 				}
 
 				ImGui::EndMenu();
@@ -1685,10 +1695,12 @@ void EditorWindow::DrawHierarchy()
 		ImGui::Text("Scene Objects: %d", scene->GetRenderQueue()->Count);
 		ImGui::Separator();
 
-		for each (SceneObject ^ obj in scene->GetRenderQueue())
+		for (int x = 0; x < scene->GetRenderQueue()->Count; x++)
 		{
-			auto reference = obj->GetReference();
-			auto type = obj->objectType;
+			Engine::Internal::Components::GameObject^ obj = scene->GetRenderQueue()[x];
+
+			auto reference = obj;
+			auto type = obj->GetObjectType();
 
 
 			if (reference != nullptr)
@@ -1701,7 +1713,7 @@ void EditorWindow::DrawHierarchy()
 
 				if (type == ObjectType::Datamodel || type == ObjectType::LightManager || reference->isProtected())
 				{
-					if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)" + "###" + reference->getTransform()->GetUID())))
+					if (ImGui::Selectable(CastToNative(refName + " (ENGINE PROTECTED)" + "###" + reference->getTransform()->GetUID() + x)))
 					{
 						if (reparentLock)
 							reparentObject = reference;
@@ -1717,7 +1729,7 @@ void EditorWindow::DrawHierarchy()
 				}
 				else if (reference->getTransform()->parent == nullptr)
 				{
-					if (ImGui::Selectable(CastToNative(refName + " (UNPARENTED)" + "###" + reference->getTransform()->GetUID())))
+					if (ImGui::Selectable(CastToNative(refName + " (UNPARENTED)" + "###" + reference->getTransform()->GetUID() + x)))
 					{
 						if (reparentLock)
 							reparentObject = reference;
@@ -1734,6 +1746,7 @@ void EditorWindow::DrawHierarchy()
 
 				DrawHierarchyInherits(scene, reference, 1);
 			}
+
 		}
 	}
 
@@ -1898,6 +1911,14 @@ void EditorWindow::DrawProperties()
 						return;
 					}
 
+					ImGui::Separator();
+
+					if (ImGui::MenuItem("Export Prefab"))
+					{
+						jsonData = Serialize(gcnew Prefab(selectedObject));
+						OpenFileExplorer("Save Prefab", Engine::Editor::Gui::explorerMode::Save, gcnew Engine::Editor::Gui::onFileSelected(&SaveToFile));
+					}
+
 					ImGui::EndMenu();
 				}
 
@@ -1910,7 +1931,7 @@ void EditorWindow::DrawProperties()
 
 					if (ImGui::MenuItem("Unprotect Member"))
 					{
-						if (selectedObject->type == ObjectType::Datamodel || selectedObject->type == ObjectType::LightManager)
+						if (selectedObject->GetObjectType() == ObjectType::Datamodel || selectedObject->GetObjectType() == ObjectType::LightManager)
 							return;
 
 						selectedObject->unprotectMember();
@@ -2028,7 +2049,7 @@ void EditorWindow::DrawAssets()
 
 		ImVec2 size = ImGui::GetWindowSize();
 
-		const char* constData[] = { "ALL", "MODELS", "TEXTURES", "AUDIO", "SCRIPTS" };
+		const char* constData[] = { "ALL", "MODELS", "TEXTURES", "SOUND", "MUSIC", "SCRIPTS", "PREFABS"};
 		ImGui::Text("Display assets: ");
 		ImGui::SameLine();
 		if (ImGui::Combo("###Display assets: ", &displayingAsset, constData, IM_ARRAYSIZE(constData)))
@@ -2045,10 +2066,16 @@ void EditorWindow::DrawAssets()
 				displayingAssets = assetDisplay::TEXTURES;
 				break;
 			case 3:
-				displayingAssets = assetDisplay::AUDIO;
+				displayingAssets = assetDisplay::SOUND;
 				break;
 			case 4:
+				displayingAssets = assetDisplay::MUSIC;
+				break;
+			case 5:
 				displayingAssets = assetDisplay::SCRIPTS;
+				break;
+			case 6:
+				displayingAssets = assetDisplay::PREFAB;
 				break;
 			}
 		}
@@ -2495,7 +2522,7 @@ void EditorWindow::DrawImGui()
 		if (ImGui::Button("Open Scene"))
 		{
 			SceneManager::UnloadScene(scene);
-			scene = SceneManager::LoadSceneFromFile(gcnew System::String(fileName), scene, passwd);
+			SceneManager::LoadSceneFromFile(gcnew System::String(fileName), passwd, scene);
 			//scene->LoadScene();
 			create();
 			ImGui::CloseCurrentPopup();
@@ -2603,6 +2630,9 @@ void EditorWindow::RegisterKeybinds()
 }
 void EditorWindow::Draw()
 {
+	if (!scene->sceneLoaded())
+		return;
+
 	if (EngineState::PlayMode)
 	{
 		renderPipeline->ExecuteRenderWorkflow(this, scene);
@@ -2633,7 +2663,6 @@ void EditorWindow::create()
 		);
 
 		scene->PushToRenderQueue(physicsService);
-		scene->AddObjectToScene(physicsService);
 	}
 
 	if (!scene->ExistsMember("lighting"))
@@ -2652,7 +2681,6 @@ void EditorWindow::create()
 		lightManager->protectMember();
 
 		scene->PushToRenderQueue(lightManager);
-		scene->AddObjectToScene(lightManager);
 	}
 	else
 	{
@@ -2673,7 +2701,6 @@ void EditorWindow::create()
 		);
 		lightdm->SetParent(daemonParent);
 		scene->PushToRenderQueue(lightdm);
-		scene->AddObjectToScene(lightdm);
 	}
 
 	auto editorCamera = ObjectManager::singleton()->GetFirstObjectOfType(Engine::EngineObjects::Editor::EditorCamera::typeid);
@@ -2691,7 +2718,6 @@ void EditorWindow::create()
 		//camera3D->SetParent(((Engine::Internal::Components::GameObject^)Singleton<ObjectManager^>::Instance->GetDatamodel("workspace")));
 
 		scene->PushToRenderQueue(camera3D);
-		scene->AddObjectToScene(camera3D);
 	}
 }
 void EditorWindow::Init()
@@ -2730,7 +2756,7 @@ void EditorWindow::Preload()
 
 	renderPipeline = gcnew Engine::Render::Pipelines::LitPBR_SRP();
 
-	scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
+	SceneManager::LoadSceneFromFile(gcnew System::String(fileName), passwd, scene);
 
 	while (!scene->sceneLoaded())
 	{
@@ -2743,6 +2769,9 @@ void EditorWindow::Preload()
 }
 void EditorWindow::Update()
 {
+	if (!scene->sceneLoaded())
+		return;
+
 	Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
 
 	if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance != renderPipeline)
@@ -2775,11 +2804,11 @@ void EditorWindow::Update()
 	{
 		auto renderQue = renderQueue->ToArray();
 
-		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in renderQue)
+		for each (GameObject^ obj in renderQue)
 		{
 			if (scene->sceneLoaded())
 			{
-				obj->GetReference()->GameUpdate();
+				obj->GameUpdate();
 			}
 		}
 
@@ -2902,7 +2931,6 @@ private:
 
 			lightManager->protectMember();
 
-			scene->PushToRenderQueue(lightManager);
 			scene->AddObjectToScene(lightManager);
 		}
 		else
@@ -2924,7 +2952,6 @@ private:
 				lightManager
 			);
 			lightdm->SetParent(daemonParent);
-			scene->PushToRenderQueue(lightdm);
 			scene->AddObjectToScene(lightdm);
 		}
 	}
@@ -2952,7 +2979,7 @@ public:
 	{
 		renderPipeline = gcnew Engine::Render::Pipelines::LitPBR_SRP();
 
-		scene = SceneManager::LoadSceneFromFile("Level0", scene, passwd);
+		SceneManager::LoadSceneFromFile(gcnew System::String(fileName), passwd, scene);
 
 		while (!scene->sceneLoaded())
 		{
@@ -3059,11 +3086,11 @@ public:
 		if(Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance != renderPipeline)
 			renderPipeline = Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance;
 
-		for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
+		for each (GameObject ^ obj in scene->GetRenderQueue())
 		{
-			if (obj->GetReference() != nullptr)
+			if (obj != nullptr)
 			{
-				obj->GetReference()->GameUpdate();
+				obj->GameUpdate();
 			}
 		}
 

@@ -18,7 +18,6 @@ namespace Engine::Management
 	{
 		// Privates
 	private:
-		System::Collections::ArrayList^ drawQueue;
 		System::Collections::Generic::List<EngineAssembly^>^ assemblies; // loaded assemblies -> passcall from scene_assemblies -> get assemblies for preloading -> tbh idk what more.
 		DataPack^ sceneDatapack;
 		bool sceneFinishedLoading;
@@ -50,7 +49,6 @@ namespace Engine::Management
 			this->skyColor = skyTint;
 			scene_assemblies = assemblies;
 			this->sceneDatapack = gcnew DataPack(sceneRequirements);
-			drawQueue = gcnew System::Collections::ArrayList();
 			this->sceneFinishedLoading = false;
 		}
 
@@ -80,7 +78,7 @@ namespace Engine::Management
 		{
 			printConsole("Loading scene " + sceneName);
 
-			if(DataPacks::singleton().dataPackHasAssets())
+			if (DataPacks::singleton().dataPackHasAssets())
 				DataPacks::singleton().FreeAll(); // free all the assets
 
 			for each (auto packRoute in assetPacks)
@@ -97,9 +95,9 @@ namespace Engine::Management
 
 			sceneFinishedLoading = true;
 
-			if(Directory::Exists("Data/unpacked/"))
+			if (Directory::Exists("Data/unpacked/"))
 				Directory::Delete("Data/unpacked/", true);
-				
+
 			OnLoad();
 
 		}
@@ -112,7 +110,6 @@ namespace Engine::Management
 
 			OnUnload();
 			sceneObjects->Clear();
-			drawQueue->Clear();
 			DataPacks::singleton().FreeAll();
 			System::GC::Collect();
 		}
@@ -124,34 +121,64 @@ namespace Engine::Management
 				sceneObjects->Remove(object);
 			}
 
-			if (drawQueue->Contains(object))
+			if (sceneObjects->Contains(object))
 			{
-				drawQueue->Remove(object);
+				sceneObjects->Remove(object);
+			}
+		}
+
+		void RemoveObjectFromScene(GameObject^ object)
+		{
+			Engine::Management::MiddleLevel::SceneObject^ instance;
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ sceneObject in sceneObjects)
+			{
+				GameObject^ inst = sceneObject->GetReference();
+
+				if (inst == object)
+				{
+					instance = sceneObject;
+					break;
+				}
+			}
+
+			if (sceneObjects->Contains(instance))
+			{
+				sceneObjects->Remove(instance);
 			}
 		}
 
 		void AddObjectToScene(Engine::Internal::Components::GameObject^ object)
 		{
-			auto tmp = gcnew Engine::Management::MiddleLevel::SceneObject
-			(
-				object->type,
-				object,
-				""
-			);
-
-			msclr::lock^ _lock = gcnew msclr::lock(sceneObjects);
-			_lock->acquire();
-			{
-				sceneObjects->Add(tmp);
-			}
-			_lock->release();
+			PushToRenderQueue(object);
 		}
 
-		System::Collections::ArrayList^ GetRenderQueue() { return drawQueue; }
+		List<GameObject^>^ GetRenderQueue()
+		{
+			List<GameObject^>^ Data = gcnew List<GameObject^>();
+
+			for each (Engine::Management::MiddleLevel::SceneObject ^ object in sceneObjects)
+			{
+				if (object != nullptr && object->GetReference() != nullptr)
+					Data->Add(object->GetReference());
+			}
+
+			return Data;
+		}
+
+		List<Engine::Management::MiddleLevel::SceneObject^>^ GetDrawQueue()
+		{
+			return sceneObjects;
+		}
+
+		void cleanupSceneObjects()
+		{
+			sceneObjects->Clear();
+		}
 
 		bool ExistsDatamodelMember(System::String^ datamodel)
 		{
-			for each (auto objects in drawQueue)
+			for each (auto objects in sceneObjects)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
 
@@ -165,10 +192,9 @@ namespace Engine::Management
 			return false;
 		}
 
-
 		bool ExistsMember(System::String^ datamodel)
 		{
-			for each (auto objects in drawQueue)
+			for each (auto objects in sceneObjects)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
 
@@ -182,7 +208,7 @@ namespace Engine::Management
 		Engine::Internal::Components::GameObject^ GetMember(System::String^ datamodel)
 		{
 			Engine::Internal::Components::GameObject^ retn = nullptr;
-			for each (auto objects in drawQueue)
+			for each (auto objects in sceneObjects)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
 
@@ -196,7 +222,7 @@ namespace Engine::Management
 		Engine::Internal::Components::GameObject^ GetDatamodelMember(System::String^ datamodel)
 		{
 			Engine::Internal::Components::GameObject^ retn = nullptr;
-			for each (auto objects in drawQueue)
+			for each (auto objects in sceneObjects)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
 
@@ -213,8 +239,7 @@ namespace Engine::Management
 
 		Engine::Internal::Components::GameObject^ GetDatamodelMember(System::String^ datamodel, bool create)
 		{
-			Engine::Internal::Components::GameObject^ retn = nullptr;
-			for each (auto objects in drawQueue)
+			for each (auto objects in sceneObjects)
 			{
 				Engine::Management::MiddleLevel::SceneObject^ sceneObject = (Engine::Management::MiddleLevel::SceneObject^)objects;
 
@@ -225,38 +250,47 @@ namespace Engine::Management
 				}
 			}
 
-			if (retn == nullptr && create)
+			if (create)
 			{
 				auto newMember = AddDatamodelMember(datamodel);
 				auto newObject = gcnew Engine::Management::MiddleLevel::SceneObject(Engine::Internal::Components::ObjectType::Datamodel, newMember, "");
 
-				retn = newMember;
-
 				AddObjectToScene(newMember);
-				drawQueue->Add(newObject);
-			}
 
-			return retn;
+				return newMember;
+			}
 		}
 
 		void CopyRenderQueueToSceneObjects()
 		{
-			sceneObjects->Clear();
-			// serialize all the objects
-			for each (Engine::Management::MiddleLevel::SceneObject ^ object in drawQueue)
+			for (int x = 0; x < sceneObjects->Count; x++)
 			{
-				object->deserialize();
-				sceneObjects->Add(object);
+				Engine::Management::MiddleLevel::SceneObject^ sceneObject = sceneObjects[x];
+
+				sceneObject->deserialize();
+			}
+		}
+
+		void SerializeObjects()
+		{
+			for (int x = 0; x < sceneObjects->Count; x++)
+			{
+				Engine::Management::MiddleLevel::SceneObject^ sceneObject = sceneObjects[x];
+
+				sceneObject->serialize();
 			}
 		}
 
 		void PushToRenderQueue(Engine::Internal::Components::GameObject^ object)
 		{
-			msclr::lock^ l = gcnew msclr::lock(drawQueue);
+			if (object == nullptr)
+				return;
+
+			msclr::lock^ l = gcnew msclr::lock(sceneObjects);
 			l->acquire();
 			{
-				drawQueue->Add(gcnew Engine::Management::MiddleLevel::SceneObject(
-					object->type,
+				sceneObjects->Add(gcnew Engine::Management::MiddleLevel::SceneObject(
+					object->GetObjectType(),
 					object,
 					""));
 
@@ -276,39 +310,20 @@ namespace Engine::Management
 			l->release();
 		}
 
-
 		void PushToRenderQueue(Engine::Management::MiddleLevel::SceneObject^ object)
 		{
-			msclr::lock^ l = gcnew msclr::lock(drawQueue);
-			{
-				drawQueue->Add(object);
-
-				if (!sceneFinishedLoading)
-				{
-					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::GameObject::Setup);
-					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::GameObject::Init);
-					onLoadedScene += gcnew OnSceneLoaded(object->GetReference(), &Engine::Internal::Components::GameObject::Start);
-				}
-				else
-				{
-					object->GetReference()->Setup();
-					object->GetReference()->Init();
-					object->GetReference()->Start(); // call start method (otherwise by serialization it won't be called.)
-				}
-			}
-			l->release();
+			PushToRenderQueue(object->GetReference());
 		}
-
 
 		Engine::Internal::Components::GameObject^ GetObjectByNameFromDrawQueue(System::String^ name)
 		{
 			Engine::Internal::Components::GameObject^ object = nullptr;
 
-			for each (Engine::Management::MiddleLevel::SceneObject^ obj in GetRenderQueue())
+			for each (GameObject^ obj in GetRenderQueue())
 			{
-				if (obj->GetReference()->name == name)
+				if (obj->name == name)
 				{
-					object = obj->GetReference();
+					object = obj;
 					break;
 				}
 			}
@@ -326,8 +341,8 @@ namespace Engine::Management
 					gcnew Engine::Components::Vector3(1, 1, 1),
 					nullptr
 				),
-				Engine::Internal::Components::ObjectType::Datamodel, 
-				"", 
+				Engine::Internal::Components::ObjectType::Datamodel,
+				"",
 				Engine::Scripting::LayerManager::GetLayerFromId(0)
 			);
 		}
@@ -353,7 +368,7 @@ namespace Engine::Management
 		{
 
 		}
-		virtual void Update() 
+		virtual void Update()
 		{
 
 		}

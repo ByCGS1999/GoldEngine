@@ -8,11 +8,22 @@
 using namespace Engine::Native;
 using namespace System::Runtime::InteropServices;
 
+void onCollisionShapeDeleted(btCollisionShape* shape)
+{
+	delete shape;
+}
+
+void onCollisionObjectDeleted(btCollisionObject* object)
+{
+	delete object;
+}
+
 CollisionShape::CollisionShape(Engine::Internal::Components::GameObject^ userPtr)
 {
 	this->handle = GCHandle::Alloc(userPtr);
 	this->userHandler = static_cast<void*>(GCHandle::ToIntPtr(handle).ToPointer());
-	this->collisionShape = nullptr;
+	this->collisionShape = NULL;
+	this->collisionObject = NULL;
 }
 
 CollisionShape::~CollisionShape()
@@ -22,6 +33,9 @@ CollisionShape::~CollisionShape()
 
 void CollisionShape::createCollisionShape(btCollisionShape* shape)
 {
+	this->collisionShape = new Engine::Native::EnginePtr<btCollisionShape*>(shape, &onCollisionShapeDeleted);
+
+	/*
 	if (this->collisionShape == nullptr)
 		this->collisionShape = shape;
 	else
@@ -29,25 +43,37 @@ void CollisionShape::createCollisionShape(btCollisionShape* shape)
 		delete this->collisionShape;
 		this->collisionShape = shape;
 	}
+	*/
 }
 
 void CollisionShape::createBulletObject()
 {
+	/*
 	if(this->collisionObject == nullptr)
 		this->collisionObject = new btCollisionObject();
+	*/
 
-	this->collisionObject->setCollisionShape(this->collisionShape);
-	this->collisionObject->setUserPointer(this->userHandler);
+	try
+	{
+		this->collisionObject = new Engine::Native::EnginePtr<btCollisionObject*>(new btCollisionObject(), &onCollisionObjectDeleted);
 
-	Singleton<Engine::EngineObjects::Physics::PhysicsService^>::Instance->AddCollisionObject(getCollisonObject());
+		this->collisionObject->getInstance()->setCollisionShape(this->collisionShape->getInstance());
+		this->collisionObject->getInstance()->setUserPointer(this->userHandler);
+
+		Singleton<Engine::EngineObjects::Physics::PhysicsService^>::Instance->AddCollisionObject(getCollisonObject());
+	}
+	catch (Exception^ ex)
+	{
+
+	}
 }
 
 btCollisionObject* CollisionShape::getCollisonObject()
 {
-	return this->collisionObject;
+	return this->collisionObject->getInstance();
 }
 
 btCollisionShape* CollisionShape::getCollisionShape()
 {
-	return this->collisionShape;
+	return this->collisionShape->getInstance();
 }

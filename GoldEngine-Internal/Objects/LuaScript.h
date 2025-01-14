@@ -41,6 +41,7 @@ namespace Engine::EngineObjects
 			}
 
 			initVM();
+			Start();
 		}
 
 	private:

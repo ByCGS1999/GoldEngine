@@ -225,3 +225,125 @@ void LuaVM::GenerateLuaBindings()
 		printError(ex->StackTrace);
 	}
 }
+
+void LuaVM::ReadLuaCodeFromFile(String^ src)
+{
+	System::IO::FileStream^ f = System::IO::File::Open(src, System::IO::FileMode::OpenOrCreate);
+	System::IO::BinaryReader^ breader = gcnew System::IO::BinaryReader(f);
+	System::IO::MemoryStream^ memoryStream;
+	System::IO::Compression::ZLibStream^ zlibStream;
+
+	String^ header = breader->ReadString();
+	int version = breader->ReadInt32();
+	int len = breader->ReadInt32();
+
+
+	if (header->Equals(BINARY_HEADER))
+	{
+		if (version == BYTECODE_VERSION)
+		{
+			try
+			{
+				auto bytes = breader->ReadBytes(len);
+				memoryStream = gcnew System::IO::MemoryStream(bytes, false);
+				zlibStream = gcnew System::IO::Compression::ZLibStream(memoryStream, System::IO::Compression::CompressionMode::Decompress);
+
+				array<unsigned char>^ decompressedData = gcnew array<unsigned char>(len);
+				zlibStream->Read(decompressedData, 0, len);
+
+				String^ base64 = System::Text::Encoding::UTF32->GetString(decompressedData);
+
+				tempBuffer = CypherLib::DecryptFileContents(base64, ::passwd);
+			}
+			catch (Exception^ ex)
+			{
+				printError("Failed loading script source");
+				printError(ex->Message);
+			}
+		}
+		else
+		{
+			printError("Lua version mismatch\n");
+		}
+	}
+	else
+	{
+		printError("Lua header mismatch\n");
+	}
+}
+
+void LuaVM::WriteLuaCodeToFile(String^ src)
+{
+	System::IO::FileStream^ f = System::IO::File::Open(src, System::IO::FileMode::OpenOrCreate);
+	System::IO::BinaryWriter^ bwriter = gcnew System::IO::BinaryWriter(f);
+	System::IO::MemoryStream^ memoryStream = gcnew System::IO::MemoryStream();
+
+	memoryStream->CopyTo(f);
+
+	System::IO::Compression::ZLibStream^ zlibStream = gcnew System::IO::Compression::ZLibStream(memoryStream, System::IO::Compression::CompressionMode::Compress);
+
+	bwriter->Write(BINARY_HEADER);
+	bwriter->Write(BYTECODE_VERSION);
+	auto bytes = System::Text::Encoding::UTF32->GetBytes(CypherLib::EncryptFileContents(source, ::passwd));
+
+	zlibStream->Write(bytes, 0, bytes->Length);
+	zlibStream->Flush();
+	zlibStream->Close();
+
+	auto compressedData = memoryStream->ToArray();
+	memoryStream->Close();
+
+	bwriter->Write(bytes->Length);
+	bwriter->Write(compressedData);
+
+	bwriter->Close();
+}
+
+
+String^ LuaVM::ReadFromFile(String^ src)
+{
+	System::IO::FileStream^ f = System::IO::File::Open(src, System::IO::FileMode::OpenOrCreate);
+	System::IO::BinaryReader^ breader = gcnew System::IO::BinaryReader(f);
+	System::IO::MemoryStream^ memoryStream;
+	System::IO::Compression::ZLibStream^ zlibStream;
+
+	String^ header = breader->ReadString();
+	int version = breader->ReadInt32();
+	int len = breader->ReadInt32();
+
+
+	if (header->Equals(BINARY_HEADER))
+	{
+		if (version == BYTECODE_VERSION)
+		{
+			try
+			{
+				auto bytes = breader->ReadBytes(len);
+				memoryStream = gcnew System::IO::MemoryStream(bytes, false);
+				zlibStream = gcnew System::IO::Compression::ZLibStream(memoryStream, System::IO::Compression::CompressionMode::Decompress);
+
+				array<unsigned char>^ decompressedData = gcnew array<unsigned char>(len);
+				zlibStream->Read(decompressedData, 0, len);
+
+				String^ base64 = System::Text::Encoding::UTF32->GetString(decompressedData);
+
+				return CypherLib::DecryptFileContents(base64, ::passwd);
+			}
+			catch (Exception^ ex)
+			{
+				printError("Failed loading script source");
+				printError(ex->Message);
+			}
+		}
+		else
+		{
+			printError("Lua version mismatch\n");
+		}
+	}
+	else
+	{
+		printError("Lua header mismatch\n");
+	}
+
+	return "";
+}

@@ -11,226 +11,82 @@ namespace Engine::Management::MiddleLevel
 	{
 	public:
 		Engine::Internal::Components::ObjectType objectType;
-		System::String^ deserializedData;
+		String^ serializedData;
+
+		Reflectable::ReflectableType^ reflectableType;
+
 	private:
-		Engine::Internal::Components::GameObject^ reference;
+		GameObject^ sceneObject;
 
 	public:
 		SceneObject(Engine::Internal::Components::ObjectType type, Engine::Internal::Components::GameObject^ obj, System::String^ data)
 		{
 			objectType = type;
-			reference = obj;
-			deserializedData = data;
+			sceneObject = obj;
+			serializedData = data;
 
-			if (obj == nullptr && deserializedData != "" && deserializedData != nullptr)
-			{
-				serialize();
-			}
-			else if (obj != nullptr && deserializedData == "")
+			if (obj == nullptr && serializedData != "" && serializedData != nullptr)
 			{
 				deserialize();
+			}
+			else if (obj != nullptr && serializedData == "")
+			{
+				reflectableType = gcnew Reflectable::ReflectableType();
+				reflectableType->SetType(sceneObject->GetType());
+
+				serialize();
 			}
 		}
 
 		Engine::Internal::Components::GameObject^ GetReference()
 		{
-			if (reference == nullptr)
+			if (sceneObject == nullptr)
 				return nullptr;
 
-			return reference;
+			return sceneObject;
 		}
 
 		void SetReference(Engine::Internal::Components::GameObject^ ref)
 		{
-			this->reference = ref;
+			this->sceneObject = ref;
 		}
 
 	public:
 		generic <class T>
 		T serializeAs()
 		{
-			return Newtonsoft::Json::JsonConvert::DeserializeObject<T>(deserializedData);
+			return sceneObject->ToObjectType<T>();
 		}
 
 	public:
 		void serialize()
 		{
-			switch ((Engine::Internal::Components::ObjectType)objectType)
-			{
-			case Engine::Internal::Components::ObjectType::Skybox:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Skybox^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::Generic:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Internal::Components::GameObject^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::Datamodel:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Internal::Components::GameObject^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::ModelRenderer:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::ModelRenderer^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::CubeRenderer:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::CubeRenderer^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::GridRenderer:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::GridRenderer^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::PBR_ModelRenderer:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::PBRModelRenderer^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::LightManager:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::LightManager^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::LightSource:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::LightSource^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::Script:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::ScriptBehaviour^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::BoundingBoxRenderer:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::BoundingBoxRenderer^>(deserializedData);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::Daemon:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::Daemon^>(deserializedData);
-				break;
-			}
-
-			default:
-			{
-				reference = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::EngineObjects::ScriptBehaviour^>(deserializedData);
-				break;
-			}
-			}
+			serializedData = Serialize(sceneObject);
 		}
+
 		void deserialize()
 		{
-			switch (objectType)
-			{
-			case Engine::Internal::Components::ObjectType::Skybox:
-			{
-				Engine::EngineObjects::Skybox^ skybox = (Engine::EngineObjects::Skybox^)reference;
-				deserializedData = Serialize(skybox);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::Generic:
-			{
-				Engine::Internal::Components::GameObject^ genericType = (Engine::Internal::Components::GameObject^)reference;
-				deserializedData = Serialize(genericType);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::ModelRenderer:
-			{
-				Engine::EngineObjects::ModelRenderer^ modelRenderer = (Engine::EngineObjects::ModelRenderer^)reference;
-				deserializedData = Serialize(modelRenderer);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::Datamodel:
-			{
-				Engine::Internal::Components::GameObject^ genericType = (Engine::Internal::Components::GameObject^)reference;
-				deserializedData = Serialize(genericType);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::CubeRenderer:
-			{
-				Engine::EngineObjects::CubeRenderer^ modelRenderer = (Engine::EngineObjects::CubeRenderer^)reference;
-				deserializedData = Serialize(modelRenderer);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::GridRenderer:
-			{
-				Engine::EngineObjects::GridRenderer^ modelRenderer = (Engine::EngineObjects::GridRenderer^)reference;
-				deserializedData = Serialize(modelRenderer);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::PBR_ModelRenderer:
-			{
-				Engine::EngineObjects::PBRModelRenderer^ pbrModelRenderer = (Engine::EngineObjects::PBRModelRenderer^)reference;
-				deserializedData = Serialize(pbrModelRenderer);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::LightManager:
-			{
-				Engine::EngineObjects::LightManager^ pbrModelRenderer = (Engine::EngineObjects::LightManager^)reference;
-				deserializedData = Serialize(pbrModelRenderer);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::LightSource:
-			{
-				Engine::EngineObjects::LightSource^ pbrModelRenderer = (Engine::EngineObjects::LightSource^)reference;
-				deserializedData = Serialize(pbrModelRenderer);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::BoundingBoxRenderer:
-			{
-				Engine::EngineObjects::BoundingBoxRenderer^ pbrModelRenderer = (Engine::EngineObjects::BoundingBoxRenderer^)reference;
-				deserializedData = Serialize(pbrModelRenderer);
-				break;
-			}
-
-			case Engine::Internal::Components::ObjectType::Daemon:
-			{
-				Engine::EngineObjects::Daemon^ pbrModelRenderer = (Engine::EngineObjects::Daemon^)reference;
-				deserializedData = Serialize(pbrModelRenderer);
-				break;
-			}
-
-			default:
-			{
-				Engine::EngineObjects::ScriptBehaviour^ genericType = (Engine::EngineObjects::ScriptBehaviour^)reference;
-				deserializedData = Serialize(genericType);
-				break;
-			}
-			}
+			sceneObject = (GameObject^)Deserialize(serializedData, reflectableType->getTypeReference());
 		}
 
 	public:
 		generic <class type>
 		type GetValue()
 		{
-			return (type)reference;
+			return sceneObject->ToObjectType<type>();
+		}
+
+		GameObject^ GetValue()
+		{
+			return sceneObject;
+		}
+
+		GameObject^ SerializeOutput()
+		{
+			reflectableType->DeserializeType();
+			deserialize();
+
+			return GetValue();
 		}
 	};
 }

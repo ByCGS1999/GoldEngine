@@ -29,14 +29,14 @@ namespace Engine::Managers
 			return System::IO::File::Exists("Data/" + fN + ".scn");
 		}
 
-		static Engine::Management::Scene^ LoadSceneFromFile(System::String^ fN, Engine::Management::Scene^ loadedScene, unsigned int passwd)
+		static void LoadSceneFromFile(System::String^ fN, unsigned int passwd, Engine::Management::Scene^% loadedScene)
 		{
 			if (AssetExists(fN))
 			{
 				auto fileContents = System::IO::File::ReadAllText("Data/" + fN + ".scn");
 				auto parsedScene = Newtonsoft::Json::JsonConvert::DeserializeObject<Engine::Management::Scene^>(fileContents);
 
-				if (loadedScene != nullptr) 
+				if (loadedScene != nullptr)
 				{
 					loadedScene->UnloadScene();
 					loadedScene = CreateScene(fN);
@@ -47,8 +47,36 @@ namespace Engine::Managers
 				}
 
 				loadedScene->setPassword(passwd);
-				loadedScene = parsedScene; // bridge all the unsetted values from the parsed scene
+				// bridge all the unsetted values from the parsed scene
+				loadedScene->assetPacks = parsedScene->assetPacks;
+				loadedScene->sceneName = parsedScene->sceneName; 
+				loadedScene->scene_assemblies = parsedScene->scene_assemblies;
+				loadedScene->skyColor = parsedScene->skyColor;
+				loadedScene->sceneRequirements = parsedScene->sceneRequirements;
 
+
+				List<Engine::Management::MiddleLevel::SceneObject^>^ sceneObjects = parsedScene->GetDrawQueue();
+				
+				msclr::lock lock(sceneObjects);
+				if (lock.try_acquire(1000))
+				{
+					auto data = sceneObjects->ToArray();
+					loadedScene->cleanupSceneObjects();
+					parsedScene->cleanupSceneObjects();
+
+					for each (auto object in data)
+					{
+						object->deserialize();
+						parsedScene->AddObjectToScene(object->GetReference());
+					}
+				}
+
+				for each (GameObject^ object in parsedScene->GetRenderQueue())
+				{
+					loadedScene->AddObjectToScene((GameObject^)object);
+				}
+
+				/*
 				for each (auto t in parsedScene->sceneObjects)
 				{
 					// TYPE DEF \\
@@ -223,6 +251,7 @@ namespace Engine::Managers
 					break;
 					}
 				}
+				*/
 
 				Engine::Management::Scene::getLoadedScene()->flagSceneLoaded(true);
 			}
@@ -239,9 +268,8 @@ namespace Engine::Managers
 			loadedScene->Preload(assemblyManager);
 
 			gcnew Engine::Scripting::ObjectManager(loadedScene);
-			loadedScene->HookSceneInit();
 
-			return loadedScene;
+			loadedScene->HookSceneInit();
 		}
 
 		static Engine::Management::Scene^ CreateScene(System::String^ sceneName)
@@ -257,9 +285,10 @@ namespace Engine::Managers
 		
 		static void SaveSceneToFile(Engine::Management::Scene^ scene, unsigned int password)
 		{
+			scene->SerializeObjects();
+
 			if (scene->sceneName)
 			{
-				scene->CopyRenderQueueToSceneObjects();
 				String^ serializedData = Newtonsoft::Json::JsonConvert::SerializeObject(scene, Newtonsoft::Json::Formatting::Indented);
 				String^ cipheredContents = CypherLib::EncryptFileContents(serializedData, password);
 

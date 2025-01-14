@@ -31,94 +31,29 @@ namespace Engine::Scripting
 		}
 
 	private:
-		ArrayList^ sceneObjects;
 		Engine::Management::Scene^ loadedScene;
 		Engine::Scripting::SceneTarget target = Engine::Scripting::RenderQueue; // by default hook RenderQueue
 
 	public:
 		ObjectManager(Engine::Management::Scene^ loadedScene)
 		{
-			if (loadedScene != nullptr)
-			{
-				target = Engine::Scripting::RenderQueue;
-				this->loadedScene = loadedScene;
-
-				this->sceneObjects = gcnew ArrayList();
-				this->sceneObjects = (System::Collections::ArrayList^)this->loadedScene->GetRenderQueue();
-			}
-
+			this->loadedScene = loadedScene;
 			Singleton<ObjectManager^>::Create(this);
 
 			self = this;
 		}
 
-		// methods (dummy for now)
-
-	public:
-		void SetTarget(int newTarget)
-		{
-			target = (SceneTarget)newTarget;
-
-			sceneObjects->Clear();
-
-			switch ((SceneTarget)newTarget)
-			{
-			case Engine::Scripting::RenderQueue:
-			{
-				for each (auto T in loadedScene->GetRenderQueue())
-				{
-					sceneObjects->Add(T);
-				}
-			}
-			break;
-			case Engine::Scripting::SceneObjects:
-			{
-				for each (auto T in loadedScene->sceneObjects)
-				{
-					sceneObjects->Add(T);
-				}
-			}
-			break;
-			}
-		}
-		void SetTarget(Engine::Scripting::SceneTarget newTarget)
-		{
-			target = newTarget;
-
-			sceneObjects->Clear();
-
-			switch (newTarget) 
-			{
-			case Engine::Scripting::RenderQueue:
-			{
-				for each (auto T in loadedScene->GetRenderQueue())
-				{
-					sceneObjects->Add(T);
-				}
-			}
-			break;
-			case Engine::Scripting::SceneObjects:
-			{
-				for each (auto T in loadedScene->sceneObjects)
-				{
-					sceneObjects->Add(T);
-				}
-			}
-			break;
-			}
-		}
-
 	private:
 		Engine::Internal::Components::GameObject^ GetObjectFromScene(Engine::Management::MiddleLevel::SceneObject^ sceneObject)
 		{
-			return sceneObject->GetReference();
+			return sceneObject->SerializeOutput();
 		}
 
 	private:
 		bool topReferenceIsDatamodel(Engine::Internal::Components::GameObject^ object, String^ dataModelName)
 		{
 			if (object->transform->parent != nullptr)
-				return topReferenceIsDatamodel((Engine::Internal::Components::GameObject^)object->transform->parent->getGameObject(), dataModelName);
+				return topReferenceIsDatamodel(object->transform->parent->GetObject<Engine::Internal::Components::GameObject^>(), dataModelName);
 			else
 			{
 				if (object->name == dataModelName)
@@ -156,11 +91,11 @@ namespace Engine::Scripting
 		{
 			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (topReferenceIsDatamodel(t->GetReference(), datamodel))
+				if (topReferenceIsDatamodel(t, datamodel))
 				{
-					objects->Add(t->GetReference());
+					objects->Add(t);
 				}
 			}
 
@@ -171,11 +106,11 @@ namespace Engine::Scripting
 		{
 			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->GetReference()->GetTag() == tag)
+				if (t->GetTag() == tag)
 				{
-					objects->Add(t->GetReference());
+					objects->Add(t);
 				}
 			}
 
@@ -186,14 +121,14 @@ namespace Engine::Scripting
 		{
 			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
-			if (sceneObjects == nullptr)
+			if (loadedScene->GetRenderQueue() == nullptr)
 				return nullptr;
 
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject ^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->GetReference()->name == name)
+				if (t->name == name)
 				{
-					objects->Add(t->GetReference());
+					objects->Add(t);
 				}
 			}
 
@@ -204,10 +139,10 @@ namespace Engine::Scripting
 		{
 			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject ^ t in loadedScene->GetRenderQueue())
 			{
-				if(t != nullptr && t->GetReference() != nullptr)
-					objects->Add(t->GetReference());
+				if(t != nullptr && t != nullptr)
+					objects->Add(t);
 			}
 
 			return objects;
@@ -217,11 +152,11 @@ namespace Engine::Scripting
 		{
 			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
 
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->objectType == type)
+				if (t != nullptr && t->GetObjectType() == type)
 				{
-					objects->Add(t->GetReference());
+					objects->Add(t);
 				}
 			}
 
@@ -233,11 +168,11 @@ namespace Engine::Scripting
 		{
 			auto objects = gcnew List<T>();
 
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->GetType() == T::typeid)
+				if (t != nullptr && t->GetType() == T::typeid)
 				{
-					objects->Add(t->GetReference()->ToObjectType<T>());
+					objects->Add(t->ToObjectType<T>());
 				}
 			}
 
@@ -246,11 +181,11 @@ namespace Engine::Scripting
 
 		Engine::Internal::Components::GameObject^ GetFirstObjectByTag(System::String^ tag)
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->GetReference()->GetTag() == tag)
+				if (t->GetTag() == tag)
 				{
-					return t->GetReference();
+					return t;
 				}
 			}
 
@@ -259,11 +194,11 @@ namespace Engine::Scripting
 
 		Engine::Internal::Components::GameObject^ GetFirstObjectByName(System::String^ name)
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->GetReference()->name == name)
+				if (t->name == name)
 				{
-					return t->GetReference();
+					return t;
 				}
 			}
 
@@ -272,11 +207,11 @@ namespace Engine::Scripting
 
 		Engine::Internal::Components::GameObject^ GetFirstObjectOfType(System::String^ assemblyType)
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->GetValue<Engine::EngineObjects::ScriptBehaviour^>()->assemblyReference == assemblyType)
+				if (t->GetType()->IsSubclassOf(Engine::EngineObjects::ScriptBehaviour::typeid) && t->ToObjectType<Engine::EngineObjects::ScriptBehaviour^>()->assemblyReference == assemblyType)
 				{
-					return t->GetReference();
+					return t;
 				}
 			}
 		}
@@ -284,42 +219,42 @@ namespace Engine::Scripting
 		generic <class T>
 		T GetFirstObjectOfType()
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
 				if (t == nullptr)
 					continue;
 
-				if (t->GetReference()->GetType()->Equals(T::typeid) || t->GetReference()->GetType()->Equals(T::typeid->BaseType))
+				if (t->GetType()->Equals(T::typeid) || t->GetType()->IsSubclassOf(T::typeid))
 				{
-					return t->GetReference()->ToObjectType<T>();
+					return (T)t;
 				}
 			}
 		}
 
 		Engine::Internal::Components::GameObject^ GetFirstObjectOfType(System::Type^ type)
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
 				if (t == nullptr)
 					continue;
 
-				if (t->GetReference()->GetType()->Equals(type) || t->GetReference()->GetType()->IsSubclassOf(type))
+				if (t->GetType()->Equals(type) || t->GetType()->IsSubclassOf(type))
 				{
-					return t->GetReference();
+					return t;
 				}
 			}
 		}
 
 		Engine::Internal::Components::GameObject^ GetFirstObjectOfType(Engine::Internal::Components::ObjectType type)
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
 				if (t == nullptr)
 					continue;
 
-				if (t->objectType == type)
+				if (t->GetObjectType() == type)
 				{
-					return t->GetReference();
+					return t;
 				}
 			}
 		}
@@ -328,9 +263,12 @@ namespace Engine::Scripting
 		{
 			List<Engine::Internal::Components::GameObject^>^ newList = gcnew List<Engine::Internal::Components::GameObject^>();
 
-			for each (Engine::Management::MiddleLevel::SceneObject^ object in sceneObjects)
+			if (parent == nullptr)
+				return newList;
+
+			for each (GameObject ^ t in loadedScene->GetRenderQueue())
 			{
-				auto v = GetObjectFromScene(object);
+				auto v = t;
 
 				if (v->getTransform() == nullptr)
 					continue;
@@ -349,11 +287,11 @@ namespace Engine::Scripting
 
 		Engine::Internal::Components::GameObject^ GetObjectByUid(System::String^ uid)
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->GetReference()->getTransform()->GetUID() == uid)
+				if (t->getTransform()->GetUID() == uid)
 				{
-					return t->GetReference();
+					return t;
 				}
 			}
 
@@ -367,13 +305,13 @@ namespace Engine::Scripting
 
 		Engine::EngineObjects::Camera^ GetMainCamera()
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject ^ t in sceneObjects)
+			for each (GameObject^ t in loadedScene->GetRenderQueue())
 			{
-				if (t->GetReference()->GetType()->IsSubclassOf(Engine::EngineObjects::Camera::typeid))
+				if (t->GetType()->IsSubclassOf(Engine::EngineObjects::Camera::typeid))
 				{
-					if (((Engine::EngineObjects::Camera^)t->GetReference())->attributes->getAttribute("IsMainCamera")->getValue<bool>() == true)
+					if (((Engine::EngineObjects::Camera^)t)->attributes->getAttribute("IsMainCamera")->getValue<bool>() == true)
 					{
-						return (Engine::EngineObjects::Camera^)t->GetReference();
+						return (Engine::EngineObjects::Camera^)t;
 					}
 				}
 			}
@@ -384,20 +322,19 @@ namespace Engine::Scripting
 		void Instantiate(Engine::Internal::Components::GameObject^ newObject)
 		{
 			loadedScene->AddObjectToScene(newObject);
-			loadedScene->PushToRenderQueue(newObject);
 		}
 
 		void Destroy(Engine::Internal::Components::GameObject^ object)
 		{
-			for each (Engine::Management::MiddleLevel::SceneObject^ objTmp in sceneObjects)
+			for each (GameObject ^ t in loadedScene->GetRenderQueue())
 			{
-				auto v = GetObjectFromScene(objTmp);
+				auto v = t;
 
 				if (v != nullptr)
 				{
 					if (v == object)
 					{
-						auto type = v->type;
+						auto type = v->GetObjectType();
 
 						if (type == Engine::Internal::Components::ObjectType::Datamodel || type == Engine::Internal::Components::ObjectType::Daemon || type == Engine::Internal::Components::ObjectType::LightManager || v->isProtected())
 							return;
@@ -411,7 +348,7 @@ namespace Engine::Scripting
 						}
 
 						// PURGE THE OBJECT FROM THE SCENE
-						loadedScene->RemoveObjectFromScene(objTmp);
+						loadedScene->RemoveObjectFromScene(t);
 
 						// call destroy method (for self impl)
 						object->Destroy();

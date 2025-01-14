@@ -47,12 +47,12 @@ namespace Engine::EngineObjects
 		float panning = 0.5f;
 		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::Public)]
 		float pitch = 1.0f;
-
 		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::ReadOnly)]
 		PanType panType = PanType::Pan2D; // HARDLOCK READONLY AS THERE'S NO PANNING ALGORITHM YET.
-
 		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::Public)]
 		ResourceType resourceType = ResourceType::Sound;
+		[Engine::Scripting::PropertyAttribute(Engine::Scripting::AccessLevel::Public)]
+		bool isLooped = true;
 
 	private:
 		Engine::Native::EnginePtr<AudioData>* soundPtr;
@@ -68,6 +68,7 @@ namespace Engine::EngineObjects
 
 		[Engine::Attributes::ExecuteInEditModeAttribute]
 		void Update() override;
+		void Destroy() override;
 
 		void Play();
 		void Stop();

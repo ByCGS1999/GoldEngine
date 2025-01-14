@@ -125,5 +125,9 @@ namespace Engine::EngineObjects
 		virtual void setTarget(Engine::Components::Vector3^ target) abstract;
 		virtual bool is3DCamera() abstract;
 		virtual void* get() abstract;
+
+		virtual void ApplyCameraYaw(float yaw, bool local) abstract;
+		virtual void ApplyCameraPitch(float pitch) abstract;
+		virtual void ApplyCameraRoll(float roll) abstract;
 	};
 }

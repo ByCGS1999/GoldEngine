@@ -45,9 +45,6 @@ namespace Engine::Internal::Components
 		[Newtonsoft::Json::JsonIgnoreAttribute]
 			const Engine::Components::Vector3^ left = gcnew Engine::Components::Vector3(-1, 0, 0);
 
-	private:
-		System::Object^ gameObject;
-
 	public:
 		Transform(Engine::Components::Vector3^ position, Engine::Components::Vector3^ rotation, Engine::Components::Vector3^ scale, Transform^ parent);
 
@@ -57,23 +54,18 @@ namespace Engine::Internal::Components
 			position = localPosition - newLocalPosition;
 		}
 
-		System::Object^ getGameObject();
-
 		String^ GetUID();
 
-		void setReference(System::Object^);
 		void setParent(Transform^);
 		Transform^ getParent();
 
-		void SetReference(System::Object^ ref) { return setReference(ref); }
 		void SetParent(Transform^ parent) { return setParent(parent); }
 		Transform^ GetParent() { return getParent(); }
 
 		generic <class T>
-		T GetObject()
-		{
-			return (T)gameObject;
-		}
+		T GetObject();
+		System::Object^ GetObject();
 
+		void SetUID(String^ uid);
 	};
 }

@@ -167,6 +167,11 @@ System::Object^ Event::raiseExecution()
 	return invoke();
 }
 
+void Event::disconnectAll()
+{
+	this->invokables->Clear();
+}
+
 Event^ Event::Create()
 {
 	return gcnew Event();

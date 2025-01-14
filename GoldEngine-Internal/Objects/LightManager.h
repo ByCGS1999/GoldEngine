@@ -79,25 +79,8 @@ namespace Engine::EngineObjects
 			this->cutoff = 10;
 			this->outerCutoff = 30;
 
-			if(this->lightPower <= 0)
+			if (this->lightPower <= 0)
 				this->lightPower = 10000;
-
-			Shader& s = DataPacks::singleton().GetShader(this->shaderId);
-
-			nativeLightSource = new Native::NativeLightSource(
-				this->lightType,
-				getTransform()->position->toNative(),
-				{0,0,0},
-				GetColor(this->lightColor),
-				this->intensity,
-				cutoff,
-				outerCutoff,
-				s
-			);
-			oldShaderId = shaderId;
-			nativeLightSource->SetLightEnabled(true);
-			enabled = true;
-			
 		}
 
 		void Init(unsigned int lightColor, float intensity, Engine::Components::Vector3^ target, int lightType, unsigned int shaderId) override
@@ -134,7 +117,26 @@ namespace Engine::EngineObjects
 
 		void UpdateLighting() override
 		{
-		//	nativeLightSource->UpdateLighting();
+			//	nativeLightSource->UpdateLighting();
+		}
+
+		void Start() override
+		{
+			Shader& s = DataPacks::singleton().GetShader(this->shaderId);
+
+			nativeLightSource = new Native::NativeLightSource(
+				this->lightType,
+				getTransform()->position->toNative(),
+				{ 0,0,0 },
+				GetColor(this->lightColor),
+				this->intensity,
+				cutoff,
+				outerCutoff,
+				s
+			);
+			oldShaderId = shaderId;
+			nativeLightSource->SetLightEnabled(true);
+			enabled = true;
 		}
 
 		void reInstantiate(Shader& newShader)
@@ -143,7 +145,7 @@ namespace Engine::EngineObjects
 		}
 
 		[Engine::Attributes::ExecuteInEditModeAttribute]
-		void Update() override
+			void Update() override
 		{
 			nativeLightSource->SetLightEnabled(enabled);
 			nativeLightSource->SetIntensity(intensity);
@@ -294,14 +296,14 @@ namespace Engine::EngineObjects
 			shader.locs[SHADER_LOC_COLOR_DIFFUSE] = GetShaderLocation(shader, "albedoColor");
 
 			shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
-			
+
 
 			float b = ambientIntensity;
 			RAYLIB::Color color = {
 				((ambientColor >> 0) & 0xFF),
-				((ambientColor >> 8) & 0xFF), 
+				((ambientColor >> 8) & 0xFF),
 				((ambientColor >> 16) & 0xFF),
-				((ambientColor >> 24) & 0xFF) 
+				((ambientColor >> 24) & 0xFF)
 			};
 
 			RAYLIB::Vector3 ambientColorNormalized = { color.r / 255.0f, color.g / 255.0f, color.b / 255.0f };
@@ -309,8 +311,8 @@ namespace Engine::EngineObjects
 			if (cameraPosition != nullptr)
 				SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], cameraPosition, SHADER_UNIFORM_VEC3);
 			else
-				SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], new float[3] {0,0,0}, SHADER_UNIFORM_VEC3);
-				
+				SetShaderValue(shader, shader.locs[SHADER_LOC_VECTOR_VIEW], new float[3] {0, 0, 0}, SHADER_UNIFORM_VEC3);
+
 			SetShaderValue(shader, GetShaderLocation(shader, "ambientColor"), &ambientColorNormalized, SHADER_UNIFORM_VEC3);
 			SetShaderValue(shader, GetShaderLocation(shader, "ambient"), &b, SHADER_UNIFORM_FLOAT);
 
@@ -344,9 +346,9 @@ namespace Engine::EngineObjects
 				{
 					fs_net = fs_net->Replace("numlights", lightSources->Count.ToString());
 				}
-				
+
 				Shader& s = LoadShaderFromMemory(CastStringToNative(vs_net).c_str(), CastStringToNative(fs_net).c_str());
-			    
+
 				CreateLocs(s, lightSources->Count);
 
 				std::vector<rPBR::Light> _light = std::vector<rPBR::Light>();
@@ -373,7 +375,7 @@ namespace Engine::EngineObjects
 					DataPacks::singleton().AddShader(shaderId, s);
 				}
 
-				for each(auto src in lightSources)
+				for each (auto src in lightSources)
 				{
 					src->reInstantiate(s);
 				}

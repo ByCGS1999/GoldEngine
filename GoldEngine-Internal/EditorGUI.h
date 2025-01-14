@@ -21,7 +21,14 @@ void BoolEditor(Engine::Scripting::Attribute^ attrib)
 
 void StringEditor(Engine::Scripting::Attribute^ attrib)
 {
+	if (attrib->getValueType() != String::typeid)
+		return;
+
 	String^ value = (String^)attrib->getValue();
+
+	if (value == nullptr)
+		value = "";
+
 	int valueLen = value->Length;
 	char* data = new char[valueLen + 1 * 8];
 

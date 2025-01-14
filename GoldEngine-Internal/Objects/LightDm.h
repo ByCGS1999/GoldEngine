@@ -10,7 +10,7 @@ namespace Engine::EngineObjects::Daemons
 	private:
 		LightManager^ lightM;
 		[JSON_SERIALIZE]
-		unsigned int shaderId;
+			unsigned int shaderId;
 
 	public:
 		LightDaemon(System::String^ name, Engine::Internal::Components::Transform^ transform, LightManager^ lightManager) : EngineObjects::Daemon(name, transform)
@@ -22,11 +22,12 @@ namespace Engine::EngineObjects::Daemons
 		{
 			if (lightM == nullptr)
 			{
+				lightM = Singleton<LightManager^>::Instance;
 				printf("Lightmanager not set to an instance. Daemon won't work!");
 				return;
 			}
 
-			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetFirstObjectOfType<Engine::EngineObjects::Camera^>();
+			Engine::EngineObjects::Camera^ camera = Singleton<ObjectManager^>::Instance->GetMainCamera();
 
 			if (camera == nullptr)
 				return;
@@ -36,10 +37,11 @@ namespace Engine::EngineObjects::Daemons
 		}
 
 		[ExecuteInEditModeAttribute]
-		void Update() override
+			void Update() override
 		{
 			if (lightM == nullptr)
 			{
+				lightM = Singleton<LightManager^>::Instance;
 				printf("Lightmanager not set to an instance. Daemon won't work!");
 				return;
 			}

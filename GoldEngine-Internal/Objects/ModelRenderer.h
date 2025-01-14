@@ -81,13 +81,6 @@ namespace Engine::EngineObjects
 			this->shader = shader;
 			this->tint = tint;
 			this->texture = texture;
-
-			modelManager = new Native::NativeModel(
-				DataPacks::singleton().GetModel(model), 
-				DataPacks::singleton().GetTexture2D(texture), 
-				DataPacks::singleton().GetShader(shader), 
-				tint
-			);
 		}
 
 		void Init(unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint)
@@ -96,8 +89,6 @@ namespace Engine::EngineObjects
 			this->shader = shader;
 			this->tint = tint;
 			this->texture = texture;
-
-			modelManager = new Native::NativeModel(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetTexture2D(texture), DataPacks::singleton().GetShader(shader), tint);
 
 			/*
 			modelInst.materials[0].shader = DataPacks::singleton().GetShader(shader);
@@ -116,7 +107,15 @@ namespace Engine::EngineObjects
 		}
 
 		void PhysicsUpdate() override {}
-		void Start() override {}
+		void Start() override {
+
+			modelManager = new Native::NativeModel(
+				DataPacks::singleton().GetModel(model),
+				DataPacks::singleton().GetTexture2D(texture),
+				DataPacks::singleton().GetShader(shader),
+				tint
+			);
+		}
 
 		void Draw() override
 		{
@@ -134,7 +133,6 @@ namespace Engine::EngineObjects
 				free(modelManager);
 
 			modelManager = new Native::NativeModel(DataPacks::singleton().GetModel(model), DataPacks::singleton().GetTexture2D(texture), DataPacks::singleton().GetShader(shader), tint);
-
 
 			/*
 			m.materials[0].shader = DataPacks::singleton().GetShader(shader);

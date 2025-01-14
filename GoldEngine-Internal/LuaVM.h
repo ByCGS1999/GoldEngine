@@ -49,118 +49,14 @@ namespace Engine::Lua::VM
 
 
 	public:
-		void WriteLuaCodeToFile(String^ src)
-		{
-			System::IO::FileStream^ f = System::IO::File::Open(src, System::IO::FileMode::OpenOrCreate);
-			System::IO::BinaryWriter^ bwriter = gcnew System::IO::BinaryWriter(f);
-
-			bwriter->Write(BINARY_HEADER);
-			bwriter->Write(BYTECODE_VERSION);
-			auto bytes = System::Text::Encoding::UTF32->GetBytes(CypherLib::EncryptFileContents(source, ::passwd));
-			String^ base64_str = System::Convert::ToBase64String(bytes);
-			auto byteArray = System::Text::Encoding::UTF7->GetBytes(base64_str);
-
-			bwriter->Write(byteArray->Length);
-
-			bwriter->Write(byteArray);
-
-			bwriter->Close();
-		}
-
-		void ReadLuaCodeFromFile(String^ src)
-		{
-			System::IO::FileStream^ f = System::IO::File::Open(src, System::IO::FileMode::OpenOrCreate);
-			System::IO::BinaryReader^ breader = gcnew System::IO::BinaryReader(f);
-
-			String^ header = breader->ReadString();
-			int version = breader->ReadInt32();
-
-			if (header->Equals(BINARY_HEADER))
-			{
-				if (version == BYTECODE_VERSION)
-				{
-					int len = breader->ReadInt32();
-					String^ base64 = System::Text::Encoding::UTF7->GetString(breader->ReadBytes(len));
-
-					tempBuffer = CypherLib::DecryptFileContents(Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
-				}
-				else
-				{
-					printError("Lua version mismatch\n");
-				}
-			}
-			else
-			{
-				printError("Lua header mismatch\n");
-			}
-		}
-
-		String^ ReadFromFile(String^ src)
-		{
-			try
-			{
-				System::IO::FileStream^ f = System::IO::File::Open(src, System::IO::FileMode::OpenOrCreate);
-				System::IO::BinaryReader^ breader = gcnew System::IO::BinaryReader(f);
-
-				String^ header = breader->ReadString();
-				int version = breader->ReadInt32();
-
-				if (header->Equals(BINARY_HEADER))
-				{
-					if (version == BYTECODE_VERSION)
-					{
-						int len = breader->ReadInt32();
-						String^ base64 = System::Text::Encoding::UTF7->GetString(breader->ReadBytes(len));
-
-						return CypherLib::DecryptFileContents(System::Text::Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
-					}
-					else
-					{
-						printError("Lua version mismatch\n");
-					}
-				}
-				else
-				{
-					printError("Lua header mismatch\n");
-				}
-			}
-			catch(Exception^ ex)
-			{
-
-			}
-
-			return "";
-		}
+		void WriteLuaCodeToFile(String^ src);
+		void ReadLuaCodeFromFile(String^ src);
+		
+		String^ ReadFromFile(String^ src);
 
 		String^ LoadLuaCodeFromFile(String^ src)
 		{
-			String^ data = "";
-			System::IO::FileStream^ f = System::IO::File::Open(src, System::IO::FileMode::OpenOrCreate);
-			System::IO::BinaryReader^ breader = gcnew System::IO::BinaryReader(f);
-
-			String^ header = breader->ReadString();
-			int version = breader->ReadInt32();
-
-			if (header->Equals(BINARY_HEADER))
-			{
-				if (version == BYTECODE_VERSION)
-				{
-					int len = breader->ReadInt32();
-					String^ base64 = System::Text::Encoding::UTF7->GetString(breader->ReadBytes(len));
-
-					data = CypherLib::DecryptFileContents(System::Text::Encoding::UTF32->GetString(System::Convert::FromBase64String(base64)), ::passwd);
-				}
-				else
-				{
-					printError("Lua version mismatch\n");
-				}
-			}
-			else
-			{
-				printError("Lua header mismatch\n");
-			}
-
-			return data;
+			return ReadFromFile(src);
 		}
 
 	private:

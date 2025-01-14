@@ -14,6 +14,7 @@
 #include "../EngineState.h"
 #include "../Event.h"
 #include "Transform.h"
+#include "../Reflection/ReflectedType.h"
 #include "GameObject.h"
 #include "../SDK.h"
 #include "../Objects/Physics/CollisionType.h"
@@ -37,9 +38,22 @@ btCollisionShape* createBoxShape(std::array<float, 3> bounds)
 
 #pragma managed(pop)
 
+bool activeToggle = false;
+
 Engine::Native::CollisionShape* getCollider(GameObject^ inst)
 {
+	Engine::Native::CollisionShape* ptr = (Engine::Native::CollisionShape*)inst->getCollisionShape();
+
+	if (ptr == nullptr || ptr == 0)
+		inst->createCollisionShape();
+
 	return (Engine::Native::CollisionShape*)inst->getCollisionShape();
+}
+
+
+void GameObject::createCollisionShape()
+{
+	this->collisionShape = new Engine::Native::CollisionShape(this);
 }
 
 // BUBBLING \\
@@ -56,8 +70,14 @@ void GameObject::descendantAdded(GameObject^ descendant)
 
 // CTOR \\
 
+GameObject::GameObject()
+{
+
+}
+
 GameObject::GameObject(System::String^ n, Engine::Internal::Components::Transform^ transform, Engine::Internal::Components::ObjectType t, String^ tag, Engine::Components::Layer^ layer)
 {
+	this->childs = gcnew List<GameObject^>();
 	this->active = true;
 	this->memberIsProtected = false;
 	this->name = n;
@@ -65,20 +85,18 @@ GameObject::GameObject(System::String^ n, Engine::Internal::Components::Transfor
 	this->type = t;
 	this->viewSpace = ViewSpace::V3D;
 
+	this->InstanceType = gcnew Reflectable::ReflectableType();
+	this->InstanceType->SetType(this->GetType());
+
 	this->lastTransform = nullptr;
 	layerMask = layer;
 
 	if (tag == nullptr)
 		tag = "";
 
-	if (this->transform != nullptr)
-		this->transform->setReference(this);
-
 	this->tag = tag;
 
 	this->collisionShape = new Engine::Native::CollisionShape(this);
-
-	getCollider(this)->createCollisionShape(createBoxShape({1,1,1}));
 
 	// EVENT CREATION \\
 
@@ -88,6 +106,8 @@ GameObject::GameObject(System::String^ n, Engine::Internal::Components::Transfor
 	this->onDescendantAdded = gcnew Engine::Scripting::Events::Event();
 
 	this->onDescendantAdded->connect(gcnew Action<GameObject^>(this, &GameObject::descendantAdded));
+
+	activeToggle = this->active;
 }
 
 void GameObject::setParent(GameObject^ object)
@@ -124,6 +144,11 @@ void GameObject::setTag(String^ tag)
 
 void GameObject::OnPropChanged()
 {
+	if (activeToggle != active)
+	{
+		onPropertyChanged->raiseExecution(gcnew cli::array<System::Object^> { "active", active, activeToggle });
+	}
+
 	if (lastTransform == nullptr)
 	{
 		lastTransform = gcnew Engine::Internal::Components::Transform(transform->position, transform->rotation, transform->scale, transform->parent);
@@ -156,20 +181,55 @@ void GameObject::OnPropChanged()
 	}
 }
 
+void fixChilds(GameObject^ root)
+{
+	for (int x = 0; x < root->childs->Count; x++)
+	{
+		GameObject^% obj = root->childs[x];
+
+		if (obj->GetType() != obj->InstanceType->getTypeReference())
+		{
+			Engine::Scripting::ObjectManager::singleton()->Destroy(obj);
+			GameObject^ newInstance = (GameObject^)Cast::Deserialzable((System::Object^%)obj, obj->InstanceType->getTypeReference());
+			root->childs[x] = newInstance;
+			Engine::Scripting::ObjectManager::singleton()->Instantiate(newInstance);
+		}
+		else
+			continue;
+	}
+}
+
+void GameObject::Start()
+{
+	getCollider(this)->createCollisionShape(NativeSingleton<Engine::EngineObjects::Physics::Native::NativePhysicsService*>::Get()->getCollisionShapeForBox(1,1,1));
+	//getCollider(this)->createBulletObject();
+}
+
 void GameObject::GameUpdate()
 {
 	OnPropChanged();
+	this->childs = GetChildren();
 
 	UpdateLocalPosition();
 	UpdatePosition();
 
 	if (!active)
 	{
-		OnUnactive();
+		if (activeToggle)
+		{
+			activeToggle = false;
+			OnUnactive();
+		}
 		return;
 	}
-
-	OnActive();
+	else
+	{
+		if (!activeToggle)
+		{
+			activeToggle = true;
+			OnActive();
+		}
+	}
 
 	HookUpdate();
 
@@ -234,6 +294,37 @@ T GameObject::ToObjectType()
 	}
 }
 
+generic <class T>
+T GameObject::ToGenericType()
+{
+	return (T)this;
+}
+
+System::Object^ GameObject::CastToType(Type^ T, bool useConvert)
+{
+	try
+	{
+		if (useConvert)
+		{
+			return System::Convert::ChangeType(this, T);
+		}
+		else
+		{
+			auto baseMethod = GetType()->GetMethod("ToGenericType");
+			auto genericMethod = baseMethod->MakeGenericMethod(T);
+
+			return genericMethod->Invoke(this, nullptr);
+		}
+	}
+	catch (Exception^ ex)
+	{
+		printError(ex->Message);
+	}
+
+	return nullptr;
+}
+
+
 System::Collections::Generic::List<GameObject^>^ GameObject::GetChildren()
 {
 	return Singleton<Engine::Scripting::ObjectManager^>::Instance->GetChildrenOf(this);
@@ -283,4 +374,20 @@ GameObject^ GameObject::Instantiate(GameObject^ instance, Transform^ parent)
 	instance->transform->setParent(parent);
 	Singleton<Engine::Scripting::ObjectManager^>::Instance->Instantiate(instance);
 	return instance;
+}
+
+Engine::Internal::Components::ObjectType GameObject::GetObjectType()
+{
+	return this->type;
+}
+
+
+GameObject^ GameObject::Parent::get()
+{
+	return (GameObject^)this->transform->getParent()->GetObject();
+}
+
+void GameObject::Parent::set(GameObject^ arg)
+{
+	return this->setParent(arg);
 }

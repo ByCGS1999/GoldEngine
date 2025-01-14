@@ -47,6 +47,9 @@ namespace Engine::Scripting
 	public:
 		System::Object^ getValue()
 		{
+			if (userData == nullptr)
+				return nullptr;
+
 			if (accessLevel == AccessLevel::WriteOnly)
 				return nullptr;
 
@@ -56,6 +59,9 @@ namespace Engine::Scripting
 		generic <class T>
 		T getValue()
 		{
+			if (userData == nullptr)
+				return T();
+
 			if (accessLevel == AccessLevel::WriteOnly)
 				return { };
 

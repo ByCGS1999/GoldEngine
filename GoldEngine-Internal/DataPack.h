@@ -576,6 +576,40 @@ namespace Engine::Assets::Management
 			}
 		}
 
+	public:
+		void ReloadModel(unsigned int modelId)
+		{
+			String^ modelStr = this->models[modelId];
+			AddModel(modelId, modelStr);
+		}
+
+		void ReloadTexture(unsigned int textureId) 
+		{
+			String^ textureStr = this->textures2d[textureId];
+			AddTextures2D(textureId, textureStr);
+		}
+
+		void ReloadShader(unsigned int shaderId)
+		{
+			cli::array<String^>^ str = gcnew cli::array<String^>(2);
+			this->shaders->TryGetValue(shaderId, str);
+			String^ vertexShader = str[0];
+			String^ fragmentShader = str[1];
+			AddShader(shaderId, vertexShader, fragmentShader);
+		}
+
+		void ReloadSound(unsigned int soundId)
+		{
+			String^ soundStr = this->sounds[soundId];
+			AddSound(soundId, soundStr);
+		}
+
+		void ReloadMusic(unsigned int musicId)
+		{
+			String^ musicStr = this->musics[musicId];
+			AddMusic(musicId, musicStr);
+		}
+
 		static DataPack^ singleton()
 		{
 			return singletonRef;

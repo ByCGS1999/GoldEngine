@@ -14,5 +14,8 @@ namespace Engine::EngineObjects::Physics::Native
 
 		btCollisionShape* getCollisionShapeFromID(unsigned int modelId, unsigned int meshId, int collisionType);
 		btCollisionShape* getCollisionShapeFromMesh(RAYLIB::Mesh mesh, int collisionType);
+
+		btCollisionShape* getCollisionShapeForBox(float x, float y, float z);
+		btCollisionShape* getCollisionShapeForSphere(float radius);
 	};
 }

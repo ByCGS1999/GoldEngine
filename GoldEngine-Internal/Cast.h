@@ -22,4 +22,12 @@ public:
 	{
 		return nullptr;
 	}
+
+
+	static System::Object^ Deserialzable(System::Object^ object, System::Type^ type)
+	{
+		System::String^ serializedData = Serialize(object);
+
+		return (System::Object^)Deserialize(serializedData, type);
+	}
 };

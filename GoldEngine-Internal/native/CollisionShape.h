@@ -8,8 +8,8 @@ namespace Engine::Native
 	class CollisionShape
 	{
 	private:
-		btCollisionShape* collisionShape;
-		btCollisionObject* collisionObject;
+		Engine::Native::EnginePtr<btCollisionShape*>* collisionShape;
+		Engine::Native::EnginePtr <btCollisionObject*>* collisionObject;
 		System::Runtime::InteropServices::GCHandle handle;
 		void* userHandler;
 

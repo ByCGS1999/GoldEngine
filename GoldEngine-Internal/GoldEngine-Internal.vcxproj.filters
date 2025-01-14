@@ -349,6 +349,9 @@
     <Filter Include="Source\Engine\EngineObjects\Audio">
       <UniqueIdentifier>{6134285a-5948-4a83-ab47-b2245e5d2086}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\Engine\ScriptingAPI">
+      <UniqueIdentifier>{ecc8131f-793c-4b76-80f8-796e51ebf4a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -459,9 +462,6 @@
     <ClInclude Include="Packs.h">
       <Filter>Source\Engine\ObjectManagement\Types</Filter>
     </ClInclude>
-    <ClInclude Include="LoggingAPI.h">
-      <Filter>Source\Engine\ScriptingAPI</Filter>
-    </ClInclude>
     <ClInclude Include="LuaVM.h">
       <Filter>Source\Engine\ScriptingAPI\Lua</Filter>
     </ClInclude>
@@ -539,9 +539,6 @@
     </ClInclude>
     <ClInclude Include="Objects\Pipeline\ScriptableRenderPipeline.hpp">
       <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Scriptable</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>Source\Engine\ScriptingAPI</Filter>
     </ClInclude>
     <ClInclude Include="RenderPipelines\LightweightSRP.h">
       <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Pipelines</Filter>
@@ -996,6 +993,18 @@
     <ClInclude Include="EditorWindow.h">
       <Filter>Source\EngineTools\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="Object\Prefab.h">
+      <Filter>Headers\Engine\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="native\NativeSingleton.h">
+      <Filter>Headers\Engine\Native</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggingAPI.h">
+      <Filter>Headers\Engine\ScriptingAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Headers\Engine\ScriptingAPI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -1141,6 +1150,12 @@
     </ClCompile>
     <ClCompile Include="Objects\Pipeline\ScriptableRenderPipeline.cpp">
       <Filter>Source\Engine\EngineObjects\Renderer Pipelines\Scriptable</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Prefab.cpp">
+      <Filter>Source\Engine\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

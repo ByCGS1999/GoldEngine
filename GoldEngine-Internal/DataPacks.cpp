@@ -1,16 +1,40 @@
+#include <utility>
 #include "DataPacks.h"
 
 using namespace Engine::Assets::Storage;
 
+void onUnloadSound(RAYLIB::Sound s)
+{
+	UnloadSound(s);
+}
+
+void onUnloadMusicStream(RAYLIB::Music m)
+{
+	UnloadMusicStream(m);
+}
+
+void onUnloadModel(RAYLIB::Model m)
+{
+	UnloadModel(m);
+}
+
+void onUnloadShader(RAYLIB::Shader m) 
+{
+	UnloadShader(m);
+}
+
+void onUnloadTexture(RAYLIB::Texture2D tex)
+{
+	UnloadTexture(tex);
+}
+
 NativeDataPack::NativeDataPack() 
 {
-	shaders = std::vector<Engine::Assets::Storage::Types::ShaderPack>();
-	models = std::vector<Engine::Assets::Storage::Types::ModelPack>();
-	cameras = std::vector<Engine::Assets::Storage::Types::CameraPack>();
-	materials = std::vector<Engine::Assets::Storage::Types::MaterialPack>();
-	textures2d = std::vector<Engine::Assets::Storage::Types::Texture2DPack>();
-	sounds = std::vector<Engine::Assets::Storage::Types::SoundPack>();
-	musics = std::vector<Engine::Assets::Storage::Types::MusicPack>();
+	shaders = std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Shader>>();
+	models = std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Model>>();
+	textures2d = std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Texture2D>>();
+	sounds = std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Sound>>();
+	musics = std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Music>>();
 }
 
 static DataPacks* instance;
@@ -33,61 +57,39 @@ NativeDataPack* DataPacks::GetNativeDataPack()
 
 void DataPacks::AddSound(unsigned int soundId, Sound sound)
 {
-	bool hasShader = false;
+	auto sP = &nativePacks->sounds[soundId];
 
-	for (int x = 0; x < nativePacks->sounds.size(); x++)
+	if (sP == nullptr)
 	{
-		auto sP = &nativePacks->sounds[x];
-
-		if (sP->getId() == soundId)
-		{
-			sP->setResource(sound); // overwrite shader reference
-			hasShader = true;
-			break;
-		}
-		else
-		{
-			hasShader = false;
-		}
+		nativePacks->sounds[soundId] = Engine::Native::EnginePtr<RAYLIB::Sound>(sound, &onUnloadSound, &onUnloadSound);
 	}
-
-	if (!hasShader)
+	else
 	{
-		nativePacks->sounds.push_back(Engine::Assets::Storage::Types::SoundPack(soundId, sound));
+		nativePacks->sounds[soundId].setInstance(sound);
 	}
 }
 
 Sound DataPacks::GetSound(unsigned int soundId)
 {
-	Sound sound;
+	Sound soundPtr;
 
-	for (int x = 0; x < nativePacks->sounds.size(); x++)
+	auto sP = &nativePacks->sounds[soundId];
+	if (sP != nullptr)
 	{
-		auto sP = &nativePacks->sounds[x];
-
-		if (sP->getId() == soundId)
-		{
-			sound = sP->getResource();
-			break;
-		}
+		soundPtr = sP->getInstance();
 	}
 
-	return sound;
+	return soundPtr;
 }
 
 Sound* DataPacks::GetSoundPtr(unsigned int soundId)
 {
-	Sound* soundPtr;
+	Sound* soundPtr = nullptr;
 
-	for (int x = 0; x < nativePacks->sounds.size(); x++)
+	auto sP = &nativePacks->sounds[soundId];
+	if (sP != nullptr)
 	{
-		auto sP = &nativePacks->sounds[x];
-
-		if (sP->getId() == soundId)
-		{
-			soundPtr = sP->getResourcePtr();
-			break;
-		}
+		soundPtr = &sP->getInstance();
 	}
 
 	return soundPtr;
@@ -96,35 +98,25 @@ Sound* DataPacks::GetSoundPtr(unsigned int soundId)
 
 Music DataPacks::GetMusic(unsigned int musicId)
 {
-	Music sound;
+	Music soundPtr;
 
-	for (int x = 0; x < nativePacks->musics.size(); x++)
+	auto sP = &nativePacks->musics[musicId];
+	if (sP != nullptr)
 	{
-		auto sP = &nativePacks->musics[x];
-
-		if (sP->getId() == musicId)
-		{
-			sound = sP->getResource();
-			break;
-		}
+		soundPtr = sP->getInstance();
 	}
 
-	return sound;
+	return soundPtr;
 }
 
 Music* DataPacks::GetMusicPtr(unsigned int musicId)
 {
-	Music* soundPtr;
+	Music* soundPtr = nullptr;
 
-	for (int x = 0; x < nativePacks->musics.size(); x++)
+	auto sP = &nativePacks->musics[musicId];
+	if (sP != nullptr)
 	{
-		auto sP = &nativePacks->musics[x];
-
-		if (sP->getId() == musicId)
-		{
-			soundPtr = sP->getResourcePtr();
-			break;
-		}
+		soundPtr = &sP->getInstance();
 	}
 
 	return soundPtr;
@@ -132,26 +124,57 @@ Music* DataPacks::GetMusicPtr(unsigned int musicId)
 
 void DataPacks::AddMusic(unsigned int soundId, Music sound)
 {
-	bool hasShader = false;
+	auto sP = &nativePacks->musics[soundId];
 
-	for (int x = 0; x < nativePacks->musics.size(); x++)
+	if (sP == nullptr)
 	{
-		auto sP = &nativePacks->musics[x];
-
-		if (sP->getId() == soundId)
-		{
-			sP->setResource(sound); // overwrite shader reference
-			hasShader = true;
-			break;
-		}
-		else
-		{
-			hasShader = false;
-		}
+		nativePacks->musics[soundId] = Engine::Native::EnginePtr<RAYLIB::Music>(sound, &onUnloadMusicStream, &onUnloadMusicStream);
 	}
-
-	if (!hasShader)
+	else
 	{
-		nativePacks->musics.push_back(Engine::Assets::Storage::Types::MusicPack(soundId, sound));
+		nativePacks->musics[soundId].setInstance(sound);
+	}
+}
+
+
+void DataPacks::AddModel(unsigned int modelId, Model modelRef)
+{
+	auto sP = &nativePacks->models[modelId];
+
+	if (sP == nullptr)
+	{
+		nativePacks->models[modelId] = Engine::Native::EnginePtr<RAYLIB::Model>(modelRef, &onUnloadModel, &onUnloadModel);
+	}
+	else
+	{
+		nativePacks->models[modelId].setInstance(modelRef);
+	}
+}
+
+void DataPacks::AddShader(unsigned int shaderId, Shader& shader)
+{
+	auto sP = &nativePacks->shaders[shaderId];
+
+	if (sP == nullptr)
+	{
+		nativePacks->shaders[shaderId] = Engine::Native::EnginePtr<RAYLIB::Shader>(shader, &onUnloadShader, &onUnloadShader);
+	}
+	else
+	{
+		nativePacks->shaders[shaderId].setInstance(shader);
+	}
+}
+
+void DataPacks::AddTexture2D(unsigned int textureId, Texture2D texture)
+{
+	auto sP = &nativePacks->textures2d[textureId];
+
+	if (sP == nullptr)
+	{
+		nativePacks->textures2d[textureId] = Engine::Native::EnginePtr<RAYLIB::Texture2D>(texture, &onUnloadTexture, &onUnloadTexture);
+	}
+	else
+	{
+		sP->setInstance(texture);
 	}
 }

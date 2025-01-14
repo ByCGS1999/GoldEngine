@@ -96,17 +96,24 @@ namespace UserScripts
 
 /* END SCRIPTING TEMPLATES */
 
+void onEditorTabsDispose(std::vector<EditorTab> tabs)
+{
 
+}
+
+bool codeEditorOpen = false;
 
 CodeEditor::CodeEditor(Engine::Window^ instance)
 {
 	std::vector<EditorTab> editorTabs = std::vector<EditorTab>();
 
 	EditorTab defaultTab = EditorTab();
-	defaultTab.codeEditorFile = "./Untitled.txt";
+	defaultTab.codeEditorFile = "Untitled.txt";
 
 	editorTabs.push_back(defaultTab); // DEFAULT TAB
-
+	bool value = false;
+	tabs = new Engine::Native::EnginePtr<std::vector<EditorTab>>(editorTabs, &onEditorTabsDispose);
+	
 	this->instance = instance;
 
 	try
@@ -131,12 +138,22 @@ void CodeEditor::SaveEditorCode()
 
 void CodeEditor::Draw()
 {
-	if (ImGui::Begin("Embedded Code Editor", &codeEditorOpen->getInstance(), ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar))
+	if (ImGui::Begin("Embedded Code Editor", &codeEditorOpen, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar))
 	{
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
 			{
+				if (ImGui::MenuItem("New"))
+				{
+					EditorTab defaultTab = EditorTab();
+					defaultTab.codeEditorFile = "Untitled.txt";
+
+					tabs->getInstance().push_back(defaultTab);
+				}
+
+				ImGui::Separator();
+
 				if (ImGui::MenuItem("Open"))
 				{
 					if (tabs->getInstance()[selectedTab].codeEditorFile != "")
@@ -168,6 +185,19 @@ void CodeEditor::Draw()
 					((EditorWindow^)instance)->OpenFileExplorer("Save File", Engine::Editor::Gui::explorerMode::Save, (gcnew Engine::Editor::Gui::onFileSelected(this, &CodeEditor::SaveEditorContents)));
 				}
 				ImGui::Separator();
+
+				if (ImGui::MenuItem("Close", "", (bool*)0, (tabs->getInstance().size() > 1)))
+				{
+					if (tabs->getInstance().size() > 1)
+					{
+						tabs->getInstance().erase(tabs->getInstance().begin() + selectedTab);
+						if (selectedTab != 0)
+							selectedTab--;
+						else 
+							selectedTab = 0;
+					}
+				}
+
 				if (ImGui::MenuItem("Exit"))
 				{
 					codeEditorOpen = false;
@@ -264,15 +294,17 @@ void CodeEditor::Draw()
 			ImGui::EndPopup();
 		}
 
-		ImGui::BeginGroup();
-		for (int x = 0; x < tabs->getInstance().size(); x++)
+		if (ImGui::BeginTabBar("TAB_MODULE", ImGuiTabBarFlags_None))
 		{
-			if (ImGui::Button(tabs->getInstance()[x].codeEditorFile.c_str()))
+			for (int x = 0; x < tabs->getInstance().size(); x++)
 			{
-				selectedTab = x;
+				if (ImGui::TabItemButton((tabs->getInstance()[x].codeEditorFile + "###" + std::to_string(x)).c_str()))
+				{
+					selectedTab = x;
+				}
 			}
+			ImGui::EndTabBar();
 		}
-		ImGui::EndGroup();
 
 		tabs->getInstance()[selectedTab].codeEditor.SetLanguageDefinition(tabs->getInstance()[selectedTab].language);
 		tabs->getInstance()[selectedTab].codeEditor.Render(TextFormat("Embedded_Code_Editor_%d", selectedTab));
@@ -286,7 +318,12 @@ void CodeEditor::SetEditorCode(String^ file)
 {
 	SaveEditorCode();
 
-	tabs->getInstance()[selectedTab].codeEditorFile = CastStringToNative(file);
+	file = file->Replace("\\", "/");
+	if (file->LastIndexOf('/') != -1)
+		tabs->getInstance()[selectedTab].codeEditorFile = CastStringToNative(file->Substring(file->LastIndexOf('/') + 1));
+	else
+		tabs->getInstance()[selectedTab].codeEditorFile = CastStringToNative(file);
+
 	String^ content = File::ReadAllText(file);
 
 	if (content->Equals(""))
@@ -303,7 +340,18 @@ void CodeEditor::SetEditorCode(String^ file)
 
 void CodeEditor::SaveEditorContents(String^ path)
 {
-	File::WriteAllText(path, gcnew String(tabs->getInstance()[selectedTab].codeEditorChunk.c_str()));
+	path = path->Replace("\\", "/");
+	if (path->LastIndexOf('/') != -1)
+		tabs->getInstance()[selectedTab].codeEditorFile = CastStringToNative(path->Substring(path->LastIndexOf('/')+1));
+	else
+		tabs->getInstance()[selectedTab].codeEditorFile = CastStringToNative(path);
+
+	StreamWriter^ streamWriter = gcnew StreamWriter(path);
+
+	streamWriter->Write(gcnew String(tabs->getInstance()[selectedTab].codeEditorChunk.c_str()));
+	streamWriter->Flush();
+
+	streamWriter->Close();
 }
 
 void CodeEditor::SetEditorCode(std::string fileName, std::string fileContents)
@@ -333,8 +381,21 @@ void CodeEditor::createTab(String^ file, TextEditor::LanguageDefinition def)
 	newTab.language = def;
 
 	tabs->getInstance().push_back(newTab);
-	selectedTab = tabs->getInstance().size();
+	selectedTab = tabs->getInstance().size()-1;
 
 	SetEditorCode(file);
 }
+
+void CodeEditor::setCodeEditorOpen(bool value)
+{
+	codeEditorOpen = value;
+}
+
+bool CodeEditor::isCodeEditorOpen()
+{
+	return codeEditorOpen;
+}
+
+
+
 #pragma managed(pop)

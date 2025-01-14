@@ -18,8 +18,6 @@ ref class CodeEditor
 private:
 	int selectedTab = 0;
 	Engine::Native::EnginePtr<std::vector<EditorTab>>* tabs;
-	Engine::Native::EnginePtr<ImVec2>* codeEditorSize;
-	Engine::Native::EnginePtr<bool>* codeEditorOpen;
 	Engine::Window^ instance;
 
 public:
@@ -36,6 +34,6 @@ public:
 	void SaveEditorContents(String^ path);
 	void SaveEditorCode();
 
-	void setCodeEditorOpen(bool value) { codeEditorOpen->setInstance(value); }
-	bool isCodeEditorOpen() { return codeEditorOpen->getInstance(); }
+	void setCodeEditorOpen(bool value);
+	bool isCodeEditorOpen();
 };

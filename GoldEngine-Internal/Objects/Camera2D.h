@@ -4,7 +4,7 @@ namespace Engine::EngineObjects
 {
 	public ref class Camera2D : public Engine::EngineObjects::Camera
 	{
-	private:
+	protected:
 		Native::NativeCamera3D* nativeCamera;
 
 	public:
@@ -57,6 +57,21 @@ namespace Engine::EngineObjects
 		bool is3DCamera() override
 		{
 			return false;
+		}
+
+		void ApplyCameraYaw(float yaw, bool local) override
+		{
+			RAYLIB::CameraYaw(nativeCamera->getCameraPtr(), yaw, local);
+		}
+
+		void ApplyCameraPitch(float yaw) override
+		{
+			RAYLIB::CameraPitch(nativeCamera->getCameraPtr(), yaw);
+		}
+
+		void ApplyCameraRoll(float roll) override
+		{
+			RAYLIB::CameraRoll(nativeCamera->getCameraPtr(), roll);
 		}
 	};
 }

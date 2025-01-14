@@ -21,6 +21,22 @@ namespace Engine::EngineObjects::Editor
 			{
 				attributes->getAttribute("camera direction")->setValue(Engine::Components::Vector3::create(((Native::NativeCamera3D*)this->get())->get().target));
 			}
+
+			if (cameraMode == CamMode::CAMERA_CUSTOM)
+			{
+				if (attributes->getAttribute("camera direction"))
+					this->nativeCamera->get().target = ((Engine::Components::Vector3^)attributes->getAttribute("camera direction")->getValue())->toNative();
+
+				this->nativeCamera->getCameraPtr()->position = transform->position->toNative();
+			}
+
+			UpdateCamera(this->nativeCamera->getCameraPtr(), (int)cameraMode);
+		}
+
+
+		void OnActive() override
+		{
+			this->nativeCamera->getCameraPtr()->position = transform->position->toNative();
 		}
 	};
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../Reflection/ReflectedType.h"
+
 namespace Engine::Internal::Components
 {
 	[MoonSharp::Interpreter::MoonSharpUserDataAttribute]
@@ -7,19 +9,24 @@ namespace Engine::Internal::Components
 	{
 	private:
 		void* collisionShape;
-		bool memberIsProtected;
 		Engine::Internal::Components::Transform^ lastTransform;
+		[Newtonsoft::Json::JsonPropertyAttribute]
+		bool memberIsProtected;
+		[Newtonsoft::Json::JsonPropertyAttribute]
+		Engine::Internal::Components::ObjectType type;
 
 	public:
 		bool active;
 
 		System::String^ name;
-		initonly Engine::Internal::Components::ObjectType type;
 		Engine::Internal::Components::Transform^ transform;
 
 		Engine::Internal::Components::ViewSpace viewSpace;
 		Engine::Components::Layer^ layerMask;
 		System::String^ tag;
+
+		[Newtonsoft::Json::JsonIgnoreAttribute]
+			System::Collections::Generic::List<GameObject^>^ childs;
 
 		[Newtonsoft::Json::JsonIgnoreAttribute]
 			Engine::Scripting::Events::Event^ onPropertyChanged;
@@ -30,22 +37,46 @@ namespace Engine::Internal::Components
 		[Newtonsoft::Json::JsonIgnoreAttribute]
 			Engine::Scripting::Events::Event^ onDescendantAdded;
 
+		Reflectable::ReflectableType^ InstanceType;
+
+		[Newtonsoft::Json::JsonIgnoreAttribute]
+		property GameObject^ Parent 
+		{
+			GameObject^ get();
+			void set(GameObject^ arg);
+		}
+
 	public:
 		[Newtonsoft::Json::JsonConstructorAttribute]
-			GameObject(System::String^ n, Engine::Internal::Components::Transform^ transform, Engine::Internal::Components::ObjectType t, String^ tag, Engine::Components::Layer^ layer);
+		GameObject();
+		GameObject(System::String^ n, Engine::Internal::Components::Transform^ transform, Engine::Internal::Components::ObjectType t, String^ tag, Engine::Components::Layer^ layer);
 
 	private:
 		~GameObject()
 		{
+			childs->Clear();
+			onPropertyChanged->disconnectAll();
+			onChildAdded->disconnectAll();
+			onChildRemoved->disconnectAll();
+			onDescendantAdded->disconnectAll();
+
 			delete collisionShape;
 			delete name;
 			delete transform;
 			delete layerMask;
 			delete tag;
+			delete lastTransform;
+			delete childs;
+			delete onPropertyChanged;
+			delete onChildAdded;
+			delete onChildRemoved;
+			delete onDescendantAdded;
+			delete InstanceType;
 		}
 
 	public:
 		void* getCollisionShape() { return collisionShape; }
+		void createCollisionShape();
 
 	public:
 		// vmethods
@@ -57,7 +88,7 @@ namespace Engine::Internal::Components
 		virtual void Setup() {}
 
 		// object methods
-		virtual void Start() {}
+		virtual void Start();
 		virtual void PhysicsUpdate() {}
 		virtual void Update() { }
 		virtual void Draw() {}
@@ -132,8 +163,15 @@ namespace Engine::Internal::Components
 		Transform^ GetTransform() { return getTransform(); }
 		void SetParent(GameObject^ arg) { this->setParent(arg); }
 
+		Engine::Internal::Components::ObjectType GetObjectType();
+
+		generic <class T>
+		T ToGenericType();
+
 		generic <class T>
 		T ToObjectType();
+
+		System::Object^ CastToType(Type^ T, bool useConvert);
 
 		virtual void Destroy()
 		{
@@ -170,7 +208,6 @@ namespace Engine::Internal::Components
 		static GameObject^ Instantiate(GameObject^ instance, Transform^ parent);
 
 		/*
-
 #pragma region IConvertible_Implementation
 
 		virtual System::TypeCode GetTypeCode()
@@ -259,7 +296,6 @@ namespace Engine::Internal::Components
 		}
 
 #pragma endregion
-
 */
-	};
+};
 }

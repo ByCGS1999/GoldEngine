@@ -25,6 +25,8 @@ namespace Engine::Scripting::Events
 		void disconnect(System::Action^);
 		void disconnect(MoonSharp::Interpreter::DynValue^);
 
+		void disconnectAll();
+
 	public:
 		System::Object^ invoke(cli::array<System::Object^>^);
 		System::Object^ invoke();

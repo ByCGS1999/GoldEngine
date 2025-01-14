@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <algorithm>
+#include <utility>
+#include <map>
 #include "Includes.h"
 #include "GlIncludes.h"
 #include "Object/Transform.h"
@@ -19,13 +21,13 @@ namespace Engine::Assets::Storage
 	public class NativeDataPack
 	{
 	public:
-		std::vector<Engine::Assets::Storage::Types::ShaderPack> shaders;
-		std::vector<Engine::Assets::Storage::Types::ModelPack> models;
-		std::vector<Engine::Assets::Storage::Types::CameraPack> cameras;
-		std::vector<Engine::Assets::Storage::Types::MaterialPack> materials;
-		std::vector<Engine::Assets::Storage::Types::Texture2DPack> textures2d;
-		std::vector<Engine::Assets::Storage::Types::SoundPack> sounds;
-		std::vector<Engine::Assets::Storage::Types::MusicPack> musics;
+		std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Shader>> shaders;
+		std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Model>> models;
+		//std::map<unsigned int, Engine::Assets::Storage::Types::CameraPack> cameras;
+		//std::map<unsigned int, Engine::Assets::Storage::Types::MaterialPack> materials;
+		std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Texture2D>> textures2d;
+		std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Sound>> sounds;
+		std::map<unsigned int, Engine::Native::EnginePtr<RAYLIB::Music>> musics;
 
 		NativeDataPack();
 	};
@@ -45,8 +47,8 @@ namespace Engine::Assets::Storage
 			assetCount += nativePacks->shaders.size();
 			assetCount += nativePacks->models.size();
 			assetCount += nativePacks->textures2d.size();
-			assetCount += nativePacks->materials.size();
-			assetCount += nativePacks->cameras.size();
+			//assetCount += nativePacks->materials.size();
+			//assetCount += nativePacks->cameras.size();
 			assetCount += nativePacks->sounds.size();
 
 			return (assetCount >= 0);
@@ -58,7 +60,7 @@ namespace Engine::Assets::Storage
 			{
 				auto sP = &nativePacks->shaders[x];
 
-				sP->freealloc();
+				sP->release();
 			}
 
 			nativePacks->shaders.clear();
@@ -70,7 +72,7 @@ namespace Engine::Assets::Storage
 			{
 				auto sP = &nativePacks->musics[x];
 
-				sP->freealloc();
+				sP->release();
 			}
 
 			nativePacks->musics.clear();
@@ -83,7 +85,7 @@ namespace Engine::Assets::Storage
 			{
 				auto sP = &nativePacks->sounds[x];
 
-				sP->freealloc();
+				sP->release();
 			}
 
 			nativePacks->sounds.clear();
@@ -96,10 +98,7 @@ namespace Engine::Assets::Storage
 			{
 				auto sP = &nativePacks->shaders[x];
 
-				if (sP->getId() == shaderId)
-				{
-					sP->freealloc();
-				}
+				sP->release();
 			}
 		}
 
@@ -115,7 +114,7 @@ namespace Engine::Assets::Storage
 			}
 			*/
 
-			nativePacks->materials.clear();
+			//nativePacks->materials.clear();
 		}
 
 		void FreeModels()
@@ -124,10 +123,7 @@ namespace Engine::Assets::Storage
 			{
 				auto sP = &nativePacks->models[x];
 
-				if (sP->hasValue())
-				{
-					sP->freealloc();
-				}
+				sP->release();
 			}
 
 			nativePacks->models.clear();
@@ -135,7 +131,7 @@ namespace Engine::Assets::Storage
 
 		void FreeCameras()
 		{
-			nativePacks->cameras.clear();
+			//nativePacks->cameras.clear();
 		}
 
 		void FreeTextures2D()
@@ -144,10 +140,7 @@ namespace Engine::Assets::Storage
 			{
 				auto tP = &nativePacks->textures2d[x];
 
-				if (tP->hasValue())
-				{
-					tP->freealloc();
-				}
+				tP->release();
 			}
 
 			nativePacks->textures2d.clear();
@@ -169,48 +162,10 @@ namespace Engine::Assets::Storage
 			FreeMusics();
 		}
 
-
-		Engine::Assets::Storage::Types::ModelPack* GetModelPack(unsigned int modelPackId)
-		{
-			Engine::Assets::Storage::Types::ModelPack* shader = nullptr;
-
-			for (int x = 0; x < nativePacks->models.size(); x++)
-			{
-				auto sP = &nativePacks->models[x];
-
-				if (sP->getId()  == modelPackId)
-				{
-					shader = sP;
-					break;
-				}
-			}
-
-			return shader;
-		}
-
-
-		Engine::Assets::Storage::Types::ShaderPack* GetShaderPack(unsigned int shaderId)
-		{
-			Engine::Assets::Storage::Types::ShaderPack* shader = nullptr;
-
-			for (int x = 0; x < nativePacks->shaders.size(); x++)
-			{
-				auto sP = &nativePacks->shaders[x];
-
-				if (sP->getId() == shaderId)
-				{
-					shader = sP;
-					break;
-				}
-			}
-
-			return shader;
-		}
-
 		RAYLIB::Camera3D GetCamera3D(unsigned int cameraId)
 		{
 			RAYLIB::Camera3D camera = { };
-
+			/*
 			for each (Engine::Assets::Storage::Types::CameraPack  cP in nativePacks->cameras)
 			{
 				if ((cP.cameraId == cameraId) && (cP.cameraType == Engine::Internal::Components::CameraType::C3D))
@@ -219,23 +174,20 @@ namespace Engine::Assets::Storage
 					break;
 				}
 			}
-
+			*/
 			return camera;
 		}
 
 		RAYLIB::Camera2D GetCamera2D(unsigned int cameraId)
 		{
 			RAYLIB::Camera2D camera = { };
-
-			for each (Engine::Assets::Storage::Types::CameraPack  cP in nativePacks->cameras)
+			/*
+			auto cP = nativePacks->cameras[cameraId];
+			if ((cP.cameraId == cameraId) && (cP.cameraType == Engine::Internal::Components::CameraType::C2D))
 			{
-				if ((cP.cameraId == cameraId) && (cP.cameraType == Engine::Internal::Components::CameraType::C2D))
-				{
-					camera = cP.camera2D;
-					break;
-				}
+				camera = cP.camera2D;
 			}
-
+			*/
 			return camera;
 		}
 
@@ -245,10 +197,7 @@ namespace Engine::Assets::Storage
 			{
 				auto mP = &nativePacks->textures2d[x];
 
-				if (mP->getId() == textureId)
-				{
-					return mP->getResource();
-				}
+				return mP->getInstance();
 			}
 
 			AddTexture2D(textureId, LoadTexture("./Data/Engine/Textures/NotFound.png"));
@@ -268,6 +217,7 @@ namespace Engine::Assets::Storage
 		{
 			Material material = { };
 
+			/*
 			bool hasMaterial = false;
 
 			for each (Engine::Assets::Storage::Types::MaterialPack  sP in nativePacks->materials)
@@ -283,7 +233,7 @@ namespace Engine::Assets::Storage
 			if (!hasMaterial)
 			{
 				material = LoadMaterialDefault();
-			}
+			}*/
 
 			return material;
 		}
@@ -294,16 +244,11 @@ namespace Engine::Assets::Storage
 			Model retn = { };
 			bool hasModel = false;
 
-			for (int x = 0; x < nativePacks->models.size(); x++)
-			{
-				auto mP = &nativePacks->models[x];
+			auto mP = &nativePacks->models[modelId];
 
-				if (mP->getId() == modelId)
-				{
-					retn = mP->getResource();
-					hasModel = true;
-					break;
-				}
+			if (mP != nullptr)
+			{
+				return mP->getInstance();
 			}
 
 			if (!hasModel)
@@ -321,14 +266,11 @@ namespace Engine::Assets::Storage
 
 			bool hasShader = false;
 
-			for (int x = 0; x < nativePacks->shaders.size(); x++)
-			{
-				auto sP = &nativePacks->shaders[x];
+			auto sP = &nativePacks->shaders[shaderId];
 
-				if (sP->getId() == shaderId)
-				{
-					return sP->getResource();
-				}
+			if (sP != nullptr)
+			{
+				return sP->getInstance();
 			}
 
 			if (!hasShader)
@@ -347,14 +289,11 @@ namespace Engine::Assets::Storage
 
 			bool hasShader = false;
 
-			for (int x = 0; x < nativePacks->shaders.size(); x++)
-			{
-				auto sP = &nativePacks->shaders[x];
+			auto sP = &nativePacks->shaders[shaderId];
 
-				if (sP->getId() == shaderId)
-				{
-					return sP->getResource();
-				}
+			if (sP != nullptr)
+			{
+				return sP->getInstance();
 			}
 
 			if (!hasShader)
@@ -373,16 +312,11 @@ namespace Engine::Assets::Storage
 
 			bool hasShader = false;
 
-			for (int x = 0; x < nativePacks->shaders.size(); x++)
-			{
-				auto sP = &nativePacks->shaders[x];
+			auto sP = &nativePacks->shaders[shaderId];
 
-				if (sP->getId() == shaderId)
-				{
-					shader = sP->getResourcePtr();
-					hasShader = true;
-					break;
-				}
+			if (sP != nullptr)
+			{
+				return &sP->getInstance();
 			}
 
 			if (!hasShader)
@@ -395,60 +329,14 @@ namespace Engine::Assets::Storage
 			return shader;
 		}
 
-		void AddShader(unsigned int shaderId, Shader& shader)
-		{
-			bool hasShader = false;
+		void AddShader(unsigned int shaderId, Shader& shader);
+		void AddModel(unsigned int modelId, Model modelRef);
+		void AddTexture2D(unsigned int textureId, Texture2D texture);
 
-			for (int x = 0; x < nativePacks->shaders.size(); x++)
-			{
-				auto sP = &nativePacks->shaders[x];
-
-				if (sP->getId() == shaderId)
-				{
-					sP->setResource(shader); // overwrite shader reference
-					hasShader = true;
-					break;
-				}
-				else
-				{
-					hasShader = false;
-				}
-			}
-
-			if (!hasShader)
-			{
-				nativePacks->shaders.push_back(Engine::Assets::Storage::Types::ShaderPack(shaderId, shader));
-			}
-		}
-		void AddModel(unsigned int modelId, Model modelRef)
-		{
-			bool hasModel = false;
-
-			for (int x = 0; x < nativePacks->models.size(); x++)
-			{
-				auto sP = &nativePacks->models[x];
-
-				if (sP->getId() == modelId)
-				{
-					sP->setResource(modelRef);
-					hasModel = true;
-					break;
-				}
-				else
-				{
-					hasModel = false;
-				}
-			}
-
-			if (!hasModel)
-			{
-				nativePacks->models.push_back(Engine::Assets::Storage::Types::ModelPack(modelId, modelRef));
-			}
-		}
 		void AddCamera(unsigned int cameraId, RAYLIB::Camera2D camera, Engine::Internal::Components::CameraType type)
 		{
 			bool hasCamera = false;
-
+			/*
 			for each (Engine::Assets::Storage::Types::CameraPack  cPack in nativePacks->cameras)
 			{
 				if (cPack.cameraId == cameraId && cPack.cameraType == type)
@@ -467,12 +355,13 @@ namespace Engine::Assets::Storage
 			{
 				nativePacks->cameras.push_back(Engine::Assets::Storage::Types::CameraPack(cameraId, type, &camera));
 			}
+			*/
 		}
 
 		void AddCamera(unsigned int cameraId, RAYLIB::Camera3D camera, Engine::Internal::Components::CameraType type)
 		{
 			bool hasCamera = false;
-
+			/*
 			for each (Engine::Assets::Storage::Types::CameraPack  cPack in nativePacks->cameras)
 			{
 				if (cPack.cameraId == cameraId && cPack.cameraType == type)
@@ -491,6 +380,7 @@ namespace Engine::Assets::Storage
 			{
 				nativePacks->cameras.push_back(Engine::Assets::Storage::Types::CameraPack(cameraId, type, &camera));
 			}
+			*/
 		}
 
 
@@ -498,6 +388,7 @@ namespace Engine::Assets::Storage
 		{
 			bool hasMaterial = false;
 
+			/*
 			for each (Engine::Assets::Storage::Types::MaterialPack  cPack in nativePacks->materials)
 			{
 				if (cPack.MaterialId == materialID)
@@ -516,38 +407,14 @@ namespace Engine::Assets::Storage
 			{
 				nativePacks->materials.push_back(Engine::Assets::Storage::Types::MaterialPack(materialID, material));
 			}
-		}
-
-		void AddTexture2D(unsigned int textureId, Texture2D texture)
-		{
-			bool hasTexture2D = false;
-
-			for (int x = 0; x < nativePacks->textures2d.size(); x++)
-			{
-				auto sP = &nativePacks->textures2d[x];
-
-				if (sP->getId() == textureId)
-				{
-					sP->setResource(texture); // overwrite shader reference
-					hasTexture2D = true;
-					break;
-				}
-				else
-				{
-					hasTexture2D = false;
-				}
-			}
-
-			if (!hasTexture2D)
-			{
-				nativePacks->textures2d.push_back(Engine::Assets::Storage::Types::Texture2DPack(textureId, texture));
-			}
+			*/
 		}
 
 		bool HasMaterial(unsigned int materialID)
 		{
 			bool hasMaterial = false;
 
+			/*
 			for each (Engine::Assets::Storage::Types::MaterialPack  cPack in nativePacks->materials)
 			{
 				if (cPack.MaterialId == materialID)
@@ -556,6 +423,7 @@ namespace Engine::Assets::Storage
 					break;
 				}
 			}
+			*/
 
 			return hasMaterial;
 		}
@@ -564,20 +432,11 @@ namespace Engine::Assets::Storage
 		{
 			bool hasTexture2D = false;
 
-			for (int x = 0; x < nativePacks->textures2d.size(); x++)
-			{
-				auto sP = &nativePacks->textures2d[x];
 
-				if (sP->getId() == textureId)
-				{
-					hasTexture2D = true;
-					break;
-				}
-				else
-				{
-					hasTexture2D = false;
-				}
-			}
+			auto sP = &nativePacks->textures2d[textureId];
+
+			if (sP != nullptr)
+				hasTexture2D = true;
 
 			return hasTexture2D;
 		}
@@ -586,15 +445,11 @@ namespace Engine::Assets::Storage
 		{
 			bool hasShader = false;
 
-			for (int x = 0; x < nativePacks->shaders.size(); x++)
-			{
-				auto sP = &nativePacks->shaders[x];
+			auto sP = &nativePacks->shaders[shaderId];
 
-				if (sP->getId() == shaderId)
-				{
-					hasShader = true;
-					break;
-				}
+			if (sP != nullptr)
+			{
+				hasShader = true;
 			}
 
 			return hasShader;
@@ -604,18 +459,11 @@ namespace Engine::Assets::Storage
 		{
 			bool hasMaterial = false;
 
-			for each (Engine::Assets::Storage::Types::MaterialPack  cPack in nativePacks->materials)
-			{
-				if (cPack.MaterialId == materialID)
-				{
-					hasMaterial = true;
-					break;
-				}
-				else
-				{
-					hasMaterial = false;
-				}
-			}
+			auto sP = &nativePacks->models[materialID];
+
+			if (sP != nullptr)
+				hasMaterial = true;
+
 
 			return hasMaterial;
 		}

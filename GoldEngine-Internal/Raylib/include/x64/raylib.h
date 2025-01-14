@@ -1698,6 +1698,11 @@ namespace RAYLIB
         RLAPI void AttachAudioMixedProcessor(AudioCallback processor); // Attach audio stream processor to the entire audio pipeline, receives the samples as 'float'
         RLAPI void DetachAudioMixedProcessor(AudioCallback processor); // Detach audio stream processor from the entire audio pipeline
 
+        // Camera functions
+        RLAPI void CameraYaw(Camera* cameraPointer, float yaw, bool local);
+        RLAPI void CameraPitch(Camera* cameraPointer, float pitch);
+        RLAPI void CameraRoll(Camera* cameraPointer, float roll);
+
 #if defined(__cplusplus)
     }
 #endif

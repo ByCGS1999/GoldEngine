@@ -31,9 +31,9 @@
 extern int max_lights;
 extern unsigned int passwd;
 
-#define ENGINE_VERSION "GoldEngine Ver: 0.3c"
-#define EDITOR_VERSION "GoldEngine Editor Ver: 0.6a"
-#define RUNTIME_VERSION "GoldEngine Runtime Prev-Ver: 0.1a"
+#define ENGINE_VERSION "GoldEngine Ver: 0.5a"
+#define EDITOR_VERSION "GoldEngine Editor Ver: 0.7a"
+#define RUNTIME_VERSION "GoldEngine Runtime Prev-Ver: 0.3a"
 
 // PHYSICS SYSTEM
 

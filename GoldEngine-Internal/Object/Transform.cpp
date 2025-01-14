@@ -2,6 +2,7 @@
 #include "../ManagedIncludes.h"
 #include "../Event.h"
 #include "GameObject.h"
+#include "../SDK.h"
 
 using namespace System;
 using namespace Engine::Internal::Components;
@@ -12,7 +13,6 @@ Engine::Internal::Components::Transform::Transform(Engine::Components::Vector3^ 
 	this->localPosition = position;
 	this->localRotation = rotation;
 	this->scale = scale;
-	this->gameObject = gameObject;
 
 	if (parent != nullptr)
 	{
@@ -34,24 +34,29 @@ String^ Engine::Internal::Components::Transform::GetUID()
 	return uid;
 }
 
+
+void Engine::Internal::Components::Transform::SetUID(String^ uid)
+{
+	this->uid = uid;
+}
+
 void Engine::Internal::Components::Transform::setParent(Transform^ newTransform)
 {
 	this->parent = newTransform;
 }
 
-void Engine::Internal::Components::Transform::setReference(System::Object^ gameObject)
-{
-	//this->gameObject = (Engine::Internal::Components::GameObject^)gameObject;
-	this->gameObject = gameObject;
-}
-
-System::Object^ Engine::Internal::Components::Transform::getGameObject()
-{
-	//return (Engine::Internal::Components::GameObject^)this->gameObject;
-	return this->gameObject;
-}
-
 Engine::Internal::Components::Transform^ Engine::Internal::Components::Transform::getParent()
 {
 	return parent;
+}
+
+generic <class T>
+T Engine::Internal::Components::Transform::GetObject()
+{
+	return (T)Singleton<Engine::Scripting::ObjectManager^>::Instance->GetObjectByUid(this->uid);
+}
+
+System::Object^ Engine::Internal::Components::Transform::GetObject()
+{
+	return Singleton<Engine::Scripting::ObjectManager^>::Instance->GetObjectByUid(this->uid);
 }
