@@ -78,10 +78,14 @@ using namespace Engine::Attributes;
 
 // physics
 
+#ifdef USE_BULLET_PHYS
+
 #include "Objects/Physics/CollisionType.h"
 #include "Objects/Physics/Native/NativePhysicsService.h"
 #include "Objects/Physics/RigidBody.h"
 #include "Objects/Physics/PhysicsService.h"
+
+#endif
 
 // render pipelines
 
@@ -1381,6 +1385,7 @@ void EditorWindow::DrawMainMenuBar()
 
 			if (ImGui::BeginMenu("Physics"))
 			{
+#ifdef USE_BULLET_PHYS
 				if (ImGui::MenuItem("RigidBody"))
 				{
 					auto meshRenderer = gcnew Engine::EngineObjects::Physics::RigidBody(
@@ -1395,7 +1400,9 @@ void EditorWindow::DrawMainMenuBar()
 
 					scene->AddObjectToScene(meshRenderer);
 				}
-
+#else
+				ImGui::Text("Engine not compiled with physics module");
+#endif
 				ImGui::EndMenu();
 			}
 
@@ -1443,7 +1450,6 @@ void EditorWindow::DrawMainMenuBar()
 						1
 					);
 					meshRenderer->SetParent(lightManager);
-					lightManager->AddLight(meshRenderer, 1);
 
 					scene->AddObjectToScene(meshRenderer);
 				}
@@ -1465,7 +1471,6 @@ void EditorWindow::DrawMainMenuBar()
 						1
 					);
 					meshRenderer->SetParent(lightManager);
-					lightManager->AddLight(meshRenderer, 1);
 					scene->AddObjectToScene(meshRenderer);
 				}
 
@@ -1486,9 +1491,8 @@ void EditorWindow::DrawMainMenuBar()
 						1
 					);
 					meshRenderer->SetParent(lightManager);
-					lightManager->AddLight(meshRenderer, 1);
+
 					scene->AddObjectToScene(meshRenderer);
-					
 				}
 
 				ImGui::EndMenu();
@@ -2651,6 +2655,8 @@ void EditorWindow::create()
 	scene->GetDatamodelMember("gui", true);
 	auto daemonParent = scene->GetDatamodelMember("daemons", true);
 
+#ifdef USE_BULLET_PHYS
+
 	if (!scene->ExistsMember("PhysicsService"))
 	{
 		auto physicsService = gcnew Engine::EngineObjects::Physics::PhysicsService("PhysicsService",
@@ -2664,6 +2670,8 @@ void EditorWindow::create()
 
 		scene->PushToRenderQueue(physicsService);
 	}
+
+#endif
 
 	if (!scene->ExistsMember("lighting"))
 	{
@@ -2745,6 +2753,7 @@ void EditorWindow::Init()
 }
 void EditorWindow::Preload()
 {
+	dataPack.LoadDefaultAssets();
 	ImGui::LoadStyle("EditorStyle.ini");
 
 	if (FirstTimeBoot())
@@ -2977,6 +2986,7 @@ public:
 
 	void Preload() override
 	{
+		dataPack.LoadDefaultAssets();
 		renderPipeline = gcnew Engine::Render::Pipelines::LitPBR_SRP();
 
 		SceneManager::LoadSceneFromFile(gcnew System::String(fileName), passwd, scene);
@@ -3011,74 +3021,6 @@ public:
 	void Draw() override
 	{
 		renderPipeline->ExecuteRenderWorkflow(this, scene);
-
-		/*
-		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
-			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreFirstPassRender(scene);
-
-		BeginDrawing();
-		{
-			if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
-				Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PreRenderFrame();
-
-			ClearBackground(GetColor(scene->skyColor));
-
-			Engine::EngineObjects::Camera^ camera = ObjectManager::singleton()->GetMainCamera();
-
-			auto projectionMode = camera->cameraProjection;
-
-			bool is3DCamera = (projectionMode == CameraProjection::CAMERA_PERSPECTIVE);
-
-			if (camera == nullptr)
-				return;
-
-			if (is3DCamera)
-				BeginMode3D(((Engine::EngineObjects::Native::NativeCamera3D*)camera->get())->get());
-			else
-				BeginMode3D(((Engine::EngineObjects::Native::NativeCamera3D*)camera->get())->get());
-
-			int currentLayer = 1;
-
-			render(currentLayer, Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance, scene);
-
-			if (is3DCamera)
-				EndMode3D();
-			else
-				EndMode3D();
-
-			DrawFPS(0, 0);
-
-			rlImGuiBegin();
-
-			ImGui::Begin("DemoVer", (bool*)true, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking);
-			{
-				ImGui::SetWindowSize(ImVec2(285, 20), 0);
-				ImGui::SetWindowPos(ImVec2(0, GetScreenHeight() - 25), 0);
-				ImGui::TextColored(ImVec4(255, 255, 255, 255), ENGINE_VERSION);
-				ImGui::End();
-			}
-
-			for each (Engine::Management::MiddleLevel::SceneObject ^ obj in scene->GetRenderQueue())
-			{
-				if (obj != nullptr)
-				{
-					if (obj->GetReference() != nullptr)
-					{
-						obj->GetReference()->GameDrawImGUI();
-					}
-				}
-			}
-
-			DrawImGui();
-
-			rlImGuiEnd();
-
-		}
-		EndDrawing();
-
-		if (Singleton<Engine::Render::ScriptableRenderPipeline^>::Instantiated)
-			Singleton<Engine::Render::ScriptableRenderPipeline^>::Instance->PostRenderFrame();
-		*/
 	}
 
 	virtual void Update() override

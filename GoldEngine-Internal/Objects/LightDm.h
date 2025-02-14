@@ -61,7 +61,7 @@ namespace Engine::EngineObjects::Daemons
 						{
 							if (!lightM->hasLight(src))
 							{
-								lightM->AddLight(src, src->shaderId);
+								lightM->AddLight(src);
 							}
 						}
 					}

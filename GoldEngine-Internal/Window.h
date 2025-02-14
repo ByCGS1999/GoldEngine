@@ -47,6 +47,8 @@ namespace Engine
 
 		void OpenWindow(int width, int height, const char* name)
 		{
+			EngineState::glInitialized = true;
+
 			InitWindow(width, height, name);
 			InitAudioDevice();
 			RLGL::rlglInit(width, height);

@@ -138,6 +138,10 @@
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <ManagedAssembly>true</ManagedAssembly>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
+    <VcpkgManifestInstall>false</VcpkgManifestInstall>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -177,7 +181,7 @@
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -210,7 +214,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc11</LanguageStandard_C>
-      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;C:\Users\Carles\source\repos\GoldEngine\GoldEngine-Internal\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Solutions\Physics\bullet3\src;..\Solutions\Physics\bullet3\Extras\HACD;assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -391,9 +395,7 @@
     <ClInclude Include="Objects\LightDm.h" />
     <ClInclude Include="Objects\LightManager.h" />
     <ClInclude Include="Objects\LuaScript.h" />
-    <ClInclude Include="Objects\MeshRenderer.h" />
     <ClInclude Include="Objects\ModelRenderer.h" />
-    <ClInclude Include="Objects\PBRModelRenderer.h" />
     <ClInclude Include="Objects\Pipeline\ScriptableRenderPipeline.hpp" />
     <ClInclude Include="Objects\ScriptBehaviour.h" />
     <ClInclude Include="Objects\Skybox.h" />
@@ -483,6 +485,7 @@
     <ClCompile Include="Instantiable.cpp" />
     <ClCompile Include="LuaVM.cpp" />
     <ClCompile Include="native\CollisionShape.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Objects\Audio\AudioSource.cpp" />
     <ClCompile Include="Objects\Physics\Native\NativePhysicsService.cpp" />
     <ClCompile Include="Objects\Physics\PhysicsService.cpp" />
@@ -700,6 +703,15 @@
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
       <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Shaders/%(Filename)%(Extension)</DestinationFileName>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\Engine\Models\Error.mtl">
+      <FileType>Document</FileType>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|Win32'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='PlaybackEngine_Release|x64'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
+      <DestinationFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Data/Engine/Models/%(Filename)%(Extension)</DestinationFileName>
     </CopyFileToFolders>
     <None Include="Data\Engine\Shaders\Lighting\rlights.frag" />
     <None Include="Data\Engine\Shaders\Lighting\rlights.vert" />

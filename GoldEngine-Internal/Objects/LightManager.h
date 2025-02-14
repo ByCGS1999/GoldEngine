@@ -134,6 +134,7 @@ namespace Engine::EngineObjects
 				outerCutoff,
 				s
 			);
+
 			oldShaderId = shaderId;
 			nativeLightSource->SetLightEnabled(true);
 			enabled = true;
@@ -364,16 +365,7 @@ namespace Engine::EngineObjects
 
 				TraceLog(LOG_INFO, "Lights %d", _light.size());
 
-				if (&DataPacks::singleton().GetShader_Unsafe(shaderId) == nullptr)
-				{
-					DataPacks::singleton().AddShader(shaderId, s);
-				}
-				else
-				{
-					UnloadShader(DataPacks::singleton().GetShader(shaderId));
-
-					DataPacks::singleton().AddShader(shaderId, s);
-				}
+				DataPacks::singleton().AddShader(shaderId, s);
 
 				for each (auto src in lightSources)
 				{
@@ -389,7 +381,7 @@ namespace Engine::EngineObjects
 		}
 
 	public:
-		int AddLight(Engine::EngineObjects::LightSource^ light, unsigned int shaderId)
+		int AddLight(Engine::EngineObjects::LightSource^ light)
 		{
 			if (!lightSources->Contains(light))
 			{

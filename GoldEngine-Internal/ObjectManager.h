@@ -35,13 +35,7 @@ namespace Engine::Scripting
 		Engine::Scripting::SceneTarget target = Engine::Scripting::RenderQueue; // by default hook RenderQueue
 
 	public:
-		ObjectManager(Engine::Management::Scene^ loadedScene)
-		{
-			this->loadedScene = loadedScene;
-			Singleton<ObjectManager^>::Create(this);
-
-			self = this;
-		}
+		ObjectManager(Engine::Management::Scene^ loadedScene);
 
 	private:
 		Engine::Internal::Components::GameObject^ GetObjectFromScene(Engine::Management::MiddleLevel::SceneObject^ sceneObject)
@@ -77,30 +71,11 @@ namespace Engine::Scripting
 			return loadedScene;
 		}
 
-		GameObject^ GetDatamodel(String^ dataModelName)
-		{
-			return loadedScene->GetDatamodelMember(dataModelName, false);
-		}
+		GameObject^ GetDatamodel(String^ dataModelName);
 
-		GameObject^ GetDatamodel(String^ dataModelName, bool createDataModel)
-		{
-			return loadedScene->GetDatamodelMember(dataModelName, createDataModel);
-		}
+		GameObject^ GetDatamodel(String^ dataModelName, bool createDataModel);
 
-		List<Engine::Internal::Components::GameObject^>^ GetObjectsFromDatamodel(System::String^ datamodel)
-		{
-			auto objects = gcnew List<Engine::Internal::Components::GameObject^>();
-
-			for each (GameObject^ t in loadedScene->GetRenderQueue())
-			{
-				if (topReferenceIsDatamodel(t, datamodel))
-				{
-					objects->Add(t);
-				}
-			}
-
-			return objects;
-		}
+		List<Engine::Internal::Components::GameObject^>^ GetObjectsFromDatamodel(System::String^ datamodel);
 
 		List<Engine::Internal::Components::GameObject^>^ GetObjectsByTag(System::String^ tag)
 		{
@@ -300,65 +275,22 @@ namespace Engine::Scripting
 
 		Engine::Internal::Components::GameObject^ GetObjectFromTransform(Engine::Internal::Components::Transform^ transform)
 		{
-			return nullptr;
+			return GetObjectByUid(transform->GetUID());
 		}
 
-		Engine::EngineObjects::Camera^ GetMainCamera()
-		{
-			for each (GameObject^ t in loadedScene->GetRenderQueue())
-			{
-				if (t->GetType()->IsSubclassOf(Engine::EngineObjects::Camera::typeid))
-				{
-					if (((Engine::EngineObjects::Camera^)t)->attributes->getAttribute("IsMainCamera")->getValue<bool>() == true)
-					{
-						return (Engine::EngineObjects::Camera^)t;
-					}
-				}
-			}
-
-			return nullptr;
-		}
+		Engine::EngineObjects::Camera^ GetMainCamera();
+		Engine::EngineObjects::Camera^ GetMainCamera(bool ignoreEditorCameras);
 
 		void Instantiate(Engine::Internal::Components::GameObject^ newObject)
 		{
 			loadedScene->AddObjectToScene(newObject);
 		}
 
-		void Destroy(Engine::Internal::Components::GameObject^ object)
-		{
-			for each (GameObject ^ t in loadedScene->GetRenderQueue())
-			{
-				auto v = t;
-
-				if (v != nullptr)
-				{
-					if (v == object)
-					{
-						auto type = v->GetObjectType();
-
-						if (type == Engine::Internal::Components::ObjectType::Datamodel || type == Engine::Internal::Components::ObjectType::Daemon || type == Engine::Internal::Components::ObjectType::LightManager || v->isProtected())
-							return;
-
-						// REPARENT ALL THE CHILDREN TO NULL (SET AS UNPARENTED).
-						List<Engine::Internal::Components::GameObject^>^ objectList = ObjectManager::singleton()->GetChildrenOf(object);
-
-						for each (auto obj in objectList)
-						{
-							obj->getTransform()->SetParent(nullptr);
-						}
-
-						// PURGE THE OBJECT FROM THE SCENE
-						loadedScene->RemoveObjectFromScene(t);
-
-						// call destroy method (for self impl)
-						object->Destroy();
-						break;
-					}
-				}
-			}
-		}
-
-
+		void Destroy(Engine::Internal::Components::GameObject^ object);
+		
+		concurrency::task<bool> WaitForDatamodel(String^ datamodelName);
+		System::Threading::Tasks::Task<bool>^ WaitForDatamodelAsync(String^ datamodelName);
+		
 		// patching attributes
 
 

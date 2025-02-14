@@ -1,4 +1,7 @@
 #include "../../../SDK.h"
+
+#ifdef USE_BULLET_PHYS
+
 #include "NativePhysicsService.h"
 
 using namespace Engine::EngineObjects::Physics::Native;
@@ -83,3 +86,5 @@ NativePhysicsService::NativePhysicsService()
 {
 	NativeSingleton<NativePhysicsService*>::create(this);
 }
+
+#endif

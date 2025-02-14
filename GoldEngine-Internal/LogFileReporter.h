@@ -44,6 +44,8 @@ namespace Engine::Utils
 		{
 			fileStream->Write(message);
 			fileStream->Write("\n");
+
+			fileStream->Flush();
 		}
 
 		void ThreadProcessing()

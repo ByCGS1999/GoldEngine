@@ -12,9 +12,8 @@ namespace Engine::Internal::Components
 		CubeRenderer = 5,
 		LightManager = 6,
 		LightSource = 7,
-		PBR_ModelRenderer = 8,
-		Script = 9,
-		BoundingBoxRenderer = 10,
-		Daemon = 11
+		Script = 8,
+		BoundingBoxRenderer = 9,
+		Daemon = 10
 	};
 }

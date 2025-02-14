@@ -37,8 +37,6 @@ extern unsigned int passwd;
 
 // PHYSICS SYSTEM
 
-#define USE_BULLET_PHYS
-
 #ifdef _WIN64
 
 #pragma comment(lib, "../Libs/x64/GFXLib.dll")
@@ -61,8 +59,10 @@ extern unsigned int passwd;
 
 #endif
 #else
+#pragma comment(lib, "../Libs/x86/GFXLib.dll")
 #pragma comment(lib, "../Libs/x86/GFXLib.lib")
 #pragma comment(lib, "../Libs/x86/assimp.lib")
+#pragma comment(lib, "../Libs/x86/zlibstatic.lib")
 
 #ifdef USE_BULLET_PHYS
 #pragma comment(lib, "../Libs/x86/LinearMath.lib")

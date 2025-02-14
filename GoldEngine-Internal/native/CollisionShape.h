@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef USE_BULLET_PHYS
+
 #pragma managed(push, off)
 #include <btBulletCollisionCommon.h>
 
@@ -28,3 +30,5 @@ namespace Engine::Native
 }
 
 #pragma managed(pop)
+
+#endif

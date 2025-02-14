@@ -200,7 +200,6 @@ namespace Engine::Managers
 
 						loadedScene->PushToRenderQueue(sceneObj);
 						
-						auto pbrRenderer = sceneObj->GetValue<Engine::EngineObjects::PBRModelRenderer^>();
 						//pbrRenderer->Init(pbrRenderer->model_id, pbrRenderer->shader_id, pbrRenderer->texture_id, pbrRenderer->color_hex);
 					}
 					break;

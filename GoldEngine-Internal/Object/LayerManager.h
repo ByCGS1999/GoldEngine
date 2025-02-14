@@ -18,10 +18,13 @@ namespace Engine::Scripting
 		{
 			layers = gcnew System::Collections::Generic::List<Layer^>();
 
+			Layer^ transparentLayer = gcnew Layer(2, "Transparent");
+			transparentLayer->setLayerBlendFlags(RAYLIB::BLEND_ALPHA);
+
 			AddLayer(gcnew Layer(0, "EngineRoot"));
 			AddLayer(gcnew Layer(1, "Geometry"));
-			AddLayer(gcnew Layer(2, "PostFX"));
-			AddLayer(gcnew Layer(3, "Transparent"));
+			AddLayer(transparentLayer);
+			AddLayer(gcnew Layer(3, "PostFX"));
 		}
 
 	public:

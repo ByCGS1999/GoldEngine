@@ -23,14 +23,12 @@
 #include "Objects/CubeRenderer.h"
 #include "Objects/GridRenderer.h"
 #include "Objects/ModelRenderer.h"
-#include "Objects/PBRModelRenderer.h"
 #include "Objects/Skybox.h"
 
 // last class to be imported, it must access to all the components included \\
 
 #include "Objects/ScriptBehaviour.h"
 #include "Objects/LightManager.h"
-#include "Objects/MeshRenderer.h"
 
 #include "Objects/Daemon.h"
 #include "Objects/Camera.h"

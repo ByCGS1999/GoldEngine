@@ -21,7 +21,6 @@ namespace Engine::Assets::Management
 	private:
 		void ParseContentData()
 		{
-			Engine::Assets::Storage::DataPacks::singleton().FreeAll();
 			print("[DataPack]:", "Adding stored assets to the datapacks");
 
 			for each (unsigned int shader_id in shaders->Keys)
@@ -159,6 +158,13 @@ namespace Engine::Assets::Management
 				print("[Resource Manager]:", "Compiling Stored Shader [" + id + "]");
 				print("[Resource Manager]:", "VertexShader: " + vs);
 				print("[Resource Manager]:", "FragmentShader: " + fs);
+
+				if (s.id == NULL)
+				{
+					print("[Resource Manager]:", "Failed to compile shader [" + id + "]");
+					print("[Resource Manager]", "------------------------------------------");
+					return Engine::Assets::Storage::DataPacks::singleton().GetNativeDataPack()->fallbackShader->getInstance();
+				}
 
 				print("[Resource Manager]:", "Compiled Shader id -> " + s.id);
 

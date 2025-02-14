@@ -387,8 +387,8 @@ namespace Engine::Internal
         
         /* -- SETTERS -- */
 
-		static void GL_SetShaderValue(RAYLIB::Shader, int, void*, rlWrapper::UniformType);
-        static void GL_SetShaderValue(RAYLIB::Shader, rlWrapper::ShaderLocs, void*, rlWrapper::UniformType);
+		static void GL_SetShaderValue(RAYLIB::Shader&, int, void*, rlWrapper::UniformType);
+        static void GL_SetShaderValue(RAYLIB::Shader&, rlWrapper::ShaderLocs, void*, rlWrapper::UniformType);
 
         /*-- MODES --*/
 
@@ -404,17 +404,17 @@ namespace Engine::Internal
 
         /* -- LOADERS -- */
 
-        static RAYLIB::Model GL_LoadModel(String^);
-        static RAYLIB::RenderTexture GL_LoadRenderTexture(int, int);
-        static RAYLIB::Texture GL_LoadTexture(String^);
-        static RAYLIB::Shader GL_LoadShader(String^, String^);
-        static RAYLIB::Shader GL_LoadShaderFromMemory(String^, String^);
-        static void GL_LoadDepthTexture(RAYLIB::RenderTexture, int, int, bool);
+        static RAYLIB::Model& GL_LoadModel(String^);
+        static RAYLIB::RenderTexture& GL_LoadRenderTexture(int, int);
+        static RAYLIB::Texture& GL_LoadTexture(String^);
+        static RAYLIB::Shader& GL_LoadShader(String^, String^);
+        static RAYLIB::Shader& GL_LoadShaderFromMemory(String^, String^);
+        static void GL_LoadDepthTexture(RAYLIB::RenderTexture&, int, int, bool);
 
         /* -- GETTERS -- */
 
-        static int  GL_GetShaderLoc(RAYLIB::Shader, const char*);
-        static RAYLIB::RenderTexture GL_GetDepthTexture(int, int);
+        static int  GL_GetShaderLoc(RAYLIB::Shader&, const char*);
+        static RAYLIB::RenderTexture& GL_GetDepthTexture(int, int);
 
         /* -- GRAPHICS -- */
 
@@ -423,17 +423,25 @@ namespace Engine::Internal
         static void GL_DrawRectangle(int, int, int, int, Engine::Components::Color^);
         static void GL_DrawRectangleV(Engine::Components::Vector2^, Engine::Components::Vector2^, Engine::Components::Color^);
         static void GL_ClearBackground(Engine::Components::Color^);
-        static void GL_DrawModel(RAYLIB::Model, Engine::Components::Vector3^, float, Engine::Components::Color^);
-        static void GL_DrawTexture(RAYLIB::Texture, Engine::Components::Vector2^, Engine::Components::Color^);
+        static void GL_DrawModel(RAYLIB::Model&, Engine::Components::Vector3^, float, Engine::Components::Color^);
+        static void GL_DrawTexture(RAYLIB::Texture&, Engine::Components::Vector2^, Engine::Components::Color^);
         static void GL_DrawFPS(Engine::Components::Vector2^);
 
         /* -- UNLOADERS -- */
-        static void GL_UnloadTexture(RAYLIB::Texture);
-        static void GL_UnloadModel(RAYLIB::Model);
-        static void GL_UnloadRenderTexture(RAYLIB::RenderTexture);
+        static void GL_UnloadTexture(RAYLIB::Texture&);
+        static void GL_UnloadModel(RAYLIB::Model&);
+        static void GL_UnloadRenderTexture(RAYLIB::RenderTexture&);
 
 
-        static GLWrapper::Texture2D ConvertTexture2D(RAYLIB::Texture2D texture);
-        static GLWrapper::RenderTexture2D ConvertRenderTexture2D(RAYLIB::RenderTexture2D texture);
+        static GLWrapper::Texture2D ConvertTexture2D(RAYLIB::Texture2D& texture);
+        static GLWrapper::RenderTexture2D ConvertRenderTexture2D(RAYLIB::RenderTexture2D& texture);
+
+        /* -- DATAPACK ENGINE -- */
+        
+        static RAYLIB::Texture2D& GL_GetTexture2D(unsigned int id);
+        static RAYLIB::Music& GL_GetMusic(unsigned int id);
+        static RAYLIB::Sound& GL_GetSound(unsigned int id);
+        static RAYLIB::Model& GL_GetModel(unsigned int id);
+        static RAYLIB::Shader& GL_GetShader(unsigned int id);
 	};
 }

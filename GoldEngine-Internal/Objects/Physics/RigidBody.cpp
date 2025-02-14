@@ -1,4 +1,7 @@
 #include "../../SDK.h"
+
+#ifdef USE_BULLET_PHYS
+
 #include "CollisionType.h"
 #include "../ModelRenderer.h"
 #include "Native/NativePhysicsService.h"
@@ -195,3 +198,5 @@ btRigidBody* RigidBody::getRigidBody()
 {
 	return rigidBody;
 }
+
+#endif

@@ -8,4 +8,6 @@ public:
 #else
 	static bool PlayMode = false;
 #endif
+
+	static bool glInitialized = false;
 };

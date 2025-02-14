@@ -1,4 +1,7 @@
 #include "../../SDK.h"
+
+#ifdef USE_BULLET_PHYS
+
 #include "CollisionType.h"
 #include "Rigidbody.h"
 #include "Native/NativePhysicsService.h"
@@ -41,8 +44,8 @@ public:
 		int index0,
 		const btCollisionObjectWrapper* colObj1Wrap,
 		int partId1,
-		int index1) override 
-	{	
+		int index1) override
+	{
 		void* obj0ptr = colObj0Wrap->getCollisionObject()->getUserPointer();
 		void* obj1ptr = colObj1Wrap->getCollisionObject()->getUserPointer();
 
@@ -60,7 +63,7 @@ void setGravity(btDiscreteDynamicsWorld* world, float x, float y, float z)
 	world->setGravity(btVector3(x, y, z));
 
 	btAlignedObjectArray<btRigidBody*> rigidBodies = world->getNonStaticRigidBodies();
-	
+
 	for (int i = 0; i < rigidBodies.size(); i++)
 	{
 		btRigidBody* rigidBody = rigidBodies[i];
@@ -138,7 +141,7 @@ void PhysicsService::AddPhysicsObject(Engine::EngineObjects::Physics::RigidBody^
 	else
 		if (world == nullptr)
 			printError("Physics World not instantiated");
-		else if(rigidBody->getRigidBody() == nullptr)
+		else if (rigidBody->getRigidBody() == nullptr)
 			printError("Rigidbody not instantiated");
 }
 
@@ -157,6 +160,12 @@ void PhysicsService::RemovePhysicsObject(Engine::EngineObjects::Physics::RigidBo
 
 void PhysicsService::AddCollisionObject(btCollisionObject* collisionObject)
 {
+	if (this == nullptr)
+	{
+		printError("Physics Service not initialized");
+		return;
+	}
+
 	if (collisionObject != nullptr && world != nullptr)
 	{
 		world->addCollisionObject(collisionObject);
@@ -186,3 +195,5 @@ NativePhysicsService* PhysicsService::getNativePhysicsService()
 {
 	return this->nativePhysicsService;
 }
+
+#endif

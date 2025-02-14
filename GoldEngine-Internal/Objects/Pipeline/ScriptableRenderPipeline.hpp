@@ -119,7 +119,7 @@ namespace Engine::Render
 				RLGL::rlEnableDepthTest();
 				PreRenderFrame();
 				{
-					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera();
+					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera(true);
 
 					int currentLayer = 0;
 
@@ -198,7 +198,7 @@ namespace Engine::Render
 
 				PreRenderFrame(); // PRE FRAME
 				{
-					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera();
+					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera(false);
 
 					int currentLayer = 1;
 
@@ -323,23 +323,53 @@ namespace Engine::Render
 						{
 							Engine::Internal::Components::GameObject^ reference = (Engine::Internal::Components::GameObject^)sceneObject;
 
-							if (reference->layerMask->IsLayer(cL))
+							try
 							{
-								PreRenderObject(reference);
+								if (reference->layerMask->IsLayer(cL))
+								{
+									if ((reference->layerMask->getLayerBlendFlags() & BLEND_ALPHA))
+										RAYLIB::BeginBlendMode(BLEND_ALPHA);
+									if ((reference->layerMask->getLayerBlendFlags() & BLEND_ADDITIVE))
+										RAYLIB::BeginBlendMode(BLEND_ADDITIVE);
+									if ((reference->layerMask->getLayerBlendFlags() & BLEND_MULTIPLIED))
+										RAYLIB::BeginBlendMode(BLEND_MULTIPLIED);
+									if ((reference->layerMask->getLayerBlendFlags() & BLEND_ADD_COLORS))
+										RAYLIB::BeginBlendMode(BLEND_ADD_COLORS);
+									if ((reference->layerMask->getLayerBlendFlags() & BLEND_SUBTRACT_COLORS))
+										RAYLIB::BeginBlendMode(BLEND_SUBTRACT_COLORS);
+									if ((reference->layerMask->getLayerBlendFlags() & BLEND_ALPHA_PREMULTIPLY))
+										RAYLIB::BeginBlendMode(BLEND_ALPHA_PREMULTIPLY);
+									if ((reference->layerMask->getLayerBlendFlags() & BLEND_CUSTOM))
+										RAYLIB::BeginBlendMode(BLEND_CUSTOM);
+									if ((reference->layerMask->getLayerBlendFlags() & BLEND_CUSTOM_SEPARATE))
+										RAYLIB::BeginBlendMode(BLEND_CUSTOM_SEPARATE);
 
-								/*
-								reference->GameDraw();
-								*/
+									PreRenderObject(reference);
+
+									/*
+									reference->GameDraw();
+									*/
 #if PRODUCTION_BUILD == FALSE
 
-								if (!EngineState::PlayMode)
-								{
-									reference->GameDrawGizmos();
-								}
+									if (!EngineState::PlayMode)
+									{
+										reference->GameDrawGizmos();
+									}
 
 #endif
 
-								PostRenderObject();
+									PostRenderObject();
+
+									RAYLIB::EndBlendMode();
+								}
+							}
+							catch (Exception^ ex)
+							{
+								print("[Drawing Managed Exception]", "An exception has occurred within the draw loop -> " + ex->Message);
+							}
+							catch (std::exception ex)
+							{
+								print("[Drawing Unmanaged Exception]", "An exception has occurred within the draw loop -> " + gcnew String(ex.what()));
 							}
 						}
 					}

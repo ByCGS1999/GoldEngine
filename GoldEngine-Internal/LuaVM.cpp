@@ -76,8 +76,11 @@ Object^ VMWrapper::GetProperty(Engine::Internal::Components::GameObject^ object,
 
 LuaVM^ LuaVM::RequireOverride(System::Object^ luaSource)
 {
-	if (luaSource != Engine::EngineObjects::LuaScript::typeid)
-		printError("Cannot require an object that is not a LuaScript");
+	if (luaSource->GetType() != Engine::EngineObjects::LuaScript::typeid)
+	{
+		throw gcnew MoonSharp::Interpreter::ScriptRuntimeException("Cannot require an object that is not a LuaScript");
+		return nullptr;
+	}
 
 	return ((Engine::EngineObjects::LuaScript^)luaSource)->virtualMachine;
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+
+#ifdef USE_BULLET_PHYS
+
 #pragma managed(push, off)
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
@@ -48,3 +51,5 @@ namespace Engine::EngineObjects::Physics
 		btRigidBody* getRigidBody();
 	};
 }
+
+#endif

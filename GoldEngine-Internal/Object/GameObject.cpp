@@ -30,15 +30,20 @@ using namespace Engine::Internal::Components;
 
 #pragma managed(push, off)
 
+#ifdef USE_BULLET_PHYS
+
 btCollisionShape* createBoxShape(std::array<float, 3> bounds)
 {
 	return new btBoxShape({ bounds[0], bounds[1], bounds[2] });
 }
 
+#endif
 
 #pragma managed(pop)
 
 bool activeToggle = false;
+
+#ifdef USE_BULLET_PHYS
 
 Engine::Native::CollisionShape* getCollider(GameObject^ inst)
 {
@@ -50,11 +55,12 @@ Engine::Native::CollisionShape* getCollider(GameObject^ inst)
 	return (Engine::Native::CollisionShape*)inst->getCollisionShape();
 }
 
-
 void GameObject::createCollisionShape()
 {
 	this->collisionShape = new Engine::Native::CollisionShape(this);
 }
+
+#endif
 
 // BUBBLING \\
 
@@ -95,9 +101,10 @@ GameObject::GameObject(System::String^ n, Engine::Internal::Components::Transfor
 		tag = "";
 
 	this->tag = tag;
-
+	
+#ifdef USE_BULLET_PHYS
 	this->collisionShape = new Engine::Native::CollisionShape(this);
-
+#endif
 	// EVENT CREATION \\
 
 	this->onPropertyChanged = gcnew Engine::Scripting::Events::Event();
@@ -115,7 +122,7 @@ void GameObject::setParent(GameObject^ object)
 	if (object == nullptr)
 		return;
 
-	if (this->transform->GetParent() != nullptr)
+	if (this->transform->parent != nullptr)
 	{
 		String^ TUID = this->transform->GetParent()->GetUID();
 		Singleton<Engine::Scripting::ObjectManager^>::Instance->GetObjectByUid(TUID)->onChildRemoved->raiseExecution(gcnew cli::array<System::Object^> { this });
@@ -201,8 +208,10 @@ void fixChilds(GameObject^ root)
 
 void GameObject::Start()
 {
-	getCollider(this)->createCollisionShape(NativeSingleton<Engine::EngineObjects::Physics::Native::NativePhysicsService*>::Get()->getCollisionShapeForBox(1,1,1));
-	//getCollider(this)->createBulletObject();
+#ifdef USE_BULLET_PHYS
+	getCollider(this)->createCollisionShape(NativeSingleton<Engine::EngineObjects::Physics::Native::NativePhysicsService*>::Get()->getCollisionShapeForBox(1, 1, 1));
+	getCollider(this)->createBulletObject();
+#endif
 }
 
 void GameObject::GameUpdate()
@@ -381,10 +390,9 @@ Engine::Internal::Components::ObjectType GameObject::GetObjectType()
 	return this->type;
 }
 
-
 GameObject^ GameObject::Parent::get()
 {
-	return (GameObject^)this->transform->getParent()->GetObject();
+	return (GameObject^)Singleton<Engine::Scripting::ObjectManager^>::Instance->GetObjectFromTransform(this->transform->getParent());
 }
 
 void GameObject::Parent::set(GameObject^ arg)

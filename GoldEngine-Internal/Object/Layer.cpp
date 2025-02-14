@@ -17,4 +17,14 @@ namespace Engine::Components
 	
 		return false;
 	}
+
+	void Layer::setLayerBlendFlags(unsigned int flags)
+	{
+		this->layerBlendFlags = flags;
+	}
+
+	unsigned int Layer::getLayerBlendFlags()
+	{
+		return this->layerBlendFlags;
+	}
 }

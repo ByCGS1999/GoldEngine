@@ -6,10 +6,11 @@
 #include "Object/Color.h"
 #include "Object/Vector3.h"
 #include "GraphicsWrapper.h"
+#include "DataPacks.h"
 
 using namespace Engine::Internal;
 
-RenderTexture GraphicsWrapper::GL_GetDepthTexture(int width, int height)
+RenderTexture& GraphicsWrapper::GL_GetDepthTexture(int width, int height)
 {
 	RenderTexture2D target = LoadRenderTexture(width, height);;
 
@@ -46,22 +47,22 @@ RenderTexture GraphicsWrapper::GL_GetDepthTexture(int width, int height)
 	return target;
 }
 
-void GraphicsWrapper::GL_SetShaderValue(RAYLIB::Shader shader, int loc, void* value, rlWrapper::UniformType flags)
+void GraphicsWrapper::GL_SetShaderValue(RAYLIB::Shader& shader, int loc, void* value, rlWrapper::UniformType flags)
 {
 	RAYLIB::SetShaderValue(shader, loc, value, (int)flags);
 }
 
-void GraphicsWrapper::GL_SetShaderValue(RAYLIB::Shader shader, rlWrapper::ShaderLocs loc, void* value, rlWrapper::UniformType flags)
+void GraphicsWrapper::GL_SetShaderValue(RAYLIB::Shader& shader, rlWrapper::ShaderLocs loc, void* value, rlWrapper::UniformType flags)
 {
 	RAYLIB::SetShaderValue(shader, (int)loc, value, (int)flags);
 }
 
-int GraphicsWrapper::GL_GetShaderLoc(RAYLIB::Shader shader, const char* loc_name)
+int GraphicsWrapper::GL_GetShaderLoc(RAYLIB::Shader& shader, const char* loc_name)
 {
 	return RAYLIB::GetShaderLocation(shader, loc_name);
 }
 
-RAYLIB::Model GraphicsWrapper::GL_LoadModel(String^ fileName)
+RAYLIB::Model& GraphicsWrapper::GL_LoadModel(String^ fileName)
 {
 	return RAYLIB::LoadModel(CastStringToNative(fileName).c_str());
 }
@@ -71,7 +72,7 @@ void GraphicsWrapper::GL_BeginTextureMode(RAYLIB::RenderTexture render_texture)
 	RAYLIB::BeginTextureMode(render_texture);
 }
 
-RAYLIB::RenderTexture GraphicsWrapper::GL_LoadRenderTexture(int width, int height)
+RAYLIB::RenderTexture& GraphicsWrapper::GL_LoadRenderTexture(int width, int height)
 {
 	return RAYLIB::LoadRenderTexture(width, height);
 }
@@ -91,49 +92,49 @@ void GraphicsWrapper::GL_EndTextureMode()
 	RAYLIB::EndTextureMode();
 }
 
-void GraphicsWrapper::GL_LoadDepthTexture(RAYLIB::RenderTexture renderTexture, int width, int height, bool renderBuffer)
+void GraphicsWrapper::GL_LoadDepthTexture(RAYLIB::RenderTexture& renderTexture, int width, int height, bool renderBuffer)
 {
 	renderTexture.depth.width = width;
 	renderTexture.depth.height = height;
 	renderTexture.depth.id = RLGL::rlLoadTextureDepth(width, height, renderBuffer);
 }
 
-void GraphicsWrapper::GL_DrawModel(RAYLIB::Model model, Engine::Components::Vector3^ position, float scale, Engine::Components::Color^ color)
+void GraphicsWrapper::GL_DrawModel(RAYLIB::Model& model, Engine::Components::Vector3^ position, float scale, Engine::Components::Color^ color)
 {
 	RAYLIB::DrawModel(model, position->toNative(), scale, color->toNative());
 }
 
-void GraphicsWrapper::GL_DrawTexture(RAYLIB::Texture texture, Engine::Components::Vector2^ position, Engine::Components::Color^ color)
+void GraphicsWrapper::GL_DrawTexture(RAYLIB::Texture& texture, Engine::Components::Vector2^ position, Engine::Components::Color^ color)
 {
 	RAYLIB::DrawTexture(texture, position->x, position->y, color->toNative());
 }
 
-void GraphicsWrapper::GL_UnloadModel(RAYLIB::Model model)
+void GraphicsWrapper::GL_UnloadModel(RAYLIB::Model& model)
 {
 	RAYLIB::UnloadModel(model);
 }
 
-RAYLIB::Shader GraphicsWrapper::GL_LoadShaderFromMemory(String^ vertexShaderCode, String^ fragmentShaderCode)
+RAYLIB::Shader& GraphicsWrapper::GL_LoadShaderFromMemory(String^ vertexShaderCode, String^ fragmentShaderCode)
 {
 	return RAYLIB::LoadShaderFromMemory(CastStringToNative(vertexShaderCode).c_str(), CastStringToNative(fragmentShaderCode).c_str());
 }
 
-RAYLIB::Shader GraphicsWrapper::GL_LoadShader(String^ vertexShader, String^ fragmentShader)
+RAYLIB::Shader& GraphicsWrapper::GL_LoadShader(String^ vertexShader, String^ fragmentShader)
 {
 	return RAYLIB::LoadShader(CastStringToNative(vertexShader).c_str(), CastStringToNative(fragmentShader).c_str());
 }
 
-RAYLIB::Texture GraphicsWrapper::GL_LoadTexture(String^ texturePath)
+RAYLIB::Texture& GraphicsWrapper::GL_LoadTexture(String^ texturePath)
 {
 	return RAYLIB::LoadTexture(CastStringToNative(texturePath).c_str());
 }
 
-void GraphicsWrapper::GL_UnloadTexture(RAYLIB::Texture texture)
+void GraphicsWrapper::GL_UnloadTexture(RAYLIB::Texture& texture)
 {
 	RAYLIB::UnloadTexture(texture);
 }
 
-void GraphicsWrapper::GL_UnloadRenderTexture(RAYLIB::RenderTexture renderTexture)
+void GraphicsWrapper::GL_UnloadRenderTexture(RAYLIB::RenderTexture& renderTexture)
 {
 	RAYLIB::UnloadRenderTexture(renderTexture);
 }
@@ -188,7 +189,7 @@ void GraphicsWrapper::GL_DrawLine(Engine::Components::Vector2^ origin, Engine::C
 	RAYLIB::DrawLine(origin->x, origin->y, dest->x, dest->y, color->toNative());
 }
 
-GLWrapper::Texture2D GraphicsWrapper::ConvertTexture2D(RAYLIB::Texture2D texture)
+GLWrapper::Texture2D GraphicsWrapper::ConvertTexture2D(RAYLIB::Texture2D& texture)
 {
 	GLWrapper::Texture2D newTexture = GLWrapper::Texture2D();
 
@@ -201,7 +202,7 @@ GLWrapper::Texture2D GraphicsWrapper::ConvertTexture2D(RAYLIB::Texture2D texture
 	return newTexture;
 }
 
-GLWrapper::RenderTexture2D GraphicsWrapper::ConvertRenderTexture2D(RAYLIB::RenderTexture2D texture)
+GLWrapper::RenderTexture2D GraphicsWrapper::ConvertRenderTexture2D(RAYLIB::RenderTexture2D& texture)
 {
 	GLWrapper::RenderTexture2D newTexture = GLWrapper::RenderTexture2D();
 
@@ -210,4 +211,29 @@ GLWrapper::RenderTexture2D GraphicsWrapper::ConvertRenderTexture2D(RAYLIB::Rende
 	newTexture.Depth = ConvertTexture2D(texture.depth);
 
 	return newTexture;
+}
+
+RAYLIB::Texture2D& GraphicsWrapper::GL_GetTexture2D(unsigned int id)
+{
+	return Engine::Assets::Storage::DataPacks::singleton().GetTexture2D(id);
+}
+
+RAYLIB::Music& GraphicsWrapper::GL_GetMusic(unsigned int id)
+{
+	return Engine::Assets::Storage::DataPacks::singleton().GetMusic(id);
+}
+
+RAYLIB::Sound& GraphicsWrapper::GL_GetSound(unsigned int id)
+{
+	return Engine::Assets::Storage::DataPacks::singleton().GetSound(id);
+}
+
+RAYLIB::Model& GraphicsWrapper::GL_GetModel(unsigned int id)
+{
+	return Engine::Assets::Storage::DataPacks::singleton().GetModel(id);
+}
+
+RAYLIB::Shader& GraphicsWrapper::GL_GetShader(unsigned int id)
+{
+	return Engine::Assets::Storage::DataPacks::singleton().GetShader(id);
 }

@@ -1,4 +1,7 @@
 #include "../SDK.h"
+
+#ifdef USE_BULLET_PHYS
+
 #include "CollisionShape.h"
 #include "../Objects/Physics/CollisionType.h"
 #include "../Objects/Physics/Native/NativePhysicsService.h"
@@ -18,6 +21,19 @@ void onCollisionObjectDeleted(btCollisionObject* object)
 	delete object;
 }
 
+void newThread(btCollisionObject* collisionObjectPointer)
+{
+	while (!Singleton<Engine::EngineObjects::Physics::PhysicsService^>::Instantiated)
+	{
+		using namespace std::chrono_literals;
+		std::this_thread::sleep_for(1000ms);
+	}
+
+	Singleton<Engine::EngineObjects::Physics::PhysicsService^>::Instance->AddCollisionObject(collisionObjectPointer);
+
+	std::this_thread::yield();
+}
+
 CollisionShape::CollisionShape(Engine::Internal::Components::GameObject^ userPtr)
 {
 	this->handle = GCHandle::Alloc(userPtr);
@@ -33,26 +49,16 @@ CollisionShape::~CollisionShape()
 
 void CollisionShape::createCollisionShape(btCollisionShape* shape)
 {
-	this->collisionShape = new Engine::Native::EnginePtr<btCollisionShape*>(shape, &onCollisionShapeDeleted);
-
-	/*
 	if (this->collisionShape == nullptr)
-		this->collisionShape = shape;
+		this->collisionShape = new Engine::Native::EnginePtr<btCollisionShape*>(shape, &onCollisionShapeDeleted, &onCollisionShapeDeleted);
 	else
 	{
-		delete this->collisionShape;
-		this->collisionShape = shape;
+		this->collisionShape->setInstance(shape);
 	}
-	*/
 }
 
 void CollisionShape::createBulletObject()
 {
-	/*
-	if(this->collisionObject == nullptr)
-		this->collisionObject = new btCollisionObject();
-	*/
-
 	try
 	{
 		this->collisionObject = new Engine::Native::EnginePtr<btCollisionObject*>(new btCollisionObject(), &onCollisionObjectDeleted);
@@ -62,9 +68,14 @@ void CollisionShape::createBulletObject()
 
 		Singleton<Engine::EngineObjects::Physics::PhysicsService^>::Instance->AddCollisionObject(getCollisonObject());
 	}
+	catch (NullReferenceException^ nullException)
+	{
+		// launch a separate thread and wait for the PhysicsService to be initialized
+		std::thread t1(newThread, getCollisonObject());
+	}
 	catch (Exception^ ex)
 	{
-
+		printError(ex->Message);
 	}
 }
 
@@ -77,3 +88,5 @@ btCollisionShape* CollisionShape::getCollisionShape()
 {
 	return this->collisionShape->getInstance();
 }
+
+#endif

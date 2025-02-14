@@ -8,7 +8,9 @@ namespace Engine::Internal::Components
 		public ref class GameObject
 	{
 	private:
+#ifdef USE_BULLET_PHYS
 		void* collisionShape;
+#endif
 		Engine::Internal::Components::Transform^ lastTransform;
 		[Newtonsoft::Json::JsonPropertyAttribute]
 		bool memberIsProtected;
@@ -59,8 +61,10 @@ namespace Engine::Internal::Components
 			onChildAdded->disconnectAll();
 			onChildRemoved->disconnectAll();
 			onDescendantAdded->disconnectAll();
-
+			
+#ifdef USE_BULLET_PHYS
 			delete collisionShape;
+#endif
 			delete name;
 			delete transform;
 			delete layerMask;
@@ -74,9 +78,11 @@ namespace Engine::Internal::Components
 			delete InstanceType;
 		}
 
+#ifdef USE_BULLET_PHYS
 	public:
 		void* getCollisionShape() { return collisionShape; }
 		void createCollisionShape();
+#endif
 
 	public:
 		// vmethods

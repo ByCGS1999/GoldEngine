@@ -95,12 +95,6 @@
     <Filter Include="Source\Engine\EngineObjects\Skybox">
       <UniqueIdentifier>{b8173c9a-bfdd-4e66-90a9-ad1c6b994373}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Engine\EngineObjects\PBR">
-      <UniqueIdentifier>{bf3d51b6-a8c1-4740-9bb4-9464f1fa50c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Engine\EngineObjects\PBR\PBRModelRenderer">
-      <UniqueIdentifier>{1caeaa6b-8ee3-40e8-94d6-b081916f8d25}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Engine\EngineObjects\Renderer Pipelines">
       <UniqueIdentifier>{8cd565ea-b573-41fb-ac22-1833499cbb34}</UniqueIdentifier>
     </Filter>
@@ -444,9 +438,6 @@
     <ClInclude Include="Objects\ModelRenderer.h">
       <Filter>Source\Engine\EngineObjects\ModelRenderer</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\PBRModelRenderer.h">
-      <Filter>Source\Engine\EngineObjects\PBR\PBRModelRenderer</Filter>
-    </ClInclude>
     <ClInclude Include="Objects\ScriptBehaviour.h">
       <Filter>Source\Engine\EngineObjects\Script</Filter>
     </ClInclude>
@@ -482,9 +473,6 @@
     </ClInclude>
     <ClInclude Include="LogFileReporter.h">
       <Filter>Source\Engine\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\MeshRenderer.h">
-      <Filter>Source\Engine\EngineObjects\ModelRenderer</Filter>
     </ClInclude>
     <ClInclude Include="Object\ObjectType.h">
       <Filter>Source\Engine\Object\Enums</Filter>
@@ -1157,6 +1145,9 @@
     <ClCompile Include="Window.cpp">
       <Filter>Source\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Source\Engine\ScriptingAPI\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -1219,6 +1210,9 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="EditorAssets\Icons\Sound.png">
       <Filter>Data\EditorAssets\Icons</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Data\Engine\Models\Error.mtl">
+      <Filter>Data\Engine\Models</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
