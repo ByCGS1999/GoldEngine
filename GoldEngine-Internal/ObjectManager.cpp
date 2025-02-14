@@ -93,7 +93,7 @@ GameObject^ ObjectManager::GetDatamodel(String^ dataModelName, bool createDataMo
 
 Engine::EngineObjects::Camera^ ObjectManager::GetMainCamera()
 {
-	return GetMainCamera(true);
+	return GetMainCamera(false);
 }
 
 Engine::EngineObjects::Camera^ ObjectManager::GetMainCamera(bool ignoreEditorCameras)
@@ -103,8 +103,11 @@ Engine::EngineObjects::Camera^ ObjectManager::GetMainCamera(bool ignoreEditorCam
 		if (t->GetType()->IsSubclassOf(Engine::EngineObjects::Camera::typeid))
 		{
 #if !defined(PRODUCTION_BUILD)
-			if (t->GetType() == Engine::EngineObjects::Editor::EditorCamera::typeid && ignoreEditorCameras)
-				continue;
+			if (ignoreEditorCameras)
+			{
+				if (t->GetType() == Engine::EngineObjects::Editor::EditorCamera::typeid)
+					continue;
+			}
 #endif
 
 			if (((Engine::EngineObjects::Camera^)t)->attributes->getAttribute("IsMainCamera")->getValue<bool>() == true)
