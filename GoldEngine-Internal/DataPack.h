@@ -58,14 +58,6 @@ namespace Engine::Assets::Management
 				AddMusic(musicId, filePath);
 			}
 
-			for each (unsigned int material_id in materials->Keys)
-			{
-				unsigned int shaderId = materials[material_id];
-
-				Material m;
-				m.shader = Engine::Assets::Storage::DataPacks::singleton().GetShader(shaderId);
-				Engine::Assets::Storage::DataPacks::singleton().AddMaterial(material_id, m);
-			}
 		}
 
 		bool AssetExists(System::String^ fN)
@@ -291,15 +283,6 @@ namespace Engine::Assets::Management
 
 				return _sound;
 			}
-		}
-
-		Material AddMaterials(unsigned int id, unsigned int shaderId)
-		{
-			Material m;
-			m.shader = Engine::Assets::Storage::DataPacks::singleton().GetShader(shaderId);
-			materials->Add(id, shaderId);
-			Engine::Assets::Storage::DataPacks::singleton().AddMaterial(id, m);
-			return m;
 		}
 
 		Texture2D AddTextures2D(unsigned int id, String^ tex)

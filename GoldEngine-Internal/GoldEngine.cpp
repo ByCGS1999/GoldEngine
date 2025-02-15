@@ -16,6 +16,7 @@ using namespace Engine::Attributes;
 #include "Cast.h"
 #include "EngineConfig.h"
 #include "Event.h"
+#include "Object/Material.h"
 #include "Object/Transform.h"
 #include "Object/GameObject.h"
 #include "CypherLib.h"

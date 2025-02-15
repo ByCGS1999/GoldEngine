@@ -329,7 +329,6 @@
     <ClInclude Include="assimp\assimp\ZipArchiveIOSystem.h" />
     <ClInclude Include="Attribute.h" />
     <ClInclude Include="AttributeManager.h" />
-    <ClInclude Include="CameraPack.h" />
     <ClInclude Include="Cast.h" />
     <ClInclude Include="CastToNative.h" />
     <ClInclude Include="Chunk.h" />
@@ -406,6 +405,7 @@
     <ClInclude Include="Object\GameObject.h" />
     <ClInclude Include="Object\Layer.h" />
     <ClInclude Include="Object\LayerManager.h" />
+    <ClInclude Include="Object\Material.h" />
     <ClInclude Include="Object\ObjectType.h" />
     <ClInclude Include="Object\Prefab.h" />
     <ClInclude Include="Object\Quaternion.h" />
@@ -413,7 +413,6 @@
     <ClInclude Include="Object\Vector2.h" />
     <ClInclude Include="Object\Vector3.h" />
     <ClInclude Include="Object\ViewSpace.h" />
-    <ClInclude Include="Packs.h" />
     <ClInclude Include="PreloadScript.h" />
     <ClInclude Include="PropertyAttribute.h" />
     <ClInclude Include="Raylib\include\x64\raylib.h" />
@@ -443,7 +442,6 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Includes.h" />
-    <ClInclude Include="MaterialPack.h" />
     <ClInclude Include="Raylib\include\FA6FreeSolidFontData.h" />
     <ClInclude Include="Raylib\include\glad.h" />
     <ClInclude Include="Raylib\include\IconsFontAwesome6.h" />
@@ -494,12 +492,12 @@
     <ClCompile Include="Object\Color.cpp" />
     <ClCompile Include="Object\GameObject.cpp" />
     <ClCompile Include="Object\Layer.cpp" />
+    <ClCompile Include="Object\Material.cpp" />
     <ClCompile Include="Object\Prefab.cpp" />
     <ClCompile Include="Object\Quaternion.cpp" />
     <ClCompile Include="Object\Transform.cpp" />
     <ClCompile Include="Object\Vector2.cpp" />
     <ClCompile Include="Object\Vector3.cpp" />
-    <ClCompile Include="Packs.cpp" />
     <ClCompile Include="Raylib\craylib\craylib.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
     <ClCompile Include="Reflection\ReflectedType.cpp" />

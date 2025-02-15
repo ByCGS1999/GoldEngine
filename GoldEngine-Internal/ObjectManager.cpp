@@ -93,7 +93,7 @@ GameObject^ ObjectManager::GetDatamodel(String^ dataModelName, bool createDataMo
 
 Engine::EngineObjects::Camera^ ObjectManager::GetMainCamera()
 {
-	return GetMainCamera(false);
+	return GetMainCamera(true);
 }
 
 Engine::EngineObjects::Camera^ ObjectManager::GetMainCamera(bool ignoreEditorCameras)

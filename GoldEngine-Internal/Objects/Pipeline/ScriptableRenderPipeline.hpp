@@ -119,7 +119,7 @@ namespace Engine::Render
 				RLGL::rlEnableDepthTest();
 				PreRenderFrame();
 				{
-					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera(false);
+					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera(true);
 
 					int currentLayer = 0;
 
@@ -198,7 +198,7 @@ namespace Engine::Render
 
 				PreRenderFrame(); // PRE FRAME
 				{
-					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera(true);
+					Engine::EngineObjects::Camera^ camera = Engine::Scripting::ObjectManager::singleton()->GetMainCamera(false);
 
 					int currentLayer = 1;
 

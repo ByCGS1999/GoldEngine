@@ -46,12 +46,32 @@ namespace Engine::EngineObjects
 		unsigned int texture;
 		unsigned int tint;
 
+		Engine::Components::Material^ material;
+
 		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->model = model;
 			this->shader = shader;
 			this->tint = tint;
 			this->texture = texture;
+
+			this->material = gcnew Engine::Components::Material();
+			this->material->SetMainTexture(texture);
+			this->material->SetShader(shader);
+			this->material->SetBaseColor(gcnew Engine::Components::Color(tint));
+
+			this->modelInstance = nullptr;
+			this->shaderInstance = nullptr;
+			this->textureInstance = nullptr;
+		}
+
+		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, Engine::Components::Material^ material) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
+		{
+			this->model = model;
+			this->material = material;
+			this->shader = material->GetShader();
+			this->tint = ((Engine::Components::Color^)material->GetBaseColor())->toHex();
+			this->texture = material->GetMainTexture();
 
 			this->modelInstance = nullptr;
 			this->shaderInstance = nullptr;

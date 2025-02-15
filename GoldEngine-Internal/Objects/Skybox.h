@@ -15,6 +15,7 @@ namespace Engine::EngineObjects
 		};
 	}
 
+	[System::ObsoleteAttribute("The class Skybox is obsolete, please, use the ModelRenderer for this. (This class may be deleted or used for internal testing purposes and might have unexpected behaviours)")]
 	public ref class Skybox : Engine::Internal::Components::GameObject
 	{
 	private:
@@ -83,7 +84,7 @@ namespace Engine::EngineObjects
 
 		void SwapMaterial(unsigned int materialId)
 		{
-			nativeSkybox->model->materials[0] = DataPacks::singleton().GetMaterial(0);
+			
 		}
 	};
 }

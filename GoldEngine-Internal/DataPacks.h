@@ -6,9 +6,6 @@
 #include "Includes.h"
 #include "GlIncludes.h"
 #include "Object/Transform.h"
-#include "Packs.h"
-#include "CameraPack.h"
-#include "MaterialPack.h"
 #include "LoggingAPI.h"
 
 /*
@@ -208,133 +205,12 @@ namespace Engine::Assets::Storage
 		Music* GetMusicPtr(unsigned int musicId);
 		void AddMusic(unsigned int musicId, Music music);
 
-		Material GetMaterial(unsigned int materialId)
-		{
-			Material material = { };
-
-			/*
-			bool hasMaterial = false;
-
-			for each (Engine::Assets::Storage::Types::MaterialPack  sP in nativePacks->materials)
-			{
-				if (sP.MaterialId == materialId)
-				{
-					material = sP.MaterialReference;
-					hasMaterial = true;
-					break;
-				}
-			}
-
-			if (!hasMaterial)
-			{
-				material = LoadMaterialDefault();
-			}*/
-
-			return material;
-		}
-
-
 		Model& GetModel(unsigned int modelId);
 		RAYLIB::Shader& GetShader(unsigned int shaderId);
 
 		void AddShader(unsigned int shaderId, RAYLIB::Shader& shader);
 		void AddModel(unsigned int modelId, Model modelRef);
 		void AddTexture2D(unsigned int textureId, Texture2D texture);
-
-		void AddCamera(unsigned int cameraId, RAYLIB::Camera2D camera, Engine::Internal::Components::CameraType type)
-		{
-			bool hasCamera = false;
-			/*
-			for each (Engine::Assets::Storage::Types::CameraPack  cPack in nativePacks->cameras)
-			{
-				if (cPack.cameraId == cameraId && cPack.cameraType == type)
-				{
-					cPack.camera2D = camera;
-					hasCamera = true;
-					break;
-				}
-				else
-				{
-					hasCamera = false;
-				}
-			}
-
-			if (!hasCamera)
-			{
-				nativePacks->cameras.push_back(Engine::Assets::Storage::Types::CameraPack(cameraId, type, &camera));
-			}
-			*/
-		}
-
-		void AddCamera(unsigned int cameraId, RAYLIB::Camera3D camera, Engine::Internal::Components::CameraType type)
-		{
-			bool hasCamera = false;
-			/*
-			for each (Engine::Assets::Storage::Types::CameraPack  cPack in nativePacks->cameras)
-			{
-				if (cPack.cameraId == cameraId && cPack.cameraType == type)
-				{
-					cPack.camera3D = camera;
-					hasCamera = true;
-					break;
-				}
-				else
-				{
-					hasCamera = false;
-				}
-			}
-
-			if (!hasCamera)
-			{
-				nativePacks->cameras.push_back(Engine::Assets::Storage::Types::CameraPack(cameraId, type, &camera));
-			}
-			*/
-		}
-
-
-		void AddMaterial(unsigned int materialID, Material material)
-		{
-			bool hasMaterial = false;
-
-			/*
-			for each (Engine::Assets::Storage::Types::MaterialPack  cPack in nativePacks->materials)
-			{
-				if (cPack.MaterialId == materialID)
-				{
-					cPack.MaterialReference = material;
-					hasMaterial = true;
-					break;
-				}
-				else
-				{
-					hasMaterial = false;
-				}
-			}
-
-			if (!hasMaterial)
-			{
-				nativePacks->materials.push_back(Engine::Assets::Storage::Types::MaterialPack(materialID, material));
-			}
-			*/
-		}
-
-		bool HasMaterial(unsigned int materialID)
-		{
-			bool hasMaterial = false;
-
-			/*
-			for each (Engine::Assets::Storage::Types::MaterialPack  cPack in nativePacks->materials)
-			{
-				if (cPack.MaterialId == materialID)
-				{
-					hasMaterial = true;
-					break;
-				}
-			}
-			*/
-
-			return hasMaterial;
-		}
 
 		bool HasTexture2D(unsigned int textureId)
 		{
