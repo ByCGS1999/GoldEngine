@@ -4,6 +4,8 @@
 // REFLECTION AND INTEROP \\
 
 #include "Reflection/ReflectedType.h"
+#include "Reflection/ReflectableType.h"
+
 #include "Attribute.h"
 #include "PropertyAttribute.h"
 #include "AttributeManager.h"

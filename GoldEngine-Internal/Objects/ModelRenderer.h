@@ -45,9 +45,9 @@ namespace Engine::EngineObjects
 		unsigned int shader;
 		unsigned int texture;
 		unsigned int tint;
+		Reflectable::Generic::Reflectable<Engine::Components::Material^>^ material;
 
-		Engine::Components::Material^ material;
-
+		[Newtonsoft::Json::JsonConstructorAttribute]
 		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, unsigned int shader, unsigned int texture, unsigned int tint) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->model = model;
@@ -55,7 +55,7 @@ namespace Engine::EngineObjects
 			this->tint = tint;
 			this->texture = texture;
 
-			this->material = gcnew Engine::Components::Material();
+			this->material = gcnew Reflectable::Generic::Reflectable<Engine::Components::Material^>(gcnew Engine::Components::Material());
 			this->material->SetMainTexture(texture);
 			this->material->SetShader(shader);
 			this->material->SetBaseColor(gcnew Engine::Components::Color(tint));
@@ -68,7 +68,7 @@ namespace Engine::EngineObjects
 		ModelRenderer(String^ name, Engine::Internal::Components::Transform^ trans, unsigned int model, Engine::Components::Material^ material) : Engine::Internal::Components::GameObject(name, trans, Engine::Internal::Components::ObjectType::ModelRenderer, this->tag, Engine::Scripting::LayerManager::GetLayerFromId(1))
 		{
 			this->model = model;
-			this->material = material;
+			this->material = gcnew Reflectable::Generic::Reflectable<Engine::Components::Material^>(material);
 			this->shader = material->GetShader();
 			this->tint = ((Engine::Components::Color^)material->GetBaseColor())->toHex();
 			this->texture = material->GetMainTexture();

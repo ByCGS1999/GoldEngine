@@ -418,6 +418,7 @@
     <ClInclude Include="Raylib\include\x64\raylib.h" />
     <ClInclude Include="Raylib\include\x64\raymath.h" />
     <ClInclude Include="Raylib\include\x64\rlgl.h" />
+    <ClInclude Include="Reflection\ReflectableType.h" />
     <ClInclude Include="Reflection\ReflectedType.h" />
     <ClInclude Include="RenderPipelines\RaymarchSRP.h" />
     <ClInclude Include="RenderPipelines\LightweightSRP.h" />
@@ -500,6 +501,7 @@
     <ClCompile Include="Object\Vector3.cpp" />
     <ClCompile Include="Raylib\craylib\craylib.cpp" />
     <ClCompile Include="Raylib\include\rlImGui.cpp" />
+    <ClCompile Include="Reflection\ReflectableType.cpp" />
     <ClCompile Include="Reflection\ReflectedType.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Screen.h" />
